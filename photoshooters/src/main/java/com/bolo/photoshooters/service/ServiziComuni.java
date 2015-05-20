@@ -21,4 +21,7 @@ public interface ServiziComuni {
 
 	public <T extends Serializable> T getById(Class<T> c, Object id) throws Exception;
 	public <T extends Serializable> T getById(Class<T> c, Object id, EntityManager em) throws Exception;
+
+	public <T extends Serializable> void merge(T t, EntityManager em) throws Exception;
+    public <T extends Serializable> void merge(T t) throws Exception;
 }

@@ -90,6 +90,43 @@ public class Utente implements Serializable{
 	@Enumerated
 	private Sesso sesso;
 
+	@Enumerated
+	private Esperienza esperienza;
+
+	@Column
+	private String sitoweb;	
+
+	@Enumerated
+	private RegioniItaliane regioniitaliane;
+
+	public RegioniItaliane getRegioniitaliane() {
+		return regioniitaliane;
+	}
+
+	public void setRegioniitaliane(RegioniItaliane regioniitaliane) {
+		this.regioniitaliane = regioniitaliane;
+	}
+
+	public Esperienza[] getEsperienze() {
+        return Esperienza.values();
+	}
+	
+	public Esperienza getEsperienza() {
+		return esperienza;
+	}
+
+	public void setEsperienza(Esperienza esperienza) {
+		this.esperienza = esperienza;
+	}
+
+	public String getSitoweb() {
+		return sitoweb;
+	}
+
+	public void setSitoweb(String sitoweb) {
+		this.sitoweb = sitoweb;
+	}
+
 	public Sesso[] getSessi() {
         return Sesso.values();
 	}

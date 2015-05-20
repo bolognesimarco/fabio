@@ -42,7 +42,7 @@
 	    	   	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton value="LOGin" styleClass="menubutton" rendered="#{utenteBean.utente==null}">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(2)}" render=":content" />
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(2)}" render=":content :loginform" />
 	    	   	</h:commandButton>
 
 			</h:form>
@@ -54,7 +54,7 @@
 				<h:graphicImage value="/resources/images/nofoto.jpg" styleClass="circular"/>
 
 				<h:commandButton value="PROFILo" styleClass="menubuttonred">
-					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content" />
+					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform" />
 				</h:commandButton>
 
 	    	   	<h:commandButton value="MENù 2" styleClass="menubuttonred">

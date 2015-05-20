@@ -1,6 +1,7 @@
 package com.bolo.photoshooters.web;
 
 
+import java.util.Date;
 import java.util.UUID;
 
 import javax.faces.application.FacesMessage;
@@ -12,6 +13,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
+import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
