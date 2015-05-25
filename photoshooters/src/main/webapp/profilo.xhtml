@@ -4,66 +4,119 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homePage.css" library="css" />
 </h:head>
 
+
 <h:body>
 	
 	<h:panelGroup styleClass="pannello homepage">
 
 		<h:form id="profiloform">
-			<h:panelGrid columns="6" columnClasses="right, left, left, right, left, left">
+			<h:panelGrid border="1" columns="6" columnClasses="right, left, left, right, left, left">
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
         		</f:facet>
 	
 				<h:outputLabel for="username">username</h:outputLabel>
-				<h:inputText id="username" value="#{utenteBean.utente.username}"/>
+				<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
 				<h:outputLabel>*</h:outputLabel>
-
 				<h:outputLabel for="password">password</h:outputLabel>
-				<h:inputText id="password" value="#{utenteBean.utente.password}"/>
+				<h:outputText   id="password" value="#{utenteBean.utente.password}"/>
 				<h:outputLabel>*</h:outputLabel>	
-				
-				
+								
 				<h:outputLabel for="email">email</h:outputLabel>
-				<h:inputText id="email" value="#{utenteBean.utente.email}"/>
+				<h:outputText  id="email" value="#{utenteBean.utente.email}"/>
 				<h:outputLabel>*</h:outputLabel>	
-
 				<h:outputLabel for="nome">nome</h:outputLabel>
-				<h:inputText id="nome" value="#{utenteBean.utente.name}"/>
+				<h:outputText  id="nome" value="#{utenteBean.utente.name}"/>
 				<h:outputLabel>*</h:outputLabel>	
-
-
+				
+				<h:outputLabel for="cognome">cognome</h:outputLabel>
+				<h:inputText id="cognome" value="#{utenteBean.utente.cognome}"/>
+				<h:outputLabel>*</h:outputLabel>
+				<h:outputLabel for="tumblr">avatar</h:outputLabel>
+				<h:inputText id="tumblr" value="#{utenteBean.utente.tumblr}"/>
+				<h:outputLabel>*</h:outputLabel>
+				
+				<h:outputLabel for="tipoutente">tipo utente</h:outputLabel>
+				<h:outputText id="tipoutente" value="#{utenteBean.utente.tipoUtente.descrizione}"/>
+				<h:outputLabel>*</h:outputLabel>	
+				<h:outputLabel for="esperienza">livello esperienza</h:outputLabel>
+				<h:selectOneMenu id="esperienza" value="#{utenteBean.utente.esperienza}" 
+					required="true" requiredMessage="scegli il livello esperienza">
+				 <f:selectItems value="#{utenteBean.utente.esperienze}" var="esperienza" itemValue="#{esperienza}" itemLabel="#{esperienza.esperienza}" />
+            	</h:selectOneMenu>
+            	<h:panelGroup>
+					<h:message for="esperienza" />*
+				</h:panelGroup>
+				
 				<h:outputLabel for="sesso">sesso</h:outputLabel>
 				<h:selectOneMenu id="sesso" value="#{utenteBean.utente.sesso}" 
 					required="true" requiredMessage="scegli il sesso">
-				 <f:selectItems value="#{utenteBean.utente.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
+				 <f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
             	</h:selectOneMenu>
             	<h:panelGroup>
-					<h:message for="sesso" />
+					<h:message for="sesso" />*
 				</h:panelGroup>
-
 				<h:outputLabel for="dataNascita">data di nascita</h:outputLabel>
         	    <h:inputText id="dataNascita" value="#{utenteBean.utente.dataNascita}"
         	      required="true" requiredMessage="inserisci l'anno" >
        			<f:convertDateTime pattern="d-M-yyyy" />
        			 </h:inputText>
             	<h:panelGroup>
-					<h:message for="dataNascita" />
+					<h:message for="dataNascita" />*
 				</h:panelGroup>
 				
+				<h:outputLabel for="sitoweb">sito web</h:outputLabel>
+				<h:inputText id="sitoweb" value="#{utenteBean.utente.sitoweb}"/>
+				<h:outputLabel>*</h:outputLabel>
+				<h:outputLabel for="facebook">facebook</h:outputLabel>
+				<h:inputText id="facebook" value="#{utenteBean.utente.facebook}"/>
+				<h:outputLabel>*</h:outputLabel>					
+
+				<h:outputLabel for="twitter">twitter</h:outputLabel>
+				<h:inputText id="twitter" value="#{utenteBean.utente.twitter}"/>
+				<h:outputLabel>*</h:outputLabel>				
+				<h:outputLabel for="instagram">instagram</h:outputLabel>
+				<h:inputText id="instagram" value="#{utenteBean.utente.instagram}"/>
+				<h:outputLabel>*</h:outputLabel>					
+
+		
+				<h:outputLabel for="regione">regioni di collaborazione</h:outputLabel>
+				<h:selectManyListbox layout="pageDirection" id="regione" value="#{utenteBean.utente.regIta}" 
+					required="true" requiredMessage="scegli almeno una regione">
+				 <f:selectItems value="#{utenteBean.utente.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
+            	</h:selectManyListbox >
+            	<h:panelGroup>
+					<h:message for="regione" />
+				</h:panelGroup>			
+				<h:outputLabel for="googleplus">googleplus</h:outputLabel>
+				<h:inputText id="googleplus" value="#{utenteBean.utente.googleplus}"/>
+				<h:outputLabel>*</h:outputLabel>	
 				
+				<h:outputLabel for="tipolavoro">tipi lavoro</h:outputLabel>
+				<h:selectManyMenu rows="3" layout="pageDirection" id="tipolavoro" value="#{utenteBean.utente.tipilavoroId}" 
+					required="true" requiredMessage="scegli almeno una regione">
+				 <f:selectItems value="#{utenteBean.utente.tipoUtente.tipiLavoro}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
+            	</h:selectManyMenu>
+            	<h:panelGroup>
+					<h:message for="regione" />
+				</h:panelGroup>			
+				<h:outputLabel for="linkedin">linkedin</h:outputLabel>
+				<h:inputText id="linkedin" value="#{utenteBean.utente.linkedin}"/>
+				<h:outputLabel>*</h:outputLabel>			
 				<f:facet name="footer">
 		            <h:panelGroup>
-		                <h:commandButton value="AGGIORNa PROFILo"
-						 	action="#{utenteBean.aggiornaProfilo()}" >
-		            	</h:commandButton>  
+		                <h:commandButton value="AGGIORNa PROFILo" 
+		                	action="#{utenteBean.aggiornaProfilo()}" >
+		            	</h:commandButton>  <BR></BR>
+		            	<h:outputText value="#{contentBean.messaggio}"></h:outputText><br/><br/>
 	            	</h:panelGroup>
         		</f:facet>
 				

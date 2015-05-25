@@ -54,9 +54,7 @@
 				<h:outputLabel for="email">email</h:outputLabel>
 				<h:inputText id="email" value="#{registratiBean.email}"
 					required="true" requiredMessage="inserisci un indirizzo email"
-					validatorMessage="indirizzo non valido" 	>
-					<f:validateRegex
-						pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+					validator="#{registratiBean.checkEmail}">
 				</h:inputText>
 				<h:panelGroup>
 					<h:message for="email" />

@@ -13,8 +13,8 @@
 		<h:outputStylesheet library="css" name="header.css"  />
 		<div class="riga-celeste-chiaro"></div>
 		<div class="riga-celeste-medio">
-			<h:graphicImage value="/resources/images/Scritta_photoshooters-01_C.svg"/>
-			
+			<h:graphicImage onmouseover="show('photoshooters.net')" value="/resources/images/Scritta_photoshooters-01_C.svg">
+			<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" /></h:graphicImage>
 			<h:form>
 				
 				<h:commandButton value="HOMe" styleClass="menubutton">
@@ -57,23 +57,23 @@
 					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform" />
 				</h:commandButton>
 
-	    	   	<h:commandButton value="MENù 2" styleClass="menubuttonred">
+	    	   	<h:commandButton value="ALBUMs" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(9)}" render=":content" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="MENù 3" styleClass="menubuttonred">
+	    	   	<h:commandButton value="MESSAGGi" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(10)}" render=":content" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="MENù 4" styleClass="menubuttonred">
+	    	   	<h:commandButton value="CHAt" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(11)}" render=":content" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="MENù 5" styleClass="menubuttonred">
+	    	   	<h:commandButton value="ANNUNCi" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(12)}" render=":content" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="MENù 6" styleClass="menubuttonred">
+	    	   	<h:commandButton value="CREDITi" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(13)}" render=":content :registratiform" />
 	    	   	</h:commandButton>
 	    	   	

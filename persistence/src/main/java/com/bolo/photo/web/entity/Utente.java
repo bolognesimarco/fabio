@@ -1,11 +1,13 @@
 package com.bolo.photo.web.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -27,6 +29,9 @@ public class Utente implements Serializable{
 
 	@Column
 	private String name;
+	
+	@Column
+	private String cognome;
 	
 	@Column
 	private String username;
@@ -55,9 +60,44 @@ public class Utente implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataNascita;
 	
+	@ManyToMany
+	private List<TipoLavoro> tipiLavoro;
+	
+	public List<TipoLavoro> getTipiLavoro() {
+		return tipiLavoro;
+	}
+
+		public void setTipiLavoro(List<TipoLavoro> tipiLavoro) {
+		this.tipiLavoro = tipiLavoro;
+	}
+	
+	public List<Integer> getTipilavoroId() {
+		List<Integer> darit = new ArrayList<Integer>();
+		for (TipoLavoro t:getTipiLavoro()){
+			darit.add(t.getId());
+		}
+		return darit;
+	}
+
+	public void setTipiLavoroId(List<Integer> tipilavoro) {
+		for (Integer id : tipilavoro) {
+			TipoLavoro tipolavorox = new TipoLavoro();
+			tipolavorox.setId(id);
+			getTipiLavoro().add(tipolavorox);
+		}
+	}	
+	
 	@ManyToOne
     @JoinColumn(name="tipoUtente", nullable=false)
 	private TipoUtente tipoUtente;
+	
+	public TipoUtente getTipoUtente() {
+		return tipoUtente;
+	}
+
+	public void setTipoUtente(TipoUtente tipoUtente) {
+		this.tipoUtente = tipoUtente;
+	}
 	
 	@OneToMany
 	@JoinColumn(name="UtenteId")
@@ -95,18 +135,110 @@ public class Utente implements Serializable{
 
 	@Column
 	private String sitoweb;	
+	
+	@Column
+	private String facebook;
+	
+	@Column
+	private String twitter;
+	
+	@Column
+	private String tumblr;
+	
+	@Column
+	private String instagram;
+	
+	@Column
+	private String linkedin;
+	
+	@Column
+	private String googleplus;
+	
+	@ElementCollection
+	private List <RegioneItaliana> regioniitaliane;
+	
+	public String getFacebook() {
+		return facebook;
+	}
 
-	@Enumerated
-	private RegioniItaliane regioniitaliane;
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
+	}
 
-	public RegioniItaliane getRegioniitaliane() {
+	public String getTwitter() {
+		return twitter;
+	}
+
+	public void setTwitter(String twitter) {
+		this.twitter = twitter;
+	}
+
+	public String getTumblr() {
+		return tumblr;
+	}
+
+	public void setTumblr(String tumblr) {
+		this.tumblr = tumblr;
+	}
+
+	public String getInstagram() {
+		return instagram;
+	}
+
+	public void setInstagram(String instagram) {
+		this.instagram = instagram;
+	}
+
+	public String getLinkedin() {
+		return linkedin;
+	}
+
+	public void setLinkedin(String linkedin) {
+		this.linkedin = linkedin;
+	}
+
+	public String getGoogleplus() {
+		return googleplus;
+	}
+
+	public void setGoogleplus(String googleplus) {
+		this.googleplus = googleplus;
+	}
+
+	public String getCognome() {
+		return cognome;
+	}
+
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+	
+
+	public List<RegioneItaliana> getRegioniitaliane() {
 		return regioniitaliane;
 	}
 
-	public void setRegioniitaliane(RegioniItaliane regioniitaliane) {
+	public void setRegioniitaliane(List<RegioneItaliana> regioniitaliane) {
 		this.regioniitaliane = regioniitaliane;
 	}
 
+	public void setRegIta(List<String> regs){
+		for (String string : regs) {
+			getRegioniitaliane().add(RegioneItaliana.valueOf(string));
+		}
+	}
+	public List<String> getRegIta(){
+		List<String> darit = new ArrayList<String>();
+		for (RegioneItaliana reg : getRegioniitaliane()) {
+			darit.add(reg.getRegioneitaliana());
+		}
+		return darit;
+	}
+	
+	public RegioneItaliana[] getRegioni() {
+        return RegioneItaliana.values();
+	}
+	
 	public Esperienza[] getEsperienze() {
         return Esperienza.values();
 	}
@@ -127,10 +259,6 @@ public class Utente implements Serializable{
 		this.sitoweb = sitoweb;
 	}
 
-	public Sesso[] getSessi() {
-        return Sesso.values();
-	}
-	
 	public int getId() {
 		return id;
 	}
@@ -169,14 +297,6 @@ public class Utente implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public TipoUtente getTipoUtente() {
-		return tipoUtente;
-	}
-
-	public void setTipoUtente(TipoUtente tipoUtente) {
-		this.tipoUtente = tipoUtente;
 	}
 
 	public List<Utente> getCollaboratori() {

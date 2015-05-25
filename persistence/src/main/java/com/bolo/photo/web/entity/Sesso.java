@@ -1,9 +1,10 @@
 package com.bolo.photo.web.entity;
 
 public enum Sesso {
-	M ("M"),
-	F ("F"),
-	A ("A");
+	Uomo ("Uomo"),
+	Donna ("Donna"),
+	Altro ("Altro"),
+	Società ("Società");
 	
 	private final String sesso;
 	
@@ -11,5 +12,7 @@ public enum Sesso {
 		this.sesso = sesso;
 	}
 	
-	public String getSesso(){return sesso;}
+	public String getSesso(){
+		return sesso;
+	}
 }

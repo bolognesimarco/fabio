@@ -22,11 +22,15 @@ public class RegistrationServlet extends HttpServlet {
 			if(u==null){
 				response.sendRedirect("errorPage.xhtml");
 			}else{
-				UtenteBean bean = new UtenteBean();
-				bean.setUtente(u);
-				request.getSession(true).setAttribute("utenteBean", bean);
+				
 				ContentBean contentBean = new ContentBean();
 				request.getSession(true).setAttribute("contentBean", contentBean);
+				
+				UtenteBean bean = new UtenteBean();
+				bean.setUtente(u);
+				bean.setContentBean(contentBean);
+				request.getSession(true).setAttribute("utenteBean", bean);
+				
 				MenuBean menu = new MenuBean();
 				menu.setContentBean(contentBean);
 				menu.setUtenteBean(bean);

@@ -36,15 +36,22 @@ public class LoginBean {
 			Utente u = serviziVari.login(username, password);
 			System.out.println("u:"+u);
 			if(u!=null){
-				String mm = "Completa il tuo profilo di photoshooter: inserisci";
+				String mm = "";
+				String mess = "Completa il tuo profilo di photoshooter: inserisci";
 				if(u.getDataNascita()==null){
 					mm = mm+" anno di nascita -";
 				}
 				if(u.getSesso()==null){
 					mm = mm+" genere -";
 				}
-
-				contentBean.setMessaggio(mm);				
+				if(u.getEsperienza()==null){
+					mm = mm+" livello esperienza";
+				}
+				if(mm!=""){
+					mm = mess+mm;
+				}
+				String mm2="BENVENUTo "+u.getName()+"\n"+mm;
+				contentBean.setMessaggio(mm2);				
 				utenteBean.setUtente(u);
 				contentBean.setContent("homePage.xhtml");
 			}else{
