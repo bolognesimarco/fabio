@@ -20,7 +20,7 @@ public class TipoUtente implements Serializable{
 	@Column
 	private String descrizione;
 
-	@ManyToMany(mappedBy="tipiUtente", cascade=CascadeType.PERSIST)
+	@ManyToMany(mappedBy="tipiUtente", cascade=CascadeType.ALL)
 	private List<TipoLavoro> tipiLavoro = new ArrayList<TipoLavoro>();
 	
 	public List<TipoLavoro> getTipiLavoro() {

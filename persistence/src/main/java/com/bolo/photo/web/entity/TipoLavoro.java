@@ -1,6 +1,7 @@
 package com.bolo.photo.web.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -23,9 +24,9 @@ public class TipoLavoro implements Serializable {
 	private String descrizione;
 
 	@ManyToMany
-	private List<TipoUtente> tipiUtente;
+	private List<TipoUtente> tipiUtente = new ArrayList<TipoUtente>();
 
-	@ManyToMany (mappedBy="tipilavoro")
+	@ManyToMany (mappedBy="tipiLavoro")
 	private List<Utente> utenti;
 	
 	
@@ -60,4 +61,12 @@ public class TipoLavoro implements Serializable {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
+
+//	@Override
+//	public String toString() {
+//		return getDescrizione();
+//	}
+	
+	
+	
 }

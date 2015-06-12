@@ -11,12 +11,20 @@
 	<ui:composition>
 		<h:outputStylesheet library="css" name="common.css"  />
 		<h:outputStylesheet library="css" name="header.css"  />
-		<div class="riga-celeste-chiaro"></div>
-		<div class="riga-celeste-medio">
-			<h:graphicImage onmouseover="show('photoshooters.net')" value="/resources/images/Scritta_photoshooters-01_C.svg">
-			<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" /></h:graphicImage>
-			<h:form>
-				
+
+		<div class="riga-celeste-medio" >
+		  <h:panelGrid border="0" columns="3" styleClass="center" columnClasses="right, center, left">
+
+			  <h:graphicImage value="/resources/images/Loghetto_PS_naked_C.svg" height="25%" width="25%"></h:graphicImage>
+			  <h:graphicImage value="/resources/images/Scritta_photoshooters_small_C.svg">
+			  <f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" /></h:graphicImage>
+			  <h:inputText id="cerca" maxlength="36" label="cerca"/>
+
+		  </h:panelGrid>
+		 </div>
+		  
+		 <div class="riga-menu">
+			<h:form  id="headerform">				
 				<h:commandButton value="HOMe" styleClass="menubutton">
 					<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" />
 				</h:commandButton>
@@ -41,14 +49,18 @@
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(1)}" render=":content :registratiform" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="LOGin" styleClass="menubutton" rendered="#{utenteBean.utente==null}">
+	    	   	<h:commandButton value="LOGIn" styleClass="menubutton" rendered="#{utenteBean.utente==null}">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(2)}" render=":content :loginform" />
 	    	   	</h:commandButton>
 
 			</h:form>
 		</div>
 		
-		<h:panelGroup layout="block" class="riga-celeste-fino" rendered="#{utenteBean.utente!=null}">
+		<h:panelGroup rendered="#{utenteBean.utente==null}" ><div class="pattern-alto-guest"></div></h:panelGroup>
+		
+		
+		
+		<h:panelGroup layout="block" class="pattern-alto-login" rendered="#{utenteBean.utente!=null}">
 			<h:form>
 				
 				<h:graphicImage value="/resources/images/nofoto.jpg" styleClass="circular"/>
@@ -82,12 +94,9 @@
 	    	   	</h:commandButton>
 
 			</h:form>
-		
-		
+				
 		</h:panelGroup>
 		
-		
-		<div class="pattern-alto-guest"></div>
 	</ui:composition>
 
 

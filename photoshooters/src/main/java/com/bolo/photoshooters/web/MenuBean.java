@@ -21,20 +21,22 @@ public class MenuBean {
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 4://FORUM
-			contentBean.setContent("wip.xhtml");
+			contentBean.setContent("uploadPhoto.xhtml");
 			break;
 		case 5://LAVORI
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 6://PHOTOSHOOTERS
-			contentBean.setContent("wip.xhtml");
+			contentBean.setContent("cerca.xhtml");
 			break;
 		case 7://HOME
 			contentBean.setMessaggio(null);
 			contentBean.setContent("homePage.xhtml");
 			break;
 		case 8://PROFILO
+			contentBean.setMessaggio(null);
 			contentBean.setContent("profilo.xhtml");
+			//utenteBean.fillSelectItems();
 			break;
 		case 9://FORUM
 			contentBean.setContent("wip.xhtml");
@@ -59,6 +61,10 @@ public class MenuBean {
 		case 15://HOMEPAGE
 			utenteBean.setUtente(null);
 			contentBean.setContent("homePage.xhtml");
+			break;
+		case 16://MODIFICA PROFILO
+			contentBean.setMessaggio(null);
+			contentBean.setContent("modificaProfilo.xhtml");
 			break;
 		default:
 			break;

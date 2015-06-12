@@ -61,31 +61,24 @@ public class Utente implements Serializable{
 	private Date dataNascita;
 	
 	@ManyToMany
-	private List<TipoLavoro> tipiLavoro;
+	private List<TipoLavoro> tipiLavoro = new ArrayList<TipoLavoro>();
 	
 	public List<TipoLavoro> getTipiLavoro() {
 		return tipiLavoro;
 	}
-
-		public void setTipiLavoro(List<TipoLavoro> tipiLavoro) {
-		this.tipiLavoro = tipiLavoro;
-	}
 	
-	public List<Integer> getTipilavoroId() {
-		List<Integer> darit = new ArrayList<Integer>();
-		for (TipoLavoro t:getTipiLavoro()){
-			darit.add(t.getId());
+	public List<String> getTipiLavoroDescrizione() {
+		List<String> darit = new ArrayList<String>();
+		for (TipoLavoro tipo : getTipiLavoro()) {
+			darit.add(tipo.getDescrizione());
 		}
 		return darit;
 	}
 
-	public void setTipiLavoroId(List<Integer> tipilavoro) {
-		for (Integer id : tipilavoro) {
-			TipoLavoro tipolavorox = new TipoLavoro();
-			tipolavorox.setId(id);
-			getTipiLavoro().add(tipolavorox);
-		}
-	}	
+	public void setTipiLavoro(List<TipoLavoro> tipiLavoro) {
+		
+		this.tipiLavoro = tipiLavoro;
+	}
 	
 	@ManyToOne
     @JoinColumn(name="tipoUtente", nullable=false)
@@ -130,8 +123,30 @@ public class Utente implements Serializable{
 	@Enumerated
 	private Sesso sesso;
 
+	@Column
+	private String descrizione;
+	
+	@Column
+	private String città;
+	
 	@Enumerated
 	private Esperienza esperienza;
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
+	public String getCittà() {
+		return città;
+	}
+
+	public void setCittà(String città) {
+		this.città = città;
+	}
 
 	@Column
 	private String sitoweb;	
@@ -153,6 +168,33 @@ public class Utente implements Serializable{
 	
 	@Column
 	private String googleplus;
+	
+	@Column
+	private Integer altezza;
+	
+	@Column
+	private Integer peso;
+	
+	@Column
+	private Integer taglia;
+	
+	@Column
+	private Integer seno;
+
+	@Column
+	private Integer vita;
+	
+	@Column
+	private Integer fianchi;
+	
+	@Column
+	private Integer scarpe;
+	
+	@Column
+	private Integer tatuaggi;
+
+	@Column
+	private Integer piercing;
 	
 	@ElementCollection
 	private List <RegioneItaliana> regioniitaliane;
@@ -213,7 +255,6 @@ public class Utente implements Serializable{
 		this.cognome = cognome;
 	}
 	
-
 	public List<RegioneItaliana> getRegioniitaliane() {
 		return regioniitaliane;
 	}
@@ -223,8 +264,9 @@ public class Utente implements Serializable{
 	}
 
 	public void setRegIta(List<String> regs){
+		getRegioniitaliane().clear();
 		for (String string : regs) {
-			getRegioniitaliane().add(RegioneItaliana.valueOf(string));
+				getRegioniitaliane().add(RegioneItaliana.valueOf(string));
 		}
 	}
 	public List<String> getRegIta(){
@@ -235,14 +277,6 @@ public class Utente implements Serializable{
 		return darit;
 	}
 	
-	public RegioneItaliana[] getRegioni() {
-        return RegioneItaliana.values();
-	}
-	
-	public Esperienza[] getEsperienze() {
-        return Esperienza.values();
-	}
-	
 	public Esperienza getEsperienza() {
 		return esperienza;
 	}
@@ -251,6 +285,78 @@ public class Utente implements Serializable{
 		this.esperienza = esperienza;
 	}
 
+	public Integer getTatuaggi() {
+		return tatuaggi;
+	}
+
+	public void setTatuaggi(Integer tatuaggi) {
+		this.tatuaggi = tatuaggi;
+	}
+
+	public Integer getPiercing() {
+		return piercing;
+	}
+
+	public void setPiercing(Integer piercing) {
+		this.piercing = piercing;
+	}
+	
+	public Integer getAltezza() {
+		return altezza;
+	}
+
+	public void setAltezza(Integer altezza) {
+		this.altezza = altezza;
+	}
+
+	public Integer getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Integer peso) {
+		this.peso = peso;
+	}
+
+	public Integer getTaglia() {
+		return taglia;
+	}
+
+	public void setTaglia(Integer taglia) {
+		this.taglia = taglia;
+	}
+
+	public Integer getSeno() {
+		return seno;
+	}
+
+	public void setSeno(Integer seno) {
+		this.seno = seno;
+	}
+
+	public Integer getVita() {
+		return vita;
+	}
+
+	public void setVita(Integer vita) {
+		this.vita = vita;
+	}
+
+	public Integer getFianchi() {
+		return fianchi;
+	}
+
+	public void setFianchi(Integer fianchi) {
+		this.fianchi = fianchi;
+	}
+
+	public Integer getScarpe() {
+		return scarpe;
+	}
+
+	public void setScarpe(Integer scarpe) {
+		this.scarpe = scarpe;
+	}
+	
 	public String getSitoweb() {
 		return sitoweb;
 	}

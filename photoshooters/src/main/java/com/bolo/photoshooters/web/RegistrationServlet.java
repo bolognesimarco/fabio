@@ -37,6 +37,7 @@ public class RegistrationServlet extends HttpServlet {
 				menu.messaggioAvvenutaRegistrazione();
 				request.getSession(true).setAttribute("menuBean", menu);
 				response.sendRedirect("/");
+				bean.fillSelectItems();
 			}
 			
 		} catch (Exception e) {

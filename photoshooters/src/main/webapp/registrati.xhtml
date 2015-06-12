@@ -18,10 +18,10 @@
 			<h:panelGrid columns="3" columnClasses="right, left, left">
 			
 				<f:facet name="header">
-            		<h:outputText value="REGISTRAZIONe PHOTOSHOOTEr"/>
+            		<h:outputText value="&#160;&#160;REGISTRAZIONe PHOTOSHOOTEr"/>
         		</f:facet>
 
-				<h:outputLabel for="username">username</h:outputLabel>
+				<h:outputLabel for="username">USERSNAMe</h:outputLabel>
 				<h:inputText id="username" value="#{registratiBean.username}"
 					required="true" requiredMessage="inserisci uno username" 
 					validator="#{registratiBean.checkUsername}"/>
@@ -30,7 +30,7 @@
 				</h:panelGroup>
 
 
-				<h:outputLabel for="password">password</h:outputLabel>
+				<h:outputLabel for="password">PASSWORd</h:outputLabel>
 				<h:inputSecret id="password" value="#{registratiBean.password}"
 					required="true" requiredMessage="inserisci una password">
 				</h:inputSecret>
@@ -39,7 +39,7 @@
 				</h:panelGroup>
 
 
-				<h:outputLabel for="confirm">conferma</h:outputLabel>
+				<h:outputLabel for="confirm">CONFERMa PASSWORd</h:outputLabel>
 				<h:inputSecret id="confirm" value="#{registratiBean.confirm}"
 					required="true" requiredMessage="conferma la password"
 					validator="#{registratiBean.checkConfirmPassword}">
@@ -51,7 +51,7 @@
 				</h:panelGroup>
 
 
-				<h:outputLabel for="email">email</h:outputLabel>
+				<h:outputLabel for="email">EMAIl</h:outputLabel>
 				<h:inputText id="email" value="#{registratiBean.email}"
 					required="true" requiredMessage="inserisci un indirizzo email"
 					validator="#{registratiBean.checkEmail}">
@@ -61,14 +61,14 @@
 				</h:panelGroup>
 
 
-				<h:outputLabel for="nome">nome</h:outputLabel>
+				<h:outputLabel for="nome">NOMe</h:outputLabel>
 				<h:inputText id="nome" value="#{registratiBean.nome}"
 					required="true" requiredMessage="inserisci un nome" />
 				<h:panelGroup>
 					<h:message for="nome" />
 				</h:panelGroup>
 				
-				<h:outputLabel for="profilo">profilo lavorativo</h:outputLabel>
+				<h:outputLabel for="profilo">PROFILo PROFESSIONALe</h:outputLabel>
 				<h:selectOneMenu id="profilo" value="#{registratiBean.tipoUtente}" 
 					required="true" requiredMessage="scegli un profilo">
                 	<f:selectItems value="#{parametersBean.tipiUtente}" />
@@ -84,7 +84,7 @@
 				
 				<f:facet name="footer">
 		            <h:panelGroup>
-		                <h:commandButton value="COMPLETa REGISTRAZIONe"
+		                <h:commandButton value="COMPLETa REGISTRAZIONe&#160;&#160;"
 						 	action="#{registratiBean.registrati()}" >
 		            	</h:commandButton>  
 	            	</h:panelGroup>

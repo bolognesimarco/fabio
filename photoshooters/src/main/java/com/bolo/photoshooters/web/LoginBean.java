@@ -45,7 +45,10 @@ public class LoginBean {
 					mm = mm+" genere -";
 				}
 				if(u.getEsperienza()==null){
-					mm = mm+" livello esperienza";
+					mm = mm+" livello esperienza -";
+				}
+				if(u.getRegioniitaliane().isEmpty()){
+					mm = mm+" regioni di collaborazione";
 				}
 				if(mm!=""){
 					mm = mess+mm;
@@ -53,6 +56,7 @@ public class LoginBean {
 				String mm2="BENVENUTo "+u.getName()+"\n"+mm;
 				contentBean.setMessaggio(mm2);				
 				utenteBean.setUtente(u);
+				utenteBean.fillSelectItems();
 				contentBean.setContent("homePage.xhtml");
 			}else{
 				System.out.println("login ko");
