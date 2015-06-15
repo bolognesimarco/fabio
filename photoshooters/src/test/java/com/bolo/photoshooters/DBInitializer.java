@@ -320,9 +320,18 @@ public class DBInitializer {
 		test3.setName("fabio3");
 		test3.setUsername("fb3");
 		test3.setPassword("fb3");
-		test3.setEmail("fbolo2@inwind.it");
+		test3.setEmail("fbolo3@inwind.it");
 		test3.setTipoUtente(hostess);
 		test3.setActive(true);
+		
+		Utente test4 = new Utente();
+		test4.setId(4);
+		test4.setName("fabio");
+		test4.setUsername("fb4");
+		test4.setPassword("fb4");
+		test4.setEmail("fbolo4@inwind.it");
+		test4.setTipoUtente(mua);
+		test4.setActive(true);
 		
 		serv.deleteAll(Utente.class, em);
 		serv.deleteAll(TipoLavoro.class, em);
@@ -331,6 +340,7 @@ public class DBInitializer {
 		serv.persist(test, em);	
 		serv.persist(test2, em);
 		serv.persist(test3, em);
+		serv.persist(test4, em);
 		
 		serv.persist(hairmodel, em);
 		serv.persist(ritratto, em);

@@ -6,8 +6,8 @@ public enum RegioneItaliana {
 	Basilicata	("Basilicata"),
 	Calabria	("Calabria"),
 	Campania	("Campania"),
-	EmiliaRomagna	("Emilia Romagna"),
-	FriuliVeneziaGiulia	("Friuli Venezia Giulia"),
+	Emilia_Romagna	("Emilia_Romagna"),
+	Friuli_Venezia_Giulia	("Friuli_Venezia_Giulia"),
 	Lazio	("Lazio"),
 	Liguria	("Liguria"),
 	Lombardia	("Lombardia"),
@@ -18,9 +18,9 @@ public enum RegioneItaliana {
 	Sardegna	("Sardegna"),
 	Sicilia	("Sicilia"),
 	Toscana	("Toscana"),
-	TrentinoAltoAdige	("Trentino Alto Adige"),
+	Trentino_Alto_Adige	("Trentino_Alto_Adige"),
 	Umbria	("Umbria"),
-	ValAosta	("Val d'Aosta"),
+	Valle_Aosta	("Valle_Aosta"),
 	Veneto	("Veneto");
 	
 	private final String regioneitaliana;

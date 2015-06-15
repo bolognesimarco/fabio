@@ -2,6 +2,7 @@ package com.bolo.photoshooters.web;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -15,6 +16,7 @@ import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
+import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
@@ -26,11 +28,149 @@ import com.bolo.photoshooters.vo.CercaUtenteVO;
 public class UtenteBean {
 
 	private Utente utente;
-	private CercaUtenteVO cercaUtente;
+	private CercaUtenteVO cercaUtente = new CercaUtenteVO();
 	List<Utente> risultato = new ArrayList<Utente>();
 	private ServiziComuni serv = new ServiziComuniImpl();
-	private String username;
-	private String name;
+//	private String username;
+//	private String name;
+
+
+	public void cercaUtenti(){
+		
+		EntityManager em = EMF.createEntityManager();
+		//String hql = "from Utente u where u.name=:n and u.username=:un and u.esperienza=:esp and u.tipoUtente.id=:tipout ";
+		String hqlstart = "from Utente u "; //where";
+		String hqlcerca = "";
+		String hql = "";
+		//u.name=:n and u.username=:un and u.esperienza=:esp and u.tipoUtente.id=:tipout ";
+
+		boolean nomeInserito = false;
+		boolean usernameInserito = false;
+		boolean esperienzaInserito = false;
+		boolean utenteInserito = false;
+		int i = 0;
+		if (cercaUtente.getName()!="") {
+			hqlcerca += " u.name=:n ";
+			nomeInserito = true;
+			i++;
+		}
+		if (cercaUtente.getUsername()!="") {
+			if (i>0){
+				hqlcerca += "and";
+			}
+			hqlcerca += " u.username like :un ";
+			usernameInserito = true;
+			i++;
+		}
+		if (cercaUtente.getEsperienza()!=null) {
+			if (i>0){
+				hqlcerca += "and";
+			}
+			hqlcerca += " u.esperienza=:esp ";
+			esperienzaInserito = true;
+			i++;
+		}
+		if (cercaUtente.getTipoUtente()>-1) {
+			if (i>0){
+				hqlcerca += "and";
+			}
+			hqlcerca += " u.tipoUtente.id=:tipout ";
+			utenteInserito = true;
+			i++;
+		}
+		if (i>0){
+			hql = hqlstart + "where" + hqlcerca; 
+		}
+		else {
+			hql = hqlstart; 
+		}
+			
+		//boolean primaRegione = true;
+//		int i = 1;
+//		for () {
+//			if(primaRegione){
+//				hql += "or u.regioniitaliane.regioneitaliana in (";
+//				primaRegione = false;
+//			}
+//			
+//			hql+=":reg"+(i++)+",";
+//		}
+//		if(primaRegione==false){
+//			hql = hql.substring(0,hql.length()-1);
+//			hql += ")";
+//		}
+//		if(primaRegione==false){
+//		for(int j=0 ; j<i-1 ; j++){
+//			q.setParameter("reg"+(j+1), cercaUtente.getRegioniitaliane().get(j).getRegioneitaliana());
+//		}
+//	}
+		
+		Query q = em.createQuery(hql, Utente.class);
+		if(nomeInserito){
+			q.setParameter("n",cercaUtente.getName());
+		}
+		if(usernameInserito){
+			q.setParameter("un", "%" + cercaUtente.getUsername() + "%");
+		}
+		if(esperienzaInserito){
+			q.setParameter("esp", cercaUtente.getEsperienza());
+		}
+		if(utenteInserito){
+			q.setParameter("tipout", cercaUtente.getTipoUtente());
+		}
+
+		risultato = q.getResultList();
+		System.out.println("================================="+risultato.size());
+		
+		//selezione per regioni - se selezionate
+		
+		if (cercaUtente.getRegioniitaliane()!=null) {
+			
+			Iterator<Utente> iter = risultato.iterator();
+	
+			while(iter.hasNext()){
+				Utente u = iter.next();
+				boolean trovato = false;
+				
+				for (RegioneItaliana regita : u.getRegioniitaliane()) {
+					System.out.println("================================="+regita.toString());	
+				}
+							
+				for (RegioneItaliana reg : cercaUtente.getRegioniitaliane()) {
+					System.out.println("================================="+reg.getRegioneitaliana());
+					
+					if(u.getRegioniitaliane().contains(RegioneItaliana.valueOf(reg.getRegioneitaliana()))){
+						System.out.println("=================================LUI SI:"+u.getName());
+						trovato = true;
+						break;
+					}
+				}
+				if(!trovato){
+					System.out.println("=================================lUI NO:"+u.getName());
+					iter.remove();
+				}
+				trovato = false;
+			}
+		}
+		//contentBean.setContent("risultatiCerca.xhtml");	
+	}
+	
+	
+	public void aggiornaProfilo() {
+				try {
+			serv.merge(utente);
+			String mm = "PROFILo AGGIORNATo";
+			contentBean.setMessaggio(mm);		
+		} catch (Exception e) {
+			e.printStackTrace();
+			//	contentBean.setContent("profilo.xhtml");
+			String mm = e.getMessage()+" ERRORe";
+			contentBean.setMessaggio(mm);
+		}
+			//contentBean.setContent(null);
+		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
+	}
+	
 
 	public List<Utente> getRisultato() {
 		return risultato;
@@ -38,61 +178,6 @@ public class UtenteBean {
 
 	public void setRisultato(List<Utente> risultato) {
 		this.risultato = risultato;
-	}
-
-	public void cercaUtenti(){
-		
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Utente u where u.name=:n and u.username=:un";
-		Query q = em.createQuery(hql, Utente.class);
-		q.setParameter("un", name);
-		q.setParameter("n", username);
-		
-		risultato = q.getResultList();
-		//contentBean.setContent("risultatiCerca.xhtml");	
-		contentBean.setMessaggio("risultati"+name);
-	}
-	
-	public void aggiornaProfilo() {
-		
-		try {
-			serv.merge(utente);
-			String mm = "PROFILo AGGIORNATo";
-			contentBean.setMessaggio(mm);		
-		} catch (Exception e) {
-			e.printStackTrace();
-	
-		//	contentBean.setContent("profilo.xhtml");
-			String mm = e.getMessage()+" ERRORe";
-			contentBean.setMessaggio(mm);
-		}
-		
-		//contentBean.setContent(null);
-		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
-	}
-	
-//	public List<Utente> getRisultato() {
-//		return risultato;
-//	}
-//
-//	public void setRisultato(List<Utente> risultato) {
-//		this.risultato = risultato;
-//	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public Utente getUtente() {

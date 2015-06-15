@@ -7,24 +7,29 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.servlet.http.Part;
 
+import com.bolo.photoshooters.web.LoginBean;
+import com.bolo.photoshooters.web.UtenteBean;
+
 @ManagedBean(name = "inputBean")
-@ViewScoped
+@SessionScoped
 public class InputBean {
  
 	private Part part;
 	private String statusMessage;
- 
-	public String uploadFile() throws IOException {
- 
+	//@ManagedProperty(value = "#{utenteBean}")
+	private LoginBean loginBean = new LoginBean();
+	
+	public void uploadFile() {
+		
 		// Extract file name from content-disposition header of file part
 		String fileName = getFileName(part);
-		System.out.println("***** fileName: " + fileName);
- 
+		String fileExtension = "avatar_" + loginBean.getUsername() + "." + getFileExtension(fileName);
 		String basePath = "C:" + File.separator + "temp" + File.separator;
-		File outputFilePath = new File(basePath + fileName);
+		File outputFilePath = new File(basePath + fileExtension);
  
 		// Copy uploaded file to destination path
 		InputStream inputStream = null;
@@ -38,22 +43,39 @@ public class InputBean {
 			while ((read = inputStream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
- 
-			statusMessage = "File upload successfull !!";
+			statusMessage = "Upload file completato!";
 		} catch (IOException e) {
 			e.printStackTrace();
-			statusMessage = "File upload failed !!";
+			statusMessage = "Upload file fallito!";
 		} finally {
 			if (outputStream != null) {
-				outputStream.close();
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if (inputStream != null) {
-				inputStream.close();
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		return null;    // return to same page
+		//return null;    // return to same page
 	}
  
+	public LoginBean getLoginBean() {
+		return loginBean;
+	}
+
+	public void setLoginBean(LoginBean loginBean) {
+		this.loginBean = loginBean;
+	}
+
 	public Part getPart() {
 		return part;
 	}
@@ -82,4 +104,12 @@ public class InputBean {
 		}
 		return null;
 	}
+	
+	private static String getFileExtension(String fileName) {
+	     //String fileName = file.getName();
+	     if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+	     return fileName.substring(fileName.lastIndexOf(".")+1);
+	     else return "";
+	}
+	
 }

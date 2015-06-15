@@ -22,12 +22,7 @@
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
-            		<h:graphicImage value="/rimgs/portoricano.png" height="51" width="50"></h:graphicImage>
-
-<!--             		<h:outputLabel for="file" value="Select file" /> -->
-<!--                     <t:inputFileUpload  id="file" value="#{inputBean.uploadFile()}" /> -->
-<!--                     <h:message for="file"/> -->
-        		
+            		<h:graphicImage value="/rimgs/portoricano.png" height="51" width="50"></h:graphicImage>   		
         		</f:facet>
         		
 			<h:panelGrid border="1" columns="3" columnClasses="right, left, left">
@@ -124,12 +119,12 @@
             	</h:selectManyListbox >
             	<h:panelGroup><h:message for="regione" />*</h:panelGroup>		
 
-				<h:outputLabel for="tipolavoro">tipi lavoro</h:outputLabel>
+				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
 				<h:selectManyListbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.tipiLavoroId}" 
 					required="true" requiredMessage="scegli almeno un lavoro">
 				<f:selectItems value="#{utenteBean.utente.tipoUtente.tipiLavoro}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
             	</h:selectManyListbox>
-            	<h:panelGroup><h:message for="tipilavoro" />*</h:panelGroup>	
+            	<h:panelGroup><h:message for="tipolavoro" />*</h:panelGroup>	
 
 			</h:panelGrid>	
 			

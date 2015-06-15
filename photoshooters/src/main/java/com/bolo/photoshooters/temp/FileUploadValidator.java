@@ -21,23 +21,24 @@ public class FileUploadValidator implements Validator {
 		String fileName = getFileName(part);
 		System.out.println("----- validator fileName: " + fileName);
 		if(fileName.length() == 0 ) {
-			FacesMessage message = new FacesMessage("Error: File name is invalid !!");
+			FacesMessage message = new FacesMessage("Errore: nome del file non valido!");
 			throw new ValidatorException(message);
 		} else if (fileName.length() > 50) {
-			FacesMessage message = new FacesMessage("Error: File name is too long !!");
+			FacesMessage message = new FacesMessage("Errore: nome del file troppo lungo!");
 			throw new ValidatorException(message);
 		}
  
 		// 2. validate file type (only text files allowed)
 		System.out.println(part.getContentType());
-//		if (!"text/plain".equals(part.getContentType())) {
-//			FacesMessage message = new FacesMessage("Error: File type is invalid !!");
-//			throw new ValidatorException(message);
-//		  }
+		//if (!"image".equals(part.getContentType())) {
+		if (!part.getContentType().startsWith("image/")) {
+			FacesMessage message = new FacesMessage("Errore: tipo file non valido! Tipi file validi: jpg | png | gif | svg | tif | bmp | jpeg");
+			throw new ValidatorException(message);
+		  }
  
 		// 3. validate file size (should not be greater than 2048 bytes)
-		if (part.getSize() > 2048) {
-			FacesMessage message = new FacesMessage("Error: File size is too big !!");
+		if (part.getSize() > 1024*1024) {
+			FacesMessage message = new FacesMessage("Errore: dimensione del file eccessiva! Massima dimensione: 1Mb/2Mb");
 			throw new ValidatorException(message);
 		}
 	}

@@ -15,23 +15,22 @@
 
 	<h:panelGroup styleClass="pannello homepage">
 		
-		<form id="inputForm" enctype="multipart/form-data" >
+		<h:form id="inputForm" enctype="multipart/form-data" >
 
-			<h:inputFile id="file" label="file2" value="#{inputBean.part}"
-				required="true" requiredMessage="File not selected !!">
+			<h:inputFile id="file" label="SFOGLIa" value="#{inputBean.part}"
+				required="true" requiredMessage="Selezionare file per upload!">ciao
 				<f:validator validatorId="FileUploadValidator" />
 			</h:inputFile>
 			<h:message style="color: red" for="file" />
 			<br />
-
-			<h:commandButton id="submit" action="#{inputBean.uploadFile()}"
-				value="upload file" />
+			<h:commandButton id="submit" action="#{inputBean.uploadFile}"
+				value="UPLOAd FILe" />
 			<br />
 
-			status message of file upload; rendered if message is set
+<!-- 			status message of file upload; rendered if message is set -->
 			<h:outputText value="#{inputBean.statusMessage}"
 				rendered="#{not empty inputBean.statusMessage}" />
-		</form>
+		</h:form>
 
 	</h:panelGroup>
 </h:body>

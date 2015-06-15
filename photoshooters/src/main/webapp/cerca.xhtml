@@ -23,19 +23,41 @@
         		</f:facet>
 
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
-				<h:inputText id="username" value="#{utenteBean.username}"
-					required="true" requiredMessage="inserisci uno username"/>
+				<h:inputText id="username" value="#{utenteBean.cercaUtente.username}"/>
 				<h:panelGroup>
 					*<h:message for="username" />
 				</h:panelGroup>
 
 				<h:outputLabel for="name">NOMe</h:outputLabel>
-				<h:inputText id="name" value="#{utenteBean.name}"
-					required="true" requiredMessage="inserisci un nome" />
+				<h:inputText id="name" value="#{utenteBean.cercaUtente.name}"/>
 				<h:panelGroup>
 					*<h:message for="name" />
 				</h:panelGroup>
-						
+				
+				<h:outputLabel for="profilo">PROFILo PROFESSIONALe</h:outputLabel>
+				<h:selectOneMenu id="profilo" value="#{utenteBean.cercaUtente.tipoUtente}" 
+					required="false" requiredMessage="scegli un profilo">
+                	<f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
+                	<f:selectItems value="#{parametersBean.tipiUtente}" />
+            	</h:selectOneMenu>
+            	<h:panelGroup>
+					<h:message for="profilo" />
+				</h:panelGroup>
+				
+				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
+				<h:selectOneMenu id="esperienza" value="#{utenteBean.cercaUtente.esperienza}" 
+					required="false" requiredMessage="scegli il livello esperienza">
+				<f:selectItem itemValue="#{null}" itemLabel="" noSelectionOption="true" />
+				<f:selectItems value="#{utenteBean.esperienze}" var="esperienza" itemValue="#{esperienza}" itemLabel="#{esperienza.esperienza}" />
+            	</h:selectOneMenu>
+            	<h:panelGroup><h:message for="esperienza" />*</h:panelGroup>
+				
+				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
+				<h:selectManyListbox layout="pageDirection" id="regione" value="#{utenteBean.cercaUtente.regIta}" 
+					required="false" requiredMessage="scegli almeno una regione">
+				<f:selectItems noSelectionValue="#{null}" value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
+            	</h:selectManyListbox >
+            	<h:panelGroup><h:message for="regione" />*</h:panelGroup>
 				
 				<f:facet name="footer">
 		            <h:panelGroup>
