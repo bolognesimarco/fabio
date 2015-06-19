@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.RegioneItaliana;
+import com.bolo.photo.web.entity.TipoLavoro;
 import com.bolo.photo.web.entity.TipoUtente;
 
 public class CercaUtenteVO {
@@ -17,9 +18,23 @@ public class CercaUtenteVO {
 	private int tipoUtente;
 	private List <RegioneItaliana> regioniitaliane = new ArrayList<RegioneItaliana>();
 	private Esperienza esperienza;
+	private List<TipoLavoro> tipiLavoro = new ArrayList<TipoLavoro>();
 	
 	public String getName() {
 		return name;
+	}
+	public List<TipoLavoro> getTipiLavoro() {
+		return tipiLavoro;
+	}
+	public void setTipiLavoro(List<TipoLavoro> tipiLavoro) {
+		this.tipiLavoro = tipiLavoro;
+	}
+	public List<String> getTipiLavoroDescrizione() {
+		List<String> darit = new ArrayList<String>();
+		for (TipoLavoro tipo : getTipiLavoro()) {
+			darit.add(tipo.getDescrizione());
+		}
+		return darit;
 	}
 	public int getTipoUtente() {
 		return tipoUtente;

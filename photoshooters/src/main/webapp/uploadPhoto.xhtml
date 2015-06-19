@@ -8,29 +8,47 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.prime.com.tr/ui"> 
 <h:head>
+	<script type="text/javascript">
+// 		document.getElementById("uploadBtn").onchange = function () {
+// 		document.getElementById("uploadFile").value = this.value;
+// 		};
+
+
+	</script>
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homepage.css" library="css" />
+	<h:outputStylesheet name="buttons.css" library="css" />
 </h:head>
 <h:body>
 
+
+	<br/>
+		<br/>
 	<h:panelGroup styleClass="pannello homepage">
 		
-		<h:form id="inputForm" enctype="multipart/form-data" >
-
-			<h:inputFile id="file" label="SFOGLIa" value="#{inputBean.part}"
-				required="true" requiredMessage="Selezionare file per upload!">ciao
-				<f:validator validatorId="FileUploadValidator" />
-			</h:inputFile>
-			<h:message style="color: red" for="file" />
-			<br />
-			<h:commandButton id="submit" action="#{inputBean.uploadFile}"
-				value="UPLOAd FILe" />
-			<br />
-
-<!-- 			status message of file upload; rendered if message is set -->
-			<h:outputText value="#{inputBean.statusMessage}"
-				rendered="#{not empty inputBean.statusMessage}" />
+		<h:form id="inputForm" enctype="multipart/form-data"  >
+		
+			<h:panelGrid columns="3" border="1">
+				<h:inputFile id="file"  label="SFOGLIa" value="#{inputBean.part}"
+					required="true" requiredMessage="Selezionare file per upload!">
+					<f:validator validatorId="FileUploadValidator" />
+				</h:inputFile>			
+				<h:commandButton id="submit" styleClass="buttons" action="#{inputBean.uploadFile}"
+					value="UPLOAd FILe" />
+				<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />				
+				<h:message style="color: red" for="file" />
+			</h:panelGrid>
 		</h:form>
+			<h:panelGrid columns="1" border="1">
+		
+
+<!-- 			<div class="fileUpload" align="center" > -->
+<!-- 				<span class="custom-span">+ AGGIUNGi FOTo</span> -->
+<!-- 				<p class="custom-para">AGGIUNGi FOTo</p> --> 
+<!-- 				<input id="uploadBtn" type="file" class="upload" /> -->
+<!-- 			</div> -->
+<!-- 			<input id="uploadFile" placeholder="0 files selected"  disabled="disabled" /> -->
+		</h:panelGrid>
 
 	</h:panelGroup>
 </h:body>

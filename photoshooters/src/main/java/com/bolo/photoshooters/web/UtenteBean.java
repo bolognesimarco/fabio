@@ -2,13 +2,16 @@ package com.bolo.photoshooters.web;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -30,6 +33,8 @@ public class UtenteBean {
 	private Utente utente;
 	private CercaUtenteVO cercaUtente = new CercaUtenteVO();
 	List<Utente> risultato = new ArrayList<Utente>();
+    List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
+//	private SelectItem[] risultatoLavori;
 	private ServiziComuni serv = new ServiziComuniImpl();
 //	private String username;
 //	private String name;
@@ -39,16 +44,17 @@ public class UtenteBean {
 		
 		EntityManager em = EMF.createEntityManager();
 		//String hql = "from Utente u where u.name=:n and u.username=:un and u.esperienza=:esp and u.tipoUtente.id=:tipout ";
-		String hqlstart = "from Utente u "; //where";
+		String hqlstart = "from Utente u ";
 		String hqlcerca = "";
 		String hql = "";
-		//u.name=:n and u.username=:un and u.esperienza=:esp and u.tipoUtente.id=:tipout ";
 
 		boolean nomeInserito = false;
 		boolean usernameInserito = false;
 		boolean esperienzaInserito = false;
 		boolean utenteInserito = false;
+		boolean lavoroInserito = false;
 		int i = 0;
+		
 		if (cercaUtente.getName()!="") {
 			hqlcerca += " u.name=:n ";
 			nomeInserito = true;
@@ -78,6 +84,14 @@ public class UtenteBean {
 			utenteInserito = true;
 			i++;
 		}
+		if (cercaUtente.getTipiLavoro()!=null) {
+			if (i>0){
+				hqlcerca += "and";
+			}
+			hqlcerca += " u.tipiLavoro in (:tiplav) ";
+			lavoroInserito = true;
+			i++;
+		}
 		if (i>0){
 			hql = hqlstart + "where" + hqlcerca; 
 		}
@@ -85,26 +99,6 @@ public class UtenteBean {
 			hql = hqlstart; 
 		}
 			
-		//boolean primaRegione = true;
-//		int i = 1;
-//		for () {
-//			if(primaRegione){
-//				hql += "or u.regioniitaliane.regioneitaliana in (";
-//				primaRegione = false;
-//			}
-//			
-//			hql+=":reg"+(i++)+",";
-//		}
-//		if(primaRegione==false){
-//			hql = hql.substring(0,hql.length()-1);
-//			hql += ")";
-//		}
-//		if(primaRegione==false){
-//		for(int j=0 ; j<i-1 ; j++){
-//			q.setParameter("reg"+(j+1), cercaUtente.getRegioniitaliane().get(j).getRegioneitaliana());
-//		}
-//	}
-		
 		Query q = em.createQuery(hql, Utente.class);
 		if(nomeInserito){
 			q.setParameter("n",cercaUtente.getName());
@@ -118,14 +112,16 @@ public class UtenteBean {
 		if(utenteInserito){
 			q.setParameter("tipout", cercaUtente.getTipoUtente());
 		}
-
+		List<TipoLavoro> tipiLavoroSelezionati = new ArrayList<TipoLavoro>();
+		if(lavoroInserito){
+			q.setParameter("tiplav", cercaUtente.getTipiLavoro());
+		}
 		risultato = q.getResultList();
-		System.out.println("================================="+risultato.size());
+		System.out.println("================CCC==========="+risultato.size());
 		
-		//selezione per regioni - se selezionate
-		
-		if (cercaUtente.getRegioniitaliane()!=null) {
-			
+		//selezione per regioni - se selezionate cioè <> da []
+		if (cercaUtente.getRegioniitaliane().toString()!="[]") {
+			System.out.println("XXXXXXXXXXXXX"+cercaUtente.getRegioniitaliane().toString());			
 			Iterator<Utente> iter = risultato.iterator();
 	
 			while(iter.hasNext()){
@@ -133,11 +129,11 @@ public class UtenteBean {
 				boolean trovato = false;
 				
 				for (RegioneItaliana regita : u.getRegioniitaliane()) {
-					System.out.println("================================="+regita.toString());	
+					System.out.println("=====BBBBBBBB==============="+regita.toString());	
 				}
 							
 				for (RegioneItaliana reg : cercaUtente.getRegioniitaliane()) {
-					System.out.println("================================="+reg.getRegioneitaliana());
+					System.out.println("=======AAA================"+reg.getRegioneitaliana());
 					
 					if(u.getRegioniitaliane().contains(RegioneItaliana.valueOf(reg.getRegioneitaliana()))){
 						System.out.println("=================================LUI SI:"+u.getName());
@@ -171,7 +167,7 @@ public class UtenteBean {
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 	
-
+	
 	public List<Utente> getRisultato() {
 		return risultato;
 	}
@@ -202,16 +198,54 @@ public class UtenteBean {
 	    }
 	} 
 	
+	
+	public void lavoriPerTipoUtente() {
+		if (cercaUtente.getTipoUtente()!=-1){
+			EntityManager em = EMF.createEntityManager();
+			String hql = "select t from TipoLavoro t inner join t.tipiUtente tl where tl.id=:n ";
+			Query q = em.createQuery(hql, TipoLavoro.class);
+			q.setParameter("n",cercaUtente.getTipoUtente());
+			risultatoLavori = q.getResultList();
+			System.out.println("===========XX=============XXX:" + risultatoLavori.toString());
+		}
+		
+	}
+	
+	
+	public List<TipoLavoro> getRisultatoLavori() {
+		return risultatoLavori;
+
+	}
+
+
+	public void setRisultatoLavori(List<TipoLavoro> risultatoLavori) {
+		this.risultatoLavori = risultatoLavori;
+	}
+
+
 	public void setTipiLavoroId(List<String> tipilavoro) throws NumberFormatException, Exception {
 		utente.getTipiLavoro().clear();
 		for (String id : tipilavoro) {
 			utente.getTipiLavoro().add(serv.getReference(TipoLavoro.class, Integer.valueOf(id)));
 		}
 	}
+	public void setCercaTipiLavoroId(List<String> tipilavoro) throws NumberFormatException, Exception {
+		cercaUtente.getTipiLavoro().clear();
+		for (String id : tipilavoro) {
+			cercaUtente.getTipiLavoro().add(serv.getReference(TipoLavoro.class, Integer.valueOf(id)));
+		}
+	}
 	
 	public List<Integer> getTipiLavoroId() {
 		List<Integer> darit = new ArrayList<Integer>();
 		for (TipoLavoro t:utente.getTipiLavoro()){
+			darit.add(t.getId());
+		}
+		return darit;
+	}
+	public List<Integer> getCercaTipiLavoroId() {
+		List<Integer> darit = new ArrayList<Integer>();
+		for (TipoLavoro t:cercaUtente.getTipiLavoro()){
 			darit.add(t.getId());
 		}
 		return darit;
