@@ -30,7 +30,7 @@ import com.bolo.photoshooters.vo.CercaUtenteVO;
 @SessionScoped
 public class UtenteBean {
 
-	private Utente utente;
+	public Utente utente;
 	private CercaUtenteVO cercaUtente = new CercaUtenteVO();
 	List<Utente> risultato = new ArrayList<Utente>();
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
@@ -38,7 +38,7 @@ public class UtenteBean {
 	private ServiziComuni serv = new ServiziComuniImpl();
 //	private String username;
 //	private String name;
-
+	private String pathAvatar=""; 
 
 	public void cercaUtenti(){
 		
@@ -52,7 +52,7 @@ public class UtenteBean {
 		boolean usernameInserito = false;
 		boolean esperienzaInserito = false;
 		boolean utenteInserito = false;
-		boolean lavoroInserito = false;
+
 		int i = 0;
 		
 		if (cercaUtente.getName()!="") {
@@ -84,14 +84,7 @@ public class UtenteBean {
 			utenteInserito = true;
 			i++;
 		}
-		if (cercaUtente.getTipiLavoro()!=null) {
-			if (i>0){
-				hqlcerca += "and";
-			}
-			hqlcerca += " u.tipiLavoro in (:tiplav) ";
-			lavoroInserito = true;
-			i++;
-		}
+
 		if (i>0){
 			hql = hqlstart + "where" + hqlcerca; 
 		}
@@ -112,15 +105,46 @@ public class UtenteBean {
 		if(utenteInserito){
 			q.setParameter("tipout", cercaUtente.getTipoUtente());
 		}
-		List<TipoLavoro> tipiLavoroSelezionati = new ArrayList<TipoLavoro>();
-		if(lavoroInserito){
-			q.setParameter("tiplav", cercaUtente.getTipiLavoro());
-		}
+
 		risultato = q.getResultList();
 		System.out.println("================CCC==========="+risultato.size());
 		
-		//selezione per regioni - se selezionate cioè <> da []
-		if (cercaUtente.getRegioniitaliane().toString()!="[]") {
+		//selezione per tipilavoro - se selezionati
+		if (cercaUtente.getTipiLavoro().size()>0) {
+			System.out.println("AAAAAAAAaaa"+cercaUtente.getTipiLavoro().toString());			
+			Iterator<Utente> iter1 = risultato.iterator();
+	
+			while(iter1.hasNext()){
+				Utente u = iter1.next();
+//				for (TipoLavoro tiplav : u.getTipiLavoro()) {
+//					System.out.println("=====LAVORIIII==============="+tiplav.toString());	
+//				}
+				int j = 0;
+				int h = 0;
+				for (Integer tlavID : getCercaTipiLavoroId()) {
+					System.out.println("=======LAVVVV================"+tlavID.toString());
+					j++;
+					for (TipoLavoro tl : u.getTipiLavoro()){
+					
+						if (tl.getId() == tlavID){
+						System.out.println("======LAVORI========LUI SI:"+u.getName());
+						h++;
+						break;
+						}
+					}
+					
+				}
+				
+				if(j!=h){
+					System.out.println("===========LAVORI==============lUI NO:"+u.getName());
+					iter1.remove();
+				}
+			}
+		}
+
+		//selezione per regioni - se selezionate
+		
+		if (cercaUtente.getRegioniitaliane().size()>0) {
 			System.out.println("XXXXXXXXXXXXX"+cercaUtente.getRegioniitaliane().toString());			
 			Iterator<Utente> iter = risultato.iterator();
 	
@@ -128,9 +152,9 @@ public class UtenteBean {
 				Utente u = iter.next();
 				boolean trovato = false;
 				
-				for (RegioneItaliana regita : u.getRegioniitaliane()) {
-					System.out.println("=====BBBBBBBB==============="+regita.toString());	
-				}
+//				for (RegioneItaliana regita : u.getRegioniitaliane()) {
+//					System.out.println("=====ListaRegionisel?=============="+regita.toString());	
+//				}
 							
 				for (RegioneItaliana reg : cercaUtente.getRegioniitaliane()) {
 					System.out.println("=======AAA================"+reg.getRegioneitaliana());
@@ -152,6 +176,16 @@ public class UtenteBean {
 	}
 	
 	
+	public String getPathAvatar() {
+		return pathAvatar;
+	}
+
+
+	public void setPathAvatar(String pathAvatar) {
+		this.pathAvatar = pathAvatar;
+	}
+
+
 	public void aggiornaProfilo() {
 				try {
 			serv.merge(utente);
@@ -232,7 +266,12 @@ public class UtenteBean {
 	public void setCercaTipiLavoroId(List<String> tipilavoro) throws NumberFormatException, Exception {
 		cercaUtente.getTipiLavoro().clear();
 		for (String id : tipilavoro) {
-			cercaUtente.getTipiLavoro().add(serv.getReference(TipoLavoro.class, Integer.valueOf(id)));
+			if (Integer.valueOf(id)==0){
+				break;
+			}
+			else {
+				cercaUtente.getTipiLavoro().add(serv.getReference(TipoLavoro.class, Integer.valueOf(id)));
+			}
 		}
 	}
 	

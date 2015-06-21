@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.servlet.http.Part;
 
+import com.bolo.photoshooters.web.ContentBean;
 import com.bolo.photoshooters.web.LoginBean;
 import com.bolo.photoshooters.web.UtenteBean;
 
@@ -20,17 +21,38 @@ public class InputBean {
  
 	private Part part;
 	private String statusMessage;
-	//@ManagedProperty(value = "#{utenteBean}")
-	private LoginBean loginBean = new LoginBean();
+	@ManagedProperty(value="#{contentBean}")
+	private ContentBean contentBean;
 	
+	@ManagedProperty(value="#{utenteBean}")
+	private UtenteBean utenteBean;
+
+	public ContentBean getContentBean() {
+		return contentBean;
+	}
+
+	public void setContentBean(ContentBean contentBean) {
+		this.contentBean = contentBean;
+	}
+
+	public UtenteBean getUtenteBean() {
+		return utenteBean;
+	}
+
+	public void setUtenteBean(UtenteBean utenteBean) {
+		this.utenteBean = utenteBean;
+	}
+
+
 	public void uploadFile() {
 		
 		// Extract file name from content-disposition header of file part
 		String fileName = getFileName(part);
-		String fileExtension = "avatar_" + loginBean.getUsername() + "." + getFileExtension(fileName);
+		String fileExtension = "avatar_" + utenteBean.utente.getUsername() + "." + getFileExtension(fileName);
 		String basePath = "C:" + File.separator + "temp" + File.separator;
+		
 		File outputFilePath = new File(basePath + fileExtension);
- 
+		utenteBean.setPathAvatar(basePath+fileExtension);
 		// Copy uploaded file to destination path
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
@@ -43,7 +65,7 @@ public class InputBean {
 			while ((read = inputStream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
-			statusMessage = "Upload file completato!";
+			statusMessage = "Upload file completato!"+utenteBean.getPathAvatar();
 		} catch (IOException e) {
 			e.printStackTrace();
 			statusMessage = "Upload file fallito!";
@@ -68,13 +90,6 @@ public class InputBean {
 		//return null;    // return to same page
 	}
  
-	public LoginBean getLoginBean() {
-		return loginBean;
-	}
-
-	public void setLoginBean(LoginBean loginBean) {
-		this.loginBean = loginBean;
-	}
 
 	public Part getPart() {
 		return part;

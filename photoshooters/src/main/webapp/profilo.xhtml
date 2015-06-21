@@ -9,11 +9,25 @@
 <h:head>
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homePage.css" library="css" />
+	<h:outputStylesheet name="buttons.css" library="css" />
 </h:head>
 
 <h:body>
 	
 	<h:panelGroup styleClass="pannello homepage">
+        				<h:form id="avatarForm" enctype="multipart/form-data"  >
+						<h:panelGrid columns="3" border="1">
+						AVATAr UPLOAd
+							<h:inputFile id="file"  label="SFOGLIa" value="#{inputBean.part}"
+								required="true" requiredMessage="Selezionare file per upload!">
+								<f:validator validatorId="FileUploadValidator" />
+							</h:inputFile>			
+							<h:commandButton id="submit" styleClass="buttons" action="#{inputBean.uploadFile}"
+								value="UPLOAd FILe" />
+							<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />				
+							<h:message style="color: red" for="file" />
+						</h:panelGrid>
+						</h:form>
 
 		<h:form id="profiloform">
 		<h:panelGrid border="1" columns="1" columnClasses="right, left">
@@ -22,7 +36,8 @@
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
-            		<h:graphicImage value="/rimgs/portoricano.png" height="51" width="50"></h:graphicImage>
+            		<h:graphicImage value="#{utenteBean.pathAvatar}" height="51" width="50"></h:graphicImage>
+		
         		</f:facet>
         		
 			<h:panelGrid border="1" columns="3" columnClasses="right, left, left">

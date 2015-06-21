@@ -71,6 +71,14 @@ public class CercaUtenteVO {
 				getRegioniitaliane().add(RegioneItaliana.valueOf(string));
 		}
 	}
+	public void setTipiLavoroDescrizione(List<String> lavs){
+		getTipiLavoro().clear();
+		for (String string : lavs) {
+				getTipiLavoroDescrizione().add(string);
+		}
+	}
+	
+	
 	public String getUsername() {
 		return username;
 	}

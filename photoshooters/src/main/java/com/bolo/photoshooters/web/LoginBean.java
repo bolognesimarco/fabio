@@ -1,6 +1,7 @@
 package com.bolo.photoshooters.web;
 
 
+import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
@@ -58,6 +59,7 @@ public class LoginBean {
 				utenteBean.setUtente(u);
 				utenteBean.fillSelectItems();
 				contentBean.setContent("homePage.xhtml");
+				
 			}else{
 				System.out.println("login ko");
 				contentBean.setMessaggio("Utente e Password errati!!");

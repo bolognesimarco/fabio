@@ -39,7 +39,6 @@
 				<h:outputLabel for="profilo">PROFILo PROFESSIONALe</h:outputLabel>
 				<h:selectOneMenu id="profilo" value="#{utenteBean.cercaUtente.tipoUtente}" 
 					required="false" requiredMessage="scegli un profilo">
-                	<f:ajax event="change" resetValues="" render=":cercaform" />
                 	<f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
                 	<f:selectItems value="#{parametersBean.tipiUtente}" />
                 	<f:ajax execute="cercaform:tipolavoro" event="change" render="@form" listener="#{utenteBean.lavoriPerTipoUtente}" />
@@ -51,9 +50,8 @@
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
 				<h:selectManyListbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.cercaTipiLavoroId}" 
 					required="false" requiredMessage="scegli almeno un lavoro">
-				<f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
+				<f:selectItem itemValue="0" itemLabel="" noSelectionOption="true" />
 				<f:selectItems value="#{utenteBean.risultatoLavori}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
-<!-- 				<f:selectItems value="#{utenteBean.cercaUtente.tipiLavoro}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" /> -->
             	</h:selectManyListbox>
             	<h:panelGroup><h:message for="tipolavoro" />*</h:panelGroup>
 				
