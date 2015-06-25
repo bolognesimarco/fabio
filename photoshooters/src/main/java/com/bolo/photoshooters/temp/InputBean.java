@@ -48,8 +48,9 @@ public class InputBean {
 		
 		// Extract file name from content-disposition header of file part
 		String fileName = getFileName(part);
-		String fileExtension = "avatar_" + utenteBean.utente.getUsername() + "." + getFileExtension(fileName);
+		String fileExtension = "avatar_" + utenteBean.getUtente().getUsername() + "." + getFileExtension(fileName);
 		String basePath = "C:" + File.separator + "temp" + File.separator;
+
 		
 		File outputFilePath = new File(basePath + fileExtension);
 		utenteBean.setPathAvatar(basePath+fileExtension);
@@ -65,7 +66,7 @@ public class InputBean {
 			while ((read = inputStream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
-			statusMessage = "Upload file completato!"+utenteBean.getPathAvatar();
+			statusMessage = "Upload file completato! "+utenteBean.getPathAvatar();
 		} catch (IOException e) {
 			e.printStackTrace();
 			statusMessage = "Upload file fallito!";

@@ -30,20 +30,20 @@ import com.bolo.photoshooters.vo.CercaUtenteVO;
 @SessionScoped
 public class UtenteBean {
 
-	public Utente utente;
+	private Utente utente;
 	private CercaUtenteVO cercaUtente = new CercaUtenteVO();
 	List<Utente> risultato = new ArrayList<Utente>();
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
-//	private SelectItem[] risultatoLavori;
 	private ServiziComuni serv = new ServiziComuniImpl();
-//	private String username;
-//	private String name;
 	private String pathAvatar=""; 
 
-	public void cercaUtenti(){
-		
+	public String avatarPath () {
+		return pathAvatar;
+	}
+	
+	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();
-		//String hql = "from Utente u where u.name=:n and u.username=:un and u.esperienza=:esp and u.tipoUtente.id=:tipout ";
+		//String hql = "from Utente u where u.name=:n and u.username like :un and u.esperienza=:esp and u.tipoUtente.id=:tipout ";
 		String hqlstart = "from Utente u ";
 		String hqlcerca = "";
 		String hql = "";
@@ -142,8 +142,7 @@ public class UtenteBean {
 			}
 		}
 
-		//selezione per regioni - se selezionate
-		
+		//selezione per regioni - se selezionate		
 		if (cercaUtente.getRegioniitaliane().size()>0) {
 			System.out.println("XXXXXXXXXXXXX"+cercaUtente.getRegioniitaliane().toString());			
 			Iterator<Utente> iter = risultato.iterator();
@@ -158,7 +157,7 @@ public class UtenteBean {
 							
 				for (RegioneItaliana reg : cercaUtente.getRegioniitaliane()) {
 					System.out.println("=======AAA================"+reg.getRegioneitaliana());
-					
+
 					if(u.getRegioniitaliane().contains(RegioneItaliana.valueOf(reg.getRegioneitaliana()))){
 						System.out.println("=================================LUI SI:"+u.getName());
 						trovato = true;
@@ -172,20 +171,9 @@ public class UtenteBean {
 				trovato = false;
 			}
 		}
-		//contentBean.setContent("risultatiCerca.xhtml");	
+
 	}
 	
-	
-	public String getPathAvatar() {
-		return pathAvatar;
-	}
-
-
-	public void setPathAvatar(String pathAvatar) {
-		this.pathAvatar = pathAvatar;
-	}
-
-
 	public void aggiornaProfilo() {
 				try {
 			serv.merge(utente);
@@ -201,6 +189,25 @@ public class UtenteBean {
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 	
+	public void lavoriPerTipoUtente() {
+		if (cercaUtente.getTipoUtente()!=-1){
+			EntityManager em = EMF.createEntityManager();
+			String hql = "select t from TipoLavoro t inner join t.tipiUtente tl where tl.id=:n ";
+			Query q = em.createQuery(hql, TipoLavoro.class);
+			q.setParameter("n",cercaUtente.getTipoUtente());
+			risultatoLavori = q.getResultList();
+			System.out.println("===========XX=============XXX:" + risultatoLavori.toString());
+		}
+		
+	}
+	
+	public String getPathAvatar() {
+		return pathAvatar;
+	}
+
+	public void setPathAvatar(String pathAvatar) {
+		this.pathAvatar = pathAvatar;
+	}
 	
 	public List<Utente> getRisultato() {
 		return risultato;
@@ -226,36 +233,14 @@ public class UtenteBean {
 		this.utente = utente;
 	}
 	
-	public void rangeFill(List<Integer> campo2, int start, int end) {
-	    for (int i = start; i <= end; i++) {
-	    	campo2.add(new Integer(new Integer(i)));
-	    }
-	} 
-	
-	
-	public void lavoriPerTipoUtente() {
-		if (cercaUtente.getTipoUtente()!=-1){
-			EntityManager em = EMF.createEntityManager();
-			String hql = "select t from TipoLavoro t inner join t.tipiUtente tl where tl.id=:n ";
-			Query q = em.createQuery(hql, TipoLavoro.class);
-			q.setParameter("n",cercaUtente.getTipoUtente());
-			risultatoLavori = q.getResultList();
-			System.out.println("===========XX=============XXX:" + risultatoLavori.toString());
-		}
-		
-	}
-	
-	
 	public List<TipoLavoro> getRisultatoLavori() {
 		return risultatoLavori;
 
 	}
 
-
 	public void setRisultatoLavori(List<TipoLavoro> risultatoLavori) {
 		this.risultatoLavori = risultatoLavori;
 	}
-
 
 	public void setTipiLavoroId(List<String> tipilavoro) throws NumberFormatException, Exception {
 		utente.getTipiLavoro().clear();
@@ -289,6 +274,13 @@ public class UtenteBean {
 		}
 		return darit;
 	}
+	
+	
+	public void rangeFill(List<Integer> campo2, int start, int end) {
+	    for (int i = start; i <= end; i++) {
+	    	campo2.add(new Integer(new Integer(i)));
+	    }
+	} 
 	
 	public void fillSelectItems() {
 		rangeFianchi.clear();
@@ -402,7 +394,7 @@ public class UtenteBean {
 	}
 	
 	public RegioneItaliana[] getRegioni() {
-        return RegioneItaliana.values();
+		return RegioneItaliana.values();
 	}
 	
 	public ContentBean getContentBean() {

@@ -38,4 +38,6 @@ public class ParametersBean {
 		}
 		return tipiUtente;
 	}
+	
+	
 }

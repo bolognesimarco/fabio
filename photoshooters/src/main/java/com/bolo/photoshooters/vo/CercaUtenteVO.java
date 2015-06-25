@@ -77,8 +77,7 @@ public class CercaUtenteVO {
 				getTipiLavoroDescrizione().add(string);
 		}
 	}
-	
-	
+		
 	public String getUsername() {
 		return username;
 	}

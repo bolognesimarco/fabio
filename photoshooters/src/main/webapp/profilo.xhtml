@@ -15,35 +15,35 @@
 <h:body>
 	
 	<h:panelGroup styleClass="pannello homepage">
-        				<h:form id="avatarForm" enctype="multipart/form-data"  >
-						<h:panelGrid columns="3" border="1">
-						AVATAr UPLOAd
-							<h:inputFile id="file"  label="SFOGLIa" value="#{inputBean.part}"
-								required="true" requiredMessage="Selezionare file per upload!">
-								<f:validator validatorId="FileUploadValidator" />
-							</h:inputFile>			
-							<h:commandButton id="submit" styleClass="buttons" action="#{inputBean.uploadFile}"
-								value="UPLOAd FILe" />
-							<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />				
-							<h:message style="color: red" for="file" />
-						</h:panelGrid>
-						</h:form>
+   			<h:form id="avatarForm" enctype="multipart/form-data"  >
+				<h:panelGrid columns="3" border="1">
+				AVATAr UPLOAd
+					<h:inputFile id="file"  label="SFOGLIa" value="#{inputBean.part}"
+						required="true" requiredMessage="Selezionare file per upload!">
+						<f:validator validatorId="FileUploadValidator" />
+					</h:inputFile>			
+					<h:commandButton id="submit" styleClass="buttons" action="#{inputBean.uploadFile}"
+						value="UPLOAd FILe" />
+					<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />				
+					<h:message style="color: red" for="file" />
+				</h:panelGrid>
+			</h:form>
 
 		<h:form id="profiloform">
-		<h:panelGrid border="1" columns="1" columnClasses="right, left">
+		<h:panelGrid border="1" columns="1" >
 		
-		  <h:panelGrid border="1" columns="2" columnClasses="right, left">
+		  <h:panelGrid border="1" columns="2" >
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
-            		<h:graphicImage value="#{utenteBean.pathAvatar}" height="51" width="50"></h:graphicImage>
+            		<h:graphicImage value="C:/temp/avatar_fb.png" height="51" width="50"></h:graphicImage>
 		
         		</f:facet>
         		
-			<h:panelGrid border="1" columns="3" columnClasses="right, left, left">
+			<h:panelGrid border="1" columns="3" columnClasses="right, centercol, left">
 	
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
-				<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
+				<h:outputText style="width: 120px;"  id="username" value="#{utenteBean.utente.username}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="password">PASSWORd</h:outputLabel>
@@ -80,10 +80,10 @@
 				
 			</h:panelGrid>
 				
-			<h:panelGrid border="1" columns="3" columnClasses="right, left, left">
+			<h:panelGrid border="1" columns="3" columnClasses="right, centercol, left">
 				
 				<h:outputLabel for="sitoweb">SITo WEb</h:outputLabel>
-				<h:outputText id="sitoweb" value="#{utenteBean.utente.sitoweb}"/>
+				<h:outputText  style="width: 120px;" id="sitoweb" value="#{utenteBean.utente.sitoweb}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="facebook">FACEBOOk</h:outputLabel>
@@ -131,7 +131,7 @@
 	      </h:panelGrid>
 			
 		  <h:panelGrid id="modellaGrid" border="1" columns="2" columnClasses="right, left" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
-			<h:panelGrid border="1" columns="3" columnClasses="right, left, left">
+			<h:panelGrid border="1" columns="3" columnClasses="right, centercol, left">
 				
 				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
 				<h:outputText id="vita" value="#{utenteBean.utente.vita}" />
@@ -147,7 +147,7 @@
 			
 			</h:panelGrid>
 						
-			<h:panelGrid border="1" columns="3" columnClasses="right, left, left">
+			<h:panelGrid border="1" columns="3" columnClasses="right, centercol, left">
 			
 				<h:outputLabel for="altezza">ALTEZZa [Cm]</h:outputLabel>
 				<h:outputText  id="altezza" value="#{utenteBean.utente.altezza}" />

@@ -62,16 +62,6 @@ public class TipoLavoro implements Serializable {
 		this.descrizione = descrizione;
 	}
 
-	public static TipoLavoro valueOf(String descrizione2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-//	@Override
-//	public String toString() {
-//		return getDescrizione();
-//	}
-	
-	
 	
 }

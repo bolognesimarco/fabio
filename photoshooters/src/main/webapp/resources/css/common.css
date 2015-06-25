@@ -23,6 +23,7 @@ html, body{
 
 .pannello tfoot{
 	text-align: right;
+
 }
 
 .pannello tfoot input{
@@ -41,13 +42,29 @@ html, body{
 	width: 100%;
 }
 
+/* colonne tabelle  */
+
 .right{
 	text-align: right;
+	color: #EF4323;
 	margin-right: 0px;
+	width: 100px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
 }
 .left{
 	text-align: left;
+	color: white;
+	width: 100px;
+/* 	text-shadow: 0.5px 0.5px 0.5px #414042; */
 }
+
+.centercol{
+	text-align: left;
+	color: white;
+	width: 100px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+}
+
 
 .center{
 	text-align: center;
@@ -55,4 +72,7 @@ html, body{
 	margin-right: auto;
 }
 
-
+.textarea {
+	width: 300px;
+	white-space: normal;
+}

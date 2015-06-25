@@ -27,7 +27,7 @@ import com.bolo.photoshooters.service.ServiziVariImpl;
 public class LoginBean {
 	private String username;
 	private String password;
-	
+	private ServiziVari serviziVari = new ServiziVariImpl();
 	private ServiziComuni serv = new ServiziComuniImpl();
 
 	public void login() {
@@ -67,18 +67,14 @@ public class LoginBean {
 		} catch (Exception e) {
 			e.printStackTrace();
 			contentBean.setContent("login.xhtml");
-		}
-		
-		
+		}				
 	}
 	
-	private ServiziVari serviziVari = new ServiziVariImpl();
 
 	public void checkUsername(FacesContext context, UIComponent component,
 			Object value) throws ValidatorException {
 		String usernameToCheck = (String) value;
-		
-		
+				
 		boolean esiste = false;
 		try {
 			esiste = serviziVari.utenteEsiste(usernameToCheck);

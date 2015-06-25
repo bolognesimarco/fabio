@@ -15,14 +15,14 @@
 	<h:panelGroup styleClass="pannello registrati">
 
 		<h:form id="registratiform">
-			<h:panelGrid columns="3" columnClasses="right, left, left">
+			<h:panelGrid columns="3" columnClasses="right, centercol, left">
 			
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;REGISTRAZIONe PHOTOSHOOTEr"/>
         		</f:facet>
 
 				<h:outputLabel for="username">USERSNAMe</h:outputLabel>
-				<h:inputText id="username" value="#{registratiBean.username}"
+				<h:inputText  id="username" value="#{registratiBean.username}"
 					required="true" requiredMessage="inserisci uno username" 
 					validator="#{registratiBean.checkUsername}"/>
 				<h:panelGroup>
