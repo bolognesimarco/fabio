@@ -42,7 +42,7 @@ html, body{
 	width: 100%;
 }
 
-/* colonne tabelle  */
+/* colonne tabelle a 3   */
 
 .right{
 	text-align: right;
@@ -51,6 +51,7 @@ html, body{
 	width: 100px;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 }
+
 .left{
 	text-align: left;
 	color: white;
@@ -63,8 +64,26 @@ html, body{
 	color: white;
 	width: 100px;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
+	/* 	margin-top: 0px; */
+
 }
 
+/* colonne tabelle a 2   */
+
+.2right{
+/* 	padding-top: 0px; */
+	position: absolute;
+	top: 0px;
+/* margin-top: 0%; */
+}
+
+.2left{
+
+/* 	position: absolute; */
+/* 	top: 0px; */
+margin-top: ;
+
+}
 
 .center{
 	text-align: center;

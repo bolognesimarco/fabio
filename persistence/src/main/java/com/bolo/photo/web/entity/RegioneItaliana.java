@@ -3,7 +3,7 @@ package com.bolo.photo.web.entity;
 
 public enum RegioneItaliana {
 	ABRUZZo	("ABRUZZo"),
-	BASILICATAa	("BASILICATAa"),
+	BASILICATa	("BASILICATa"),
 	CALABRIa	("CALABRIa"),
 	CAMPANIa ("CAMPANIa"),
 	EMILIa_ROMAGNa	("EMILIa_ROMAGNa"),

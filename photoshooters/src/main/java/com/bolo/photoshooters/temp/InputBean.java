@@ -49,11 +49,21 @@ public class InputBean {
 		// Extract file name from content-disposition header of file part
 		String fileName = getFileName(part);
 		String fileExtension = "avatar_" + utenteBean.getUtente().getUsername() + "." + getFileExtension(fileName);
-		String basePath = "C:" + File.separator + "temp" + File.separator;
-
+		//String basePath = "C:" + File.separator + "temp" + File.separator;
+		String userFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
+		File userFolder = new File(userFolderPath);
 		
-		File outputFilePath = new File(basePath + fileExtension);
-		utenteBean.setPathAvatar(basePath+fileExtension);
+		if (!userFolder.exists()) {
+			if (userFolder.mkdirs()) {
+				System.out.println("Multiple directories are created!");
+			} else {
+				System.out.println("Failed to create multiple directories!");
+			}
+		}
+		
+		File outputFilePath = new File(userFolderPath + fileExtension);
+		utenteBean.setPathAvatar(userFolderPath+fileExtension);
+		
 		// Copy uploaded file to destination path
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
