@@ -57,7 +57,8 @@ public class LoginBean {
 				String mm2="BENVENUTo "+u.getName()+"\n"+mm;
 				contentBean.setMessaggio(mm2);				
 				utenteBean.setUtente(u);
-				utenteBean.fillSelectItems();
+				//utenteBean.fillSelectItems();
+				parametersBean.fillSelectItems();
 				contentBean.setContent("homePage.xhtml");
 				
 			}else{
@@ -129,11 +130,23 @@ public class LoginBean {
 		this.contentBean = contentBean;
 	}
 
+	@ManagedProperty(value = "#{parametersBean}")
+	private ParametersBean parametersBean;
+	
 	@ManagedProperty(value = "#{contentBean}")
 	private ContentBean contentBean;
 	
 	@ManagedProperty(value = "#{utenteBean}")
 	private UtenteBean utenteBean;
+
+	public ParametersBean getParametersBean() {
+		return parametersBean;
+	}
+
+	public void setParametersBean(ParametersBean parametersBean) {
+		this.parametersBean = parametersBean;
+	}
+
 
 	public UtenteBean getUtenteBean() {
 		return utenteBean;

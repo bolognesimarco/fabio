@@ -5,6 +5,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import com.bolo.photoshooters.temp.InputBean;
+
 @ManagedBean
 @SessionScoped
 public class MenuBean {
@@ -18,16 +20,20 @@ public class MenuBean {
 			contentBean.setContent("login.xhtml");
 			break;
 		case 3://SITE
+			contentBean.setMessaggio(null);
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 4://FORUM
+			contentBean.setMessaggio(null);
 			contentBean.setContent("uploadPhoto.xhtml");
 			break;
 		case 5://LAVORI
+			contentBean.setMessaggio(null);
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 6://PHOTOSHOOTERS
-			contentBean.setContent("cerca.xhtml");
+			contentBean.setMessaggio(null);
+			contentBean.setContent("cerca2.xhtml");
 			break;
 		case 7://HOME
 			contentBean.setMessaggio(null);
@@ -38,19 +44,21 @@ public class MenuBean {
 			contentBean.setContent("profilo.xhtml");
 			//utenteBean.fillSelectItems();
 			break;
-		case 9://FORUM
+		case 9://ALBUMS
+			//utenteBean.albumsUtente();
+			contentBean.setMessaggio(null);
+			contentBean.setContent("albums.xhtml");
+			break;
+		case 10://MESSAGGI
 			contentBean.setContent("wip.xhtml");
 			break;
-		case 10://FORUM
+		case 11://CHAT
 			contentBean.setContent("wip.xhtml");
 			break;
-		case 11://FORUM
+		case 12://ANNUNCI
 			contentBean.setContent("wip.xhtml");
 			break;
-		case 12://FORUM
-			contentBean.setContent("wip.xhtml");
-			break;
-		case 13://FORUM
+		case 13://CREDITI
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 14://LOGOUT
@@ -64,7 +72,12 @@ public class MenuBean {
 			break;
 		case 16://MODIFICA PROFILO
 			contentBean.setMessaggio(null);
+			inputBean.setStatusMessage(null);
 			contentBean.setContent("modificaProfilo.xhtml");
+			break;
+		case 17://NUOVO ALBUM
+			contentBean.setMessaggio(null);
+			contentBean.setContent("nuovoAlbum.xhtml");
 			break;
 		default:
 			break;
@@ -91,9 +104,24 @@ public class MenuBean {
 	@ManagedProperty(value="#{utenteBean}")
 	private UtenteBean utenteBean;
 
+	@ManagedProperty(value="#{inputBean}")
+	private InputBean inputBean;
+	
 	public UtenteBean getUtenteBean() {
 		return utenteBean;
 	}
+
+	public InputBean getInputBean() {
+		return inputBean;
+	}
+
+
+
+	public void setInputBean(InputBean inputBean) {
+		this.inputBean = inputBean;
+	}
+
+
 
 	public void setUtenteBean(UtenteBean utenteBean) {
 		this.utenteBean = utenteBean;

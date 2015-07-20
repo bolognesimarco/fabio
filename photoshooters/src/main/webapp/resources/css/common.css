@@ -50,12 +50,14 @@ html, body{
 	margin-right: 0px;
 	width: 100px;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
+	border: 1px:
 }
 
 .left{
 	text-align: left;
 	color: white;
 	width: 100px;
+	border: 1px solid black:
 /* 	text-shadow: 0.5px 0.5px 0.5px #414042; */
 }
 
@@ -64,6 +66,8 @@ html, body{
 	color: white;
 	width: 100px;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
+	border: 1px:
+	
 	/* 	margin-top: 0px; */
 
 }

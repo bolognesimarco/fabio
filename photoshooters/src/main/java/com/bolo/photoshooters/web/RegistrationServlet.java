@@ -27,6 +27,7 @@ public class RegistrationServlet extends HttpServlet {
 				request.getSession(true).setAttribute("contentBean", contentBean);
 				
 				UtenteBean bean = new UtenteBean();
+				ParametersBean pBean = new ParametersBean();
 				bean.setUtente(u);
 				bean.setContentBean(contentBean);
 				request.getSession(true).setAttribute("utenteBean", bean);
@@ -37,7 +38,7 @@ public class RegistrationServlet extends HttpServlet {
 				menu.messaggioAvvenutaRegistrazione();
 				request.getSession(true).setAttribute("menuBean", menu);
 				response.sendRedirect("/");
-				bean.fillSelectItems();
+				pBean.fillSelectItems();
 			}
 			
 		} catch (Exception e) {

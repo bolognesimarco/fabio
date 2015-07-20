@@ -5,12 +5,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.UUID;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.servlet.http.Part;
 
+import com.bolo.photo.web.entity.Album;
+import com.bolo.photo.web.entity.Foto;
 import com.bolo.photoshooters.web.ContentBean;
 import com.bolo.photoshooters.web.LoginBean;
 import com.bolo.photoshooters.web.UtenteBean;
@@ -42,27 +45,43 @@ public class InputBean {
 	public void setUtenteBean(UtenteBean utenteBean) {
 		this.utenteBean = utenteBean;
 	}
-
-
-	public void uploadFile() {
+	
+	
+	
+	public void uploadFoto(String albumName) {
+		//preparare File di output (c:\temp\+username+albumname+randomid)
+		
+		//nuovo oggetto Foto (name, data, randomid, etc...)
+		//aggiunge all album SU UTENTEBEAN.getfotos.add
+		//da part si prende l'inputstreaM
+		//ETCC...
 		
 		// Extract file name from content-disposition header of file part
 		String fileName = getFileName(part);
-		String fileExtension = "avatar_" + utenteBean.getUtente().getUsername() + "." + getFileExtension(fileName);
-		//String basePath = "C:" + File.separator + "temp" + File.separator;
-		String userFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
-		File userFolder = new File(userFolderPath);
+		Foto newFoto = new Foto();
+		String radomFotoName = UUID.randomUUID().toString();
 		
-		if (!userFolder.exists()) {
-			if (userFolder.mkdirs()) {
-				System.out.println("Multiple directories are created!");
+		String userFotoFileName = radomFotoName + "." + getFileExtension(fileName);
+		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
+		
+		File userAlbumFolder = new File(userAlbumFolderPath + albumName + File.separator);
+		if (!userAlbumFolder.exists()) {
+			if (userAlbumFolder.mkdirs()) {
+				System.out.println("Cartella nuovo album creata!");
+				Album nuovoAlbum = new Album();
+				nuovoAlbum.setTitolo(albumName);
+				nuovoAlbum.setPubblicatore(utenteBean.getUtente());
+				utenteBean.getUtente().getPubblicati().add(nuovoAlbum);
+				newFoto.setPubblicatore(utenteBean.getUtente());
+				utenteBean.getUtente().getFotografoDi().add(newFoto);
 			} else {
-				System.out.println("Failed to create multiple directories!");
+				System.out.println("Errore nella creazione della cartella dell'album!");
 			}
+		} else {
+			System.out.println("Album già esistente!");
 		}
 		
-		File outputFilePath = new File(userFolderPath + fileExtension);
-		utenteBean.setPathAvatar(userFolderPath+fileExtension);
+		File outputFilePath = new File(userAlbumFolderPath + userFotoFileName);
 		
 		// Copy uploaded file to destination path
 		InputStream inputStream = null;
@@ -76,10 +95,67 @@ public class InputBean {
 			while ((read = inputStream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
-			statusMessage = "Upload file completato! "+utenteBean.getPathAvatar();
+			statusMessage = "Upload file completato!";
 		} catch (IOException e) {
 			e.printStackTrace();
 			statusMessage = "Upload file fallito!";
+		} finally {
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+
+	public void uploadAvatar() {
+		
+		// Extract file name from content-disposition header of file part
+		String fileName = getFileName(part);
+		String userAvatarFileName = "avatar_" + utenteBean.getUtente().getUsername() + "." + getFileExtension(fileName);
+		String userFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
+		File userFolder = new File(userFolderPath);
+		
+		if (!userFolder.exists()) {
+			if (userFolder.mkdirs()) {
+				System.out.println("Multiple directories are created!");
+			} else {
+				System.out.println("Failed to create multiple directories!");
+			}
+		}
+		
+		File outputFilePath = new File(userFolderPath + userAvatarFileName);
+		utenteBean.getUtente().setAvatar(userAvatarFileName);
+		utenteBean.aggiornaProfilo();
+		
+		// Copy uploaded file to destination path
+		InputStream inputStream = null;
+		OutputStream outputStream = null;
+		try {
+			inputStream = part.getInputStream();
+			outputStream = new FileOutputStream(outputFilePath);
+ 
+			int read = 0;
+			final byte[] bytes = new byte[1024];
+			while ((read = inputStream.read(bytes)) != -1) {
+				outputStream.write(bytes, 0, read);
+			}
+			statusMessage = "Upload avatar completato! "+utenteBean.getUtente().getAvatar();
+		} catch (IOException e) {
+			e.printStackTrace();
+			statusMessage = "Upload avatar fallito!";
 		} finally {
 			if (outputStream != null) {
 				try {

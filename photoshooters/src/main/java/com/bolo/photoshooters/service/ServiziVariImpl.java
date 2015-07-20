@@ -30,6 +30,16 @@ public class ServiziVariImpl implements ServiziVari {
 	}
 	
 	@Override
+	public boolean utenteAttivo(String email) throws Exception {
+		EntityManager em = EMF.createEntityManager();
+		return em
+				.createQuery("select u.id from Utente u where u.email=:email and u.active = false")
+				.setParameter("email", email)
+				.getResultList()
+				.size()>0;		
+	}
+	
+	@Override
 	public Utente activateUser(String activationCode) throws Exception{
 		EntityManager em = EMF.createEntityManager();
 		em.getTransaction().begin();

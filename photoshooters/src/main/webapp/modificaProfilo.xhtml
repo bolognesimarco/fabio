@@ -15,14 +15,28 @@
 	
 	<h:panelGroup styleClass="pannello homepage">
 
+   			<h:form id="avatarForm" enctype="multipart/form-data"  >
+				<h:panelGrid columns="3" border="1">
+				AVATAr UPLOAd
+					<h:inputFile id="file"  label="SFOGLIa" value="#{inputBean.part}"
+						required="true" requiredMessage="Selezionare file per upload!">
+						<f:validator validatorId="FileUploadValidator" />
+					</h:inputFile>			
+					<h:commandButton id="submit" styleClass="buttons" action="#{inputBean.uploadAvatar}"
+						value="UPLOAd FILe" />
+					<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />				
+					<h:message style="color: red" for="file" />
+				</h:panelGrid>
+			</h:form>
+
 		<h:form id="profiloform">
 		<h:panelGrid border="1" columns="1" columnClasses="right, left">
 		
-		  <h:panelGrid border="1" columns="2" columnClasses="right, left">
+		  <h:panelGrid border="1" columns="2"  columnClasses="right, left">
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
-            		<h:graphicImage value="/rimgs/portoricano.png" height="51" width="50"></h:graphicImage>   		
+            		<h:graphicImage value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>   		
         		</f:facet>
         		
 			<h:panelGrid border="1" columns="3" columnClasses="right, left, left">
@@ -135,17 +149,17 @@
 				
 				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="vita" value="#{utenteBean.utente.vita}" >
-				<f:selectItems value="#{utenteBean.rangeVita}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangeVita}" /></h:selectOneMenu >
 				<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="seno">SENo [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="seno" value="#{utenteBean.utente.seno}" >
-				<f:selectItems value="#{utenteBean.rangeSeno}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangeSeno}" /></h:selectOneMenu >
 				<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="fianchi">FIANCHi [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="fianchi" value="#{utenteBean.utente.fianchi}" >
-				<f:selectItems value="#{utenteBean.rangeFianchi}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangeFianchi}" /></h:selectOneMenu >
 				<h:panelGroup>*</h:panelGroup>
 			
 			</h:panelGrid>
@@ -154,32 +168,32 @@
 			
 				<h:outputLabel for="altezza">ALTEZZa [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="altezza" value="#{utenteBean.utente.altezza}" >
-				<f:selectItems value="#{utenteBean.rangeAltezza}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangeAltezza}" /></h:selectOneMenu >
 				<h:outputLabel>*</h:outputLabel>	
 
 				<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
 				<h:selectOneMenu  id="peso" value="#{utenteBean.utente.peso}" >
-				<f:selectItems value="#{utenteBean.rangePeso}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangePeso}" /></h:selectOneMenu >
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="taglia">TAGLIa [Eu]</h:outputLabel>
 				<h:selectOneMenu  id="taglia" value="#{utenteBean.utente.taglia}" >
-				<f:selectItems value="#{utenteBean.rangeTaglia}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangeTaglia}" /></h:selectOneMenu >
 				<h:outputLabel>*</h:outputLabel>
 									
 				<h:outputLabel for="scarpe">SCARPe [Eu]</h:outputLabel>
 				<h:selectOneMenu  id="scarpe" value="#{utenteBean.utente.scarpe}" >
-				<f:selectItems value="#{utenteBean.rangeScarpe}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangeScarpe}" /></h:selectOneMenu >
 				<h:outputLabel>*</h:outputLabel>
 									
 				<h:outputLabel for="tatuaggi">TATUAGGi [#]</h:outputLabel>
 				<h:selectOneMenu  id="tatuaggi" value="#{utenteBean.utente.tatuaggi}" >
-				<f:selectItems value="#{utenteBean.rangeTatuaggi}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangeTatuaggi}" /></h:selectOneMenu >
 				<h:outputLabel>*</h:outputLabel>	
 				
 				<h:outputLabel for="piercing">PIERCINg [#]</h:outputLabel>
 				<h:selectOneMenu  id="piercing" value="#{utenteBean.utente.piercing}" >
-				<f:selectItems value="#{utenteBean.rangePiercing}" /></h:selectOneMenu >
+				<f:selectItems value="#{parametersBean.rangePiercing}" /></h:selectOneMenu >
 				<h:outputLabel>*</h:outputLabel>	
 
 			</h:panelGrid>

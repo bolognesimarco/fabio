@@ -46,6 +46,17 @@ public class Utente implements Serializable{
 	private boolean active = false;
 
 	@Column
+	private String avatar;
+	
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataIscrizione;
 	
@@ -112,7 +123,7 @@ public class Utente implements Serializable{
 	private List<Foto> fotografoDi;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="pubblicatore")
-	private List<Foto> pubblicate;
+	private List<Album> pubblicati;
 	
 	@ManyToMany(mappedBy="visualizzatori")
 	private List<Foto> visualizzate;
@@ -453,12 +464,12 @@ public class Utente implements Serializable{
 		this.fotografoDi = fotografoDi;
 	}
 
-	public List<Foto> getPubblicate() {
-		return pubblicate;
+	public List<Album> getPubblicati() {
+		return pubblicati;
 	}
 
-	public void setPubblicate(List<Foto> pubblicate) {
-		this.pubblicate = pubblicate;
+	public void setPubblicati(List<Album> pubblicati) {
+		this.pubblicati = pubblicati;
 	}
 
 	public List<Foto> getVisualizzate() {

@@ -63,10 +63,10 @@
 		<h:panelGroup layout="block" class="pattern-alto-login" rendered="#{utenteBean.utente!=null}">
 			<h:form>
 				
-				<h:graphicImage value="/resources/images/nofoto.jpg" styleClass="circular"/>
+				<h:graphicImage value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" styleClass="circular"/>
 
 				<h:commandButton value="PROFILo" styleClass="menubuttonred">
-					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform :avatarForm" />
+					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform" />
 				</h:commandButton>
 
 	    	   	<h:commandButton value="ALBUMs" styleClass="menubuttonred">
@@ -90,7 +90,7 @@
 	    	   	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton onclick="if (! confirm('confermi il LOGOUt?')) return false" value="LOGOUt" styleClass="menubuttonred"  rendered="#{utenteBean.utente!=null}">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render=":content :hheader" />
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render=":content :headerform" />
 	    	   	</h:commandButton>
 
 			</h:form>

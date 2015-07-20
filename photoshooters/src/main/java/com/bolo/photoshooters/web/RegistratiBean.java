@@ -85,6 +85,7 @@ public class RegistratiBean {
 		
 		boolean esiste2 = false;
 		boolean mailok = false;
+		boolean attivo = false;
 		 
         // Create the Pattern using the regex
         Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
@@ -112,16 +113,26 @@ public class RegistratiBean {
 		
 		try {
 			esiste2 = serviziVari.emailEsiste(emailToCheck);
+			attivo = serviziVari.utenteAttivo(emailToCheck);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ValidatorException(new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "GRAVE", "GRAVE"));
 		}
 		if (esiste2) {
-			String msg = "email già in uso";
+			if (attivo){
+				String msg = "email già utilizzata ma non registrata";
+				throw new ValidatorException(new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, msg));
+			}	
+			else
+			{
+				String msg = "email già in uso";
 			throw new ValidatorException(new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, msg, msg));
+			}
 		}
+	
 		if (mailok) {
 			String msg = "email non valida";
 			throw new ValidatorException(new FacesMessage(

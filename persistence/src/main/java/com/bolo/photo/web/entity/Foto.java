@@ -35,7 +35,19 @@ public class Foto {
     @JoinColumn(name="pubblicatore", nullable=false)
 	private Utente pubblicatore;
 	
+	@ManyToOne
+    @JoinColumn(name="album", nullable=false)
+	private Album album;
 	
+	
+	public Album getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(Album album) {
+		this.album = album;
+	}
+
 	@ManyToMany
 	@JoinTable(name="Foto_Visualizzatori")
 	private List<Utente> visualizzatori;
