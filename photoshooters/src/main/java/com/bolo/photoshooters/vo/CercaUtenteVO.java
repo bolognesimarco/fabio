@@ -6,8 +6,10 @@ import java.util.List;
 
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.RegioneItaliana;
+import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
 import com.bolo.photo.web.entity.TipoUtente;
+import com.bolo.photo.web.entity.Utente;
 
 public class CercaUtenteVO {
 	
@@ -19,15 +21,43 @@ public class CercaUtenteVO {
 	private List <RegioneItaliana> regioniitaliane = new ArrayList<RegioneItaliana>();
 	private Esperienza esperienza;
 	private List<TipoLavoro> tipiLavoro = new ArrayList<TipoLavoro>();
+	private Sesso sesso;
+	private Utente utente;
+	private boolean online;
+	private int lastOnlineIscritto = 1; 
 	
+	public Sesso getSesso() {
+		return sesso;
+	}
+	public void setSesso(Sesso sesso) {
+		this.sesso = sesso;
+	}
 	public String getName() {
 		return name;
+	}
+	public int getLastOnlineIscritto() {
+		return lastOnlineIscritto;
+	}
+	public void setLastOnlineIscritto(int lastOnlineIscritto) {
+		this.lastOnlineIscritto = lastOnlineIscritto;
 	}
 	public List<TipoLavoro> getTipiLavoro() {
 		return tipiLavoro;
 	}
+	public boolean isOnline() {
+		return online;
+	}
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
 	public void setTipiLavoro(List<TipoLavoro> tipiLavoro) {
 		this.tipiLavoro = tipiLavoro;
+	}
+	public Utente getUtente() {
+		return utente;
+	}
+	public void setUtente(Utente utente) {
+		this.utente = utente;
 	}
 	public List<String> getTipiLavoroDescrizione() {
 		List<String> darit = new ArrayList<String>();

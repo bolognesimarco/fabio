@@ -36,6 +36,14 @@ public class Utente implements Serializable{
 	@Column
 	private String username;
 	
+	public boolean isOnline() {
+		return online;
+	}
+
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+
 	@Column
 	private String email;
 	
@@ -45,6 +53,9 @@ public class Utente implements Serializable{
 	@Column
 	private boolean active = false;
 
+	@Column
+	private boolean online = false;
+	
 	@Column
 	private String avatar;
 	
@@ -62,8 +73,20 @@ public class Utente implements Serializable{
 	
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataUltimoAccesso;
+	
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataMember;
 	
+	public Date getDataUltimoAccesso() {
+		return dataUltimoAccesso;
+	}
+
+	public void setDataUltimoAccesso(Date dataUltimoAccesso) {
+		this.dataUltimoAccesso = dataUltimoAccesso;
+	}
+
 	@Column
 	private String password;
 	

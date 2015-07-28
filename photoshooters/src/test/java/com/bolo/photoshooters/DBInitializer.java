@@ -1,7 +1,12 @@
 package com.bolo.photoshooters;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.persistence.EntityManager;
 
+import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
@@ -39,7 +44,15 @@ public class DBInitializer {
 	public void clean(EntityManager em) throws Exception{
 		serv.deleteAll(Utente.class, em);
 	}
-
+	
+//	public static java.sql.Date convertFromJAVADateToSQLDate(java.util.Date javaDate) {
+//        java.sql.Date sqlDate = null;
+//        if (javaDate != null) {
+//            sqlDate = new Date(javaDate.getTime());
+//        }
+//        return sqlDate;
+//    }
+	
 	public void initTipiUtentiLavori(EntityManager em) throws Exception{
 
 		TipoUtente fotografo = new TipoUtente();
@@ -305,6 +318,17 @@ public class DBInitializer {
 		test.setEmail("portoricano2000@gmail.com");
 		test.setTipoUtente(fotografo);
 		test.setActive(true);
+		test.setAvatar("avatarDefault.svg");
+		DateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+		String strdate1 = "02-04-2011 11:35:42";
+		java.util.Date dataAccesso1;
+		dataAccesso1 = dateformat.parse(strdate1);
+		test.setDataUltimoAccesso(dataAccesso1);
+		String strIscr1 = "12-04-2012 21:35:42";
+		java.util.Date dataIscr1;
+		dataIscr1 = dateformat.parse(strIscr1);
+		test.setDataIscrizione(dataIscr1);
+		test.setSesso(Sesso.Donna);
 		
 		Utente test2 = new Utente();
 		test2.setId(2);
@@ -314,6 +338,16 @@ public class DBInitializer {
 		test2.setEmail("fbolo@inwind.it");
 		test2.setTipoUtente(modello);
 		test2.setActive(true);
+		test2.setAvatar("avatarDefault.svg");
+		String strdate2 = "02-06-2014 18:12:32";
+		java.util.Date dataAccesso2;
+		dataAccesso2 = dateformat.parse(strdate2);
+		test2.setDataUltimoAccesso(dataAccesso2);
+		String strIscr2 = "12-06-2014 21:35:42";
+		java.util.Date dataIscr2;
+		dataIscr2 = dateformat.parse(strIscr2);
+		test2.setDataIscrizione(dataIscr2);
+		test2.setSesso(Sesso.Uomo);
 		
 		Utente test3 = new Utente();
 		test3.setId(3);
@@ -323,6 +357,16 @@ public class DBInitializer {
 		test3.setEmail("fbolo3@inwind.it");
 		test3.setTipoUtente(hostess);
 		test3.setActive(true);
+		test3.setAvatar("avatarDefault.svg");
+		String strdate3 = "02-06-2013 12:12:32";
+		java.util.Date dataAccesso3;
+		dataAccesso3 = dateformat.parse(strdate3);
+		test3.setDataUltimoAccesso(dataAccesso3);
+		String strIscr3 = "12-10-2013 21:35:42";
+		java.util.Date dataIscr3;
+		dataIscr3 = dateformat.parse(strIscr3);
+		test3.setDataIscrizione(dataIscr3);
+		test3.setSesso(Sesso.Uomo);
 		
 		Utente test4 = new Utente();
 		test4.setId(4);
@@ -332,6 +376,16 @@ public class DBInitializer {
 		test4.setEmail("fbolo4@inwind.it");
 		test4.setTipoUtente(mua);
 		test4.setActive(true);
+		test4.setAvatar("avatarDefault.svg");
+		String strdate4 = "01-06-2012 10:12:32";
+		java.util.Date dataAccesso4;
+		dataAccesso4 = dateformat.parse(strdate4);
+		test4.setDataUltimoAccesso(dataAccesso4);
+		String strIscr4 = "12-11-2011 21:35:42";
+		java.util.Date dataIscr4;
+		dataIscr4 = dateformat.parse(strIscr4);
+		test4.setDataIscrizione(dataIscr4);
+		test4.setSesso(Sesso.Società);
 		
 		serv.deleteAll(Utente.class, em);
 		serv.deleteAll(TipoLavoro.class, em);

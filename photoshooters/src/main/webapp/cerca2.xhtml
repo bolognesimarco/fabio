@@ -45,6 +45,7 @@
 					<h:message for="profilo" />
 				</h:panelGroup>
 				
+					
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
 				<h:selectManyListbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.cercaTipiLavoroId}" style="width: 230px;" 
 					required="false" requiredMessage="scegli almeno un lavoro">
@@ -52,6 +53,13 @@
 				<f:selectItems value="#{utenteBean.risultatoLavori}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
             	</h:selectManyListbox>
             	<h:panelGroup><h:message for="tipolavoro" />*</h:panelGroup>			
+				
+				<h:outputLabel for="sesso">SESSo</h:outputLabel>
+				<h:selectOneMenu id="sesso" value="#{utenteBean.cercaUtente.sesso}" style="width: 230px;">
+				<f:selectItem itemValue="#{null}" itemLabel="" noSelectionOption="true" />
+				<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
+            	</h:selectOneMenu>
+            	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
 				
 				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
 				<h:selectOneMenu id="esperienza" value="#{utenteBean.cercaUtente.esperienza}" style="width: 230px;"
@@ -67,6 +75,18 @@
 				<f:selectItems value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
             	</h:selectManyListbox >
             	<h:panelGroup><h:message for="regione" />*</h:panelGroup>
+				
+				<h:outputLabel for="online">PHOTOSHOOTERs ONLINe NOw</h:outputLabel>
+				<h:selectBooleanCheckbox id="online" value="#{utenteBean.cercaUtente.online}">
+				</h:selectBooleanCheckbox>
+				<h:panelGroup><h:message for="online" />*</h:panelGroup>
+								
+				<h:outputLabel for="lastonline">ORDINa PHOTOSHOOTERs</h:outputLabel>
+				<h:selectOneRadio value="#{utenteBean.cercaUtente.lastOnlineIscritto}">
+   					<f:selectItem itemValue="1" itemLabel="ULTIMo ACCESSo" />
+  				 	<f:selectItem itemValue="2" itemLabel="ULTIMo ISCRITTo" />	   			
+				</h:selectOneRadio>	
+				<h:panelGroup><h:message for="lastonline" />*</h:panelGroup>
 				
 				<f:facet name="footer">
 		            <h:panelGroup>
@@ -90,14 +110,18 @@
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;USERNAMe"/>
         		</f:facet>
-        		 <h:form>
-        		 <h:commandLink  actionListener="#{risultato.username}" action="/utenteTrovato.xhtml" >
-        		      	<f:param name="username" value="#{risultato.username}" />
-        		 </h:commandLink> 
-        		 </h:form>
+<!--         		 <h:form> -->
+<!--         		 <h:commandLink  actionListener="#{risultato.username}" action="/utenteTrovato.xhtml" > -->
+<!--         		      	<f:param name="username" value="#{risultato.username}" /> -->
+<!--         		 </h:commandLink>  -->
+<!--         		 </h:form> -->
 <!--         		    <h:link outcome="utenteTrovato" target="_self" value="#{risultato.username}" > -->
 <!--      					 <f:param name="username" value="#{risultato.username}" /> -->
-<!--    					</h:link>  	 -->
+<!--    					</h:link>  -->
+   				    <h:commandButton value="#{risultato.username}">
+	    			   <f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
+	    	   		</h:commandButton>			
+   					 	
 <!--         			<h:outputText value="#{risultato.username}"/> -->
         		<f:facet name="footer">
             		<h:outputText value="&#160;&#160;USERNAMe"/>
@@ -108,7 +132,14 @@
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;NOMe"/>
         		</f:facet>
-		       		<h:outputText value="#{risultato.name}"/>
+		       		<h:graphicImage rendered="#{risultato.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{risultato.username}/#{risultato.avatar}" height="51" width="50" >
+			       			<f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
+		       		</h:graphicImage>
+		       		<h:graphicImage rendered="#{risultato.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50" >
+		       			<f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
+		       		</h:graphicImage>
+<!-- 		       		<h:outputText value="#{risultato.name}"/> -->
+		        
 		        <f:facet name="footer">
             		<h:outputText value="&#160;&#160;NOMe"/>
         		</f:facet>	
@@ -117,7 +148,7 @@
 			<f:facet name="footer">
 		            <h:panelGroup>
 		                <h:commandButton value="MODIFICa RICERCa&#160;&#160;" >
-						 	<f:ajax event="click" listener="#{menuBean.menuClick(6)}" render=":content :cercaForm" />
+						 	<f:ajax event="click" listener="#{menuBean.menuClick(6)}" render=":content :cercaform" />
 		            	</h:commandButton>  
 	            	</h:panelGroup>
         	</f:facet>

@@ -1,5 +1,6 @@
 package com.bolo.photoshooters.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -51,6 +52,9 @@ public class ServiziVariImpl implements ServiziVari {
 			Utente u = utenti.get(0);
 			System.out.println("============================================================"+u.getId());
 			u.setActive(true);
+			u.setAvatar("avatarDefault.svg");
+			Date currentDate = new Date();
+			u.setDataMember(currentDate);
 		em.getTransaction().commit();
 			return u;
 		}else{

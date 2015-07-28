@@ -1,6 +1,9 @@
 package com.bolo.photoshooters.web;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +18,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
+import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
@@ -31,20 +35,27 @@ public class RegistratiBean {
 	private String email;
 	private String nome;
 	private int tipoUtente;
+	private Sesso sesso; 
 	
 	private ServiziComuni serv = new ServiziComuniImpl();
-
+	private ServiziVari serviziVari = new ServiziVariImpl();
+	
 	public void registrati() {
 		
 		try {
 			Utente nuovo = new Utente();
+
 			nuovo.setUsername(username);
 			nuovo.setPassword(password);
 			nuovo.setName(nome);
 			nuovo.setEmail(email);
+			nuovo.setSesso(sesso);
 			nuovo.setTipoUtente(serv.getReference(TipoUtente.class, tipoUtente));
 			nuovo.setActive(false);
 			nuovo.setActivationCode(UUID.randomUUID().toString());
+			//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Date currentDate = new Date();
+			nuovo.setDataIscrizione(currentDate);
 			serv.persist(nuovo);
 			MailSender.sendRegisterMail(email, nuovo.getActivationCode());
 		} catch (Exception e) {
@@ -56,7 +67,16 @@ public class RegistratiBean {
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 	
-	private ServiziVari serviziVari = new ServiziVariImpl();
+
+	public Sesso getSesso() {
+		return sesso;
+	}
+
+
+	public void setSesso(Sesso sesso) {
+		this.sesso = sesso;
+	}
+
 
 	public void checkUsername(FacesContext context, UIComponent component,
 			Object value) throws ValidatorException {

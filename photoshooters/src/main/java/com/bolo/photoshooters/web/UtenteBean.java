@@ -1,7 +1,10 @@
 package com.bolo.photoshooters.web;
 
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +40,7 @@ public class UtenteBean {
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
     List<Album> risultatoAlbums = new ArrayList<Album>();
 	private ServiziComuni serv = new ServiziComuniImpl();
-//	private String pathAvatar = new String(); 
+	private String avatarDefault = "avatarDefault.svg"; 
 
 
 	public void cercaUtenti(){		
@@ -51,7 +54,8 @@ public class UtenteBean {
 		boolean usernameInserito = false;
 		boolean esperienzaInserito = false;
 		boolean utenteInserito = false;
-
+		boolean sessoInserito = false;
+		boolean utenteOnline = false;
 		int i = 0;
 		
 		if (cercaUtente.getName()!="") {
@@ -83,7 +87,23 @@ public class UtenteBean {
 			utenteInserito = true;
 			i++;
 		}
-
+		if (cercaUtente.getSesso()!=null) {
+			if (i>0){
+				hqlcerca += "and";
+			}
+			hqlcerca += " u.sesso=:sex ";
+			sessoInserito = true;
+			i++;
+		}
+		if (cercaUtente.isOnline()) {
+			if (i>0){
+				hqlcerca += "and";
+			}
+			hqlcerca += " u.online = true ";
+			utenteOnline = true;
+			i++;
+		}
+		
 		if (i>0){
 			hql = hqlstart + "where" + hqlcerca; 
 		}
@@ -104,7 +124,9 @@ public class UtenteBean {
 		if(utenteInserito){
 			q.setParameter("tipout", cercaUtente.getTipoUtente());
 		}
-
+		if(sessoInserito){
+			q.setParameter("sex", cercaUtente.getSesso());
+		}
 		risultato = q.getResultList();
 		System.out.println("================CCC==========="+risultato.size());
 		
@@ -128,8 +150,7 @@ public class UtenteBean {
 						h++;
 						break;
 						}
-					}
-					
+					}			
 				}
 				
 				if(j!=h){
@@ -164,8 +185,54 @@ public class UtenteBean {
 				trovato = false;
 			}
 		}
-
+		ordinaPerAccessoIscrizione();
 	}
+
+
+	public String ordinaPerAccessoIscrizione() {
+		 
+		   if(cercaUtente.getLastOnlineIscritto()==1){
+	 
+			//ordina per ultimo accesso
+			Collections.sort(risultato, new Comparator<Utente>() {
+	 
+				@Override
+				public int compare(Utente u1, Utente u2) {
+					return u2.getDataUltimoAccesso().compareTo(u1.getDataUltimoAccesso());
+				}
+			});
+	 
+		   }else{
+	 
+			//ordina per ultimo iscritto
+			Collections.sort(risultato, new Comparator<Utente>() {
+
+				@Override
+				public int compare(Utente u1, Utente u2) {
+					return u2.getDataIscrizione().compareTo(u1.getDataIscrizione());
+				} 
+			});
+		   }
+	 
+		   return null;
+		}
+
+	
+	
+	public void utenteTrovato(String username){
+		EntityManager em = EMF.createEntityManager();
+		List<Utente> utenti = em
+		.createQuery("from Utente u where u.username=:user")
+		.setParameter("user", username)
+		.getResultList();
+		if(utenti!=null && utenti.size()>0){
+			cercaUtente.setUtente(utenti.get(0));
+			contentBean.setContent("utenteTrovato.xhtml");
+		}else{
+			System.out.println("errore utenteTrovato!");
+		}
+	}
+	
 	
 	public void aggiornaProfilo() {
 		try {
@@ -194,16 +261,25 @@ public class UtenteBean {
 		
 	}
 
-	public void albumsUtente() {
-		if (cercaUtente.getTipoUtente()!=-1){
-			EntityManager em = EMF.createEntityManager();
-			String hql = "select u from Utente where u.username=:n ";
-			Query q = em.createQuery(hql, Album.class);
-			q.setParameter("n",utente.getUsername());
-			risultatoAlbums = q.getResultList();
-			System.out.println("===========ALBUMS:" + risultatoAlbums.toString());
-		}
-		
+//	public void albumsUtente() {
+//		if (cercaUtente.getTipoUtente()!=-1){
+//			EntityManager em = EMF.createEntityManager();
+//			String hql = "select u from Utente where u.username=:n ";
+//			Query q = em.createQuery(hql, Album.class);
+//			q.setParameter("n",utente.getUsername());
+//			risultatoAlbums = q.getResultList();
+//			System.out.println("===========ALBUMS:" + risultatoAlbums.toString());
+//		}
+//		
+//	}
+	
+	
+	public String getAvatarDefault() {
+		return avatarDefault;
+	}
+
+	public void setAvatarDefault(String avatarDefault) {
+		this.avatarDefault = avatarDefault;
 	}
 	
 	public List<Utente> getRisultato() {

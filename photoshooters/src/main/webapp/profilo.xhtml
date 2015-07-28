@@ -23,8 +23,8 @@
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
-            		<h:graphicImage value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
-		
+            		<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
+            		<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>		
         		</f:facet>
         		
 			<h:panelGrid  columns="3" columnClasses="right, centercol, left">

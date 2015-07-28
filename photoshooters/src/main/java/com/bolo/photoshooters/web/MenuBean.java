@@ -5,11 +5,14 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import com.bolo.photoshooters.service.ServiziComuni;
+import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.temp.InputBean;
 
 @ManagedBean
 @SessionScoped
 public class MenuBean {
+	private ServiziComuni serv = new ServiziComuniImpl();
 	
 	public void menuClick(int menuClicked){
 		switch (menuClicked) {
@@ -62,6 +65,13 @@ public class MenuBean {
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 14://LOGOUT
+			utenteBean.getUtente().setOnline(false);
+			try {
+				serv.merge(utenteBean.getUtente());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			utenteBean.setUtente(null);
 			contentBean.setMessaggio(null);
 			contentBean.setContent("homePage.xhtml");
@@ -115,13 +125,9 @@ public class MenuBean {
 		return inputBean;
 	}
 
-
-
 	public void setInputBean(InputBean inputBean) {
 		this.inputBean = inputBean;
 	}
-
-
 
 	public void setUtenteBean(UtenteBean utenteBean) {
 		this.utenteBean = utenteBean;

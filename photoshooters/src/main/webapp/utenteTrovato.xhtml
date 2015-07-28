@@ -23,46 +23,46 @@
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
-            		<h:graphicImage value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
-		
+        		    <h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{utenteBean.cercaUtente.utente.avatar}" height="51" width="50"></h:graphicImage>
+            		<h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>	
         		</f:facet>
         		
 			<h:panelGrid  columns="3" columnClasses="right, centercol, left">
 	
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
-				<h:outputText style="width: 120px;"  id="username" value="#{utenteBean.utente.username}"/>
+				<h:outputText style="width: 120px;"  id="username" value="#{utenteBean.cercaUtente.utente.username}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="password">PASSWORd</h:outputLabel>
-				<h:outputText  id="password" value="#{utenteBean.utente.password}"/>
+				<h:outputText  id="password" value="#{utenteBean.cercaUtente.utente.password}"/>
 				<h:outputLabel>*</h:outputLabel>	
 								
 				<h:outputLabel for="email">EMAIl</h:outputLabel>
-				<h:outputText  id="email" value="#{utenteBean.utente.email}"/>
+				<h:outputText  id="email" value="#{utenteBean.cercaUtente.utente.email}"/>
 				<h:outputLabel>*</h:outputLabel>	
 				
 				<h:outputLabel for="nome">NOMe</h:outputLabel>
-				<h:outputText  id="nome" value="#{utenteBean.utente.name}"/>
+				<h:outputText  id="nome" value="#{utenteBean.cercaUtente.utente.name}"/>
 				<h:outputLabel>*</h:outputLabel>	
 				
 				<h:outputLabel for="cognome">COGNOMe</h:outputLabel>
-				<h:outputText id="cognome" value="#{utenteBean.utente.cognome}"/>
+				<h:outputText id="cognome" value="#{utenteBean.cercaUtente.utente.cognome}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="sesso">SESSo</h:outputLabel>
-				<h:outputText id="sesso" value="#{utenteBean.utente.sesso}" />
+				<h:outputText id="sesso" value="#{utenteBean.cercaUtente.utente.sesso}" />
             	<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="dataNascita">DATa Di NASCITa</h:outputLabel>
-        	    <h:outputText id="dataNascita" value="#{utenteBean.utente.dataNascita}" />
+        	    <h:outputText id="dataNascita" value="#{utenteBean.cercaUtente.utente.dataNascita}" />
             	<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="città">CITTà</h:outputLabel>
-				<h:outputText id="città" value="#{utenteBean.utente.città}"/>
+				<h:outputText id="città" value="#{utenteBean.cercaUtente.utente.città}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="descrizione">DESCRIZIONe - CURRICULUm</h:outputLabel>
-				<h:inputTextarea readonly="true" size="50" rows="12" id="descrizione" value="#{utenteBean.utente.descrizione}"/>
+				<h:inputTextarea readonly="true" size="50" rows="12" id="descrizione" value="#{utenteBean.cercaUtente.utente.descrizione}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 			</h:panelGrid>
@@ -70,66 +70,66 @@
 			<h:panelGrid  columns="3" columnClasses="right, centercol, left">
 				
 				<h:outputLabel for="sitoweb">SITo WEb</h:outputLabel>
-				<h:outputText  style="width: 120px;" id="sitoweb" value="#{utenteBean.utente.sitoweb}"/>
+				<h:outputText  style="width: 120px;" id="sitoweb" value="#{utenteBean.cercaUtente.utente.sitoweb}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="facebook">FACEBOOk</h:outputLabel>
-				<h:outputText id="facebook" value="#{utenteBean.utente.facebook}"/>
+				<h:outputText id="facebook" value="#{utenteBean.cercaUtente.utente.facebook}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="instagram">INSTAGRAm</h:outputLabel>
-				<h:outputText id="instagram" value="#{utenteBean.utente.instagram}"/>
+				<h:outputText id="instagram" value="#{utenteBean.cercaUtente.utente.instagram}"/>
 				<h:outputLabel>*</h:outputLabel>		
 				
 				<h:outputLabel for="tumblr">TUMBLr</h:outputLabel>
-				<h:outputText id="tumblr" value="#{utenteBean.utente.tumblr}"/>
+				<h:outputText id="tumblr" value="#{utenteBean.cercaUtente.utente.tumblr}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="twitter">TWITTEr</h:outputLabel>
-				<h:outputText id="twitter" value="#{utenteBean.utente.twitter}"/>
+				<h:outputText id="twitter" value="#{utenteBean.cercaUtente.utente.twitter}"/>
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="googleplus">GOOGLe+</h:outputLabel>
-				<h:outputText id="googleplus" value="#{utenteBean.utente.googleplus}"/>
+				<h:outputText id="googleplus" value="#{utenteBean.cercaUtente.utente.googleplus}"/>
 				<h:outputLabel>*</h:outputLabel>	
 					
 				<h:outputLabel for="linkedin">LINKEDIn</h:outputLabel>
-				<h:outputText id="linkedin" value="#{utenteBean.utente.linkedin}"/>
+				<h:outputText id="linkedin" value="#{utenteBean.cercaUtente.utente.linkedin}"/>
 				<h:outputLabel>*</h:outputLabel>	
 
 				<h:outputLabel for="tipoutente">PROFILo PROFESSIONALe</h:outputLabel>
-				<h:outputText id="tipoutente" value="#{utenteBean.utente.tipoUtente.descrizione}"/>
+				<h:outputText id="tipoutente" value="#{utenteBean.cercaUtente.utente.tipoUtente.descrizione}"/>
 				<h:outputLabel>*</h:outputLabel>	
 				
 				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
-				<h:outputText id="esperienza" value="#{utenteBean.utente.esperienza}" />
+				<h:outputText id="esperienza" value="#{utenteBean.cercaUtente.utente.esperienza}" />
             	<h:panelGroup>*</h:panelGroup>
 					
 				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
-				<h:outputText id="regione" value="#{utenteBean.utente.regIta}" />
+				<h:outputText id="regione" value="#{utenteBean.cercaUtente.utente.regIta}" />
             	<h:panelGroup><h:message for="regione" />*</h:panelGroup>		
 
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
-				<h:outputText id="tipoLavoro" value="#{utenteBean.utente.tipiLavoroDescrizione}" />
+				<h:outputText id="tipoLavoro" value="#{utenteBean.cercaUtente.utente.tipiLavoroDescrizione}" />
             	<h:panelGroup><h:message for="tipolavoro" />*</h:panelGroup>		
 
 			</h:panelGrid>	
 			
 	      </h:panelGrid>
 			
-		  <h:panelGrid id="modellaGrid" border="1" columns="2" columnClasses="right, left" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
+		  <h:panelGrid id="modellaGrid" border="1" columns="2" columnClasses="right, left" rendered="#{utenteBean.cercaUtente.utente.tipoUtente.id==2 || cercaUtenteVO.utente.tipoUtente.id==9}">
 			<h:panelGrid border="1" columns="3" columnClasses="right, centercol, left">
 				
 				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
-				<h:outputText id="vita" value="#{utenteBean.utente.vita}" />
+				<h:outputText id="vita" value="#{utenteBean.cercaUtente.utente.vita}" />
 				<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="seno">SENo [Cm]</h:outputLabel>
-				<h:outputText  id="seno" value="#{utenteBean.utente.seno}" />
+				<h:outputText  id="seno" value="#{utenteBean.cercaUtente.utente.seno}" />
 				<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="fianchi">FIANCHi [Cm]</h:outputLabel>
-				<h:outputText  id="fianchi" value="#{utenteBean.utente.fianchi}" />
+				<h:outputText  id="fianchi" value="#{utenteBean.cercaUtente.utente.fianchi}" />
 				<h:panelGroup>*</h:panelGroup>
 			
 			</h:panelGrid>
@@ -137,27 +137,27 @@
 			<h:panelGrid border="1" columns="3" columnClasses="right, centercol, left">
 			
 				<h:outputLabel for="altezza">ALTEZZa [Cm]</h:outputLabel>
-				<h:outputText  id="altezza" value="#{utenteBean.utente.altezza}" />
+				<h:outputText  id="altezza" value="#{utenteBean.cercaUtente.utente.altezza}" />
 				<h:outputLabel>*</h:outputLabel>	
 
 				<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
-				<h:outputText  id="peso" value="#{utenteBean.utente.peso}" />
+				<h:outputText  id="peso" value="#{utenteBean.cercaUtente.utente.peso}" />
 				<h:outputLabel>*</h:outputLabel>
 				
 				<h:outputLabel for="taglia">TAGLIa [Eu]</h:outputLabel>
-				<h:outputText  id="taglia" value="#{utenteBean.utente.taglia}" />
+				<h:outputText  id="taglia" value="#{utenteBean.cercaUtente.utente.taglia}" />
 				<h:outputLabel>*</h:outputLabel>
 									
 				<h:outputLabel for="scarpe">SCARPe [Eu]</h:outputLabel>
-				<h:outputText  id="scarpe" value="#{utenteBean.utente.scarpe}" />
+				<h:outputText  id="scarpe" value="#{utenteBean.cercaUtente.utente.scarpe}" />
 				<h:outputLabel>*</h:outputLabel>
 									
 				<h:outputLabel for="tatuaggi">TATUAGGi [#]</h:outputLabel>
-				<h:outputText  id="tatuaggi" value="#{utenteBean.utente.tatuaggi}" />
+				<h:outputText  id="tatuaggi" value="#{utenteBean.cercaUtente.utente.tatuaggi}" />
 				<h:outputLabel>*</h:outputLabel>	
 				
 				<h:outputLabel for="piercing">PIERCINg [#]</h:outputLabel>
-				<h:outputText  id="piercing" value="#{utenteBean.utente.piercing}" />
+				<h:outputText  id="piercing" value="#{utenteBean.cercaUtente.utente.piercing}" />
 				<h:outputLabel>*</h:outputLabel>	
 
 			</h:panelGrid>
@@ -167,8 +167,8 @@
 									
 				<f:facet name="footer">
 		            <h:panelGroup>
-		         	<h:commandButton value="MODIFICa PROFILo" styleClass="menubutton">
-	    			   <f:ajax event="click" listener="#{menuBean.menuClick(16)}" render=":content :avatarForm" />
+		         	<h:commandButton value="MODIFICa RICERCa" styleClass="menubutton">
+	    			   <f:ajax event="click" listener="#{menuBean.menuClick(6)}" render=":content :cercaform" />
 	    	   		</h:commandButton>  <br/>
 		            	<h:outputText value="#{contentBean.messaggio}"></h:outputText><br/><br/>
 	            	</h:panelGroup>

@@ -37,6 +37,7 @@ public class LoginBean {
 			Utente u = serviziVari.login(username, password);
 			System.out.println("u:"+u);
 			if(u!=null){
+				String avatarDefault = "avatarDefault.svg";
 				String mm = "";
 				String mess = "Completa il tuo profilo di photoshooter: inserisci";
 				if(u.getDataNascita()==null){
@@ -49,16 +50,23 @@ public class LoginBean {
 					mm = mm+" livello esperienza -";
 				}
 				if(u.getRegioniitaliane().isEmpty()){
-					mm = mm+" regioni di collaborazione";
+					mm = mm+" regioni di collaborazione -";
+				}
+				if(u.getAvatar().equals(avatarDefault)){
+					mm = mm+" avatar";
 				}
 				if(mm!=""){
 					mm = mess+mm;
 				}
 				String mm2="BENVENUTo "+u.getName()+"\n"+mm;
-				contentBean.setMessaggio(mm2);				
+				
+				u.setOnline(true);
+				Date currentDate = new Date();
+				u.setDataUltimoAccesso(currentDate);
+				serv.merge(u);
 				utenteBean.setUtente(u);
-				//utenteBean.fillSelectItems();
 				parametersBean.fillSelectItems();
+				contentBean.setMessaggio(mm2);
 				contentBean.setContent("homePage.xhtml");
 				
 			}else{

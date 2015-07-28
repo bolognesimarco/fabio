@@ -76,7 +76,13 @@
             	<h:panelGroup>
 					<h:message for="profilo" />
 				</h:panelGroup>
-				
+								
+				<h:outputLabel for="sesso">SESSo</h:outputLabel>
+				<h:selectOneMenu id="sesso" value="#{registratiBean.sesso}" 
+					required="true" requiredMessage="scegli il sesso">
+				<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
+            	</h:selectOneMenu>
+            	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
 				
 				<h:outputLink value="/files/Regolamento.docx">Download Regolamento</h:outputLink>
 				<h:panelGroup/>

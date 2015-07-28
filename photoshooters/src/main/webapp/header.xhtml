@@ -63,7 +63,8 @@
 		<h:panelGroup layout="block" class="pattern-alto-login" rendered="#{utenteBean.utente!=null}">
 			<h:form>
 				
-				<h:graphicImage value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" styleClass="circular"/>
+				<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" styleClass="circular"/>
+				<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" styleClass="circular"/>
 
 				<h:commandButton value="PROFILo" styleClass="menubuttonred">
 					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform" />
