@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.faces.bean.ManagedBean;
@@ -14,6 +16,9 @@ import javax.servlet.http.Part;
 
 import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Foto;
+import com.bolo.photo.web.entity.RegioneItaliana;
+import com.bolo.photoshooters.service.ServiziComuni;
+import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.web.ContentBean;
 import com.bolo.photoshooters.web.LoginBean;
 import com.bolo.photoshooters.web.UtenteBean;
@@ -24,6 +29,7 @@ public class InputBean {
  
 	private Part part;
 	private String statusMessage;
+	private ServiziComuni serv = new ServiziComuniImpl();
 	@ManagedProperty(value="#{contentBean}")
 	private ContentBean contentBean;
 	
@@ -46,40 +52,61 @@ public class InputBean {
 		this.utenteBean = utenteBean;
 	}
 	
-	
-	
-	public void uploadFoto(String albumName) {
-		//preparare File di output (c:\temp\+username+albumname+randomid)
+	public void nuovoAlbum () {
 		
-		//nuovo oggetto Foto (name, data, randomid, etc...)
-		//aggiunge all album SU UTENTEBEAN.getfotos.add
-		//da part si prende l'inputstreaM
-		//ETCC...
-		
-		// Extract file name from content-disposition header of file part
-		String fileName = getFileName(part);
-		Foto newFoto = new Foto();
-		String radomFotoName = UUID.randomUUID().toString();
-		
-		String userFotoFileName = radomFotoName + "." + getFileExtension(fileName);
 		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
-		
-		File userAlbumFolder = new File(userAlbumFolderPath + albumName + File.separator);
+		File userAlbumFolder = new File(userAlbumFolderPath + utenteBean.getNewAlbumName() + File.separator);
 		if (!userAlbumFolder.exists()) {
 			if (userAlbumFolder.mkdirs()) {
 				System.out.println("Cartella nuovo album creata!");
 				Album nuovoAlbum = new Album();
-				nuovoAlbum.setTitolo(albumName);
+				nuovoAlbum.setTitolo(utenteBean.getNewAlbumName());
 				nuovoAlbum.setPubblicatore(utenteBean.getUtente());
 				utenteBean.getUtente().getPubblicati().add(nuovoAlbum);
+				utenteBean.aggiornaProfilo();
+				contentBean.setMessaggio("Album aggiunto");
+				utenteBean.setNewAlbumName(null);
+			} else {
+				System.out.println("Errore nella creazione della cartella dell'album!");
+				contentBean.setMessaggio("errore nell'aggiunta album");
+			}
+		} else {
+			contentBean.setMessaggio("Album già esistente!2");
+//			statusMessage = "Album già esistente!";
+			System.out.println("Album già esistente!");
+		}
+	}
+	
+	
+	public void uploadFoto() {
+		
+		// Extract file name from content-disposition header of file part
+		String fileName = getFileName(part);
+		String albumName = utenteBean.getRisultatoAlbum().getTitolo();
+		String radomFotoName = UUID.randomUUID().toString();
+
+		String userFotoFileName = radomFotoName + "." + getFileExtension(fileName);
+		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator + albumName + File.separator;
+		
+//		File userAlbumFolder = new File(userAlbumFolderPath + albumName + File.separator);
+		statusMessage="";
+		if (fileName!="") {
+
+				statusMessage="";
+				Foto newFoto = new Foto();
+				newFoto.setAlbum(utenteBean.getRisultatoAlbum());
+				newFoto.setFotografo(utenteBean.getUtente());
+				newFoto.setTitolo(utenteBean.getNewFotoName());
 				newFoto.setPubblicatore(utenteBean.getUtente());
+//				utenteBean.getRisultatoAlbum().getFotos().add(newFoto);
 				utenteBean.getUtente().getFotografoDi().add(newFoto);
+				utenteBean.aggiornaProfilo();
+				utenteBean.setNewFotoName(null);
+				utenteBean.visualizzaFotos(utenteBean.getAlbumId());
 			} else {
 				System.out.println("Errore nella creazione della cartella dell'album!");
 			}
-		} else {
-			System.out.println("Album già esistente!");
-		}
+
 		
 		File outputFilePath = new File(userAlbumFolderPath + userFotoFileName);
 		
@@ -95,10 +122,11 @@ public class InputBean {
 			while ((read = inputStream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
-			statusMessage = "Upload file completato!";
+			statusMessage = "Upload foto completato!";
+			
 		} catch (IOException e) {
 			e.printStackTrace();
-			statusMessage = "Upload file fallito!";
+			statusMessage = "Upload foto fallito!";
 		} finally {
 			if (outputStream != null) {
 				try {
@@ -117,6 +145,9 @@ public class InputBean {
 				}
 			}
 		}
+//		for (Foto tit : utenteBean.getRisultatoAlbum().getFotos()) {
+//			System.out.println("FOTOOOOOOOOOOO---"+tit.getTitolo());
+//		}
 	}
 
 

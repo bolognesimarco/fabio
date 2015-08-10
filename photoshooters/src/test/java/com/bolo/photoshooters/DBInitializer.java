@@ -3,9 +3,13 @@ package com.bolo.photoshooters;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.bolo.photo.web.entity.Album;
+import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
 import com.bolo.photo.web.entity.TipoUtente;
@@ -329,6 +333,19 @@ public class DBInitializer {
 		dataIscr1 = dateformat.parse(strIscr1);
 		test.setDataIscrizione(dataIscr1);
 		test.setSesso(Sesso.Donna);
+		Album album1 = new Album(); 
+
+		List<Album> albumlist1 = new ArrayList<Album>();
+		test.setPubblicati(albumlist1);
+
+		test.getPubblicati().add(album1);
+		album1.setPubblicatore(test);
+		album1.setTitolo("fabio");
+		Foto foto1 = new Foto();
+		foto1.setAlbum(album1);
+		album1.getFotos().add(foto1);
+		foto1.setFotografo(test);
+		foto1.setTitolo("null:");
 		
 		Utente test2 = new Utente();
 		test2.setId(2);
@@ -348,6 +365,15 @@ public class DBInitializer {
 		dataIscr2 = dateformat.parse(strIscr2);
 		test2.setDataIscrizione(dataIscr2);
 		test2.setSesso(Sesso.Uomo);
+		Album album2 = new Album(); 
+
+		List<Album> albumlist2 = new ArrayList<Album>();
+		test2.setPubblicati(albumlist2);
+
+		test2.getPubblicati().add(album2);
+		album2.setPubblicatore(test2);
+		album2.setTitolo("fabiofb2");
+		
 		
 		Utente test3 = new Utente();
 		test3.setId(3);
@@ -387,6 +413,8 @@ public class DBInitializer {
 		test4.setDataIscrizione(dataIscr4);
 		test4.setSesso(Sesso.Società);
 		
+		serv.deleteAll(Album.class, em);
+		serv.deleteAll(Foto.class, em);
 		serv.deleteAll(Utente.class, em);
 		serv.deleteAll(TipoLavoro.class, em);
 		serv.deleteAll(TipoUtente.class, em);		
@@ -395,6 +423,8 @@ public class DBInitializer {
 		serv.persist(test2, em);
 		serv.persist(test3, em);
 		serv.persist(test4, em);
+//		serv.persist(album1, em);
+//		serv.persist(foto1, em);
 		
 		serv.persist(hairmodel, em);
 		serv.persist(ritratto, em);

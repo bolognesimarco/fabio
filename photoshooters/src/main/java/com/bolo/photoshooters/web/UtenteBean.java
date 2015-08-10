@@ -20,6 +20,7 @@ import javax.persistence.Query;
 
 import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Esperienza;
+import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
@@ -38,10 +39,50 @@ public class UtenteBean {
 	private CercaUtenteVO cercaUtente = new CercaUtenteVO();
 	List<Utente> risultato = new ArrayList<Utente>();
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
-    List<Album> risultatoAlbums = new ArrayList<Album>();
+    Album risultatoAlbum = new Album();
+    List<Foto> risultatoFotos = new ArrayList<Foto>();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private String avatarDefault = "avatarDefault.svg"; 
+	private String newAlbumName ="";
+	private String albumVisualizzato ="";
+	private Foto nuovaFoto = new Foto();
+	private String newFotoName ="";
+	private Integer albumId;
+	
+	public String getAlbumVisualizzato() {
+		return albumVisualizzato;
+	}
 
+	public void setAlbumVisualizzato(String albumVisualizzato) {
+		this.albumVisualizzato = albumVisualizzato;
+	}
+
+	public Integer getAlbumId() {
+		return albumId;
+	}
+
+	public void setAlbumId(Integer albumId) {
+		this.albumId = albumId;
+	}
+
+	public Foto getNuovaFoto() {
+		return nuovaFoto;
+	}
+
+	public void setNuovaFoto(Foto nuovaFoto) {
+		this.nuovaFoto = nuovaFoto;
+	}
+
+	public String getNewFotoName() {
+		return newFotoName;
+	}
+
+	public void setNewFotoName(String newFotoName) {
+		this.newFotoName = newFotoName;
+	}
+
+	private Album nuovoAlbum = new Album();
+	private List<Album> albumList = new ArrayList<Album>();
 
 	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();
@@ -127,6 +168,7 @@ public class UtenteBean {
 		if(sessoInserito){
 			q.setParameter("sex", cercaUtente.getSesso());
 		}
+//		ORDINAMENTO PRIMA DELLA QUERY
 		risultato = q.getResultList();
 		System.out.println("================CCC==========="+risultato.size());
 		
@@ -188,7 +230,6 @@ public class UtenteBean {
 		ordinaPerAccessoIscrizione();
 	}
 
-
 	public String ordinaPerAccessoIscrizione() {
 		 
 		   if(cercaUtente.getLastOnlineIscritto()==1){
@@ -213,12 +254,63 @@ public class UtenteBean {
 				} 
 			});
 		   }
-	 
+	
 		   return null;
 		}
 
+	public void visualizzaAlbum(int albumId){
+		EntityManager em = EMF.createEntityManager();
+
+		String hql = "from Album a where a.id=:n";
+		Query q = em.createQuery(hql, Album.class);
+		q.setParameter("n", albumId);
+		
+		risultatoAlbum = (Album) q.getResultList().get(0);
+		
+//		System.out.println("PPPPPPPPPPPPPPP");
+//		System.out.println(risultatoAlbum.getFotos().size());
+//		System.out.println(risultatoAlbum.getFotos().get(0).getTitolo());
+//		if(risultatoAlbum!=null){
+//
+//			contentBean.setContent("visualizzaAlbum.xhtml");
+//			contentBean.setMessaggio(null);
+//			setAlbumId(albumId);
+//			setAlbumVisualizzato(risultatoAlbum.getTitolo());
+//		}else{
+//			System.out.println("errore album non trovato!");
+//		}
+	}
 	
+	public void visualizzaFotos(int albumId){
+		EntityManager em = EMF.createEntityManager();
+
+		String hql = "from Foto f where f.album.id=:n";
+		Query q = em.createQuery(hql, Foto.class);
+		q.setParameter("n", albumId);
+
+		risultatoFotos = (List<Foto>) q.getResultList();
+
+//		System.out.println(risultatoAlbum.getFotos().get(0).getTitolo());
+		if(risultatoFotos!=null ){
+//&& risultatoFotos.size()>0
+			contentBean.setContent("visualizzaAlbum.xhtml");
+			contentBean.setMessaggio(null);
+			setAlbumId(albumId);
+			visualizzaAlbum(albumId);
+//			setAlbumVisualizzato(risultatoAlbum.getTitolo());
+		}else{
+			System.out.println("errore lista fot non trovata!");
+		}
+	}
 	
+	public List<Foto> getRisultatoFotos() {
+		return risultatoFotos;
+	}
+
+	public void setRisultatoFotos(List<Foto> risultatoFotos) {
+		this.risultatoFotos = risultatoFotos;
+	}
+
 	public void utenteTrovato(String username){
 		EntityManager em = EMF.createEntityManager();
 		List<Utente> utenti = em
@@ -229,7 +321,7 @@ public class UtenteBean {
 			cercaUtente.setUtente(utenti.get(0));
 			contentBean.setContent("utenteTrovato.xhtml");
 		}else{
-			System.out.println("errore utenteTrovato!");
+			System.out.println("errore utente non trovato!");
 		}
 	}
 	
@@ -261,18 +353,40 @@ public class UtenteBean {
 		
 	}
 
-//	public void albumsUtente() {
-//		if (cercaUtente.getTipoUtente()!=-1){
-//			EntityManager em = EMF.createEntityManager();
-//			String hql = "select u from Utente where u.username=:n ";
-//			Query q = em.createQuery(hql, Album.class);
-//			q.setParameter("n",utente.getUsername());
-//			risultatoAlbums = q.getResultList();
-//			System.out.println("===========ALBUMS:" + risultatoAlbums.toString());
-//		}
-//		
+//	public void calcolaEtà(Date datanascita) {
+//		Date currentDate = new Date(); // current date
+//
 //	}
 	
+
+	public Album getNuovoAlbum() {
+		return nuovoAlbum;
+	}
+
+
+	public void setNuovoAlbum(Album nuovoAlbum) {
+		this.nuovoAlbum = nuovoAlbum;
+	}
+
+
+	public List<Album> getAlbumList() {
+		return albumList;
+	}
+
+
+	public void setAlbumList(List<Album> albumList) {
+		this.albumList = albumList;
+	}
+
+
+	public String getNewAlbumName() {
+		return newAlbumName;
+	}
+
+
+	public void setNewAlbumName(String newAlbumName) {
+		this.newAlbumName = newAlbumName;
+	}
 	
 	public String getAvatarDefault() {
 		return avatarDefault;
@@ -286,13 +400,16 @@ public class UtenteBean {
 		return risultato;
 	}
 
-	public List<Album> getRisultatoAlbums() {
-		return risultatoAlbums;
+
+	public Album getRisultatoAlbum() {
+		return risultatoAlbum;
 	}
 
-	public void setRisultatoAlbums(List<Album> risultatoAlbums) {
-		this.risultatoAlbums = risultatoAlbums;
+
+	public void setRisultatoAlbum(Album risultatoAlbum) {
+		this.risultatoAlbum = risultatoAlbum;
 	}
+
 
 	public void setRisultato(List<Utente> risultato) {
 		this.risultato = risultato;

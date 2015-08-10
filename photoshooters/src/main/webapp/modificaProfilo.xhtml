@@ -69,7 +69,7 @@
             	</h:selectOneMenu>
             	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
 				
-				<h:outputLabel for="dataNascita">DATa Di NASCITa</h:outputLabel>
+				<h:outputLabel for="dataNascita">DATa Di NASCITa (viene visualizzata solo l'ETà)</h:outputLabel>
         	    <h:inputText id="dataNascita" value="#{utenteBean.utente.dataNascita}"
         	      required="true" requiredMessage="inserisci l'anno" >
        			<f:convertDateTime pattern="d-M-yyyy" />

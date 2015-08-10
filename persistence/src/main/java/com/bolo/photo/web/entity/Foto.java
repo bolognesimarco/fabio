@@ -1,10 +1,12 @@
 package com.bolo.photo.web.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -13,8 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Foto {
+public class Foto implements Serializable{
+
+	private static final long serialVersionUID = -5640225111675845046L;
+
 	@Id
+	@GeneratedValue
 	private int id;
 	
 	@Column
@@ -24,7 +30,7 @@ public class Foto {
 	private boolean vietataMinori;
 	
 	@ManyToOne
-    @JoinColumn(name="soggetto", nullable=false)
+    @JoinColumn(name="soggetto", nullable=true)
 	private Utente soggetto;
 	
 	@ManyToOne
@@ -32,7 +38,7 @@ public class Foto {
 	private Utente fotografo;
 	
 	@ManyToOne
-    @JoinColumn(name="pubblicatore", nullable=false)
+    @JoinColumn(name="pubblicatore", nullable=true)
 	private Utente pubblicatore;
 	
 	@ManyToOne

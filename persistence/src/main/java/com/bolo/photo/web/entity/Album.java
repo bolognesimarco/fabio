@@ -1,17 +1,25 @@
 package com.bolo.photo.web.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Album {
+public class Album  implements Serializable{
+	
+	private static final long serialVersionUID = 4475766647760160199L;
+
 	@Id
+	@GeneratedValue
 	private int id;
 	
 	@Column
@@ -23,8 +31,8 @@ public class Album {
 	private Utente pubblicatore;
 	
 	
-	@OneToMany(mappedBy="album")
-	private List<Foto> fotos;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="album")
+	private List<Foto> fotos = new ArrayList<Foto>();
 	
 	public int getId() {
 		return id;
@@ -42,7 +50,7 @@ public class Album {
 		this.titolo = titolo;
 	}
 
-		public Utente getPubblicatore() {
+	public Utente getPubblicatore() {
 		return pubblicatore;
 	}
 

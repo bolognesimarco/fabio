@@ -49,10 +49,12 @@ public class MenuBean {
 			break;
 		case 9://ALBUMS
 			//utenteBean.albumsUtente();
+			inputBean.setStatusMessage(null);
 			contentBean.setMessaggio(null);
-			contentBean.setContent("albums.xhtml");
+			contentBean.setContent("albums2.xhtml");
 			break;
 		case 10://MESSAGGI
+			contentBean.setMessaggio(null);
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 11://CHAT
@@ -85,7 +87,7 @@ public class MenuBean {
 			inputBean.setStatusMessage(null);
 			contentBean.setContent("modificaProfilo.xhtml");
 			break;
-		case 17://NUOVO ALBUM
+		case 17://NUOVO ALBUM_non più usato!
 			contentBean.setMessaggio(null);
 			contentBean.setContent("nuovoAlbum.xhtml");
 			break;

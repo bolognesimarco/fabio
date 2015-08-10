@@ -33,8 +33,8 @@
 			
 			<f:facet name="footer">
 		            <h:panelGroup>
-		                <h:commandButton value="NUOVo ALBUm&#160;&#160;"
-						 	action="#{menuBean.menuClick(6)}" >
+		                <h:commandButton value="NUOVo ALBUm&#160;&#160;">
+		                <f:ajax event="click" listener="#{menuBean.menuClick(17)}" render=":content :nuovoalbumform" />
 		            	</h:commandButton>  
 	            	</h:panelGroup>
         	</f:facet>
