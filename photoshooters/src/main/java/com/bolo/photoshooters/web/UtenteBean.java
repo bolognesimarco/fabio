@@ -1,10 +1,12 @@
 package com.bolo.photoshooters.web;
 
 
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -41,6 +43,7 @@ public class UtenteBean {
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
     Album risultatoAlbum = new Album();
     List<Foto> risultatoFotos = new ArrayList<Foto>();
+    Foto risultatoFoto = new Foto();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private String avatarDefault = "avatarDefault.svg"; 
 	private String newAlbumName ="";
@@ -97,6 +100,7 @@ public class UtenteBean {
 		boolean utenteInserito = false;
 		boolean sessoInserito = false;
 		boolean utenteOnline = false;
+		boolean etàInserita = false;
 		int i = 0;
 		
 		if (cercaUtente.getName()!="") {
@@ -144,6 +148,14 @@ public class UtenteBean {
 			utenteOnline = true;
 			i++;
 		}
+		if (cercaUtente.getEtà()>0) {
+			if (i>0){
+				hqlcerca += "and";
+			}
+			hqlcerca += " TIMESTAMPDIFF(YEAR,u.dataMember,CURDATE()) <1 ";
+			etàInserita = true;
+			i++;
+		}
 		
 		if (i>0){
 			hql = hqlstart + "where" + hqlcerca; 
@@ -168,6 +180,9 @@ public class UtenteBean {
 		if(sessoInserito){
 			q.setParameter("sex", cercaUtente.getSesso());
 		}
+//		if(etàInserita){
+//			q.setParameter("eta", cercaUtente.getEtà());
+//		}
 //		ORDINAMENTO PRIMA DELLA QUERY
 		risultato = q.getResultList();
 		System.out.println("================CCC==========="+risultato.size());
@@ -292,17 +307,47 @@ public class UtenteBean {
 
 //		System.out.println(risultatoAlbum.getFotos().get(0).getTitolo());
 		if(risultatoFotos!=null ){
-//&& risultatoFotos.size()>0
+
 			contentBean.setContent("visualizzaAlbum.xhtml");
 			contentBean.setMessaggio(null);
 			setAlbumId(albumId);
 			visualizzaAlbum(albumId);
 //			setAlbumVisualizzato(risultatoAlbum.getTitolo());
 		}else{
-			System.out.println("errore lista fot non trovata!");
+			System.out.println("errore lista foto non trovata!");
 		}
 	}
 	
+	public void visualizzaFoto(int fotoId){
+		EntityManager em = EMF.createEntityManager();
+
+		String hql = "from Foto f where f.id=:n";
+		Query q = em.createQuery(hql, Foto.class);
+		q.setParameter("n", fotoId);
+
+		risultatoFoto = (Foto) q.getResultList().get(0);
+
+//		System.out.println(risultatoAlbum.getFotos().get(0).getTitolo());
+		if(risultatoFoto!=null ){
+
+			contentBean.setContent("visualizzaFoto.xhtml");
+			contentBean.setMessaggio(null);
+//			setAlbumId(albumId);
+//			visualizzaAlbum(albumId);
+//			setAlbumVisualizzato(risultatoAlbum.getTitolo());
+		}else{
+			System.out.println("errore foto non trovata!");
+		}
+	}
+	
+	public Foto getRisultatoFoto() {
+		return risultatoFoto;
+	}
+
+	public void setRisultatoFoto(Foto risultatoFoto) {
+		this.risultatoFoto = risultatoFoto;
+	}
+
 	public List<Foto> getRisultatoFotos() {
 		return risultatoFotos;
 	}
@@ -330,7 +375,8 @@ public class UtenteBean {
 		try {
 			serv.merge(utente);
 			String mm = "PROFILo AGGIORNATo";
-			contentBean.setMessaggio(mm);		
+			contentBean.setMessaggio(mm);
+			contentBean.setContent("profilo.xhtml");
 		} catch (Exception e) {
 			e.printStackTrace();
 			//	contentBean.setContent("profilo.xhtml");
@@ -353,10 +399,28 @@ public class UtenteBean {
 		
 	}
 
-//	public void calcolaEtà(Date datanascita) {
-//		Date currentDate = new Date(); // current date
-//
-//	}
+
+	public int calcolaEtà(Date dataNascita) {
+		Date currentDate = new Date(); // current date
+        Calendar birth = new GregorianCalendar();
+        Calendar today = new GregorianCalendar();
+        int età = 0;
+        int compiuti = 0;
+        today.setTime(currentDate);
+
+        if (dataNascita!=null){
+            birth.setTime(dataNascita);
+            if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
+                compiuti = -1;
+            }
+            
+            età = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR)+ compiuti;
+
+            return età;
+        }
+		return 0;
+        
+	}
 	
 
 	public Album getNuovoAlbum() {

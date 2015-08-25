@@ -63,7 +63,15 @@ public class InputBean {
 				nuovoAlbum.setTitolo(utenteBean.getNewAlbumName());
 				nuovoAlbum.setPubblicatore(utenteBean.getUtente());
 				utenteBean.getUtente().getPubblicati().add(nuovoAlbum);
-				utenteBean.aggiornaProfilo();
+
+				try {
+					serv.merge(utenteBean.getUtente());
+				} catch (Exception e) {
+					e.printStackTrace();
+					String mm = e.getMessage()+" ERRORe CREAZIONe NUOVo ALBUm!";
+					contentBean.setMessaggio(mm);
+				}
+				
 				contentBean.setMessaggio("Album aggiunto");
 				utenteBean.setNewAlbumName(null);
 			} else {
@@ -100,11 +108,19 @@ public class InputBean {
 				newFoto.setPubblicatore(utenteBean.getUtente());
 //				utenteBean.getRisultatoAlbum().getFotos().add(newFoto);
 				utenteBean.getUtente().getFotografoDi().add(newFoto);
-				utenteBean.aggiornaProfilo();
+
+				try {
+					serv.merge(utenteBean.getUtente());
+				} catch (Exception e) {
+					e.printStackTrace();
+					String mm = e.getMessage()+" ERRORe UPLOAd FOTo!";
+					contentBean.setMessaggio(mm);
+				}
+				
 				utenteBean.setNewFotoName(null);
 				utenteBean.visualizzaFotos(utenteBean.getAlbumId());
 			} else {
-				System.out.println("Errore nella creazione della cartella dell'album!");
+				System.out.println("Errore nell'upload della foto!");
 			}
 
 		
@@ -169,7 +185,14 @@ public class InputBean {
 		
 		File outputFilePath = new File(userFolderPath + userAvatarFileName);
 		utenteBean.getUtente().setAvatar(userAvatarFileName);
-		utenteBean.aggiornaProfilo();
+
+		try {
+			serv.merge(utenteBean.getUtente());
+		} catch (Exception e) {
+			e.printStackTrace();
+			String mm = e.getMessage()+" ERRORe UPLOAd AVATAr!";
+			contentBean.setMessaggio(mm);
+		}
 		
 		// Copy uploaded file to destination path
 		InputStream inputStream = null;

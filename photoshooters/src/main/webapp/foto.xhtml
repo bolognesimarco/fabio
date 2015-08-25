@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<!--
+	1 ) Reference to the files containing the JavaScript and CSS.
+	These files must be located on your server.
+-->
+	<h:outputScript library="js" name="highslide-with-gallery.js"> </h:outputScript>
+<!-- 	<script type="text/javascript" src="../jqueryui/highslide-with-gallery.js"></script> -->
+	<h:outputStylesheet name="highslide.css" library="css" />
+<!--     <link rel="stylesheet" type="text/css" href="../jqueryui/highslide.css" /> -->
+
+<!--
+	2) Optionally override the settings defined at the top
+	of the highslide.js file. The parameter hs.graphicsDir is important!
+-->
+<!-- <script type="text/javascript"> -->
+	<h:outputScript library="js" target="head">
+
+	hs.graphicsDir = 'resources/graphics/';
+	hs.align = 'center';
+	hs.transitions = ['expand', 'crossfade'];
+	hs.outlineType = 'rounded-white';
+	hs.fadeInOut = true;
+	//hs.dimmingOpacity = 0.75;
+	
+	// Add the controlbar
+	hs.addSlideshow({
+		//slideshowGroup: 'group1',
+		interval: 5000,
+		repeat: false,
+		useControls: true,
+		fixedControls: 'fit',
+		overlayOptions: {
+			opacity: 0.75,
+			position: 'bottom center',
+			hideOnMouseOut: true
+		}
+	});
+	
+	</h:outputScript>
+<!-- </script> -->
+	
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="homePage.css" library="css" />
+</h:head>
+
+<h:body>
+	
+	
+<!-- 3) Put the thumbnails inside a div for styling -->
+
+<!-- <div class="highslide-gallery"> -->
+
+<h:panelGroup styleClass="highslide-gallery"> 
+
+<!-- 4) This is how you mark up the thumbnail image with an anchor tag around it.
+	The anchor's href attribute defines the URL of the full-size image. -->
+<h:form>
+<h:commandLink styleClass="highslide" onclick="return hs.expand(this)" action="/imgs/gallery1.jpg">
+	<h:graphicImage value="/imgs/gallery1.thumb.jpg">
+	</h:graphicImage>
+</h:commandLink>
+
+</h:form>	
+<!-- <a href="../imgs/gallery1.jpg" class="highslide" onclick="return hs.expand(this)"> -->
+<!-- 	<img src="../imgs/gallery1.thumb.jpg" alt="Highslide JS" -->
+<!-- 		title="Click to enlarge" /> -->
+<!-- </a> -->
+
+<!-- 5 (optional). This is how you mark up the caption. The correct class name is important. -->
+
+<!-- <div class="highslide-caption"> -->
+<!-- 	Caption for the first image. This caption can be styled using CSS. -->
+<!-- </div> -->
+
+<h:panelGroup styleClass="highslide-caption">Caption for the first image. 
+This caption can be styled using CSS.</h:panelGroup>
+
+<!-- Repetionion of the above -->
+
+<!-- <a href="../imgs/gallery2.jpg" class="highslide" onclick="return hs.expand(this)"> -->
+<!-- 	<img src="../imgs/gallery2.thumb.jpg" alt="Highslide JS" -->
+<!-- 		title="Click to enlarge" /></a> -->
+
+<!-- <div class="highslide-caption"> -->
+<!-- 	Caption for the second image. -->
+<!-- </div> -->
+
+<!-- <a href="../imgs/gallery3.jpg" class="highslide" onclick="return hs.expand(this)"> -->
+<!-- 	<img src="../imgs/gallery3.thumb.jpg" alt="Highslide JS" -->
+<!-- 		title="Click to enlarge" /></a> -->
+
+<!-- <div class="highslide-caption"> -->
+<!-- 	Caption for the third image. -->
+<!-- </div> -->
+
+<!-- </div> -->
+</h:panelGroup>	
+	
+	
+	
+	
+<!-- 	<h:panelGroup styleClass="pannello homepage"> -->
+		
+<!-- 		<h:dataTable value="#{utenteBean.risultatoFoto}" var="risultato" border="1"> -->
+		
+<!-- 			<f:facet name="header"> -->
+<!--             		<h:outputText value="&#160;&#160;FOTo"/> -->
+<!--         	</f:facet> -->
+      	 	
+<!-- 			<h:column> -->
+<!-- 				<f:facet name="header"> -->
+<!--             		<h:outputText value="&#160;&#160;ALBUMs"/> -->
+<!--         		</f:facet> -->
+<!-- 		       		<h:outputText value="#{risultato.titolo}"/> -->
+<!-- 		        <f:facet name="footer"> -->
+<!--             		<h:outputText value="&#160;&#160;ALBUMs"/> -->
+<!--         		</f:facet>	 -->
+<!-- 			</h:column> -->
+			
+<!-- 			<f:facet name="footer"> -->
+<!-- 		            <h:panelGroup> -->
+<!-- 		                <h:commandButton value="NUOVo ALBUm&#160;&#160;"> -->
+<!-- 		                <f:ajax event="click" listener="#{menuBean.menuClick(17)}" render=":content :nuovoalbumform" /> -->
+<!-- 		            	</h:commandButton>   -->
+<!-- 	            	</h:panelGroup> -->
+<!--         	</f:facet> -->
+	
+		
+<!-- 		</h:dataTable>			 -->
+
+<!-- 	</h:panelGroup> -->
+
+</h:body>
+</html>

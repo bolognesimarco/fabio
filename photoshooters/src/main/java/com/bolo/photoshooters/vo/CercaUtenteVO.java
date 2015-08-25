@@ -17,6 +17,7 @@ public class CercaUtenteVO {
 	private String username;
 	private String password;
 	private Date dataNascita;
+	private int età = 0;
 	private int tipoUtente;
 	private List <RegioneItaliana> regioniitaliane = new ArrayList<RegioneItaliana>();
 	private Esperienza esperienza;
@@ -26,6 +27,12 @@ public class CercaUtenteVO {
 	private boolean online;
 	private int lastOnlineIscritto = 1; 
 	
+	public int getEtà() {
+		return età;
+	}
+	public void setEtà(int età) {
+		this.età = età;
+	}
 	public Sesso getSesso() {
 		return sesso;
 	}

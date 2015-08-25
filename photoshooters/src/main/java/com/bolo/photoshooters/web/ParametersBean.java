@@ -77,7 +77,23 @@ public class ParametersBean {
 	private List<Integer> rangeScarpe = new ArrayList<Integer>();
 	private List<Integer> rangeTatuaggi = new ArrayList<Integer>();
 	private List<Integer> rangePiercing = new ArrayList<Integer>();
-		
+	private List<Integer> rangeEtà = new ArrayList<Integer>();
+	
+	public void fillEtà(){
+		rangeEtà.clear();
+		rangeFill(rangeEtà, 0, 99);
+	}
+	
+	public List<Integer> getRangeEtà() {
+		return rangeEtà;
+	}
+
+
+	public void setRangeEtà(List<Integer> rangeEtà) {
+		this.rangeEtà = rangeEtà;
+	}
+
+
 	public List<Integer> getRangeTatuaggi() {
 		return rangeTatuaggi;
 	}

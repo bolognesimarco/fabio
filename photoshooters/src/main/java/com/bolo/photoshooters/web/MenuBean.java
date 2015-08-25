@@ -32,9 +32,10 @@ public class MenuBean {
 			break;
 		case 5://LAVORI
 			contentBean.setMessaggio(null);
-			contentBean.setContent("wip.xhtml");
+			contentBean.setContent("foto.xhtml");
 			break;
 		case 6://PHOTOSHOOTERS
+			parametersBean.fillEtà();
 			contentBean.setMessaggio(null);
 			contentBean.setContent("cerca2.xhtml");
 			break;
@@ -45,7 +46,6 @@ public class MenuBean {
 		case 8://PROFILO
 			contentBean.setMessaggio(null);
 			contentBean.setContent("profilo.xhtml");
-			//utenteBean.fillSelectItems();
 			break;
 		case 9://ALBUMS
 			//utenteBean.albumsUtente();
@@ -87,10 +87,10 @@ public class MenuBean {
 			inputBean.setStatusMessage(null);
 			contentBean.setContent("modificaProfilo.xhtml");
 			break;
-		case 17://NUOVO ALBUM_non più usato!
-			contentBean.setMessaggio(null);
-			contentBean.setContent("nuovoAlbum.xhtml");
-			break;
+//		case 17://NUOVO ALBUM_non più usato!
+//			contentBean.setMessaggio(null);
+//			contentBean.setContent("nuovoAlbum.xhtml");
+//			break;
 		default:
 			break;
 		}
@@ -119,9 +119,24 @@ public class MenuBean {
 	@ManagedProperty(value="#{inputBean}")
 	private InputBean inputBean;
 	
+	@ManagedProperty(value="#{parametersBean}")
+	private ParametersBean parametersBean;
+	
 	public UtenteBean getUtenteBean() {
 		return utenteBean;
 	}
+
+	public ParametersBean getParametersBean() {
+		return parametersBean;
+	}
+
+
+
+	public void setParametersBean(ParametersBean parametersBean) {
+		this.parametersBean = parametersBean;
+	}
+
+
 
 	public InputBean getInputBean() {
 		return inputBean;

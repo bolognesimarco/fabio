@@ -1,8 +1,6 @@
 package com.bolo.photoshooters.web;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;

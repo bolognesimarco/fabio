@@ -54,7 +54,7 @@
             	<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="dataNascita">ETà</h:outputLabel>
-        	    <h:outputText id="dataNascita" value="#{utenteBean.utente.dataNascita}" />
+        	    <h:outputText id="dataNascita" value="#{utenteBean.calcolaEtà(utenteBean.utente.dataNascita)}" />
             	<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="città">CITTà</h:outputLabel>

@@ -61,6 +61,11 @@
             	</h:selectOneMenu>
             	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
 				
+				<h:outputLabel for="età">ETà</h:outputLabel>
+				<h:selectOneMenu  id="età" value="#{utenteBean.cercaUtente.età}" >
+				<f:selectItems value="#{parametersBean.rangeEtà}" /></h:selectOneMenu >
+				<h:outputLabel>*</h:outputLabel>	
+				
 				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
 				<h:selectOneMenu id="esperienza" value="#{utenteBean.cercaUtente.esperienza}" style="width: 230px;"
 					required="false" requiredMessage="scegli il livello esperienza">
@@ -110,14 +115,7 @@
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;USERNAMe"/>
         		</f:facet>
-<!--         		 <h:form> -->
-<!--         		 <h:commandLink  actionListener="#{risultato.username}" action="/utenteTrovato.xhtml" > -->
-<!--         		      	<f:param name="username" value="#{risultato.username}" /> -->
-<!--         		 </h:commandLink>  -->
-<!--         		 </h:form> -->
-<!--         		    <h:link outcome="utenteTrovato" target="_self" value="#{risultato.username}" > -->
-<!--      					 <f:param name="username" value="#{risultato.username}" /> -->
-<!--    					</h:link>  -->
+
    				    <h:commandButton value="#{risultato.username}">
 	    			   <f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
 	    	   		</h:commandButton>			

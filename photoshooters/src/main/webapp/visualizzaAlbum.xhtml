@@ -29,6 +29,14 @@
             		<h:outputText value="&#160;&#160;ALBUMs"/>
         		</f:facet>
 		       		
+		       		<h:commandButton value="#{risultato.titolo}">
+	    			   <f:ajax event="click" listener="#{utenteBean.visualizzaFoto(risultato.id)}" render=":content :fotoform" />
+	    	   		</h:commandButton>	
+		       		
+		       		<h:graphicImage  value="/lil?path=#{risultato.username}/#{risultato.avatar}" height="51" width="50" >
+			       	   <f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
+		       		</h:graphicImage>
+		       		
 		       		<h:outputText value="#{risultato.titolo}"/>
 		        
 		        <f:facet name="footer">
@@ -38,9 +46,7 @@
 			
 			<f:facet name="footer">
 		            <h:panelGroup>
-		                <h:commandButton value="NUOVa FOTo&#160;&#160;">
-		                <f:ajax event="click" listener="#{menuBean.menuClick(17)}" render=":content :nuovoalbumform" />
-		            	</h:commandButton>  
+				         <h:outputText value="&#160;&#160;FOTOs ALMBUm&#160;&#160;"/>
 	            	</h:panelGroup>
         	</f:facet>
 		

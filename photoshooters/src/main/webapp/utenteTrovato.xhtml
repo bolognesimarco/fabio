@@ -53,8 +53,8 @@
 				<h:outputText id="sesso" value="#{utenteBean.cercaUtente.utente.sesso}" />
             	<h:panelGroup>*</h:panelGroup>
 				
-				<h:outputLabel for="dataNascita">DATa Di NASCITa</h:outputLabel>
-        	    <h:outputText id="dataNascita" value="#{utenteBean.cercaUtente.utente.dataNascita}" />
+				<h:outputLabel for="dataNascita">ETà</h:outputLabel>
+        	    <h:outputText id="dataNascita" value="#{utenteBean.calcolaEtà(cercaUtente.utente.dataNascita)}" />
             	<h:panelGroup>*</h:panelGroup>
 				
 				<h:outputLabel for="città">CITTà</h:outputLabel>
