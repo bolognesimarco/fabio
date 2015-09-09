@@ -1,0 +1,27 @@
+.ui-datagrid .ui-paginator {
+background: transparent;
+border: 0px;
+font-size: x-small;
+font-family: gisha;
+}
+ .ui-datagrid-content{
+ width: 700px;
+ display: inline-block;
+/*  background: none!important; */
+ background-color: rgba(204, 204, 204, 0.54)!important; 
+ border: none!important;
+ }
+ 
+.ui-datagrid-row .ui-datagrid-column {
+ background: transparent;	
+ border: 0px;
+} 
+
+/* celle datagrid */
+.ui-datagrid-data {
+ background: transparent;	
+ border: 0px;
+ color: white;
+ text-shadow: 2px 2px 2px #212020;
+ font-size: small;
+}

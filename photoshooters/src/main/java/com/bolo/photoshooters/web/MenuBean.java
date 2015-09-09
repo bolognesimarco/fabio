@@ -28,7 +28,7 @@ public class MenuBean {
 			break;
 		case 4://FORUM
 			contentBean.setMessaggio(null);
-			contentBean.setContent("uploadPhoto.xhtml");
+			contentBean.setContent("localizzazione.xhtml");
 			break;
 		case 5://LAVORI
 			contentBean.setMessaggio(null);
@@ -37,7 +37,7 @@ public class MenuBean {
 		case 6://PHOTOSHOOTERS
 			parametersBean.fillEtà();
 			contentBean.setMessaggio(null);
-			contentBean.setContent("cerca2.xhtml");
+			contentBean.setContent("cerca3.xhtml");
 			break;
 		case 7://HOME
 			contentBean.setMessaggio(null);

@@ -1,6 +1,7 @@
 package com.bolo.photo.web.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Foto implements Serializable{
@@ -27,6 +30,15 @@ public class Foto implements Serializable{
 	private String titolo;
 	
 	@Column
+	private String nomeFileFoto;
+	
+	@Column
+	private int altezzaFoto;
+	
+	@Column
+	private int larghezzaFoto;
+	
+	@Column
 	private boolean vietataMinori;
 	
 	@ManyToOne
@@ -37,6 +49,14 @@ public class Foto implements Serializable{
     @JoinColumn(name="fotografo", nullable=false)
 	private Utente fotografo;
 	
+	public String getNomeFileFoto() {
+		return nomeFileFoto;
+	}
+
+	public void setNomeFileFoto(String nomeFileFoto) {
+		this.nomeFileFoto = nomeFileFoto;
+	}
+
 	@ManyToOne
     @JoinColumn(name="pubblicatore", nullable=true)
 	private Utente pubblicatore;
@@ -45,9 +65,20 @@ public class Foto implements Serializable{
     @JoinColumn(name="album", nullable=false)
 	private Album album;
 	
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dataFoto;
 	
 	public Album getAlbum() {
 		return album;
+	}
+
+	public Date getDataFoto() {
+		return dataFoto;
+	}
+
+	public void setDataFoto(Date dataFoto) {
+		this.dataFoto = dataFoto;
 	}
 
 	public void setAlbum(Album album) {
@@ -69,6 +100,22 @@ public class Foto implements Serializable{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getAltezzaFoto() {
+		return altezzaFoto;
+	}
+
+	public void setAltezzaFoto(int altezzaFoto) {
+		this.altezzaFoto = altezzaFoto;
+	}
+
+	public int getLarghezzaFoto() {
+		return larghezzaFoto;
+	}
+
+	public void setLarghezzaFoto(int larghezzaFoto) {
+		this.larghezzaFoto = larghezzaFoto;
 	}
 
 	public String getTitolo() {

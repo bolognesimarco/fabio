@@ -72,6 +72,8 @@ html, body{
 
 }
 
+
+
 /* colonne tabelle a 2   */
 
 .2right{
@@ -99,3 +101,21 @@ margin-top: ;
 	width: 300px;
 	white-space: normal;
 }
+
+/* colonne per multicheckbox */
+.selection tr {
+   float: left;
+    width: 50%;
+} 
+
+input, textarea, select {
+		border-radius: 10px;
+		border: 1px solid transparent;
+		color: #414042;
+		padding-left: 7px;
+}
+
+/* .textareatonda{ */
+/* 	border-radius: 10px; */
+/* } */
+

@@ -4,157 +4,125 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
     
 <h:head>
 	<h:outputStylesheet name="common.css" library="css" />
-	<h:outputStylesheet name="registrati.css" library="css" />
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
 </h:head>
 <h:body>
 
-	<h:panelGroup styleClass="pannello registrati">
+	<h:panelGroup styleClass="pannello cerca">
 
 		<h:form id="cercaform">
 		
-			<h:panelGrid columns="3" columnClasses="right, left, left">
+			<h:panelGrid columns="2" columnClasses="right, left" >
 			
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;CERCa2 PHOTOSHOOTERs"/>
+            		<br></br>
+            		<br></br>
         		</f:facet>
 
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
-				<h:inputText id="username" value="#{utenteBean.cercaUtente.username}"/>
-				<h:panelGroup>
-					*<h:message for="username" />
-				</h:panelGroup>
+				<h:inputText id="username" value="#{utenteBean.cercaUtente.username}" />
+
 
 				<h:outputLabel for="name">NOMe</h:outputLabel>
-				<h:inputText id="name" value="#{utenteBean.cercaUtente.name}"/>
-				<h:panelGroup>
-					*<h:message for="name" />
-				</h:panelGroup>
+				<h:inputText id="name" value="#{utenteBean.cercaUtente.name}" styleClass="textareatonda"/>
+
 				
 				<h:outputLabel for="profilo">PROFILo PROFESSIONALe</h:outputLabel>
-				<h:selectOneMenu id="profilo" value="#{utenteBean.cercaUtente.tipoUtente}" style="width: 230px;" 
+				<h:selectOneMenu id="profilo" value="#{utenteBean.cercaUtente.tipoUtente}" style="width: 230px; " 
 					required="false" requiredMessage="scegli un profilo">
                 	<f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
                 	<f:selectItems value="#{parametersBean.tipiUtente}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
                 	<f:ajax execute="cercaform:tipolavoro" event="change" render="@form" listener="#{utenteBean.lavoriPerTipoUtente}" />
             	</h:selectOneMenu>
-            	<h:panelGroup>
-					<h:message for="profilo" />
-				</h:panelGroup>
+
 				
 					
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
-				<h:selectManyListbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.cercaTipiLavoroId}" style="width: 230px;" 
+				<h:selectManyListbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.cercaTipiLavoroId}" style="width: 230px;"  
 					required="false" requiredMessage="scegli almeno un lavoro">
 				<f:selectItem itemValue="0" itemLabel="" noSelectionOption="true" />
 				<f:selectItems value="#{utenteBean.risultatoLavori}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
             	</h:selectManyListbox>
-            	<h:panelGroup><h:message for="tipolavoro" />*</h:panelGroup>			
+		
 				
 				<h:outputLabel for="sesso">SESSo</h:outputLabel>
-				<h:selectOneMenu id="sesso" value="#{utenteBean.cercaUtente.sesso}" style="width: 230px;">
+				<h:selectOneMenu id="sesso" value="#{utenteBean.cercaUtente.sesso}" style="width: 230px;" >
 				<f:selectItem itemValue="#{null}" itemLabel="" noSelectionOption="true" />
 				<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
             	</h:selectOneMenu>
-            	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
+
 				
 				<h:outputLabel for="età">ETà</h:outputLabel>
 				<h:selectOneMenu  id="età" value="#{utenteBean.cercaUtente.età}" >
 				<f:selectItems value="#{parametersBean.rangeEtà}" /></h:selectOneMenu >
-				<h:outputLabel>*</h:outputLabel>	
+
 				
 				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
-				<h:selectOneMenu id="esperienza" value="#{utenteBean.cercaUtente.esperienza}" style="width: 230px;"
+				<h:selectOneMenu id="esperienza" value="#{utenteBean.cercaUtente.esperienza}" style="width: 230px;" 
 					required="false" requiredMessage="scegli il livello esperienza">
 				<f:selectItem itemValue="#{null}" itemLabel="" noSelectionOption="true" />
 				<f:selectItems value="#{utenteBean.esperienze}" var="esperienza" itemValue="#{esperienza}" itemLabel="#{esperienza.esperienza}" />
             	</h:selectOneMenu>
-            	<h:panelGroup><h:message for="esperienza" />*</h:panelGroup>
+
 				
 				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
-				<h:selectManyListbox layout="pageDirection" id="regione" value="#{utenteBean.cercaUtente.regIta}" style="width: 230px;"
-					required="false" requiredMessage="scegli almeno una regione">
-				<f:selectItems value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
-            	</h:selectManyListbox >
-            	<h:panelGroup><h:message for="regione" />*</h:panelGroup>
+				<h:panelGroup styleClass="selection">
+					<h:selectManyCheckbox layout="pageDirection" id="regione" value="#{utenteBean.cercaUtente.regIta}" >
+					<f:selectItems value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
+					</h:selectManyCheckbox>
+				</h:panelGroup>
+
 				
 				<h:outputLabel for="online">PHOTOSHOOTERs ONLINe NOw</h:outputLabel>
 				<h:selectBooleanCheckbox id="online" value="#{utenteBean.cercaUtente.online}">
 				</h:selectBooleanCheckbox>
-				<h:panelGroup><h:message for="online" />*</h:panelGroup>
+
 								
 				<h:outputLabel for="lastonline">ORDINa PHOTOSHOOTERs</h:outputLabel>
 				<h:selectOneRadio value="#{utenteBean.cercaUtente.lastOnlineIscritto}">
    					<f:selectItem itemValue="1" itemLabel="ULTIMo ACCESSo" />
   				 	<f:selectItem itemValue="2" itemLabel="ULTIMo ISCRITTo" />	   			
 				</h:selectOneRadio>	
-				<h:panelGroup><h:message for="lastonline" />*</h:panelGroup>
+
 				
 				<f:facet name="footer">
+		            <br></br>
+
 		            <h:panelGroup>
 		                <h:commandButton value="AVVIa RICERCa&#160;&#160;"
 						 	action="#{utenteBean.cercaUtenti()}" >
 		            	</h:commandButton>  
 	            	</h:panelGroup>
+	            		<br></br>
+	            	<h:panelGroup><h:messages/>***</h:panelGroup>
         		</f:facet>
 				
 			</h:panelGrid>
 
 		</h:form>
 
-		<h:dataTable value="#{utenteBean.risultato}" var="risultato" border="1">
-		
-			<f:facet name="header">
-            		<h:outputText value="&#160;&#160;PHOTOSHOOTERs TROVATi"/>
-        	</f:facet>
-
-			<h:column>
-				<f:facet name="header">
-            		<h:outputText value="&#160;&#160;USERNAMe"/>
-        		</f:facet>
-
-   				    <h:commandButton value="#{risultato.username}">
-	    			   <f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
-	    	   		</h:commandButton>			
-   					 	
-<!--         			<h:outputText value="#{risultato.username}"/> -->
-        		<f:facet name="footer">
-            		<h:outputText value="&#160;&#160;USERNAMe"/>
-        		</f:facet>
-			</h:column>
-			        	 	
-			<h:column>
-				<f:facet name="header">
-            		<h:outputText value="&#160;&#160;NOMe"/>
-        		</f:facet>
-		       		<h:graphicImage rendered="#{risultato.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{risultato.username}/#{risultato.avatar}" height="51" width="50" >
-			       			<f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
-		       		</h:graphicImage>
-		       		<h:graphicImage rendered="#{risultato.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50" >
-		       			<f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
-		       		</h:graphicImage>
-<!-- 		       		<h:outputText value="#{risultato.name}"/> -->
-		        
-		        <f:facet name="footer">
-            		<h:outputText value="&#160;&#160;NOMe"/>
-        		</f:facet>	
-			</h:column>
-			
-			<f:facet name="footer">
-		            <h:panelGroup>
-		                <h:commandButton value="MODIFICa RICERCa&#160;&#160;" >
-						 	<f:ajax event="click" listener="#{menuBean.menuClick(6)}" render=":content :cercaform" />
-		            	</h:commandButton>  
-	            	</h:panelGroup>
-        	</f:facet>
-	
-		
-		</h:dataTable>
-
 	</h:panelGroup>
+	
+	<p:dataGrid var="utenti" value="#{utenteBean.risultato}" 
+      columns="3" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 
+	    <h:panelGrid columns="1">  
+	        <h:outputText value="#{utenti.username}" />  
+	      	<h:graphicImage rendered="#{utenti.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenti.username}/#{utenti.avatar}" height="51" width="50" >
+				<f:ajax event="click" listener="#{utenteBean.utenteTrovato(utenti.username)}" render=":content :profiloform" />
+			</h:graphicImage>
+			<h:graphicImage rendered="#{utenti.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50" >
+				<f:ajax event="click" listener="#{utenteBean.utenteTrovato(utenti.username)}" render=":content :profiloform" />
+			</h:graphicImage>
+	    </h:panelGrid>  
+
+	</p:dataGrid>
 </h:body>
 </html>

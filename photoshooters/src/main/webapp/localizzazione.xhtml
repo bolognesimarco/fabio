@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="homePage.css" library="css" />
+	<h:outputStylesheet name="buttons.css" library="css" />
+
+<script type="text/javascript">
+    function geocode() {
+        PF('geoMap').geocode(document.getElementById('address').value);
+    }
+ 
+    function reverseGeocode() {
+        var lat = document.getElementById('lat').value,
+            lng = document.getElementById('lng').value;
+ 
+        PF('revGeoMap').reverseGeocode(lat, lng);
+    }
+</script>
+
+<script type="text/javascript">
+    if (navigator.geolocation) {
+        checkGeolocationByHTML5();
+    } else {
+        checkGeolocationByLoaderAPI(); // HTML5 not supported! Fall back to Loader API.
+    }
+
+    function checkGeolocationByHTML5() {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            setMapCenter(position.coords.latitude, position.coords.longitude);
+        }, function() {
+            checkGeolocationByLoaderAPI(); // Error! Fall back to Loader API.
+        });
+    }
+
+    function checkGeolocationByLoaderAPI() {
+        if (google.loader.ClientLocation) {
+            setMapCenter(google.loader.ClientLocation.latitude, google.loader.ClientLocation.longitude);
+        } else {
+            // Unsupported! Show error/warning?
+        }
+    }
+
+    function setMapCenter(latitude, longitude) {
+        w_gmap.getMap().setCenter(new google.maps.LatLng(latitude, longitude));
+    }
+</script>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+
+
+
+</h:head>
+
+<h:body>
+	
+	<h:panelGroup styleClass="pannello homepage">
+ 
+
+ 
+<h:form id="mapsform" prependId="false">
+ 
+    <h3 style="margin-top:0">Geocode</h3>
+    <h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+        <p:outputLabel for="address" value="Address:" />
+        <p:inputText id="address" />
+        <p:commandButton value="Geocode" icon="ui-icon-search" onclick="geocode()" type="button" />
+    </h:panelGrid>
+ 
+    <p:gmap id="geoGmap" widgetVar="geoMap" center="#{geocodeView.centerGeoMap}" zoom="2" type="ROADMAP" model="#{geocodeView.geoModel}" style="width:100%;height:400px">
+        <p:ajax event="geocode" listener="#{geocodeView.onGeocode}" update="@this" />
+    </p:gmap>
+ 
+    <h3>Reverse Geocode</h3>
+    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="5">
+        <p:outputLabel for="lat" value="Lat:" />
+        <p:inputText id="lat" />
+        <p:outputLabel for="lng" value="Lng:" />
+        <p:inputText id="lng" />
+        <p:commandButton value="Reverse Geocode" icon="ui-icon-search" onclick="reverseGeocode()" type="button"/>
+    </h:panelGrid>
+ 
+    <p:gmap id="revGeoGmap" widgetVar="revGeoMap" center="#{geocodeView.centerRevGeoMap}" zoom="2" type="ROADMAP" model="#{geocodeView.revGeoModel}" style="width:100%;height:400px">
+        <p:ajax event="reverseGeocode" listener="#{geocodeView.onReverseGeocode}" update="@this" />
+    </p:gmap>
+    
+	 <h3>Markers</h3>
+	 <p:gmap widgetVar="w_gmap" center="41.381542, 2.122893" zoom="8" type="HYBRID" style="width:100%;height:400px"  >
+<!-- 	 <p:ajax event="overlaySelect" listener="#{mapBean.onMarkerSelect}" update="growl" /> -->
+	 </p:gmap>
+ 
+	<h:button onclick="geoFindMe()" value="mia posizione"></h:button>
+
+</h:form>
+ 
+
+
+	</h:panelGroup>
+
+</h:body>
+</html>

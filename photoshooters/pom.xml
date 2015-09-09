@@ -28,6 +28,11 @@
 			<version>2.2.10</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.maps</groupId>
+			<artifactId>google-maps-services</artifactId>
+			<version>0.1.7</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -58,6 +63,11 @@
 			<version>1.5.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.2</version>
+		</dependency>
 	</dependencies>
 
 

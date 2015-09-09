@@ -340,12 +340,15 @@ public class DBInitializer {
 
 		test.getPubblicati().add(album1);
 		album1.setPubblicatore(test);
-		album1.setTitolo("fabio");
+		album1.setTitolo("AlbumFB1");
 		Foto foto1 = new Foto();
 		foto1.setAlbum(album1);
 		album1.getFotos().add(foto1);
 		foto1.setFotografo(test);
-		foto1.setTitolo("null:");
+		foto1.setTitolo("FotoFB1");
+		foto1.setAltezzaFoto(600);
+		foto1.setLarghezzaFoto(800);
+		foto1.setNomeFileFoto("nomeFotoFB1.jpg");
 		
 		Utente test2 = new Utente();
 		test2.setId(2);

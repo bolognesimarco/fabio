@@ -1,0 +1,22 @@
+.ui-galleria {
+height: 100%;
+width: 100%;
+font-size: large;
+font-family: gisha;
+color: red;
+}
+
+.ui-galleria-panel {
+height: 100%;
+width: 100%;
+font-size: medium;
+font-family: gisha;
+color: orange;
+}
+.ui-helper-hidden {
+	height: 100%;
+width: 100%;
+font-size: medium;
+font-family: gisha;
+color: green;
+}

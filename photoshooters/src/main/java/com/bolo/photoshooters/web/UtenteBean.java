@@ -51,7 +51,18 @@ public class UtenteBean {
 	private Foto nuovaFoto = new Foto();
 	private String newFotoName ="";
 	private Integer albumId;
+	private Integer fotoId;
+	List<String> fotos = new ArrayList<String>();
 	
+	
+	public Integer getFotoId() {
+		return fotoId;
+	}
+
+	public void setFotoId(Integer fotoId) {
+		this.fotoId = fotoId;
+	}
+
 	public String getAlbumVisualizzato() {
 		return albumVisualizzato;
 	}
@@ -296,6 +307,9 @@ public class UtenteBean {
 //		}
 	}
 	
+	
+	private List<PerPhotoswipe> pswp = new ArrayList<UtenteBean.PerPhotoswipe>();
+	
 	public void visualizzaFotos(int albumId){
 		EntityManager em = EMF.createEntityManager();
 
@@ -304,11 +318,21 @@ public class UtenteBean {
 		q.setParameter("n", albumId);
 
 		risultatoFotos = (List<Foto>) q.getResultList();
-
+		for (Foto f : risultatoFotos) {
+			fotos.add(f.getNomeFileFoto());
+			
+			
+			PerPhotoswipe pp = new PerPhotoswipe();
+			pp.setSrc(f.getNomeFileFoto());
+			pp.setH(f.getAltezzaFoto());
+			pp.setW(f.getLarghezzaFoto());
+			pswp.add(pp);
+			System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW());
+		}
 //		System.out.println(risultatoAlbum.getFotos().get(0).getTitolo());
 		if(risultatoFotos!=null ){
 
-			contentBean.setContent("visualizzaAlbum.xhtml");
+			contentBean.setContent("visualizzaAlbum3.xhtml");
 			contentBean.setMessaggio(null);
 			setAlbumId(albumId);
 			visualizzaAlbum(albumId);
@@ -318,6 +342,48 @@ public class UtenteBean {
 		}
 	}
 	
+	public List<PerPhotoswipe> getPswp() {
+		return pswp;
+	}
+
+	public void setPswp(List<PerPhotoswipe> pswp) {
+		this.pswp = pswp;
+	}
+
+	public class PerPhotoswipe{
+		private String src;
+		private int w;
+		private int h;
+		public String getSrc() {
+			return src;
+		}
+		public void setSrc(String src) {
+			this.src = src;
+		}
+		public int getW() {
+			return w;
+		}
+		public void setW(int w) {
+			this.w = w;
+		}
+		public int getH() {
+			return h;
+		}
+		public void setH(int h) {
+			this.h = h;
+		}
+		
+		
+	}
+	
+	public List<String> getFotos() {
+		return fotos;
+	}
+
+	public void setFotos(List<String> fotos) {
+		this.fotos = fotos;
+	}
+
 	public void visualizzaFoto(int fotoId){
 		EntityManager em = EMF.createEntityManager();
 

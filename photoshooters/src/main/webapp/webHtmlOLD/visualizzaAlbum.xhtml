@@ -33,9 +33,7 @@
 	    			   <f:ajax event="click" listener="#{utenteBean.visualizzaFoto(risultato.id)}" render=":content :fotoform" />
 	    	   		</h:commandButton>	
 		       		
-		       		<h:graphicImage  value="/lil?path=#{risultato.username}/#{risultato.avatar}" height="51" width="50" >
-			       	   <f:ajax event="click" listener="#{utenteBean.utenteTrovato(risultato.username)}" render=":content :profiloform" />
-		       		</h:graphicImage>
+
 		       		
 		       		<h:outputText value="#{risultato.titolo}"/>
 		        
