@@ -19,24 +19,26 @@
 	vertical-align: middle;	
 }
 
+/* menu principale */
 .menubutton{
 	background:none!important;
     border:none; 
     padding:0!important;
     cursor: pointer;
-     
+    border-radius: 0px!important;
 	text-decoration: none;
 	color: #414042;
 	vertical-align: middle;
 	margin-left: 30px;
 }
 
+/* menu utente loggato */
 .menubuttonred{
 	background:none!important;
     border:none; 
     padding:0!important;
     cursor: pointer;
-     
+    border-radius: 0px!important;
 	text-decoration: none;
 	color: white;
 	vertical-align: middle;
@@ -68,3 +70,27 @@
 	margin-bottom: 0px;
 	margin-top: 2px;
 }
+ 
+ .rightheader {
+ 	text-align: center;
+ 	margin-left: auto;
+	margin-right: auto;
+	width: 150px!important;
+	height: 50px!important;
+ }
+ 
+  .leftheader {
+ 	text-align: center;
+ 	margin-left: auto;
+	margin-right: auto;
+	width: 250px!important;
+	height: 50px!important;
+ }
+ 
+   .centerheader {
+ 	text-align: center;
+ 	margin-left: auto;
+	margin-right: auto;
+	width: 300px!important;
+	height: 50px!important;
+ }

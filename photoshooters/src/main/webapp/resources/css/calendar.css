@@ -8,34 +8,53 @@
 	border: none;
 	padding-left: 7px;
 }
+.td {
+	font-family: gisha;
+
+}
+/* quando faccio refresh cambia carattere */
+.ui-corner-all{
+	border-radius: 10px;
+	font-size: small;
+	font-family: gisha;
+	padding-left: 7px;
+}
+
+.ui-widget {
+	font-size: small;
+	font-family: gisha;
+	padding-left: 7px;
+}
+
 /* prove per togliere ombra interna quando seleziono campo */
-	.ui-state-hover {
-		border: none;
-		box-shadow: none;
-			-webkit-box-shadow: inset 0px 0px 0px 0px #dddddd;
-	    -moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
-	  box-shadow: inset 0px 0px 0px 0px transparent;
-		
-	}
-	.ui-state-default{
-		border: none;
-		box-shadow: none;
-		-webkit-box-shadow: inset 0px 0px 0px 0px #dddddd;
-	    -moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
-	  box-shadow: inset 0px 0px 0px 0px transparent;	
-	}
-	.ui-state-active{
-		color: yellow;
-		background-color: yellow;
-	}
+.ui-state-hover {
+	border: none;
+	box-shadow: none;
+	-webkit-box-shadow: inset 0px 0px 0px 0px #dddddd;
+	-moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
+    box-shadow: inset 0px 0px 0px 0px transparent;
+}
+
+.ui-state-default{
+	border: none;
+	box-shadow: none;
+	-webkit-box-shadow: inset 0px 0px 0px 0px #dddddd;
+	-moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
+	box-shadow: inset 0px 0px 0px 0px transparent;	
+}
 	
-	.ui-widget {
-		border: none;
-		box-shadow: none;
-			-webkit-box-shadow: inset 0px 0px 0px 0px #dddddd;
-	    -moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
-	  box-shadow: inset 0px 0px 0px 0px transparent;
-	}
+.ui-state-active{
+	color: yellow;
+	background-color: yellow;
+}
+
+.ui-widget {
+	border: none;
+	box-shadow: none;
+	-webkit-box-shadow: inset 0px 0px 0px 0px #dddddd;
+	-moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
+	box-shadow: inset 0px 0px 0px 0px transparent;
+}
 
 /* contorno cella selezionata */
 /* .ui-datepicker-days-cell-over { */
@@ -51,6 +70,7 @@
 /* 	font-size: small; */
 /* 	font-family: gisha; */
 /* } */
+
 /* sfondo celle giorni vuote */
 .ui-datepicker-other-month {
 	color: #808000;
@@ -65,12 +85,22 @@
 	font-size: small;
 	font-family: gisha;
 }
+
+/* cella data corrente */
 .ui-datepicker-current-day {
 	color: #ff0000;
-	background-color: #408080;
+/* 	background-color: #408080; */
 	font-size: small;
 	font-family: gisha;
 }
+/* cella data scelta */
+.ui-datepicker-days-cell-over {
+	color: #ff0000;
+/* 	background-color: #800000; */
+	font-size: small;
+	font-family: gisha;
+}
+
 
 /* sfondo singola cella */
 .ui-datepicker td {

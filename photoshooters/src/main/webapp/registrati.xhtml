@@ -4,11 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
     
 <h:head>
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="registrati.css" library="css" />
+	<h:outputStylesheet name="autocomplete.css" library="css" />
 </h:head>
 <h:body>
 
@@ -84,7 +86,11 @@
             	</h:selectOneMenu>
             	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
 				
-				<h:outputLink value="/files/Regolamento.docx">Download Regolamento</h:outputLink>
+				<h:outputLabel for="città">CITTà</h:outputLabel>
+ 				<p:autoComplete id="città" value="#{registratiBean.città}" completeMethod="#{registratiBean.suggerisciCittà}" />
+				<h:outputLabel>*</h:outputLabel>
+				
+				<h:outputLink value="/files/Regolamento.docx">DOWNLOAd REGOLAMENTo</h:outputLink>
 				<h:panelGroup/>
 				<h:panelGroup/>
 				

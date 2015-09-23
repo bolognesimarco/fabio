@@ -1,7 +1,9 @@
 package com.bolo.photoshooters.web;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +25,9 @@ import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.service.ServiziVari;
 import com.bolo.photoshooters.service.ServiziVariImpl;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
 
 @ManagedBean
 @SessionScoped
@@ -34,6 +39,7 @@ public class RegistratiBean {
 	private String nome;
 	private int tipoUtente;
 	private Sesso sesso; 
+	private String città;
 	
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private ServiziVari serviziVari = new ServiziVariImpl();
@@ -48,6 +54,7 @@ public class RegistratiBean {
 			nuovo.setName(nome);
 			nuovo.setEmail(email);
 			nuovo.setSesso(sesso);
+			nuovo.setCittà(città);
 			nuovo.setTipoUtente(serv.getReference(TipoUtente.class, tipoUtente));
 			nuovo.setActive(false);
 			nuovo.setActivationCode(UUID.randomUUID().toString());
@@ -183,7 +190,21 @@ public class RegistratiBean {
 		}
 	}
 	
+	public List<String> suggerisciCittà (String citta) throws Exception{
+		GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAg7ZoORXv7d2eMGKb-pB7_QZReIPiIzxw");
 
+		GeocodingResult[] results =  GeocodingApi.geocode(context, citta).await();
+		List<String> suggerimenti = new ArrayList<String>();
+		
+		for (GeocodingResult geocodingResult : results) {
+//			System.out.println(geocodingResult.formattedAddress);	
+			suggerimenti.add(geocodingResult.formattedAddress);
+			setCittà(geocodingResult.formattedAddress);
+		}
+		return suggerimenti;
+		
+		}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -211,6 +232,16 @@ public class RegistratiBean {
 	public String getNome() {
 		return nome;
 	}
+
+	public String getCittà() {
+		return città;
+	}
+
+
+	public void setCittà(String città) {
+		this.città = città;
+	}
+
 
 	public void setNome(String nome) {
 		this.nome = nome;

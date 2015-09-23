@@ -13,10 +13,10 @@
 		<h:outputStylesheet library="css" name="header.css"  />
 
 		<div class="riga-celeste-medio" >
-		  <h:panelGrid border="0" columns="3" styleClass="center" columnClasses="right, center, left">
+		  <h:panelGrid border="0" columns="3" styleClass="center" columnClasses="rightheader, centerheader, leftheader">
 
 			  <h:graphicImage value="/resources/images/Loghetto_PS_naked_C.svg" height="57px" width="39px"></h:graphicImage>
-			  <h:graphicImage value="/resources/images/Scritta_photoshooters_small_C.svg">
+			  <h:graphicImage  value="/resources/images/Scritta_photoshooters_small_C.svg">
 			  <f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" /></h:graphicImage>
 			  <h:inputText id="cerca" maxlength="36" label="cerca"/>
 

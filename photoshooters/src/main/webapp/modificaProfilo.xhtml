@@ -11,6 +11,7 @@
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homePage.css" library="css" />
 	<h:outputStylesheet name="calendar.css" library="css" />
+	<h:outputStylesheet name="autocomplete.css" library="css" />
 </h:head>
 
 <h:body>
@@ -75,9 +76,12 @@
 				<p:calendar readonlyInput="true" id="dataNascita" value="#{utenteBean.utente.dataNascita}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />
             	<h:panelGroup><h:message for="dataNascita" />*</h:panelGroup>
 				
+			
 				<h:outputLabel for="città">CITTà</h:outputLabel>
-				<h:inputText id="città" value="#{utenteBean.utente.città}"/>
+ 				<p:autoComplete maxlength="130" id="città" value="#{utenteBean.utente.città}" completeMethod="#{utenteBean.suggerisciCittà}" />
 				<h:outputLabel>*</h:outputLabel>
+				
+
 				
 				<h:outputLabel for="descrizione">DESCRIZIONe - CURRICULUm</h:outputLabel>
 				<h:inputTextarea size="50" rows="12" id="descrizione" value="#{utenteBean.utente.descrizione}"/>

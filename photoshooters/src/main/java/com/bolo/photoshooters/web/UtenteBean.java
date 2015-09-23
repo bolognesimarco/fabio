@@ -31,6 +31,10 @@ import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.vo.CercaUtenteVO;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 
 
 @ManagedBean
@@ -486,6 +490,24 @@ public class UtenteBean {
         }
 		return 0;
         
+	}
+	
+	
+	public List<String> suggerisciCittà (String citta) throws Exception{
+		GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAg7ZoORXv7d2eMGKb-pB7_QZReIPiIzxw");
+
+		GeocodingResult[] results =  GeocodingApi.geocode(context, citta).await();
+		List<String> suggerimenti = new ArrayList<String>();
+		
+		for (GeocodingResult geocodingResult : results) {
+//			System.out.println(geocodingResult.formattedAddress);	
+			suggerimenti.add(geocodingResult.formattedAddress);
+			utente.setCittà(geocodingResult.formattedAddress);
+			System.out.println("XXXX"+results[0].formattedAddress);
+		}
+
+	return suggerimenti;
+		
 	}
 	
 
