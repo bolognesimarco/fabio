@@ -1,6 +1,7 @@
 package com.bolo.photoshooters.web;
 
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
@@ -56,51 +58,31 @@ public class UtenteBean {
 	private String newFotoName ="";
 	private Integer albumId;
 	private Integer fotoId;
-	List<String> fotos = new ArrayList<String>();
-	
-	
-	public Integer getFotoId() {
-		return fotoId;
-	}
-
-	public void setFotoId(Integer fotoId) {
-		this.fotoId = fotoId;
-	}
-
-	public String getAlbumVisualizzato() {
-		return albumVisualizzato;
-	}
-
-	public void setAlbumVisualizzato(String albumVisualizzato) {
-		this.albumVisualizzato = albumVisualizzato;
-	}
-
-	public Integer getAlbumId() {
-		return albumId;
-	}
-
-	public void setAlbumId(Integer albumId) {
-		this.albumId = albumId;
-	}
-
-	public Foto getNuovaFoto() {
-		return nuovaFoto;
-	}
-
-	public void setNuovaFoto(Foto nuovaFoto) {
-		this.nuovaFoto = nuovaFoto;
-	}
-
-	public String getNewFotoName() {
-		return newFotoName;
-	}
-
-	public void setNewFotoName(String newFotoName) {
-		this.newFotoName = newFotoName;
-	}
-
 	private Album nuovoAlbum = new Album();
 	private List<Album> albumList = new ArrayList<Album>();
+	
+//	List<String> fotos = new ArrayList<String>();
+	
+//	public class Bean implements Serializable {
+//
+//		   /**
+//		 * nel file html : styleClass="#{bean.inputValid?'':'inputInvalid'}"
+//		 */
+//			private static final long serialVersionUID = 1L;
+//			private String text; 
+//			public String getText() {
+//				return text;
+//			}
+//			public void setText(String text) {
+//				this.text = text;
+//			}
+//		    public boolean isInputValid (){
+//		      FacesContext context = FacesContext.getCurrentInstance();
+//		      UIInput input = (UIInput)context.getViewRoot().findComponent(":form:input");
+//		      return input.isValid();
+//		   }
+//		}
+
 
 	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();
@@ -288,6 +270,7 @@ public class UtenteBean {
 		   return null;
 		}
 
+	
 	public void visualizzaAlbum(int albumId){
 		EntityManager em = EMF.createEntityManager();
 
@@ -296,24 +279,31 @@ public class UtenteBean {
 		q.setParameter("n", albumId);
 		
 		risultatoAlbum = (Album) q.getResultList().get(0);
-		
-//		System.out.println("PPPPPPPPPPPPPPP");
-//		System.out.println(risultatoAlbum.getFotos().size());
-//		System.out.println(risultatoAlbum.getFotos().get(0).getTitolo());
-//		if(risultatoAlbum!=null){
-//
-//			contentBean.setContent("visualizzaAlbum.xhtml");
-//			contentBean.setMessaggio(null);
-//			setAlbumId(albumId);
-//			setAlbumVisualizzato(risultatoAlbum.getTitolo());
-//		}else{
-//			System.out.println("errore album non trovato!");
-//		}
 	}
 	
 	
 	private List<PerPhotoswipe> pswp = new ArrayList<UtenteBean.PerPhotoswipe>();
+	private String pswpS = "";
 	
+	public String getPswpS() {
+		pswpS = "[";
+		for (PerPhotoswipe p : pswp) {
+			pswpS += "{";
+			pswpS += "src:'"+p.getSrc()+"',";
+			pswpS += "w:"+p.getW()+",";
+			pswpS += "h:"+p.getH()+"";
+			pswpS += "},";
+		}
+		pswpS=pswpS.substring(0,pswpS.length()-1);
+		pswpS += "]";
+		System.out.println("PSWP=="+pswpS+"GET");
+		return pswpS;
+	}
+
+	public void setPswpS(String pswpS) {
+		this.pswpS = pswpS;
+	}
+
 	public void visualizzaFotos(int albumId){
 		EntityManager em = EMF.createEntityManager();
 
@@ -322,25 +312,24 @@ public class UtenteBean {
 		q.setParameter("n", albumId);
 
 		risultatoFotos = (List<Foto>) q.getResultList();
-		for (Foto f : risultatoFotos) {
-			fotos.add(f.getNomeFileFoto());
-			
-			
-			PerPhotoswipe pp = new PerPhotoswipe();
-			pp.setSrc(f.getNomeFileFoto());
-			pp.setH(f.getAltezzaFoto());
-			pp.setW(f.getLarghezzaFoto());
-			pswp.add(pp);
-			System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW());
-		}
-//		System.out.println(risultatoAlbum.getFotos().get(0).getTitolo());
-		if(risultatoFotos!=null ){
 
+		if(risultatoFotos!=null ){
+			visualizzaAlbum(albumId);
+			pswp.clear();
+			for (Foto f : risultatoFotos) {
+				PerPhotoswipe pp = new PerPhotoswipe();
+				pp.setSrc("/lil?path="+utente.getUsername()+"/"+getRisultatoAlbum().getTitolo()+"/"+f.getNomeFileFoto());
+				pp.setH(f.getAltezzaFoto());
+				pp.setW(f.getLarghezzaFoto());
+				pswp.add(pp);
+				System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW()+getRisultatoAlbum().getTitolo());
+			}
+			System.out.println("PSWP=="+pswpS+"FINE");
 			contentBean.setContent("visualizzaAlbum3.xhtml");
 			contentBean.setMessaggio(null);
 			setAlbumId(albumId);
-			visualizzaAlbum(albumId);
-//			setAlbumVisualizzato(risultatoAlbum.getTitolo());
+//			visualizzaAlbum(albumId);
+
 		}else{
 			System.out.println("errore lista foto non trovata!");
 		}
@@ -380,14 +369,6 @@ public class UtenteBean {
 		
 	}
 	
-	public List<String> getFotos() {
-		return fotos;
-	}
-
-	public void setFotos(List<String> fotos) {
-		this.fotos = fotos;
-	}
-
 	public void visualizzaFoto(int fotoId){
 		EntityManager em = EMF.createEntityManager();
 
@@ -410,21 +391,6 @@ public class UtenteBean {
 		}
 	}
 	
-	public Foto getRisultatoFoto() {
-		return risultatoFoto;
-	}
-
-	public void setRisultatoFoto(Foto risultatoFoto) {
-		this.risultatoFoto = risultatoFoto;
-	}
-
-	public List<Foto> getRisultatoFotos() {
-		return risultatoFotos;
-	}
-
-	public void setRisultatoFotos(List<Foto> risultatoFotos) {
-		this.risultatoFotos = risultatoFotos;
-	}
 
 	public void utenteTrovato(String username){
 		EntityManager em = EMF.createEntityManager();
@@ -446,7 +412,7 @@ public class UtenteBean {
 			serv.merge(utente);
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
-			contentBean.setContent("profilo.xhtml");
+			contentBean.setContent("profilo2.xhtml");
 		} catch (Exception e) {
 			e.printStackTrace();
 			//	contentBean.setContent("profilo.xhtml");
@@ -456,6 +422,7 @@ public class UtenteBean {
 			//contentBean.setContent(null);
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
+	
 	
 	public void lavoriPerTipoUtente() {
 		if (cercaUtente.getTipoUtente()!=-1){
@@ -488,8 +455,7 @@ public class UtenteBean {
 
             return età;
         }
-		return 0;
-        
+		return 0;    
 	}
 	
 	
@@ -507,7 +473,6 @@ public class UtenteBean {
 		}
 
 	return suggerimenti;
-		
 	}
 	
 
@@ -538,6 +503,22 @@ public class UtenteBean {
 
 	public void setNewAlbumName(String newAlbumName) {
 		this.newAlbumName = newAlbumName;
+	}
+	
+	public Foto getRisultatoFoto() {
+		return risultatoFoto;
+	}
+
+	public void setRisultatoFoto(Foto risultatoFoto) {
+		this.risultatoFoto = risultatoFoto;
+	}
+
+	public List<Foto> getRisultatoFotos() {
+		return risultatoFotos;
+	}
+
+	public void setRisultatoFotos(List<Foto> risultatoFotos) {
+		this.risultatoFotos = risultatoFotos;
 	}
 	
 	public String getAvatarDefault() {
@@ -625,7 +606,46 @@ public class UtenteBean {
 		return darit;
 	}
 	
+	public Integer getFotoId() {
+		return fotoId;
+	}
 
+	public void setFotoId(Integer fotoId) {
+		this.fotoId = fotoId;
+	}
+
+	public String getAlbumVisualizzato() {
+		return albumVisualizzato;
+	}
+
+	public void setAlbumVisualizzato(String albumVisualizzato) {
+		this.albumVisualizzato = albumVisualizzato;
+	}
+
+	public Integer getAlbumId() {
+		return albumId;
+	}
+
+	public void setAlbumId(Integer albumId) {
+		this.albumId = albumId;
+	}
+
+	public Foto getNuovaFoto() {
+		return nuovaFoto;
+	}
+
+	public void setNuovaFoto(Foto nuovaFoto) {
+		this.nuovaFoto = nuovaFoto;
+	}
+
+	public String getNewFotoName() {
+		return newFotoName;
+	}
+
+	public void setNewFotoName(String newFotoName) {
+		this.newFotoName = newFotoName;
+	}
+	
 	public Esperienza[] getEsperienze() {
         return Esperienza.values();
 	}

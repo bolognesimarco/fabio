@@ -41,8 +41,7 @@
                 	<f:selectItems value="#{parametersBean.tipiUtente}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
                 	<f:ajax execute="cercaform:tipolavoro" event="change" render="@form" listener="#{utenteBean.lavoriPerTipoUtente}" />
             	</h:selectOneMenu>
-
-				
+		
 					
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
 				<h:selectManyListbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.cercaTipiLavoroId}" style="width: 230px;"  

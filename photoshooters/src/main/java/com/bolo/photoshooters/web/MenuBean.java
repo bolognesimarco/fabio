@@ -45,7 +45,7 @@ public class MenuBean {
 			break;
 		case 8://PROFILO
 			contentBean.setMessaggio(null);
-			contentBean.setContent("profilo.xhtml");
+			contentBean.setContent("profilo2.xhtml");
 			break;
 		case 9://ALBUMS
 			//utenteBean.albumsUtente();
@@ -85,7 +85,7 @@ public class MenuBean {
 		case 16://MODIFICA PROFILO
 			contentBean.setMessaggio(null);
 			inputBean.setStatusMessage(null);
-			contentBean.setContent("modificaProfilo.xhtml");
+			contentBean.setContent("modificaProfilo2.xhtml");
 			break;
 //		case 17://NUOVO ALBUM_non più usato!
 //			contentBean.setMessaggio(null);

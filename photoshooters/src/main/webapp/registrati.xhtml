@@ -24,7 +24,7 @@
         		</f:facet>
 
 				<h:outputLabel for="username">USERSNAMe</h:outputLabel>
-				<h:inputText  id="username" value="#{registratiBean.username}"
+				<h:inputText id="username" value="#{registratiBean.username}"
 					required="true" requiredMessage="inserisci uno username" 
 					validator="#{registratiBean.checkUsername}"/>
 				<h:panelGroup>
@@ -73,6 +73,7 @@
 				<h:outputLabel for="profilo">PROFILo PROFESSIONALe</h:outputLabel>
 				<h:selectOneMenu id="profilo" value="#{registratiBean.tipoUtente}" 
 					required="true" requiredMessage="scegli un profilo">
+                	<f:selectItem itemLabel="" noSelectionOption="false" />
                 	<f:selectItems value="#{parametersBean.tipiUtente}" />
             	</h:selectOneMenu>
             	<h:panelGroup>
@@ -82,13 +83,14 @@
 				<h:outputLabel for="sesso">SESSo</h:outputLabel>
 				<h:selectOneMenu id="sesso" value="#{registratiBean.sesso}" 
 					required="true" requiredMessage="scegli il sesso">
-				<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
+					<f:selectItem  itemLabel="" noSelectionOption="false" />
+					<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
             	</h:selectOneMenu>
             	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
 				
 				<h:outputLabel for="città">CITTà</h:outputLabel>
- 				<p:autoComplete id="città" value="#{registratiBean.città}" completeMethod="#{registratiBean.suggerisciCittà}" />
-				<h:outputLabel>*</h:outputLabel>
+ 				<p:autoComplete required="true" requiredMessage="scegli la città" id="città" value="#{registratiBean.città}" completeMethod="#{registratiBean.suggerisciCittà}" />
+				<h:panelGroup><h:message for="città" />*</h:panelGroup>
 				
 				<h:outputLink value="/files/Regolamento.docx">DOWNLOAd REGOLAMENTo</h:outputLink>
 				<h:panelGroup/>

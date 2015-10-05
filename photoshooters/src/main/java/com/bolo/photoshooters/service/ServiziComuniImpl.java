@@ -83,5 +83,5 @@ public class ServiziComuniImpl implements ServiziComuni {
 	public <T extends Serializable> T getById(Class<T> c, Object id, EntityManager em) throws Exception{
 		return em.find(c, id);
 	}
-
+	
 }
