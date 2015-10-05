@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="homePage.css" library="css" />
+	<h:outputStylesheet name="calendar.css" library="css" />
+	<h:outputStylesheet name="autocomplete.css" library="css" />
+	<h:outputStylesheet name="buttons.css" library="css" />
+</h:head>
+
+<h:body>
+	
+	<h:panelGroup styleClass="pannello homepage">
+
+   			<h:form id="avatarForm" enctype="multipart/form-data"  >
+				<h:panelGrid columns="3" border="1">
+				AVATAr UPLOAd
+					<h:inputFile id="file"  label="SFOGLIa" value="#{inputBean.part}"
+						required="true" requiredMessage="Selezionare file per upload!">
+						<f:validator validatorId="FileUploadValidator" />
+					</h:inputFile>			
+					<h:commandButton id="submit" styleClass="buttons" action="#{inputBean.uploadAvatar}"
+						value="UPLOAd AVATAr" />
+					<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />				
+					<h:message style="color: red" for="file" />
+				</h:panelGrid>
+			</h:form>
+
+		<h:form id="profiloform">
+		<h:panelGrid border="1" columns="1">
+		
+		  <h:panelGrid columns="2"  columnClasses="2right, 2left">
+			
+				<f:facet name="header">
+            		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
+            		<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
+            		<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>		
+        		</f:facet>
+        		
+			<h:panelGrid columns="2" columnClasses="rightprofilo, leftprofilo">
+	
+				<h:outputLabel for="username">USERNAMe</h:outputLabel>
+				<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
+				
+				<h:outputLabel for="password">PASSWORd</h:outputLabel>
+				<h:outputText   id="password" value="#{utenteBean.utente.password}"/>
+								
+				<h:outputLabel for="email">EMAIl</h:outputLabel>
+				<h:outputText  id="email" value="#{utenteBean.utente.email}"/>
+				
+				<h:outputLabel for="nome">NOMe</h:outputLabel>
+				<h:outputText  id="nome" value="#{utenteBean.utente.name}"/>
+				
+				<h:outputLabel for="cognome">COGNOMe</h:outputLabel>
+				<h:inputText id="cognome" value="#{utenteBean.utente.cognome}"/>
+				
+				<h:outputLabel for="sesso">SESSo</h:outputLabel>
+				<h:selectOneMenu id="sesso" value="#{utenteBean.utente.sesso}" 
+					required="true" requiredMessage="scegli il sesso">
+				<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
+            	</h:selectOneMenu>
+				
+				<h:outputLabel for="dataNascita">DATa Di NASCITa <br></br>(viene visualizzata solo l'ETà)</h:outputLabel>
+				<p:calendar readonlyInput="true" id="dataNascita" value="#{utenteBean.utente.dataNascita}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />			
+			
+				<h:outputLabel for="città">CITTà</h:outputLabel>
+ 				<p:autoComplete maxlength="130" id="città" value="#{utenteBean.utente.città}" completeMethod="#{utenteBean.suggerisciCittà}" />
+				
+				<h:outputLabel for="descrizione">DESCRIZIONe - CURRICULUm</h:outputLabel>
+				<h:inputTextarea size="50" rows="12" id="descrizione" value="#{utenteBean.utente.descrizione}"/>
+				
+			</h:panelGrid>
+				
+			<h:panelGrid columns="2" columnClasses="rightprofilo, leftprofilo">
+				
+				<h:outputLabel for="sitoweb">SITo WEb</h:outputLabel>
+				<h:inputText id="sitoweb" value="#{utenteBean.utente.sitoweb}"/>
+				
+				<h:outputLabel for="facebook">FACEBOOk</h:outputLabel>
+				<h:inputText id="facebook" value="#{utenteBean.utente.facebook}"/>
+				
+				<h:outputLabel for="instagram">INSTAGRAm</h:outputLabel>
+				<h:inputText id="instagram" value="#{utenteBean.utente.instagram}"/>	
+				
+				<h:outputLabel for="tumblr">TUMBLr</h:outputLabel>
+				<h:inputText id="tumblr" value="#{utenteBean.utente.tumblr}"/>
+				
+				<h:outputLabel for="twitter">TWITTERr</h:outputLabel>
+				<h:inputText id="twitter" value="#{utenteBean.utente.twitter}"/>
+				
+				<h:outputLabel for="googleplus">GOOGLe+</h:outputLabel>
+				<h:inputText id="googleplus" value="#{utenteBean.utente.googleplus}"/>	
+					
+				<h:outputLabel for="linkedin">LINKEDIn</h:outputLabel>
+				<h:inputText id="linkedin" value="#{utenteBean.utente.linkedin}"/>	
+
+				<h:outputLabel for="tipoutente">PROFILo PROFESSIONALe</h:outputLabel>
+				<h:outputText id="tipoutente" value="#{utenteBean.utente.tipoUtente.descrizione}"/>	
+				
+				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
+				<h:selectOneMenu id="esperienza" value="#{utenteBean.utente.esperienza}" 
+					required="true" requiredMessage="scegli il livello esperienza">
+				<f:selectItems value="#{utenteBean.esperienze}" var="esperienza" itemValue="#{esperienza}" itemLabel="#{esperienza.esperienza}" />
+            	</h:selectOneMenu>
+					
+				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
+				<h:panelGroup styleClass="selection">
+				<h:selectManyCheckbox layout="pageDirection" id="regione" value="#{utenteBean.utente.regIta}" 
+					required="true" requiredMessage="scegli almeno una regione">
+				<f:selectItems value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
+            	</h:selectManyCheckbox >
+            	</h:panelGroup>	
+
+				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
+				<h:panelGroup styleClass="selection">
+				<h:selectManyCheckbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.tipiLavoroId}" 
+					required="true" requiredMessage="scegli almeno un lavoro">
+				<f:selectItems value="#{utenteBean.utente.tipoUtente.tipiLavoro}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
+            	</h:selectManyCheckbox >
+				</h:panelGroup>	
+				
+			</h:panelGrid>	
+			
+	      </h:panelGrid>
+			
+		  <h:panelGrid id="modellaGrid" border="1" columns="2" columnClasses="2right, 2left" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
+			<h:panelGrid columns="2" columnClasses="rightprofilo, leftprofilo">
+				
+				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
+				<h:selectOneMenu  id="vita" value="#{utenteBean.utente.vita}" >
+				<f:selectItems value="#{parametersBean.rangeVita}" /></h:selectOneMenu >
+				
+				<h:outputLabel for="seno">SENo [Cm]</h:outputLabel>
+				<h:selectOneMenu  id="seno" value="#{utenteBean.utente.seno}" >
+				<f:selectItems value="#{parametersBean.rangeSeno}" /></h:selectOneMenu >
+				
+				<h:outputLabel for="fianchi">FIANCHi [Cm]</h:outputLabel>
+				<h:selectOneMenu  id="fianchi" value="#{utenteBean.utente.fianchi}" >
+				<f:selectItems value="#{parametersBean.rangeFianchi}" /></h:selectOneMenu >
+			
+			</h:panelGrid>
+						
+			<h:panelGrid columns="2" columnClasses="rightprofilo, leftprofilo">
+			
+				<h:outputLabel for="altezza">ALTEZZa [Cm]</h:outputLabel>
+				<h:selectOneMenu  id="altezza" value="#{utenteBean.utente.altezza}" >
+				<f:selectItems value="#{parametersBean.rangeAltezza}" /></h:selectOneMenu >
+
+				<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
+				<h:selectOneMenu  id="peso" value="#{utenteBean.utente.peso}" >
+				<f:selectItems value="#{parametersBean.rangePeso}" /></h:selectOneMenu >
+				
+				<h:outputLabel for="taglia">TAGLIa [Eu]</h:outputLabel>
+				<h:selectOneMenu  id="taglia" value="#{utenteBean.utente.taglia}" >
+				<f:selectItems value="#{parametersBean.rangeTaglia}" /></h:selectOneMenu >
+									
+				<h:outputLabel for="scarpe">SCARPe [Eu]</h:outputLabel>
+				<h:selectOneMenu  id="scarpe" value="#{utenteBean.utente.scarpe}" >
+				<f:selectItems value="#{parametersBean.rangeScarpe}" /></h:selectOneMenu >
+				<h:outputLabel>*</h:outputLabel>
+									
+				<h:outputLabel for="tatuaggi">TATUAGGi [#]</h:outputLabel>
+				<h:selectOneMenu  id="tatuaggi" value="#{utenteBean.utente.tatuaggi}" >
+				<f:selectItems value="#{parametersBean.rangeTatuaggi}" /></h:selectOneMenu >
+				
+				<h:outputLabel for="piercing">PIERCINg [#]</h:outputLabel>
+				<h:selectOneMenu  id="piercing" value="#{utenteBean.utente.piercing}" >
+				<f:selectItems value="#{parametersBean.rangePiercing}" /></h:selectOneMenu >	
+
+			</h:panelGrid>
+		   
+		   </h:panelGrid>
+									
+				<f:facet name="footer">
+		            <h:panelGroup>
+		                <h:commandButton value="AGGIORNa PROFILo" 
+		                	action="#{utenteBean.aggiornaProfilo()}" >
+		            	</h:commandButton>  <br/>
+		            	<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+		            	<h:messages></h:messages>
+	            	</h:panelGroup>
+        		</f:facet>
+        		
+		</h:panelGrid>			
+					
+		</h:form>
+
+	</h:panelGroup>
+
+</h:body>
+</html>

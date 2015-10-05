@@ -1,0 +1,23 @@
+<faces-config version="2.0"
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    <application>
+        <system-event-listener>
+            <system-event-listener-class>com.bolo.photoshooters.service.MyPostValidationListener</system-event-listener-class>
+            <system-event-class>javax.faces.event.PostValidateEvent</system-event-class>
+            <source-class>javax.faces.component.html.HtmlInputText</source-class>
+        </system-event-listener>
+        <system-event-listener>
+            <system-event-listener-class>com.bolo.photoshooters.service.MyPostValidationListener</system-event-listener-class>
+            <system-event-class>javax.faces.event.PostValidateEvent</system-event-class>
+            <source-class>javax.faces.component.html.HtmlInputSecret</source-class>
+        </system-event-listener>
+        <system-event-listener>
+            <system-event-listener-class>com.bolo.photoshooters.service.MyPostValidationListener</system-event-listener-class>
+            <system-event-class>javax.faces.event.PostValidateEvent</system-event-class>
+            <source-class>javax.faces.component.html.HtmlSelectOneMenu</source-class>
+        </system-event-listener>
+    </application>
+        
+</faces-config>
