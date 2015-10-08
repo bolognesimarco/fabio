@@ -3,6 +3,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
     // parse slide data (url, title, size ...) from DOM elements 
     // (children of gallerySelector)
     var parseThumbnailElements = function(el) {
+    	
         var thumbElements = el.querySelectorAll("figure"),
             numNodes = thumbElements.length,
             items = [],
@@ -11,44 +12,45 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
             size,
             item;
         
-        for(var i = 0; i < numNodes; i++) {
+		    for(var i = 0; i < numNodes; i++) {
+		
+		            figureEl = thumbElements[i]; // <figure> element
+		            
+		            figureEl.setAttribute('id', i+1);
+		            
+		            // include only element nodes 
+		            if(figureEl.nodeType !== 1) {
+		                continue;
+		            }
 
-            figureEl = thumbElements[i]; // <figure> element
+		            linkEl = figureEl.children[0]; // <a> element
+		
+		            size = linkEl.getAttribute('data-size').split('x');
 
-            // include only element nodes 
-            if(figureEl.nodeType !== 1) {
-                continue;
-            }
-
-            linkEl = figureEl.children[0]; // <a> element
-
-            size = linkEl.getAttribute('data-size').split('x');
-
-            // create slide object
-            item = {
-                src: linkEl.getAttribute('href'),
-                w: parseInt(size[0], 10),
-                h: parseInt(size[1], 10)
-            };
+		            // create slide object
+		            item = {
+		                src: linkEl.getAttribute('href'),
+		                w: parseInt(size[0], 10),
+		                h: parseInt(size[1], 10)
+		            };
 
 
-
-            if(figureEl.children.length > 1) {
-                // <figcaption> content
-                item.title = figureEl.children[1].innerHTML; 
-            }
-
-            if(linkEl.children.length > 0) {
-                // <img> thumbnail element, retrieving thumbnail url
-                item.msrc = linkEl.children[0].getAttribute('src');
-            } 
-
-            item.el = figureEl; // save link to element for getThumbBoundsFn
-            items.push(item);
-        }
+		            if(figureEl.children.length > 1) {
+		                // <figcaption> content
+		                item.title = figureEl.children[1].innerHTML; 
+		            }
+		
+		            if(linkEl.children.length > 0) {
+		                // <img> thumbnail element, retrieving thumbnail url
+		                item.msrc = linkEl.children[0].getAttribute('src');
+		            } 
+		
+		            item.el = figureEl; // save link to element for getThumbBoundsFn
+		            items.push(item);
+		    }
 
         return items;
-    };
+    }; //fine function
 
     // find nearest parent element
     var closest = function closest(el, fn) {
@@ -91,14 +93,12 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
             nodeIndex++;
         }
 
-
-
         if(index >= 0) {
             // open PhotoSwipe if valid index found
             openPhotoSwipe( index, clickedGallery );
         }
         return false;
-    };
+    };//fine function
 
     // parse picture index and gallery index from URL (#&pid=1&gid=2)
     var photoswipeParseHash = function() {
@@ -126,7 +126,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
         }
 
         return params;
-    };
+    };//fine function
 
     var openPhotoSwipe = function(index, galleryElement, disableAnimation, fromURL) {
         var pswpElement = document.querySelectorAll('.pswp')[0],
@@ -190,7 +190,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
     var galleryElements = document.querySelectorAll( gallerySelector );
 
     for(var i = 0, l = galleryElements.length; i < l; i++) {
-        galleryElements[i].setAttribute('data-pswp-uid', i+1);
+        galleryElements[i].setAttribute('data-pswp-uid', i+3);
         galleryElements[i].onclick = onThumbnailsClick;
     }
 
@@ -204,6 +204,3 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 // execute above function
 initPhotoSwipeFromDOM('#my-gallery');
 
-function funzionePopup() {
-	alert("pop"+numNodes);
-}

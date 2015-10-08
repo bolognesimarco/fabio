@@ -16,44 +16,44 @@
 	<h:outputScript name="photoswipe-ui-default.js" library="js" />
 	<h:outputScript name="gallery.js" library="js" />
 <!-- <script type="text/javascript"> -->
-// var openPhotoSwipe = function() {
-// var pswpElement = document.querySelectorAll('.pswp')[0];
+<!-- // var openPhotoSwipe = function() { -->
+<!-- // var pswpElement = document.querySelectorAll('.pswp')[0]; -->
 
-// //build items array
-// var items = #{utenteBean.pswpS};
-// /*     {
-//         src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
-//         w: 964,
-//         h: 1024
-//     },
-//     {
-//         src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
-//         w: 1024,
-//         h: 683
-//     } ,
-// 	 {
-// 	     src: 'http://localhost:8080/lil?path=fb/AlbumFB1/nomeFotoFB1.jpg',
-// 	     w: 800,
-// 	     h: 600
-// 	 }
-// ];
-//  */
-// //define options (if needed)
-// var options = {
-//  // optionName: 'option value'
-//  // for example:
-//  index: 0 // start at first slide
-// };
+<!-- // //build items array -->
+<!-- // var items = #{utenteBean.pswpS}; -->
+<!-- // /*     { -->
+<!-- //         src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg', -->
+<!-- //         w: 964, -->
+<!-- //         h: 1024 -->
+<!-- //     }, -->
+<!-- //     { -->
+<!-- //         src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg', -->
+<!-- //         w: 1024, -->
+<!-- //         h: 683 -->
+<!-- //     } , -->
+<!-- // 	 { -->
+<!-- // 	     src: 'http://localhost:8080/lil?path=fb/AlbumFB1/nomeFotoFB1.jpg', -->
+<!-- // 	     w: 800, -->
+<!-- // 	     h: 600 -->
+<!-- // 	 } -->
+<!-- // ]; -->
+<!-- //  */ -->
+<!-- // //define options (if needed) -->
+<!-- // var options = { -->
+<!-- //  // optionName: 'option value' -->
+<!-- //  // for example: -->
+<!-- //  index: 0 // start at first slide -->
+<!-- // }; -->
 
-// //Initializes and opens PhotoSwipe
-// var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-// gallery.init();
+<!-- // //Initializes and opens PhotoSwipe -->
+<!-- // var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options); -->
+<!-- // gallery.init(); -->
 
-// };
+<!-- // }; -->
 
-// //openPhotoSwipe();
+<!-- // //openPhotoSwipe(); -->
 
-// document.getElementById('btn').onclick = openPhotoSwipe;
+<!-- // document.getElementById('btn').onclick = openPhotoSwipe; -->
 
 <!-- </script> -->
 </h:head>
@@ -135,7 +135,7 @@
 	
 		<h:button id="bottone" onclick="funzionePopup()">PoPUP</h:button>
 		
-		<h:dataTable id="my-gallery" value="#{utenteBean.risultatoFotos}" var="risultato" border="1">
+		<h:dataTable id="my-gallery" value="#{utenteBean.risultatoFotos}" var="risultato" border="1" >
 		
 			<f:facet name="header">
             		<h:outputText id="username" value="#{utenteBean.utente.username}"/>
@@ -146,22 +146,20 @@
 			<h:column>
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;ALBUMs"/>
-        		</f:facet>
+        		</f:facet> 
 
 				
-				<figure itemprop="associatedMedia" itemscope="true"
-					itemtype="http://schema.org/ImageObject"> 
-					<a
-					href="/lil?path=#{utenteBean.utente.username}/#{utenteBean.risultatoAlbum.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
-
-					<h:graphicImage itemprop="thumbnail"
-						value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.risultatoAlbum.titolo}/#{risultato.nomeFileFoto}"
-						height="51" width="50">
-					</h:graphicImage>
-				</a> <figcaption itemprop="caption description"> <h:outputText
-					value="#{risultato.titolo}" /></figcaption> </figure>
-
-
+				<figure itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
+					<a href="/lil?path=#{utenteBean.utente.username}/#{utenteBean.risultatoAlbum.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
+						<h:graphicImage itemprop="thumbnail"
+							value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.risultatoAlbum.titolo}/#{risultato.nomeFileFoto}"
+							height="51" width="50">
+						</h:graphicImage>
+					</a> 
+					<figcaption itemprop="caption description"> 
+						<h:outputText value="#{risultato.titolo}" />
+					</figcaption> 
+				</figure>
 
 
 				<f:facet name="footer">

@@ -13,12 +13,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.faces.model.ArrayDataModel;
+import javax.faces.model.DataModel;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -49,6 +52,7 @@ public class UtenteBean {
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
     Album risultatoAlbum = new Album();
     List<Foto> risultatoFotos = new ArrayList<Foto>();
+    List<String> indexFoto = new ArrayList<String>();
     Foto risultatoFoto = new Foto();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private String avatarDefault = "avatarDefault.svg"; 
@@ -60,6 +64,8 @@ public class UtenteBean {
 	private Integer fotoId;
 	private Album nuovoAlbum = new Album();
 	private List<Album> albumList = new ArrayList<Album>();
+	
+//	private DataModel<Foto> risFotos = new ArrayDataModel<Foto>(risultatoFotos);
 	
 //	List<String> fotos = new ArrayList<String>();
 	
@@ -316,19 +322,26 @@ public class UtenteBean {
 		if(risultatoFotos!=null ){
 			visualizzaAlbum(albumId);
 			pswp.clear();
+			indexFoto.clear();
+			Integer i=0;
 			for (Foto f : risultatoFotos) {
+				i++;
+				String str = i.toString();
+				indexFoto.add(str);
 				PerPhotoswipe pp = new PerPhotoswipe();
 				pp.setSrc("/lil?path="+utente.getUsername()+"/"+getRisultatoAlbum().getTitolo()+"/"+f.getNomeFileFoto());
 				pp.setH(f.getAltezzaFoto());
 				pp.setW(f.getLarghezzaFoto());
 				pswp.add(pp);
 				System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW()+getRisultatoAlbum().getTitolo());
+				
 			}
 			System.out.println("PSWP=="+pswpS+"FINE");
 			contentBean.setContent("visualizzaAlbum3.xhtml");
 			contentBean.setMessaggio(null);
 			setAlbumId(albumId);
 //			visualizzaAlbum(albumId);
+//			risultatoFotos.indexOf(risultatoFotos);
 
 		}else{
 			System.out.println("errore lista foto non trovata!");
@@ -413,6 +426,7 @@ public class UtenteBean {
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
 			contentBean.setContent("profilo2.xhtml");
+			System.out.println("profilo aggiornato!");
 		} catch (Exception e) {
 			e.printStackTrace();
 			//	contentBean.setContent("profilo.xhtml");
@@ -521,6 +535,14 @@ public class UtenteBean {
 		this.risultatoFotos = risultatoFotos;
 	}
 	
+//	public List<Integer> getIndexFoto() {
+//		return indexFoto;
+//	}
+//
+//	public void setIndexFoto(List<Integer> indexFoto) {
+//		this.indexFoto = indexFoto;
+//	}
+
 	public String getAvatarDefault() {
 		return avatarDefault;
 	}

@@ -85,7 +85,7 @@ public class MenuBean {
 		case 16://MODIFICA PROFILO
 			contentBean.setMessaggio(null);
 			inputBean.setStatusMessage(null);
-			contentBean.setContent("modificaProfilo2.xhtml");
+			contentBean.setContent("modificaProfilo3.xhtml");
 			break;
 //		case 17://NUOVO ALBUM_non più usato!
 //			contentBean.setMessaggio(null);
