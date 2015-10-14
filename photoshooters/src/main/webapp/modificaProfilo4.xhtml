@@ -22,106 +22,95 @@
 	<h:form id="profiloform" enctype="multipart/form-data">
 	
   	  <h:panelGrid border="1">      		
-							
+		<h:panelGrid  columns="2" style="vertical-align: top" columnClasses="2right, 2left">						
 			
-			<h:panelGrid columns="4" columnClasses="rightprofilo, leftprofilo, rightprofilo, leftprofilo">
-	
 				<f:facet name="header">
             		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
         		</f:facet>
+        		
+			<h:panelGrid columns="2" columnClasses="rightprofilo, leftprofilo">
 	
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
 				<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
 				
-				<h:outputLabel for="avatar">AVATAr</h:outputLabel>
-				<h:panelGroup>            		
-					<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
-            		<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>		
-            		<h:inputFile id="file2"  label="SFOGLIa" value="#{inputBean.part}"
-						required="true" requiredMessage="Selezionare file per upload!">
-							<f:validator validatorId="FileUploadValidator" />
-					<h:commandButton id="submit" styleClass="buttons" action="#{inputBean.uploadAvatar()}"
-						value="UPLOAd AVATAr" />
-					</h:inputFile>	
-            	</h:panelGroup>
-				
-				
 				<h:outputLabel for="password">PASSWORd</h:outputLabel>
-				<h:outputText   id="password" value="#{utenteBean.utente.password}"/>	
-						
-				<h:outputLabel for="sitoweb">SITo WEb</h:outputLabel>
-				<h:inputText id="sitoweb" value="#{utenteBean.utente.sitoweb}"/>			
-				
+				<h:outputText   id="password" value="#{utenteBean.utente.password}"/>
 				
 				<h:outputLabel for="email">EMAIl</h:outputLabel>
 				<h:outputText  id="email" value="#{utenteBean.utente.email}"/>
-								
-				<h:outputLabel for="facebook">FACEBOOk</h:outputLabel>
-				<h:inputText id="facebook" value="#{utenteBean.utente.facebook}"/>
-				
 				
 				<h:outputLabel for="nome">NOMe</h:outputLabel>
 				<h:outputText  id="nome" value="#{utenteBean.utente.name}"/>
-								
-				<h:outputLabel for="instagram">INSTAGRAm</h:outputLabel>
-				<h:inputText id="instagram" value="#{utenteBean.utente.instagram}"/>
 				
-								
 				<h:outputLabel for="cognome">COGNOMe</h:outputLabel>
-				<h:inputText id="cognome" value="#{utenteBean.utente.cognome}"/>
-				
-				<h:outputLabel for="tumblr">TUMBLr</h:outputLabel>
-				<h:inputText id="tumblr" value="#{utenteBean.utente.tumblr}"/>			
-				
-				
+				<h:inputText id="cognome" value="#{utenteBean.utente.cognome}"/>							
+								
 				<h:outputLabel for="sesso">SESSo</h:outputLabel>
 				<h:selectOneMenu id="sesso" value="#{utenteBean.utente.sesso}" 
 					required="true" requiredMessage="scegli il sesso">
 					<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
-            	</h:selectOneMenu>		
-
-				<h:outputLabel for="twitter">TWITTERr</h:outputLabel>
-				<h:inputText id="twitter" value="#{utenteBean.utente.twitter}"/>			
-	
-				
+            	</h:selectOneMenu>
+			
 				<h:outputLabel for="dataNascita">DATa Di NASCITa <br></br>(viene visualizzata l'ETà)</h:outputLabel>
 				<p:calendar readonlyInput="true" id="dataNascita" value="#{utenteBean.utente.dataNascita}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />			
-
-				<h:outputLabel for="googleplus">GOOGLe+</h:outputLabel>
-				<h:inputText id="googleplus" value="#{utenteBean.utente.googleplus}"/>				
-	
 	
 				<h:outputLabel for="città">CITTà</h:outputLabel>
  				<p:autoComplete maxlength="130" id="città" value="#{utenteBean.utente.città}" completeMethod="#{utenteBean.suggerisciCittà}" />
 
-				<h:outputLabel for="linkedin">LINKEDIn</h:outputLabel>
-				<h:inputText id="linkedin" value="#{utenteBean.utente.linkedin}"/>				
-				
-			
-				<h:outputLabel for="descrizione">DESCRIZIONe - CURRICULUm</h:outputLabel>
-				<h:inputTextarea size="50" rows="12" id="descrizione" value="#{utenteBean.utente.descrizione}"/>
-						
-				<h:outputLabel for="tipoutente">PROFILo PROFESSIONALe</h:outputLabel>
-				<h:outputText id="tipoutente" value="#{utenteBean.utente.tipoUtente.descrizione}"/>				
-	
-				
 				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
 				<h:panelGroup styleClass="selection">
 					<h:selectManyCheckbox layout="pageDirection" id="regione" value="#{utenteBean.utente.regIta}" 
 						required="true" requiredMessage="scegli almeno una regione">
 						<f:selectItems value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
 	            	</h:selectManyCheckbox >
-            	</h:panelGroup>					
+            	</h:panelGroup>	
+
+			</h:panelGrid>
+				
+			<h:panelGrid  columns="2" columnClasses="rightprofilo, leftprofilo">
+			
+				<h:outputLabel for="avatar">AVATAr</h:outputLabel>
+				<h:panelGroup>            		
+					<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
+            		<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>		
+            		<h:inputFile id="file2"  label="SFOGLIa" value="#{inputBean.part}"
+						required="false" requiredMessage="Selezionare file per upload!">
+							<f:validator validatorId="FileUploadValidator" />
+					</h:inputFile>	
+            	</h:panelGroup>
+				
+				<h:outputLabel for="descrizione">DESCRIZIONe - CURRICULUm</h:outputLabel>
+				<h:inputTextarea size="50" rows="12" id="descrizione" value="#{utenteBean.utente.descrizione}"/>
+							
+				<h:outputLabel for="sitoweb">SITo WEb</h:outputLabel>
+				<h:inputText id="sitoweb" value="#{utenteBean.utente.sitoweb}"/>
+							
+				<h:outputLabel for="facebook">FACEBOOk</h:outputLabel>
+				<h:inputText id="facebook" value="#{utenteBean.utente.facebook}"/>
+						
+				<h:outputLabel for="instagram">INSTAGRAm</h:outputLabel>
+				<h:inputText id="instagram" value="#{utenteBean.utente.instagram}"/>
+				
+				<h:outputLabel for="tumblr">TUMBLr</h:outputLabel>
+				<h:inputText id="tumblr" value="#{utenteBean.utente.tumblr}"/>			
+				
+				<h:outputLabel for="twitter">TWITTERr</h:outputLabel>
+				<h:inputText id="twitter" value="#{utenteBean.utente.twitter}"/>			
+				
+				<h:outputLabel for="googleplus">GOOGLe+</h:outputLabel>
+				<h:inputText id="googleplus" value="#{utenteBean.utente.googleplus}"/>				
+						
+				<h:outputLabel for="linkedin">LINKEDIn</h:outputLabel>
+				<h:inputText id="linkedin" value="#{utenteBean.utente.linkedin}"/>			
+
+				<h:outputLabel for="tipoutente">PROFILo PROFESSIONALe</h:outputLabel>
+				<h:outputText id="tipoutente" value="#{utenteBean.utente.tipoUtente.descrizione}"/>							
 			
 				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
 				<h:selectOneMenu id="esperienza" value="#{utenteBean.utente.esperienza}" 
 					required="true" requiredMessage="scegli il livello esperienza">
 					<f:selectItems value="#{utenteBean.esperienze}" var="esperienza" itemValue="#{esperienza}" itemLabel="#{esperienza.esperienza}" />
             	</h:selectOneMenu>			
-
-
-				<h:outputLabel for="vuoto"></h:outputLabel>
-				<h:panelGroup styleClass="selection">	            	</h:panelGroup>		
 				
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
 				<h:panelGroup styleClass="selection">
@@ -132,10 +121,12 @@
 				</h:panelGroup>	
 				
 	
+            
+            </h:panelGrid>
             							
-			</h:panelGrid>
+		</h:panelGrid>
 							
-			<h:panelGrid id="modellaGrid" columns="4" columnClasses="rightprofilo, leftprofilo, rightprofilo, leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
+		<h:panelGrid id="modellaGrid" columns="4" columnClasses="rightprofilo, leftprofilo, rightprofilo, leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
 				
 				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="vita" value="#{utenteBean.utente.vita}" >
@@ -176,7 +167,7 @@
 				<h:selectOneMenu  id="piercing" value="#{utenteBean.utente.piercing}" >
 				<f:selectItems value="#{parametersBean.rangePiercing}" /></h:selectOneMenu >	
 				
-		   </h:panelGrid>	
+		  </h:panelGrid>	
 		   		
 		   		<f:facet name="footer">
 		            <h:panelGroup>

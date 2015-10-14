@@ -62,7 +62,21 @@ public class ServiziComuniImpl implements ServiziComuni {
             em.getTransaction().commit();
             em.close();
     }
-		
+	
+	@Override
+	public <T extends Serializable> void delete(T c) throws Exception{
+		EntityManager em = EMF.createEntityManager();
+		em.getTransaction().begin();
+		delete(c, em);
+		em.getTransaction().commit();
+		em.close();
+	}
+	
+	@Override
+	public <T extends Serializable> void delete(T c, EntityManager em) throws Exception{
+		em.remove(em.merge(c));
+	}
+	
 	public <T extends Serializable> List<T> getAll(Class<T> c) throws Exception{
 		EntityManager em = EMF.createEntityManager();
 		List<T> lista = getAll(c, em);

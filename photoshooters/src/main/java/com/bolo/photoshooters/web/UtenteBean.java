@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -151,11 +152,20 @@ public class UtenteBean {
 			utenteOnline = true;
 			i++;
 		}
+		
+		Calendar nAnniFa = null;
+		Calendar nAnniFaMenoUno = null;
 		if (cercaUtente.getEtà()>0) {
+			nAnniFa = Calendar.getInstance();
+			nAnniFa.add(Calendar.YEAR, -cercaUtente.getEtà());
+			
+			nAnniFaMenoUno = Calendar.getInstance();
+			nAnniFaMenoUno.add(Calendar.YEAR, -cercaUtente.getEtà()-1);
+			
 			if (i>0){
 				hqlcerca += "and";
 			}
-			hqlcerca += " TIMESTAMPDIFF(YEAR,u.dataMember,CURDATE()) <1 ";
+			hqlcerca += " (u.dataNascita between :nAnniFaMenoUno and :nAnniFa) or u.dataNascita is null ";
 			etàInserita = true;
 			i++;
 		}
@@ -183,9 +193,10 @@ public class UtenteBean {
 		if(sessoInserito){
 			q.setParameter("sex", cercaUtente.getSesso());
 		}
-//		if(etàInserita){
-//			q.setParameter("eta", cercaUtente.getEtà());
-//		}
+		if(etàInserita){
+			q.setParameter("nAnniFaMenoUno", nAnniFaMenoUno.getTime());
+			q.setParameter("nAnniFa", nAnniFa.getTime());
+		}
 //		ORDINAMENTO PRIMA DELLA QUERY
 		risultato = q.getResultList();
 		System.out.println("================CCC==========="+risultato.size());
@@ -425,8 +436,8 @@ public class UtenteBean {
 			serv.merge(utente);
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
-			contentBean.setContent("profilo2.xhtml");
-			System.out.println("profilo aggiornato!");
+			contentBean.setContent("profilo2.xhtml");	
+//			System.out.println("profilo aggiornato!");
 		} catch (Exception e) {
 			e.printStackTrace();
 			//	contentBean.setContent("profilo.xhtml");

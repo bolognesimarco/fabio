@@ -13,6 +13,9 @@ public interface ServiziComuni {
 	public <T extends Serializable> void deleteAll(Class<T> t, EntityManager em) throws Exception;
 	public <T extends Serializable> void deleteAll(Class<T> t) throws Exception;
 	
+	public <T extends Serializable> void delete(T t, EntityManager em) throws Exception;
+	public <T extends Serializable> void delete(T t) throws Exception;
+	
 	public <T extends Serializable> T getReference(Class<T> c, int id, EntityManager em) throws Exception;
 	public <T extends Serializable> T getReference(Class<T> c, int id) throws Exception;
 	

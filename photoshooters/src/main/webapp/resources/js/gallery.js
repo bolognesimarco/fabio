@@ -16,7 +16,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 		
 		            figureEl = thumbElements[i]; // <figure> element
 		            
-		            figureEl.setAttribute('id', i+1);
+//		            figureEl.setAttribute('id', i+1);
 		            
 		            // include only element nodes 
 		            if(figureEl.nodeType !== 1) {
@@ -75,8 +75,9 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
         // find index of clicked item by looping through all child nodes
         // alternatively, you may define index via data- attribute
-        var clickedGallery = clickedListItem.parentNode,
-            childNodes = clickedListItem.parentNode.childNodes,
+        var clickedGallery = clickedListItem.parentNode.parentNode.parentNode.parentNode,
+        	childNodes = clickedGallery.querySelectorAll('figure'),
+//            childNodes = clickedListItem.parentNode.childNodes,
             numChildNodes = childNodes.length,
             nodeIndex = 0,
             index;
@@ -190,7 +191,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
     var galleryElements = document.querySelectorAll( gallerySelector );
 
     for(var i = 0, l = galleryElements.length; i < l; i++) {
-        galleryElements[i].setAttribute('data-pswp-uid', i+3);
+        galleryElements[i].setAttribute('data-pswp-uid', i+1);
         galleryElements[i].onclick = onThumbnailsClick;
     }
 

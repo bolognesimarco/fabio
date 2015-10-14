@@ -1,6 +1,10 @@
 package com.bolo.photoshooters.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -28,6 +32,32 @@ public class ServiziVariImpl implements ServiziVari {
 				.setParameter("email", email)
 				.getResultList()
 				.size()>0;
+	}
+	
+	@Override
+	public void cancellaUtentiNonAttivati() throws Exception{
+		//dopo 30gg cancella utenti registrati ma non attivati
+		
+		Date currentDate = new Date(); // current date
+        Calendar today = new GregorianCalendar();
+		int giorniScadenza = 1;
+        today.setTime(currentDate);				
+		today.add(Calendar.DAY_OF_YEAR, -giorniScadenza);
+        Date scadenza = today.getTime();
+
+		System.out.println("DATE PrrOVa:::SCADENZA"+scadenza+":::TODAY"+today);
+		final ServiziComuni serv = new ServiziComuniImpl();
+		EntityManager em = EMF.createEntityManager();
+		em.getTransaction().begin();
+		List<Utente> utenti = em
+				.createQuery("select u from Utente u where u.dataIscrizione < :scadenza and u.active = false")
+				.setParameter("scadenza", scadenza)
+				.getResultList();
+				
+		for (Utente ut : utenti) {
+			serv.delete(ut);
+		}
+				
 	}
 	
 	@Override

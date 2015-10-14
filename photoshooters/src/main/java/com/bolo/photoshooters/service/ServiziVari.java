@@ -7,5 +7,6 @@ public interface ServiziVari {
 	public boolean emailEsiste(String email) throws Exception;
 	public Utente activateUser(String activationCode) throws Exception;
 	public Utente login(String username, String password) throws Exception;
-	boolean utenteAttivo(String email) throws Exception;
+	public boolean utenteAttivo(String email) throws Exception;
+	public void cancellaUtentiNonAttivati() throws Exception;
 }

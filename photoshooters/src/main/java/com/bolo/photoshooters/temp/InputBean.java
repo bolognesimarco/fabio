@@ -90,6 +90,9 @@ public class InputBean {
 	
 	public void uploadFoto() {
 		
+		if (part==null){
+			return;
+		}
 		// Extract file name from content-disposition header of file part
 		String fileName = getFileName(part);
 		String albumName = utenteBean.getRisultatoAlbum().getTitolo();
@@ -195,9 +198,10 @@ public class InputBean {
 	public void uploadAvatar() {
 		
 		
-		
-		
 		// Extract file name from content-disposition header of file part
+		if (part==null){
+			return;
+		}
 		String fileName = getFileName(part);
 		String userAvatarFileName = "avatar_" + utenteBean.getUtente().getUsername() + "." + getFileExtension(fileName);
 		String userFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
