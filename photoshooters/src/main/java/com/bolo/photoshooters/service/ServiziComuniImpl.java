@@ -95,7 +95,19 @@ public class ServiziComuniImpl implements ServiziComuni {
 	}
 	
 	public <T extends Serializable> T getById(Class<T> c, Object id, EntityManager em) throws Exception{
+		
+		
 		return em.find(c, id);
+	}
+	
+	public void refresh(Object id) throws Exception{
+		EntityManager em = EMF.createEntityManager();
+		refresh(id, em);
+		em.close();
+	}
+	
+	public void refresh(Object id, EntityManager em) throws Exception{
+		em.refresh(id);
 	}
 	
 }

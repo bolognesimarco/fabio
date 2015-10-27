@@ -19,7 +19,7 @@ public class MailSender {
 		MailSender.sendRegisterMail("bolognesi.marco@gmail.com", "messaggioneeee");
 	}
 	
-	private static String activationMessage = "Hai ricevuto questo messaggio perchè ti sei registrato a Photoshooters.net.\r\n"
+	private static String activationMessage = "Hai ricevuto questo messaggio perchè ti sei registrato al portale Photoshooters.net.\r\n"
 			+ "Per completare la registrazione segui questo link: http://localhost:8080/activate?activationCode=%\r\n\r\n"
 			+ "Se non hai effettuato tu la registrazione semplicemente cancella questo messaggio.";
 	
@@ -62,4 +62,12 @@ public class MailSender {
         Transport.send(msg);
  
     }
+	
+	private static String cancellazioneUtenteNonAttivoMessage = "Utente:%, hai ricevuto questo messaggio perchè hai iniziato il processo di registrazione al portale Photoshooters.net senza completarlo entro 60gg.\r\n"
+			+ "I dati inseriti sono stati cancellati. Per effettuare una nuova registrazione visita Photoshooters.net: http://www.photoshooters.net\r\n"
+			+ "Se non hai effettuato tu la registrazione semplicemente cancella questo messaggio.";
+	
+	public static void sendNonActivationMail(String address, String nomeUtente) throws Exception{
+		sendEmail("mail.photoshooters.net", "25", "register@photoshooters.net", "1Ochorios_", address, "Cancellazione registrazione a Photoshooters.net", cancellazioneUtenteNonAttivoMessage.replace("%", nomeUtente));
+	}
 }

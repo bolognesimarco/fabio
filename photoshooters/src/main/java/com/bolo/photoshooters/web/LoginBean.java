@@ -41,7 +41,7 @@ public class LoginBean {
 				String mm = "";
 				String mess = "Completa il tuo profilo di photoshooter: inserisci";
 				if(u.getDataNascita()==null){
-					mm = mm+" anno di nascita -";
+					mm = mm+" data di nascita -";
 				}
 				if(u.getSesso()==null){
 					mm = mm+" genere -";

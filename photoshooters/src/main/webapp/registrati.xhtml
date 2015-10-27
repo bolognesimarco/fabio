@@ -86,11 +86,11 @@
 					<f:selectItem  itemLabel="" noSelectionOption="false" />
 					<f:selectItems value="#{utenteBean.sessi}" var="sesso" itemValue="#{sesso}" itemLabel="#{sesso.sesso}" />
             	</h:selectOneMenu>
-            	<h:panelGroup><h:message for="sesso" />*</h:panelGroup>
+            	<h:panelGroup><h:message for="sesso" /></h:panelGroup>
 				
 				<h:outputLabel for="città">CITTà</h:outputLabel>
  				<p:autoComplete required="true" requiredMessage="scegli la città" id="città" value="#{registratiBean.città}" completeMethod="#{registratiBean.suggerisciCittà}" />
-				<h:panelGroup><h:message for="città" />*</h:panelGroup>
+				<h:panelGroup><h:message for="città" /></h:panelGroup>
 				
 				<h:outputLink value="/files/Regolamento.docx">DOWNLOAd REGOLAMENTo</h:outputLink>
 				<h:panelGroup/>

@@ -30,6 +30,12 @@ public class Foto implements Serializable{
 	private String titolo;
 	
 	@Column
+	private String luogoScatto;
+	
+	@Column
+	private String descrizione;
+	
+	@Column
 	private String nomeFileFoto;
 	
 	@Column
@@ -46,7 +52,7 @@ public class Foto implements Serializable{
 	private Utente soggetto;
 	
 	@ManyToOne
-    @JoinColumn(name="fotografo", nullable=false)
+    @JoinColumn(name="fotografo", nullable=true)
 	private Utente fotografo;
 	
 	public String getNomeFileFoto() {
@@ -57,8 +63,9 @@ public class Foto implements Serializable{
 		this.nomeFileFoto = nomeFileFoto;
 	}
 
+		// pubblicatore è chi pubblica foto sul sito
 	@ManyToOne
-    @JoinColumn(name="pubblicatore", nullable=true)
+    @JoinColumn(name="pubblicatore", nullable=false)
 	private Utente pubblicatore;
 	
 	@ManyToOne
@@ -93,6 +100,22 @@ public class Foto implements Serializable{
 	private List<Voto> voti;
 	
 
+
+	public String getLuogoScatto() {
+		return luogoScatto;
+	}
+
+	public void setLuogoScatto(String luogoScatto) {
+		this.luogoScatto = luogoScatto;
+	}
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
 
 	public int getId() {
 		return id;

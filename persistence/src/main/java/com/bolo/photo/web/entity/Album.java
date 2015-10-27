@@ -25,6 +25,16 @@ public class Album  implements Serializable{
 	@Column
 	private String titolo;
 	
+	@Column
+	private String descrizione;
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
 
 	@ManyToOne
     @JoinColumn(name="pubblicatore", nullable=false)

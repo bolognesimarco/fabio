@@ -15,6 +15,8 @@ import java.util.Map;
 
 
 
+
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -25,6 +27,7 @@ import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder.Case;
 
 import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Esperienza;
@@ -61,6 +64,8 @@ public class UtenteBean {
 	private String albumVisualizzato ="";
 	private Foto nuovaFoto = new Foto();
 	private String newFotoName ="";
+	private String soggettoFoto ="";
+	private String fotografoFoto ="";
 	private Integer albumId;
 	private Integer fotoId;
 	private Album nuovoAlbum = new Album();
@@ -124,7 +129,7 @@ public class UtenteBean {
 			if (i>0){
 				hqlcerca += "and";
 			}
-			hqlcerca += " u.esperienza=:esp ";
+			hqlcerca += " u.esperienza=:esp or u.esperienza is null ";
 			esperienzaInserito = true;
 			i++;
 		}
@@ -153,14 +158,47 @@ public class UtenteBean {
 			i++;
 		}
 		
+		//ricerca x fascia et‡ inserita
 		Calendar nAnniFa = null;
 		Calendar nAnniFaMenoUno = null;
-		if (cercaUtente.getEt‡()>0) {
+		int minEt‡=0;
+		int maxEt‡=0;
+//		System.out.println("=====GETETA''''''''''''''''''''''"+cercaUtente.getEt‡());
+		if (cercaUtente.getEt‡()>-1) {
+			switch (cercaUtente.getEt‡()){
+			case 1: //<18
+				minEt‡=1;
+				maxEt‡=17;
+				break;		
+			case 2: //18-21
+				minEt‡=19;
+				maxEt‡=21;
+				break;
+			case 3: //22-25
+				minEt‡=23;
+				maxEt‡=25;
+				break;
+			case 4: //26-30
+				minEt‡=27;
+				maxEt‡=30;
+				break;
+			case 5: //31-40
+				minEt‡=32;
+				maxEt‡=40;
+				break;
+			case 6: //>40
+				minEt‡=42;
+				maxEt‡=99;
+				break;		
+			default:
+				break;
+			}
+			System.out.println("minETA'-maxETA'::::"+minEt‡+"--"+maxEt‡+"I:"+i);
 			nAnniFa = Calendar.getInstance();
-			nAnniFa.add(Calendar.YEAR, -cercaUtente.getEt‡());
+			nAnniFa.add(Calendar.YEAR, -minEt‡);
 			
 			nAnniFaMenoUno = Calendar.getInstance();
-			nAnniFaMenoUno.add(Calendar.YEAR, -cercaUtente.getEt‡()-1);
+			nAnniFaMenoUno.add(Calendar.YEAR, -maxEt‡-1);
 			
 			if (i>0){
 				hqlcerca += "and";
@@ -168,6 +206,8 @@ public class UtenteBean {
 			hqlcerca += " (u.dataNascita between :nAnniFaMenoUno and :nAnniFa) or u.dataNascita is null ";
 			et‡Inserita = true;
 			i++;
+//			System.out.println("nANNI+FA'::::"+nAnniFa);
+//			System.out.println("nANNImENOUNO+FA'::::"+nAnniFaMenoUno);
 		}
 		
 		if (i>0){
@@ -196,7 +236,9 @@ public class UtenteBean {
 		if(et‡Inserita){
 			q.setParameter("nAnniFaMenoUno", nAnniFaMenoUno.getTime());
 			q.setParameter("nAnniFa", nAnniFa.getTime());
+			System.out.println("nANNIFAMENOUNO"+nAnniFaMenoUno.getTime()+", nANNIFA:"+nAnniFa.getTime());
 		}
+
 //		ORDINAMENTO PRIMA DELLA QUERY
 		risultato = q.getResultList();
 		System.out.println("================CCC==========="+risultato.size());
@@ -322,6 +364,8 @@ public class UtenteBean {
 	}
 
 	public void visualizzaFotos(int albumId){
+		
+		risultatoFotos.clear();
 		EntityManager em = EMF.createEntityManager();
 
 		String hql = "from Foto f where f.album.id=:n";
@@ -329,8 +373,9 @@ public class UtenteBean {
 		q.setParameter("n", albumId);
 
 		risultatoFotos = (List<Foto>) q.getResultList();
-
-		if(risultatoFotos!=null ){
+		System.out.println("RISULTATOFOToS SIZE=="+risultatoFotos.size());
+		
+		if(risultatoFotos!=null) {
 			visualizzaAlbum(albumId);
 			pswp.clear();
 			indexFoto.clear();
@@ -348,7 +393,7 @@ public class UtenteBean {
 				
 			}
 			System.out.println("PSWP=="+pswpS+"FINE");
-			contentBean.setContent("visualizzaAlbum3.xhtml");
+			contentBean.setContent("visualizzaAlbum4.xhtml");
 			contentBean.setMessaggio(null);
 			setAlbumId(albumId);
 //			visualizzaAlbum(albumId);
@@ -371,6 +416,7 @@ public class UtenteBean {
 		private String src;
 		private int w;
 		private int h;
+		
 		public String getSrc() {
 			return src;
 		}
@@ -388,8 +434,7 @@ public class UtenteBean {
 		}
 		public void setH(int h) {
 			this.h = h;
-		}
-		
+		}	
 		
 	}
 	
@@ -415,6 +460,23 @@ public class UtenteBean {
 		}
 	}
 	
+	public void cancellaFoto (int idFoto){
+		EntityManager em = EMF.createEntityManager();
+		String hql = "from Foto f where f.id=:n";
+		Query q = em.createQuery(hql, Foto.class);
+		q.setParameter("n", idFoto);
+		System.out.println("FOTO DA CANCELLARE trovata::"+q.getResultList().get(0).toString());
+		try {
+			serv.delete((Foto)q.getResultList().get(0));
+			serv.refresh(getUtente());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Foto CANCELLATA!");
+		visualizzaFotos(risultatoAlbum.getId());
+	}
+	
 
 	public void utenteTrovato(String username){
 		EntityManager em = EMF.createEntityManager();
@@ -427,6 +489,20 @@ public class UtenteBean {
 			contentBean.setContent("utenteTrovato.xhtml");
 		}else{
 			System.out.println("errore utente non trovato!");
+		}
+	}
+	
+	public Utente cercaUtente (String username){
+		EntityManager em = EMF.createEntityManager();
+		List<Utente> utenti = em
+		.createQuery("from Utente u where u.username=:user")
+		.setParameter("user", username)
+		.getResultList();
+		if(utenti!=null && utenti.size()>0){
+			return utenti.get(0);
+		}else{
+			contentBean.setMessaggio("errore utente non trovato!");
+			return null;
 		}
 	}
 	
@@ -691,6 +767,22 @@ public class UtenteBean {
 		return RegioneItaliana.values();
 	}
 	
+	public String getSoggettoFoto() {
+		return soggettoFoto;
+	}
+
+	public void setSoggettoFoto(String soggettoFoto) {
+		this.soggettoFoto = soggettoFoto;
+	}
+
+	public String getFotografoFoto() {
+		return fotografoFoto;
+	}
+
+	public void setFotografoFoto(String fotografoFoto) {
+		this.fotografoFoto = fotografoFoto;
+	}
+
 	public ContentBean getContentBean() {
 		return contentBean;
 	}

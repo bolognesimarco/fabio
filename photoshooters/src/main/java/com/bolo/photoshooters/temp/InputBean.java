@@ -93,14 +93,17 @@ public class InputBean {
 		if (part==null){
 			return;
 		}
+		
+		System.out.println("UTENTEBEAN.NUOVAFOTO==="+utenteBean.getNuovaFoto().toString());
+		
 		// Extract file name from content-disposition header of file part
 		String fileName = getFileName(part);
 		String albumName = utenteBean.getRisultatoAlbum().getTitolo();
-//		String fotoName ="";
 		String radomFotoName = UUID.randomUUID().toString();
 		String userFotoFileName = radomFotoName + "." + getFileExtension(fileName);
 		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator + albumName + File.separator;
 		
+		System.out.println("Inizio upload FOTo");
 		
 		
 		File outputFilePath = new File(userAlbumFolderPath + userFotoFileName);		
@@ -139,8 +142,7 @@ public class InputBean {
 			}
 		}
 		
-//		File userAlbumFolder = new File(userAlbumFolderPath + albumName + File.separator);
-		statusMessage="";
+
 		if (!fileName.equals("")) {
 				
 			Foto newFoto = new Foto();
@@ -148,55 +150,61 @@ public class InputBean {
 					SimpleImageInfo sii = new SimpleImageInfo(outputFilePath);
 					newFoto.setAltezzaFoto(sii.getHeight());
 					newFoto.setLarghezzaFoto(sii.getWidth());
-					System.out.println("DIMENSIONI"+sii.getHeight()+sii.getWidth());
+//					System.out.println("DIMENSIONI"+sii.getHeight()+sii.getWidth());
 					SimpleImageInfo imageInfo = new SimpleImageInfo((outputFilePath));
-					 System.out.println(imageInfo);
+
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
-			
-				statusMessage="";
+				}			
+
+				System.out.println("inizio crazione FOTo");
 				
-				newFoto.setAlbum(utenteBean.getRisultatoAlbum());
-				newFoto.setFotografo(utenteBean.getUtente());
-				newFoto.setTitolo(utenteBean.getNewFotoName());
-				newFoto.setPubblicatore(utenteBean.getUtente());
-				newFoto.setNomeFileFoto(userFotoFileName);
-//				utenteBean.getRisultatoAlbum().getFotos().add(newFoto);
-				utenteBean.getUtente().getFotografoDi().add(newFoto);
 				utenteBean.setNuovaFoto(newFoto);
-				Date currentDate = new Date();
-				newFoto.setDataFoto(currentDate);
+				newFoto.setAlbum(utenteBean.getRisultatoAlbum());
+				newFoto.setPubblicatore(utenteBean.getUtente());
+				newFoto.setFotografo(utenteBean.cercaUtente(utenteBean.getFotografoFoto()));
+				newFoto.setTitolo(utenteBean.getNewFotoName());
+				newFoto.setDescrizione(utenteBean.getNuovaFoto().getDescrizione());
+				newFoto.setNomeFileFoto(userFotoFileName);
+				newFoto.setSoggetto(utenteBean.cercaUtente(utenteBean.getSoggettoFoto()));
+				newFoto.setLuogoScatto(utenteBean.getNuovaFoto().getLuogoScatto());
+				newFoto.setVietataMinori(utenteBean.getNuovaFoto().isVietataMinori());
+				utenteBean.getUtente().getFotografoDi().add(newFoto);
+				
+				if (utenteBean.getNuovaFoto().getDataFoto()==null){
+					Date currentDate = new Date();
+					newFoto.setDataFoto(currentDate);	
+				}
+				else{
+					newFoto.setDataFoto(utenteBean.getNuovaFoto().getDataFoto());
+				}
+				
+				System.out.println("Fine crazione FOTo");
+				
 				try {
 					serv.merge(utenteBean.getUtente());
+					serv.refresh(utenteBean.getUtente());
 				} catch (Exception e) {
 					e.printStackTrace();
 					String mm = e.getMessage()+" ERRORe UPLOAd FOTo!";
 					contentBean.setMessaggio(mm);
 				}
-//				fotoName = String.valueOf(newFoto.getId());
-//				fotoName = Integer.toString(newFoto.getId());
-//				fotoName = String.valueOf(utenteBean.getNuovaFoto().getId());
+
 				utenteBean.setNewFotoName(null);
+				utenteBean.setNuovaFoto(new Foto());
 				utenteBean.visualizzaFotos(utenteBean.getAlbumId());
+				System.out.println("FINE INPUT FOTO////"+utenteBean.getNuovaFoto().getNomeFileFoto());
+				part=null;
 			} else {
 				System.out.println("Errore nell'upload della foto!");
 			} 
-//		System.out.println("nomeFotoooooOOOOOO:::"+fotoName);
-//		System.out.println("nomeFotoooooOOOOOO:::"+utenteBean.getNuovaFoto().getId());
-//		String userFotoFileName = fotoName + "." + getFileExtension(fileName);		
 
-		
-		// Copy uploaded file to destination path
-		//		for (Foto tit : utenteBean.getRisultatoAlbum().getFotos()) {
-//			System.out.println("FOTOOOOOOOOOOO---"+tit.getTitolo());
-//		}
 	}
-
+	
+	
 
 	public void uploadAvatar() {
-		
 		
 		// Extract file name from content-disposition header of file part
 		if (part==null){

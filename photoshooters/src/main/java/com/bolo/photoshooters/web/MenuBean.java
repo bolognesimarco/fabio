@@ -77,6 +77,9 @@ public class MenuBean {
 			utenteBean.setUtente(null);
 			contentBean.setMessaggio(null);
 			contentBean.setContent("homePage.xhtml");
+			if (utenteBean.getUtente()==null){
+			System.out.println("UTENTE NUL???????????");
+			}
 			break;
 		case 15://HOMEPAGE
 			utenteBean.setUtente(null);

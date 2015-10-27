@@ -344,7 +344,7 @@ public class DBInitializer {
 		Foto foto1 = new Foto();
 		foto1.setAlbum(album1);
 		album1.getFotos().add(foto1);
-		foto1.setFotografo(test);
+		foto1.setPubblicatore(test);
 		foto1.setTitolo("FotoFB1");
 		foto1.setAltezzaFoto(600);
 		foto1.setLarghezzaFoto(800);

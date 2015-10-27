@@ -25,7 +25,7 @@
 		<h:panelGrid  columns="2" style="vertical-align: top" columnClasses="2right, 2left">						
 			
 				<f:facet name="header">
-            		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
+            		<h:outputText value="PROFILO PHOTOSHOOTEr - MODIFICa INFo"/>
         		</f:facet>
         		
 			<h:panelGrid columns="2" columnClasses="rightprofilo, leftprofilo">
@@ -55,7 +55,7 @@
 				<p:calendar readonlyInput="true" id="dataNascita" value="#{utenteBean.utente.dataNascita}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />			
 	
 				<h:outputLabel for="città">CITTà</h:outputLabel>
- 				<p:autoComplete maxlength="130" id="città" value="#{utenteBean.utente.città}" completeMethod="#{utenteBean.suggerisciCittà}" />
+ 				<p:autoComplete maxlength="130" id="città"  value="#{utenteBean.utente.città}"  completeMethod="#{utenteBean.suggerisciCittà}" />
 
 				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
 				<h:panelGroup styleClass="selection">

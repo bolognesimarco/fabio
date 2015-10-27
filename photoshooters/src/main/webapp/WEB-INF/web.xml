@@ -4,7 +4,7 @@
     <welcome-file>home.xhtml</welcome-file>
   </welcome-file-list>
   <session-config>
-		<session-timeout>2</session-timeout>
+		<session-timeout>4</session-timeout>
   </session-config>
   <filter>
         <filter-name>SessionFilter</filter-name>

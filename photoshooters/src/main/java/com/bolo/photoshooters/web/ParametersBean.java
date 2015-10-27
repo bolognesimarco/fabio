@@ -20,6 +20,7 @@ public class ParametersBean {
 	private ServiziComuni serv = new ServiziComuniImpl();
 	
 	private Map<String, Object> tipiUtente;
+	private Map<String, Object> fasciaEtà = new LinkedHashMap<String,Object>();
 
 	public Map<String, Object> getTipiUtente(){
 		if(tipiUtente==null){
@@ -80,12 +81,31 @@ public class ParametersBean {
 	private List<Integer> rangeEtà = new ArrayList<Integer>();
 	
 	public void fillEtà(){
-		rangeEtà.clear();
-		rangeFill(rangeEtà, 0, 99);
+//		rangeEtà.clear();
+//		rangeFill(rangeEtà, 0, 5);
+
+		fasciaEtà.put("<18",1);
+		fasciaEtà.put("18-21",2);
+		fasciaEtà.put("22-25",3);
+		fasciaEtà.put("26-30",4);
+		fasciaEtà.put("31-40",5);
+		fasciaEtà.put(">40",6);
+
 	}
+	
 	
 	public List<Integer> getRangeEtà() {
 		return rangeEtà;
+	}
+
+
+	public Map<String, Object> getFasciaEtà() {
+		return fasciaEtà;
+	}
+
+
+	public void setFasciaEtà(Map<String, Object> fasciaEtà) {
+		this.fasciaEtà = fasciaEtà;
 	}
 
 

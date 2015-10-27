@@ -15,13 +15,13 @@
 <h:body>
 
 	<h:panelGroup styleClass="pannello cerca">
-
+	<p:focus for="cercaform:username"/>
 		<h:form id="cercaform">
 		
 			<h:panelGrid columns="2" columnClasses="right, left" >
 			
 				<f:facet name="header">
-            		<h:outputText styleClass="common" value="&#160;&#160;CERCa2 PHOTOSHOOTERs"/>
+            		<h:outputText styleClass="common" value="&#160;&#160;CERCa PHOTOSHOOTERs"/>
             		<br></br>
             		<br></br>
         		</f:facet>
@@ -60,7 +60,8 @@
 				
 				<h:outputLabel for="età">ETà</h:outputLabel>
 				<h:selectOneMenu  id="età" value="#{utenteBean.cercaUtente.età}" >
-				<f:selectItems value="#{parametersBean.rangeEtà}" /></h:selectOneMenu >
+				<f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
+				<f:selectItems value="#{parametersBean.fasciaEtà}" /></h:selectOneMenu >
 
 				
 				<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>

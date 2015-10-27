@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.web.EMF;
+import com.bolo.photoshooters.web.MailSender;
 
 public class ServiziVariImpl implements ServiziVari {
 
@@ -40,7 +41,7 @@ public class ServiziVariImpl implements ServiziVari {
 		
 		Date currentDate = new Date(); // current date
         Calendar today = new GregorianCalendar();
-		int giorniScadenza = 1;
+		int giorniScadenza = 60;
         today.setTime(currentDate);				
 		today.add(Calendar.DAY_OF_YEAR, -giorniScadenza);
         Date scadenza = today.getTime();
@@ -55,6 +56,7 @@ public class ServiziVariImpl implements ServiziVari {
 				.getResultList();
 				
 		for (Utente ut : utenti) {
+			MailSender.sendNonActivationMail(ut.getEmail(), ut.getUsername());
 			serv.delete(ut);
 		}
 				
@@ -85,6 +87,7 @@ public class ServiziVariImpl implements ServiziVari {
 			u.setAvatar("avatarDefault.svg");
 			Date currentDate = new Date();
 			u.setDataMember(currentDate);
+			u.setDataUltimoAccesso(currentDate);
 		em.getTransaction().commit();
 			return u;
 		}else{

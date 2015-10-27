@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.bolo.photoshooters.web.EMF;
+
 public interface ServiziComuni {
 	public <T extends Serializable> void persist(T t, EntityManager em) throws Exception;
 	public <T extends Serializable> void persist(T t) throws Exception;
@@ -27,4 +29,8 @@ public interface ServiziComuni {
 
 	public <T extends Serializable> void merge(T t, EntityManager em) throws Exception;
     public <T extends Serializable> void merge(T t) throws Exception;
+    
+    public void refresh(Object id) throws Exception;
+	public void refresh(Object id, EntityManager em) throws Exception;
+
 }
