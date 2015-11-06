@@ -54,14 +54,6 @@ public class Foto implements Serializable{
 	@ManyToOne
     @JoinColumn(name="fotografo", nullable=true)
 	private Utente fotografo;
-	
-	public String getNomeFileFoto() {
-		return nomeFileFoto;
-	}
-
-	public void setNomeFileFoto(String nomeFileFoto) {
-		this.nomeFileFoto = nomeFileFoto;
-	}
 
 		// pubblicatore è chi pubblica foto sul sito
 	@ManyToOne
@@ -76,6 +68,26 @@ public class Foto implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataFoto;
 	
+	@ManyToMany
+	@JoinTable(name="Foto_Visualizzatori")
+	private List<Utente> visualizzatori;
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="foto")
+	private List<Voto> voti;
+	
+	@ManyToMany
+	@JoinTable(name="Foto_Collaboratori")
+	private List<Utente> collaboratori;
+	
+	
+	public List<Utente> getCollaboratori() {
+		return collaboratori;
+	}
+
+	public void setCollaboratori(List<Utente> collaboratori) {
+		this.collaboratori = collaboratori;
+	}
+
 	public Album getAlbum() {
 		return album;
 	}
@@ -91,14 +103,14 @@ public class Foto implements Serializable{
 	public void setAlbum(Album album) {
 		this.album = album;
 	}
+	
+	public String getNomeFileFoto() {
+		return nomeFileFoto;
+	}
 
-	@ManyToMany
-	@JoinTable(name="Foto_Visualizzatori")
-	private List<Utente> visualizzatori;
-	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="foto")
-	private List<Voto> voti;
-	
+	public void setNomeFileFoto(String nomeFileFoto) {
+		this.nomeFileFoto = nomeFileFoto;
+	}
 
 
 	public String getLuogoScatto() {

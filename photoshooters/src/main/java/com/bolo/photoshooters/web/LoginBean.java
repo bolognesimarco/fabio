@@ -33,45 +33,42 @@ public class LoginBean {
 	public void login() {
 		
 		try {
-			System.out.println("in login");
-			Utente u = serviziVari.login(username, password);
-			System.out.println("u:"+u);
-			if(u!=null){
-				String avatarDefault = "avatarDefault.svg";
-				String mm = "";
-				String mess = "Completa il tuo profilo di photoshooter: inserisci";
-				if(u.getDataNascita()==null){
-					mm = mm+" data di nascita -";
+			if (!username.isEmpty() || !password.isEmpty()) {
+
+				System.out.println("in login");
+				Utente u = serviziVari.login(username, password);
+				System.out.println("dopo login - utente u:"+u);
+				if(u!=null){
+					String avatarDefault = "avatarDefault.svg";
+					String mm = "";
+					String mess = "completa il tuo profilo di photoshooter: inserisci";
+					if(u.getDataNascita()==null){
+						mm = mm+" data di nascita -";
+					}
+					if(u.getEsperienza()==null){
+						mm = mm+" livello esperienza -";
+					}
+					if(u.getAvatar().equals(avatarDefault)){
+						mm = mm+" avatar";
+					}
+					if(mm!=""){
+						mm = mess+mm;
+					}
+					String mm2="BENVENUTo "+u.getName()+"\n"+mm;
+					
+					u.setOnline(true);
+					Date currentDate = new Date();
+					u.setDataUltimoAccesso(currentDate);
+					serv.merge(u);
+					utenteBean.setUtente(u);
+					parametersBean.fillSelectItems();
+					contentBean.setMessaggio(mm2);
+					contentBean.setContent("homePage.xhtml");
+					
+				}else{
+					System.out.println("login ko");
+					contentBean.setMessaggio("utente e/o password errati!");
 				}
-				if(u.getSesso()==null){
-					mm = mm+" genere -";
-				}
-				if(u.getEsperienza()==null){
-					mm = mm+" livello esperienza -";
-				}
-				if(u.getRegioniitaliane().isEmpty()){
-					mm = mm+" regioni di collaborazione -";
-				}
-				if(u.getAvatar().equals(avatarDefault)){
-					mm = mm+" avatar";
-				}
-				if(mm!=""){
-					mm = mess+mm;
-				}
-				String mm2="BENVENUTo "+u.getName()+"\n"+mm;
-				
-				u.setOnline(true);
-				Date currentDate = new Date();
-				u.setDataUltimoAccesso(currentDate);
-				serv.merge(u);
-				utenteBean.setUtente(u);
-				parametersBean.fillSelectItems();
-				contentBean.setMessaggio(mm2);
-				contentBean.setContent("homePage.xhtml");
-				
-			}else{
-				System.out.println("login ko");
-				contentBean.setMessaggio("Utente e Password errati!!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

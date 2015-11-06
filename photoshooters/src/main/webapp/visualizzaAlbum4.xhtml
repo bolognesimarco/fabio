@@ -138,13 +138,13 @@
  <h:panelGrid>
 			<f:facet name="header">
             		<h:outputText id="username" value="#{utenteBean.utente.username}"/>
-            	    <h:outputText value="&#160;&#160;FOTOs ALMBUm&#160;&#160;"/>
+            	    <h:outputText value="&#160;-&#160;FOTOs ALMBUm :&#160;"/>
             		<h:outputText id="nomeAlbum" value="#{utenteBean.risultatoAlbum.titolo}"/>
         	</f:facet>
 	
 	<p:dataGrid id="my-gallery" value="#{utenteBean.risultatoFotos}" var="risultato" 
       columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
-			    
+			    <p:column>
 				<figure itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
 					<a href="/lil?path=#{utenteBean.utente.username}/#{utenteBean.risultatoAlbum.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
 						<h:graphicImage itemprop="thumbnail"
@@ -157,9 +157,25 @@
 						<h:outputText value="#{risultato.dataFoto}" />
 					</figcaption> 
 				</figure>
-				<h:commandButton image="/resources/images/elimina.svg" >
+				<h:commandButton value="ELIMINa" styleClass="menubuttonorange" >
 					<f:ajax event="click" listener="#{utenteBean.cancellaFoto(risultato.id)}" render=":content" />
 				</h:commandButton>
+<!-- 				<p:graphicImage id="modifica"  name="/images/modifica_C.svg"></p:graphicImage> -->
+				<h:commandButton id="modifica" value="MODIFICa" styleClass="menubuttonwhite" />
+				<p:overlayPanel for="modifica" id="modificaFoto" appendToBody="false" >
+
+						<h:panelGrid>
+							<h:graphicImage value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.risultatoAlbum.titolo}/#{risultato.nomeFileFoto}"
+								height="150" width="150"></h:graphicImage>
+							
+							<h:inputText value="#{utenteBean.titoloFotoModifica}" />
+							<h:inputText value="#{risultato.dataFoto}" />
+							<p:commandLink  value="AGGIORNa FOTo" action="#{utenteBean.aggiornaFoto2(risultato)}" />
+	
+						</h:panelGrid>
+
+				</p:overlayPanel>
+				</p:column>
 	</p:dataGrid>
 		
 	<h:dataTable value="#{utenteBean.risultatoFotos}" border="1" var="result">
@@ -176,17 +192,20 @@
 			   <h:panelGrid columns="2" border="1">
 			   
 				<h:outputLabel for="newFotoName">TITOLo FOTo</h:outputLabel>
-				<h:inputText id="newFotoName" value="#{utenteBean.newFotoName}"/>
+				<h:inputText id="newFotoName" value="#{utenteBean.nuovaFoto.titolo}"/>
 
 				<h:outputLabel for="newFotoDescrizione">DESCRIZIONe FOTo</h:outputLabel>
 				<h:inputTextarea size="50" rows="6" id="newFotoDescrizione" value="#{utenteBean.nuovaFoto.descrizione}"/>
 
 				<h:outputLabel for="fotografoFoto">FOTOGRAFo/a FOTo</h:outputLabel>
-				<h:inputText id="fotografoFoto" required="false" value="#{utenteBean.fotografoFoto}"/>
-
-				<h:outputLabel for="soggettoFoto">SOGGETTo FOTo</h:outputLabel>
-				<h:inputText id="soggettoFoto" required="false" value="#{utenteBean.soggettoFoto}"/>
+				<p:autoComplete id="fotografoFoto" value="#{utenteBean.nuovaFoto.fotografo}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="complete" itemValue="#{complete}" itemLabel="#{complete.username}"></p:autoComplete>
 				
+				<h:outputLabel for="soggettoFoto">SOGGETTo FOTo</h:outputLabel>
+				<p:autoComplete id="soggettoFoto" value="#{utenteBean.nuovaFoto.soggetto}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="complete" itemValue="#{complete}" itemLabel="#{complete.username}"></p:autoComplete>
+				
+				<h:outputLabel for="collaboratoriFoto">COLLABORATORi FOTo</h:outputLabel>
+				<p:autoComplete id="collaboratoriFoto" value="#{utenteBean.nuovaFoto.collaboratori}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="complete" itemValue="#{complete}" itemLabel="#{complete.username}" multiple="true"></p:autoComplete>
+
 				<h:outputLabel for="dataFoto">DATa SCATTo</h:outputLabel>
 				<p:calendar readonlyInput="true" id="dataFoto" value="#{utenteBean.nuovaFoto.dataFoto}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />	
 
@@ -205,9 +224,6 @@
 
 				<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />
 				<h:outputText style="color: red" value="#{contentBean.messaggio}"></h:outputText>
-
-<!-- 				<h:outputLabel for="collaboratoriFoto">COLLABORATORi FOTo</h:outputLabel> -->
-<!-- 				<h:inputText id="collaboratoriFoto" value=""/> -->
 				
 				<h:commandButton id="submit" action="#{inputBean.uploadFoto()}" value="UPLOAd FOTo" />
 				

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="homePage.css" library="css" />
+	<h:outputStylesheet name="datagrid.css" library="css" />
+</h:head>
+
+<h:body>
+
+
+	
+	<h:panelGroup styleClass="pannello homepage">
+			<f:facet name="header"> 		
+            		<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
+            		<h:outputText value="&#160;-&#160;ALMBUMs PHOTOSHOOTEr"/>
+					<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
+            		<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>	
+        	</f:facet>
+			<h:form id="albumsForm">
+			<h:dataTable value="#{utenteBean.utente.pubblicati}" var="risultato" border="1">   	 	
+				<h:column>   	
+		       	    <h:commandButton value="#{risultato.titolo}">
+	    			   <f:ajax event="click" listener="#{utenteBean.visualizzaFotos(risultato.id)}" render=":content :nuovafotoform" />
+	    	   		</h:commandButton>	
+	    	   		<h:commandButton value="ELIMINA ALBUM" >
+	    			   <f:ajax event="click" listener="#{utenteBean.cancellaAlbum(risultato.id)}" render=":albumsForm" />
+	    	   		</h:commandButton>	
+				</h:column>
+			</h:dataTable>	
+			
+			</h:form>
+			
+			<f:facet name="footer">
+		            <h:panelGroup>
+						<h:outputText value="&#160;&#160;SELEZIONa ALBUm da VISUALIZZARe o MODIFICARe"/>
+	            	</h:panelGroup>
+        	</f:facet>
+        	
+					<h:form id="nuovoalbumform" enctype="multipart/form-data" >
+						<h:panelGrid columns="2" border="1">
+							<h:outputLabel for="newAlbumName">NOMe NUOVo ALBUm:</h:outputLabel>
+							<h:inputText id="newAlbumName" value="#{utenteBean.newAlbumName}" required="true" requiredMessage="Inserire il nome del nuovo album!"/>
+
+							<h:outputLabel for="newAlbumDescrizione">DESCRIZIONe NUOVo ALBUm:</h:outputLabel>
+							<h:inputTextarea size="50" rows="6" id="newAlbumDescrizione" value="#{utenteBean.nuovoAlbum.descrizione}"/>
+				
+							<h:commandButton id="submit" action="#{inputBean.nuovoAlbum()}" value="CREa ALBUm" />
+
+							<h:messages />
+							<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />
+							<h:outputText style="color: red" value="#{contentBean.messaggio}"></h:outputText>
+						</h:panelGrid>
+					</h:form>
+
+	</h:panelGroup>
+
+</h:body>
+</html>

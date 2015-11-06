@@ -1,8 +1,31 @@
 .registrati{
-	width: 600px;
+	width: 1000px;
 	display: inline-block;
 }
 
 tbody td{
 	width: 33%;
 }
+
+/* prove per file .doc */
+/* .regolamento { */
+/* 	background: none; */
+/* } */
+/* div.WordSection1 { */
+/*     page: WordSection1; */
+/*     background:none!important; */
+/* } */
+/* div.MsoNormal{ */
+/* 	background:none!important; */
+/* } */
+/* p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph { */
+/* 	background:red!important; */
+/* } */
+
+/* element.style { */
+/* 	background:red!important; */
+/* 	} */
+	
+/* p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast { */
+/* 		background:yellow!important; */
+/* 	} */

@@ -17,7 +17,7 @@
 	<h:panelGroup styleClass="pannello login">
 	<p:focus for="loginform:username"/>
 		<h:form id="loginform">
-			<h:panelGrid columns="3" columnClasses="right, left, left">
+			<h:panelGrid columns="2" columnClasses="loginright, loginleft">
 			
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;LOGIn"/>
@@ -26,31 +26,23 @@
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
 				<h:inputText id="username" value="#{loginBean.username}"
 					required="true" requiredMessage="inserisci uno username" />
-				<h:panelGroup>
-					<h:message for="username" />
-				</h:panelGroup>
 
 
 				<h:outputLabel for="password">PASSWORd</h:outputLabel>
 				<h:inputSecret id="password" value="#{loginBean.password}"
 					required="true" requiredMessage="inserisci una password">
 				</h:inputSecret>
-				<h:panelGroup>
-					<h:message for="password" />
+
+				<h:outputLabel for="messages"><br></br></h:outputLabel>
+		        <h:panelGroup>
+					<h:messages layout="table"></h:messages>
+					<h:outputText value="#{contentBean.messaggio}"></h:outputText>				
 				</h:panelGroup>
 
-				<h:panelGroup></h:panelGroup>
-				<h:panelGroup>
-				<h:outputLabel for="messaggio"></h:outputLabel>
-					<h:outputText value="#{contentBean.messaggio}"></h:outputText>
-					
-				</h:panelGroup>
-				<h:panelGroup></h:panelGroup>
 
 				<f:facet name="footer">
 		            <h:panelGroup>
-		                <h:commandButton value="ENTRa&#160;&#160;"
-						 	action="#{loginBean.login()}" >
+		                <h:commandButton value="ENTRa&#160;&#160;" action="#{loginBean.login()}" >
 		            	</h:commandButton>  
 	            	</h:panelGroup>
         		</f:facet>

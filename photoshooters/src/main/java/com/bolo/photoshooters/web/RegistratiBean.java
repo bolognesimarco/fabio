@@ -40,46 +40,43 @@ public class RegistratiBean {
 	private int tipoUtente;
 	private Sesso sesso; 
 	private String città;
+	private boolean accettoRegolamento = false;
+	private String regolamento ="";
 	
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private ServiziVari serviziVari = new ServiziVariImpl();
 	
 	public void registrati() {
 		
-		try {
-			Utente nuovo = new Utente();
-
-			nuovo.setUsername(username);
-			nuovo.setPassword(password);
-			nuovo.setName(nome);
-			nuovo.setEmail(email);
-			nuovo.setSesso(sesso);
-			nuovo.setCittà(città);
-			nuovo.setTipoUtente(serv.getReference(TipoUtente.class, tipoUtente));
-			nuovo.setActive(false);
-			nuovo.setActivationCode(UUID.randomUUID().toString());
-			//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			Date currentDate = new Date();
-			nuovo.setDataIscrizione(currentDate);
-			serv.persist(nuovo);
-			MailSender.sendRegisterMail(email, nuovo.getActivationCode());
-		} catch (Exception e) {
-			e.printStackTrace();
-			contentBean.setContent("registrati.xhtml");
-		}
-
-		contentBean.setContent("messaggioInvioMailRegistrazione.xhtml");
-		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
-	}
+		if (accettoRegolamento){
+			try {
+				Utente nuovo = new Utente();
 	
-
-	public Sesso getSesso() {
-		return sesso;
-	}
-
-
-	public void setSesso(Sesso sesso) {
-		this.sesso = sesso;
+				nuovo.setUsername(username);
+				nuovo.setPassword(password);
+				nuovo.setName(nome);
+				nuovo.setEmail(email);
+				nuovo.setSesso(sesso);
+				nuovo.setCittà(città);
+				nuovo.setTipoUtente(serv.getReference(TipoUtente.class, tipoUtente));
+				nuovo.setActive(false);
+				nuovo.setActivationCode(UUID.randomUUID().toString());
+				//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				Date currentDate = new Date();
+				nuovo.setDataIscrizione(currentDate);
+				serv.persist(nuovo);
+				MailSender.sendRegisterMail(email, nuovo.getActivationCode());
+			} catch (Exception e) {
+				e.printStackTrace();
+				contentBean.setContent("registrati.xhtml");
+			}
+	
+			contentBean.setContent("messaggioInvioMailRegistrazione.xhtml");
+			FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
+			}
+		else {
+			contentBean.setMessaggio("per completare la registrazione è obbligatorio accettare il regolamento!");
+		}
 	}
 
 
@@ -204,6 +201,25 @@ public class RegistratiBean {
 		return suggerimenti;
 		
 		}
+	
+	
+
+	public boolean isAccettoRegolamento() {
+		return accettoRegolamento;
+	}
+
+	public void setAccettoRegolamento(boolean accettoRegolamento) {
+		this.accettoRegolamento = accettoRegolamento;
+	}
+
+	public Sesso getSesso() {
+		return sesso;
+	}
+
+
+	public void setSesso(Sesso sesso) {
+		this.sesso = sesso;
+	}
 	
 	public String getUsername() {
 		return username;

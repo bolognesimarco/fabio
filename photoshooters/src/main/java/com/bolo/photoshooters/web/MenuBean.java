@@ -51,7 +51,7 @@ public class MenuBean {
 			//utenteBean.albumsUtente();
 			inputBean.setStatusMessage(null);
 			contentBean.setMessaggio(null);
-			contentBean.setContent("albums2.xhtml");
+			contentBean.setContent("albums3.xhtml");
 			break;
 		case 10://MESSAGGI
 			contentBean.setMessaggio(null);

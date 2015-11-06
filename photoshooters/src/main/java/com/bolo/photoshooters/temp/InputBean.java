@@ -61,13 +61,19 @@ public class InputBean {
 		if (!userAlbumFolder.exists()) {
 			if (userAlbumFolder.mkdirs()) {
 				System.out.println("Cartella nuovo album creata!");
-				Album nuovoAlbum = new Album();
-				nuovoAlbum.setTitolo(utenteBean.getNewAlbumName());
-				nuovoAlbum.setPubblicatore(utenteBean.getUtente());
-				utenteBean.getUtente().getPubblicati().add(nuovoAlbum);
+				Album newAlbum = new Album();
+				utenteBean.setNuovoAlbum(newAlbum);
+//				newAlbum.setTitolo(utenteBean.getNuovoAlbum().getTitolo());
+				newAlbum.setDescrizione(utenteBean.getNuovoAlbum().getDescrizione());
+				System.out.println("GETTITOLO:"+utenteBean.getNuovoAlbum().getTitolo());
+				System.out.println("GEDESCRIZIONE:"+utenteBean.getNuovoAlbum().getDescrizione());
+				newAlbum.setTitolo(utenteBean.getNewAlbumName());
+				newAlbum.setPubblicatore(utenteBean.getUtente());
+				utenteBean.getUtente().getPubblicati().add(newAlbum);
 
 				try {
 					serv.merge(utenteBean.getUtente());
+//					serv.merge(utenteBean.getNuovoAlbum());
 				} catch (Exception e) {
 					e.printStackTrace();
 					String mm = e.getMessage()+" ERRORe CREAZIONe NUOVo ALBUm!";
@@ -76,11 +82,14 @@ public class InputBean {
 				
 				contentBean.setMessaggio("Album aggiunto");
 				utenteBean.setNewAlbumName(null);
+//				utenteBean.setRisultatoAlbum(null);
 			} else {
 				System.out.println("Errore nella creazione della cartella dell'album!");
 				contentBean.setMessaggio("errore nell'aggiunta album");
 			}
 		} else {
+			System.out.println("GETTITOLO:"+utenteBean.getNuovoAlbum().getTitolo());
+			System.out.println("GEDESCRIZIONE:"+utenteBean.getNuovoAlbum().getDescrizione());
 			contentBean.setMessaggio("Album già esistente!2");
 //			statusMessage = "Album già esistente!";
 			System.out.println("Album già esistente!");
@@ -92,8 +101,7 @@ public class InputBean {
 		
 		if (part==null){
 			return;
-		}
-		
+		}		
 		System.out.println("UTENTEBEAN.NUOVAFOTO==="+utenteBean.getNuovaFoto().toString());
 		
 		// Extract file name from content-disposition header of file part
@@ -103,8 +111,7 @@ public class InputBean {
 		String userFotoFileName = radomFotoName + "." + getFileExtension(fileName);
 		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator + albumName + File.separator;
 		
-		System.out.println("Inizio upload FOTo");
-		
+		System.out.println("Inizio upload FOTo");	
 		
 		File outputFilePath = new File(userAlbumFolderPath + userFotoFileName);		
 		InputStream inputStream = null;
@@ -152,7 +159,6 @@ public class InputBean {
 					newFoto.setLarghezzaFoto(sii.getWidth());
 //					System.out.println("DIMENSIONI"+sii.getHeight()+sii.getWidth());
 					SimpleImageInfo imageInfo = new SimpleImageInfo((outputFilePath));
-
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -163,15 +169,16 @@ public class InputBean {
 				utenteBean.setNuovaFoto(newFoto);
 				newFoto.setAlbum(utenteBean.getRisultatoAlbum());
 				newFoto.setPubblicatore(utenteBean.getUtente());
-				newFoto.setFotografo(utenteBean.cercaUtente(utenteBean.getFotografoFoto()));
-				newFoto.setTitolo(utenteBean.getNewFotoName());
+				newFoto.setFotografo(utenteBean.getNuovaFoto().getSoggetto());
+				newFoto.setTitolo(utenteBean.getNuovaFoto().getTitolo());
 				newFoto.setDescrizione(utenteBean.getNuovaFoto().getDescrizione());
 				newFoto.setNomeFileFoto(userFotoFileName);
-				newFoto.setSoggetto(utenteBean.cercaUtente(utenteBean.getSoggettoFoto()));
+				newFoto.setSoggetto(utenteBean.getNuovaFoto().getSoggetto());
+//				System.out.println("SOGGGGGGGETTO FOTo"+utenteBean.getNuovaFoto().getSoggetto().getUsername());
+//				newFoto.setSoggetto(utenteBean.cercaUtente(utenteBean.getNuovaFoto().getSoggetto().getUsername()));
 				newFoto.setLuogoScatto(utenteBean.getNuovaFoto().getLuogoScatto());
 				newFoto.setVietataMinori(utenteBean.getNuovaFoto().isVietataMinori());
 				utenteBean.getUtente().getFotografoDi().add(newFoto);
-				
 				if (utenteBean.getNuovaFoto().getDataFoto()==null){
 					Date currentDate = new Date();
 					newFoto.setDataFoto(currentDate);	
@@ -179,20 +186,18 @@ public class InputBean {
 				else{
 					newFoto.setDataFoto(utenteBean.getNuovaFoto().getDataFoto());
 				}
-				
+			
 				System.out.println("Fine crazione FOTo");
 				
 				try {
 					serv.merge(utenteBean.getUtente());
-					serv.refresh(utenteBean.getUtente());
+//					serv.refresh(utenteBean.getUtente());
 				} catch (Exception e) {
 					e.printStackTrace();
 					String mm = e.getMessage()+" ERRORe UPLOAd FOTo!";
 					contentBean.setMessaggio(mm);
 				}
 
-				utenteBean.setNewFotoName(null);
-				utenteBean.setNuovaFoto(new Foto());
 				utenteBean.visualizzaFotos(utenteBean.getAlbumId());
 				System.out.println("FINE INPUT FOTO////"+utenteBean.getNuovaFoto().getNomeFileFoto());
 				part=null;

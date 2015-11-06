@@ -64,7 +64,7 @@ html, body{
 	text-align: right;
 	color: #EF4323;
 	margin-right: 0px;
-	width: 100px;
+	width: 33%;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 /* 	border: 1px; */
 	margin-bottom: 0px!important;
@@ -73,7 +73,7 @@ html, body{
 .left{
 	text-align: left;
 	color: white;
-	width: 100px;
+	width: 33%;
 /* 	border: 1px solid black; */
 /* 	text-shadow: 0.5px 0.5px 0.5px #414042; */
 }
@@ -81,13 +81,29 @@ html, body{
 .centercol{
 	text-align: left;
 	color: white;
-	width: 100px;
+	width: 33%;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 /* 	border: 1px; */
 	/* 	margin-top: 0px; */
 }
 
+/* colonne tabelle a 2 login   */
 
+.loginright{
+	text-align: right;
+	color: #EF4323;
+	margin-right: 0px;
+	width: 35%;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-bottom: 0px!important;
+}
+
+.loginleft{
+	text-align: left;
+	color: white;
+	width: 65%;
+
+}
 
 /* colonne tabelle a 2 standard  */
 
@@ -175,9 +191,6 @@ select {
 		color: #414042; 
      }
 	
-/* .inputInvalid { */
-/*    border: 2px solid red; */
-/* } */
 
 .invalid-input {
     border: 1px solid #EF4323;;
@@ -185,3 +198,41 @@ select {
 .valid-input {
     background-color: white;
 }
+
+/* menu arancio ELIMINA*/
+.menubuttonorange{
+	font-size: large;
+	font-weight: normal;
+	background:none!important;
+    text-align: right;
+	color: #EF4323;
+	margin-right: 0px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+    border:none; 
+    padding:0!important;
+    cursor: pointer;
+    border-radius: 0px!important;
+	vertical-align: middle;
+}
+/* menu bianco MODIFICA*/
+.menubuttonwhite{
+	font-size: large;
+	font-weight: normal;
+	background:none!important;
+    text-align: right;
+	color: white;
+	margin-right: 0px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+    border:none; 
+    padding:0!important;
+    cursor: pointer;
+    border-radius: 0px!important;
+	vertical-align: middle;
+}
+/* .inputInvalid { */
+/*    border: 2px solid red; */
+/* } */
+/* .error { */
+/* 	list-style-type: none!important; */
+/* 	list-style-image: none!important; */
+/* } */
