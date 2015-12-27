@@ -28,6 +28,8 @@ public class Voto {
     @JoinColumn(name="foto", nullable=false)
 	private Foto foto;
 
+	
+	
 	public int getId() {
 		return id;
 	}

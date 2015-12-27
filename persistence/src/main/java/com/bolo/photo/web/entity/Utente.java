@@ -35,14 +35,6 @@ public class Utente implements Serializable{
 	
 	@Column
 	private String username;
-	
-	public boolean isOnline() {
-		return online;
-	}
-
-	public void setOnline(boolean online) {
-		this.online = online;
-	}
 
 	@Column
 	private String email;
@@ -58,14 +50,6 @@ public class Utente implements Serializable{
 	
 	@Column
 	private String avatar;
-	
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
 
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -78,14 +62,6 @@ public class Utente implements Serializable{
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataMember;
-	
-	public Date getDataUltimoAccesso() {
-		return dataUltimoAccesso;
-	}
-
-	public void setDataUltimoAccesso(Date dataUltimoAccesso) {
-		this.dataUltimoAccesso = dataUltimoAccesso;
-	}
 
 	@Column
 	private String password;
@@ -97,34 +73,9 @@ public class Utente implements Serializable{
 	@ManyToMany
 	private List<TipoLavoro> tipiLavoro = new ArrayList<TipoLavoro>();
 	
-	public List<TipoLavoro> getTipiLavoro() {
-		return tipiLavoro;
-	}
-	
-	public List<String> getTipiLavoroDescrizione() {
-		List<String> darit = new ArrayList<String>();
-		for (TipoLavoro tipo : getTipiLavoro()) {
-			darit.add(tipo.getDescrizione());
-		}
-		return darit;
-	}
-
-	public void setTipiLavoro(List<TipoLavoro> tipiLavoro) {
-		
-		this.tipiLavoro = tipiLavoro;
-	}
-	
 	@ManyToOne
     @JoinColumn(name="tipoUtente", nullable=false)
 	private TipoUtente tipoUtente;
-	
-	public TipoUtente getTipoUtente() {
-		return tipoUtente;
-	}
-
-	public void setTipoUtente(TipoUtente tipoUtente) {
-		this.tipoUtente = tipoUtente;
-	}
 	
 	@OneToMany
 	@JoinColumn(name="UtenteId")
@@ -143,13 +94,16 @@ public class Utente implements Serializable{
 	private List<Foto> soggettoDi;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="fotografo")
-	private List<Foto> fotografoDi;
+	private List<Foto> pubblicatoreDi;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="pubblicatore")
 	private List<Album> pubblicati;
 	
 	@ManyToMany(mappedBy="visualizzatori")
-	private List<Foto> visualizzate;
+	private List<Foto> fotoVisualizzate;
+	
+	@ManyToMany(mappedBy="utentiChePreferisconoFoto")
+	private List<Foto> fotoPreferite;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="rilasciatoDa")
 	private List<Voto> voti;
@@ -165,22 +119,6 @@ public class Utente implements Serializable{
 	
 	@Enumerated
 	private Esperienza esperienza;
-
-	public String getDescrizione() {
-		return descrizione;
-	}
-
-	public void setDescrizione(String descrizione) {
-		this.descrizione = descrizione;
-	}
-
-	public String getCittà() {
-		return città;
-	}
-
-	public void setCittà(String città) {
-		this.città = città;
-	}
 
 	@Column
 	private String sitoweb;	
@@ -232,6 +170,85 @@ public class Utente implements Serializable{
 	
 	@ElementCollection
 	private List <RegioneItaliana> regioniitaliane;
+	
+	
+	
+	
+	//************GETTERS&SETTERS**********
+	
+	
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public List<Foto> getFotoPreferite() {
+		return fotoPreferite;
+	}
+
+	public void setFotoPreferite(List<Foto> fotoPreferite) {
+		this.fotoPreferite = fotoPreferite;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public Date getDataUltimoAccesso() {
+		return dataUltimoAccesso;
+	}
+
+	public void setDataUltimoAccesso(Date dataUltimoAccesso) {
+		this.dataUltimoAccesso = dataUltimoAccesso;
+	}
+	
+	public TipoUtente getTipoUtente() {
+		return tipoUtente;
+	}
+
+	public void setTipoUtente(TipoUtente tipoUtente) {
+		this.tipoUtente = tipoUtente;
+	}
+	
+	public List<TipoLavoro> getTipiLavoro() {
+		return tipiLavoro;
+	}
+	
+	public List<String> getTipiLavoroDescrizione() {
+		List<String> darit = new ArrayList<String>();
+		for (TipoLavoro tipo : getTipiLavoro()) {
+			darit.add(tipo.getDescrizione());
+		}
+		return darit;
+	}
+
+	public void setTipiLavoro(List<TipoLavoro> tipiLavoro) {
+		
+		this.tipiLavoro = tipiLavoro;
+	}
+	
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+
+	public String getCittà() {
+		return città;
+	}
+
+	public void setCittà(String città) {
+		this.città = città;
+	}
+	
+	public boolean isOnline() {
+		return online;
+	}
+
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
 	
 	public String getFacebook() {
 		return facebook;
@@ -479,12 +496,12 @@ public class Utente implements Serializable{
 		this.soggettoDi = soggettoDi;
 	}
 
-	public List<Foto> getFotografoDi() {
-		return fotografoDi;
+	public List<Foto> getPubblicatoreDi() {
+		return pubblicatoreDi;
 	}
 
-	public void setFotografoDi(List<Foto> fotografoDi) {
-		this.fotografoDi = fotografoDi;
+	public void setPubblicatoreDi(List<Foto> pubblicatoreDi) {
+		this.pubblicatoreDi = pubblicatoreDi;
 	}
 
 	public List<Album> getPubblicati() {
@@ -495,12 +512,12 @@ public class Utente implements Serializable{
 		this.pubblicati = pubblicati;
 	}
 
-	public List<Foto> getVisualizzate() {
-		return visualizzate;
+	public List<Foto> getFotoVisualizzate() {
+		return fotoVisualizzate;
 	}
 
-	public void setVisualizzate(List<Foto> visualizzate) {
-		this.visualizzate = visualizzate;
+	public void setFotoVisualizzate(List<Foto> fotoVisualizzate) {
+		this.fotoVisualizzate = fotoVisualizzate;
 	}
 
 	public List<Voto> getVoti() {

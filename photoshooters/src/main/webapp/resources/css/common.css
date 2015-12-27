@@ -201,7 +201,7 @@ select {
 
 /* menu arancio ELIMINA*/
 .menubuttonorange{
-	font-size: large;
+	font-size: 13px;
 	font-weight: normal;
 	background:none!important;
     text-align: right;

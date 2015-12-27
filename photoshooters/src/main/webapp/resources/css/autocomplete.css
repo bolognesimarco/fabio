@@ -14,7 +14,31 @@ font-family: gisha;
 	-moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
 	box-shadow: inset 0px 0px 0px 0px transparent;	
 	padding-left: 7px;
-	
+}
+/* multiple selection */
+.ui-autocomplete-multiple-container {
+	color: #212020;
+	font-family: gisha;
+	font-size: small;
+	border: none;
+	box-shadow: none;
+	height: 11px;
+}
+.ui-autocomplete-multiple {
+	color: #212020;
+	font-family: gisha;
+	font-size: small;
+	border: none;
+	box-shadow: none;
+	height: 41px;
+}
+.ui-autocomplete-input-token {
+	color: #212020;
+	font-family: gisha;
+	font-size: small;
+	border: none;
+	box-shadow: none;
+	height: 41px;
 }
 
 /* quando faccio refresh cambia carattere */

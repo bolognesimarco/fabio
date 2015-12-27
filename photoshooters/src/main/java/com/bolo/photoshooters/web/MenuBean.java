@@ -5,6 +5,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import com.bolo.photo.web.entity.Foto;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.temp.InputBean;
@@ -32,7 +33,7 @@ public class MenuBean {
 			break;
 		case 5://LAVORI
 			contentBean.setMessaggio(null);
-			contentBean.setContent("foto.xhtml");
+			contentBean.setContent("wip.xhtml");
 			break;
 		case 6://PHOTOSHOOTERS
 			parametersBean.fillEtà();
@@ -48,7 +49,7 @@ public class MenuBean {
 			contentBean.setContent("profilo2.xhtml");
 			break;
 		case 9://ALBUMS
-			//utenteBean.albumsUtente();
+			inputBean.visualizzaAlbums(utenteBean.getUtente());
 			inputBean.setStatusMessage(null);
 			contentBean.setMessaggio(null);
 			contentBean.setContent("albums3.xhtml");
@@ -67,19 +68,18 @@ public class MenuBean {
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 14://LOGOUT
-			utenteBean.getUtente().setOnline(false);
+			utenteBean.getUtente().setOnline(false); 
 			try {
 				serv.merge(utenteBean.getUtente());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			System.out.println("LOGOUTTTTT"+utenteBean.getUtente().getUsername());
 			utenteBean.setUtente(null);
+			System.out.println("LOGOUTTTTT utente null??"+utenteBean.getUtente());
 			contentBean.setMessaggio(null);
 			contentBean.setContent("homePage.xhtml");
-			if (utenteBean.getUtente()==null){
-			System.out.println("UTENTE NUL???????????");
-			}
 			break;
 		case 15://HOMEPAGE
 			utenteBean.setUtente(null);
@@ -90,10 +90,10 @@ public class MenuBean {
 			inputBean.setStatusMessage(null);
 			contentBean.setContent("modificaProfilo4.xhtml");
 			break;
-//		case 17://NUOVO ALBUM_non più usato!
-//			contentBean.setMessaggio(null);
-//			contentBean.setContent("nuovoAlbum.xhtml");
-//			break;
+		case 17://FOTOS
+			contentBean.setMessaggio(null);
+			contentBean.setContent("fotos.xhtml");
+			break;
 		default:
 			break;
 		}

@@ -41,7 +41,6 @@ public class RegistratiBean {
 	private Sesso sesso; 
 	private String città;
 	private boolean accettoRegolamento = false;
-	private String regolamento ="";
 	
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private ServiziVari serviziVari = new ServiziVariImpl();

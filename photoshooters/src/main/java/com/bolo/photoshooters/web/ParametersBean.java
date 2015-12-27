@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
@@ -81,16 +80,12 @@ public class ParametersBean {
 	private List<Integer> rangeEtà = new ArrayList<Integer>();
 	
 	public void fillEtà(){
-//		rangeEtà.clear();
-//		rangeFill(rangeEtà, 0, 5);
-
 		fasciaEtà.put("<18",1);
 		fasciaEtà.put("18-21",2);
 		fasciaEtà.put("22-25",3);
 		fasciaEtà.put("26-30",4);
 		fasciaEtà.put("31-40",5);
 		fasciaEtà.put(">40",6);
-
 	}
 	
 	

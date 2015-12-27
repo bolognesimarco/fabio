@@ -1,6 +1,7 @@
 package com.bolo.photo.web.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,12 @@ public class Foto implements Serializable{
 	@Column
 	private boolean vietataMinori;
 	
+	@Column
+	private boolean visibileSoloMembri;
+	
+	@Column
+	private boolean inVotazione;
+	
 	@ManyToOne
     @JoinColumn(name="soggetto", nullable=true)
 	private Utente soggetto;
@@ -77,13 +84,37 @@ public class Foto implements Serializable{
 	
 	@ManyToMany
 	@JoinTable(name="Foto_Collaboratori")
-	private List<Utente> collaboratori;
+	private List<Utente> collaboratori = new ArrayList<Utente>();
 	
+	@ManyToMany
+	@JoinTable(name="Foto_Preferenti")
+	private List<Utente> utentiChePreferisconoFoto;
 	
+
+	
+	//************GETTERS&SETTERS**********
+	
+
+	public boolean isInVotazione() {
+		return inVotazione;
+	}
+
+	public void setInVotazione(boolean inVotazione) {
+		this.inVotazione = inVotazione;
+	}
+
+	public List<Utente> getUtentiChePreferisconoFoto() {
+		return utentiChePreferisconoFoto;
+	}
+
+	public void setUtentiChePreferisconoFoto(List<Utente> utentiChePreferisconoFoto) {
+		this.utentiChePreferisconoFoto = utentiChePreferisconoFoto;
+	}
+
 	public List<Utente> getCollaboratori() {
 		return collaboratori;
 	}
-
+	
 	public void setCollaboratori(List<Utente> collaboratori) {
 		this.collaboratori = collaboratori;
 	}
@@ -111,7 +142,6 @@ public class Foto implements Serializable{
 	public void setNomeFileFoto(String nomeFileFoto) {
 		this.nomeFileFoto = nomeFileFoto;
 	}
-
 
 	public String getLuogoScatto() {
 		return luogoScatto;
@@ -207,6 +237,14 @@ public class Foto implements Serializable{
 
 	public void setVoti(List<Voto> voti) {
 		this.voti = voti;
+	}
+
+	public boolean isVisibileSoloMembri() {
+		return visibileSoloMembri;
+	}
+
+	public void setVisibileSoloMembri(boolean visibileSoloMembri) {
+		this.visibileSoloMembri = visibileSoloMembri;
 	}
 
 	

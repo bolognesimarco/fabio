@@ -28,14 +28,6 @@ public class Album  implements Serializable{
 	@Column
 	private String descrizione;
 
-	public String getDescrizione() {
-		return descrizione;
-	}
-
-	public void setDescrizione(String descrizione) {
-		this.descrizione = descrizione;
-	}
-
 	@ManyToOne
     @JoinColumn(name="pubblicatore", nullable=false)
 	private Utente pubblicatore;
@@ -43,6 +35,14 @@ public class Album  implements Serializable{
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="album")
 	private List<Foto> fotos = new ArrayList<Foto>();
+	
+
+	@JoinColumn(name="copertinaAlbum", nullable=true)
+	private Foto copertinaAlbum;
+	
+	
+	
+	//*********GETTERS&SETTERS***********
 	
 	public int getId() {
 		return id;
@@ -60,6 +60,14 @@ public class Album  implements Serializable{
 		this.titolo = titolo;
 	}
 
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+	
 	public Utente getPubblicatore() {
 		return pubblicatore;
 	}
@@ -74,6 +82,14 @@ public class Album  implements Serializable{
 
 	public void setFotos(List<Foto> fotos) {
 		this.fotos = fotos;
+	}
+
+	public Foto getCopertinaAlbum() {
+		return copertinaAlbum;
+	}
+
+	public void setCopertinaAlbum(Foto copertinaAlbum) {
+		this.copertinaAlbum = copertinaAlbum;
 	}
 	
 	

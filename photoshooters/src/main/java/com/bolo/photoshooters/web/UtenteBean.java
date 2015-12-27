@@ -2,7 +2,10 @@ package com.bolo.photoshooters.web;
 
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
+
+import java.io.File;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -13,6 +16,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+
+
+
 
 
 
@@ -38,6 +45,7 @@ import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
+import com.bolo.photo.web.entity.Voto;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.vo.CercaUtenteVO;
@@ -56,12 +64,12 @@ public class UtenteBean {
 	List<Utente> risultato = new ArrayList<Utente>();
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
     Album risultatoAlbum = new Album();
+    List<Album> listaAlbum = new ArrayList<Album>();
     List<Foto> risultatoFotos = new ArrayList<Foto>();
     Foto risultatoFoto = new Foto();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private String avatarDefault = "avatarDefault.svg"; 
-	private String newAlbumName ="";
-	private String albumVisualizzato ="";
+
 	private Foto nuovaFoto = new Foto();
 	private String soggettoFoto ="";
 	private String fotografoFoto ="";
@@ -69,8 +77,10 @@ public class UtenteBean {
 	private Integer fotoId;
 	private Album nuovoAlbum = new Album();
 	private List<Album> albumList = new ArrayList<Album>();
-	private String titoloFotoModifica="";
-	// primefaces confim dialog
+
+	
+
+	// primefaces confim dialog- provaaaaa
     public void destroyWorld() {
         addMessage("System Error", "Please try again later.");
     }
@@ -305,9 +315,9 @@ public class UtenteBean {
 		}
 		ordinaPerAccessoIscrizione();
 	}
-
-	public String ordinaPerAccessoIscrizione() {
-		 
+	
+	
+	public String ordinaPerAccessoIscrizione() {	 
 		   if(cercaUtente.getLastOnlineIscritto()==1){
 	 
 			//ordina per ultimo accesso
@@ -334,173 +344,8 @@ public class UtenteBean {
 		   return null;
 		}
 
-	
-	
-	private List<PerPhotoswipe> pswp = new ArrayList<UtenteBean.PerPhotoswipe>();
-	private String pswpS = "";
-	
-	public String getPswpS() {
-		pswpS = "[";
-		for (PerPhotoswipe p : pswp) {
-			pswpS += "{";
-			pswpS += "src:'"+p.getSrc()+"',";
-			pswpS += "w:"+p.getW()+",";
-			pswpS += "h:"+p.getH()+"";
-			pswpS += "},";
-		}
-		pswpS=pswpS.substring(0,pswpS.length()-1);
-		pswpS += "]";
-		System.out.println("PSWP=="+pswpS+"GET");
-		return pswpS;
-	}
 
-	public void setPswpS(String pswpS) {
-		this.pswpS = pswpS;
-	}
-
-	
-	public void visualizzaAlbum(int albumId){
-		
-		EntityManager em = EMF.createEntityManager();
-
-		String hql = "from Album a where a.id=:n";
-		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", albumId);
-		
-		risultatoAlbum = (Album) q.getResultList().get(0);
-	}
-	
-	public void visualizzaFotos(int albumId){
-		
-		risultatoFotos.clear();
-		EntityManager em = EMF.createEntityManager();
-
-		String hql = "from Foto f where f.album.id=:n";
-		Query q = em.createQuery(hql, Foto.class);
-		q.setParameter("n", albumId);
-
-		risultatoFotos = (List<Foto>) q.getResultList();
-		System.out.println("RISULTATOFOToS SIZE=="+risultatoFotos.size());
-		
-		if(risultatoFotos!=null) {
-			visualizzaAlbum(albumId);
-			pswp.clear();
-
-			Integer i=0;
-			for (Foto f : risultatoFotos) {
-				i++;
-				String str = i.toString();
-
-				PerPhotoswipe pp = new PerPhotoswipe();
-				pp.setSrc("/lil?path="+utente.getUsername()+"/"+getRisultatoAlbum().getTitolo()+"/"+f.getNomeFileFoto());
-				pp.setH(f.getAltezzaFoto());
-				pp.setW(f.getLarghezzaFoto());
-				pswp.add(pp);
-				System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW()+getRisultatoAlbum().getTitolo());	
-			}
-			System.out.println("PSWP=="+pswpS+"FINE");
-			contentBean.setContent("visualizzaAlbum4.xhtml");
-			contentBean.setMessaggio(null);
-			setAlbumId(albumId);
-
-//			risultatoFotos.indexOf(risultatoFotos);
-
-		}else{
-			System.out.println("errore lista foto non trovata!");
-		}
-	}
-	
-	public List<PerPhotoswipe> getPswp() {
-		return pswp;
-	}
-
-	public void setPswp(List<PerPhotoswipe> pswp) {
-		this.pswp = pswp;
-	}
-
-	public class PerPhotoswipe{
-		private String src;
-		private int w;
-		private int h;
-		
-		public String getSrc() {
-			return src;
-		}
-		public void setSrc(String src) {
-			this.src = src;
-		}
-		public int getW() {
-			return w;
-		}
-		public void setW(int w) {
-			this.w = w;
-		}
-		public int getH() {
-			return h;
-		}
-		public void setH(int h) {
-			this.h = h;
-		}			
-	}
-	
-//	public void visualizzaFoto(int fotoId){
-//		EntityManager em = EMF.createEntityManager();
-//
-//		String hql = "from Foto f where f.id=:n";
-//		Query q = em.createQuery(hql, Foto.class);
-//		q.setParameter("n", fotoId);
-//
-//		risultatoFoto = (Foto) q.getResultList().get(0);
-//
-//		if(risultatoFoto!=null ){
-//
-//			contentBean.setContent("visualizzaFoto.xhtml");
-//			contentBean.setMessaggio(null);
-//
-//		}else{
-//			System.out.println("errore foto non trovata!");
-//		}
-//	}
-	
-	public void cancellaFoto (int idFoto){
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Foto f where f.id=:n";
-		Query q = em.createQuery(hql, Foto.class);
-		q.setParameter("n", idFoto);
-		System.out.println("FOTO DA CANCELLARE trovata::"+q.getResultList().get(0).toString());
-		try {
-			serv.delete((Foto)q.getResultList().get(0));
-			serv.refresh(getUtente());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Foto CANCELLATA!");
-		visualizzaFotos(risultatoAlbum.getId());
-	}
-	
-	public void cancellaAlbum (int idAlbum){
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Album a where a.id=:n";
-		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", idAlbum);
-		System.out.println("ALBUM DA CANCELLARE trovato::"+q.getResultList().get(0).toString());
-		try {
-			serv.delete((Album)q.getResultList().get(0));
-			getUtente().getPubblicati().remove((Album)q.getResultList().get(0));
-			serv.merge(getUtente());
-			serv.refresh(getUtente());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Album CANCELLATO!");
-		visualizzaAlbum(albumId);
-//		contentBean.setContent("albums3.xhtml");
-	}
-	
-
-	public void utenteTrovato(String username){
+	public void utenteTrovato (String username){
 		EntityManager em = EMF.createEntityManager();
 		List<Utente> utenti = em
 		.createQuery("from Utente u where u.username=:user")
@@ -514,8 +359,40 @@ public class UtenteBean {
 		}
 	}
 	
+	
+	public void utenteTrovatoId (int id){
+		EntityManager em = EMF.createEntityManager();
+		List<Utente> utenti = em
+		.createQuery("from Utente u where u.id=:idutente")
+		.setParameter("idutente", id)
+		.getResultList();
+		if(utenti!=null && utenti.size()>0){
+			cercaUtente.setUtente(utenti.get(0));
+			contentBean.setContent("utenteTrovato.xhtml");
+		}else{
+			System.out.println("errore utente non trovato!");
+		}
+	}
+	
+	
+	public Utente cercaUtenteById (int id){
+		EntityManager em = EMF.createEntityManager();
+		
+		Utente u = em.find(Utente.class, id);
+
+		if(u!=null){
+			return u;
+		}else{
+			contentBean.setMessaggio("errore utentebyid non trovato!");
+			System.out.println("UTENTEbyId NON TROVATOOOOO");
+			return null;
+		}
+	}
+	
+	
 	public Utente cercaUtente (String username){
 		EntityManager em = EMF.createEntityManager();
+		
 		List<Utente> utenti = em
 		.createQuery("from Utente u where u.username=:user")
 		.setParameter("user", username)
@@ -536,10 +413,9 @@ public class UtenteBean {
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
 			contentBean.setContent("profilo2.xhtml");	
-//			System.out.println("profilo aggiornato!");
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			//	contentBean.setContent("profilo.xhtml");
 			String mm = e.getMessage()+" ERRORe";
 			contentBean.setMessaggio(mm);
 		}
@@ -547,40 +423,7 @@ public class UtenteBean {
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 
-	public void aggiornaFoto2 (Foto foto){
-		try {
-			System.out.println("titoloModifica!"+getTitoloFotoModifica());
-			foto.setTitolo(getTitoloFotoModifica());
-			serv.merge(foto);
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		contentBean.setContent("visualizzaAlbum4.xhtml");	
-		System.out.println("Foto AGGIORNATA2!");
-		visualizzaFotos(risultatoAlbum.getId());
-		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
-	}
-	
-	public void aggiornaFoto (int idFoto){
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Foto f where f.id=:n";
-		Query q = em.createQuery(hql, Foto.class);
-		q.setParameter("n", idFoto);
-		System.out.println("FOTO DA AGGIORNARE trovata::"+q.getResultList().get(0).toString());
-		try {
-			serv.merge((Foto)q.getResultList().get(0));
-			serv.refresh(getUtente());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		contentBean.setContent("visualizzaAlbum4.xhtml");	
-		System.out.println("Foto AGGIORNATA!");
-		visualizzaFotos(risultatoAlbum.getId());
-		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
-	}
+
 	
 	public void lavoriPerTipoUtente() {
 		if (cercaUtente.getTipoUtente()!=-1){
@@ -594,7 +437,21 @@ public class UtenteBean {
 		
 	}
 
-
+	public double calcolaMediaVotiFoto (List<Voto> listaVoti) {
+		if(listaVoti.size()>0) {
+		int numeroVoti=0;
+		int sommaVoti=0;
+		for (Voto v : listaVoti) {
+			sommaVoti += v.getScore();
+			numeroVoti++;	
+		}
+		double mediaVoti = sommaVoti/numeroVoti;
+		mediaVoti = Double.parseDouble(new DecimalFormat("##.##").format(mediaVoti));
+		return mediaVoti;
+		}
+		return 0;
+	}
+	
 	public int calcolaEtà(Date dataNascita) {
 		Date currentDate = new Date(); // current date
         Calendar birth = new GregorianCalendar();
@@ -607,19 +464,34 @@ public class UtenteBean {
             birth.setTime(dataNascita);
             if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
                 compiuti = -1;
-            }
-            
+            }          
             età = today.get(Calendar.YEAR) - birth.get(Calendar.YEAR)+ compiuti;
-
             return età;
         }
 		return 0;    
 	}
+
+	
+	public List<String> convertiUtenteInUsername (List<Utente> utenti) {
+//		List <String> prova = new ArrayList<String>();
+//		Integer i=0;
+//		for (i=0; i<6; i++) {
+//			prova.add(i.toString());
+//		}
+		List <String> usernames = new ArrayList<String>();
+		if (utenti==null){
+			return null;
+		}
+
+		for (Utente ut : utenti) {
+			usernames.add(ut.getUsername());
+		}
+		return usernames;
+	}
 	
 	
-	public List<Utente> suggerisciUtente (String username) {
-		
-		List<String> suggerimentiUtente = new ArrayList<String>();
+	public List<Utente> suggerisciUtente (String username) {	
+//		List<String> suggerimentiUtente = new ArrayList<String>();
 		
 		EntityManager em = EMF.createEntityManager();
 		List<Utente> utenti = em
@@ -641,22 +513,31 @@ public class UtenteBean {
 		return utenti;
 	}
 	
-	public List<String> convertiUtenteInUsername (List<Utente> utenti) {
-//		List <String> prova = new ArrayList<String>();
-//		Integer i=0;
-//		for (i=0; i<6; i++) {
-//			prova.add(i.toString());
+//	public List<Utente> suggerisciUtenteById (int id) {	
+//
+//		Utente u = cercaUtenteById(id);
+//		System.out.println("ID UTENTE===== "+id);
+//		System.out.println("USERNAME UTENTE===== "+u.getUsername());
+//		EntityManager em = EMF.createEntityManager();
+//		List<Utente> utenti = em
+//		.createQuery("from Utente u where u.username like :user")
+//		.setParameter("user", u.getUsername()+"%")
+//		.getResultList();
+//		
+//		if(utenti!=null && utenti.size()>0){
+//
+//			for (Utente ut : utenti) {
+//				System.out.println("UTENTI LIKE"+ut.getUsername());
+//			}
+//			
+//		}else{
+//			System.out.println("errore utente non trovato!");
 //		}
-		List <String> usernames = new ArrayList<String>();
-		if (utenti==null){
-			return null;
-		}
-
-		for (Utente ut : utenti) {
-			usernames.add(ut.getUsername());
-		}
-		return usernames;
-	}
+//		return utenti;
+//	}
+	
+	
+	
 	
 	public List<String> suggerisciCittà (String citta) throws Exception{
 		GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAg7ZoORXv7d2eMGKb-pB7_QZReIPiIzxw");
@@ -667,20 +548,26 @@ public class UtenteBean {
 		for (GeocodingResult geocodingResult : results) {
 //			System.out.println(geocodingResult.formattedAddress);	
 			suggerimenti.add(geocodingResult.formattedAddress);
-			utente.setCittà(geocodingResult.formattedAddress);
+//			utente.setCittà(geocodingResult.formattedAddress);
+//			
+//			
+//			
+//			utente.getRegioniitaliane().add(RegioneItaliana.valueOf(RegioneItaliana.valueOfOrDefault(geocodingResult.addressComponents[4].longName)));
 //			System.out.println("XXXX"+results[0].formattedAddress);
 		}
 	return suggerimenti;
 	}
 	
-	
 
-	public String getTitoloFotoModifica() {
-		return titoloFotoModifica;
+	
+	//************GETTERS & SETTERS*******************
+
+	public List<Album> getListaAlbum() {
+		return listaAlbum;
 	}
 
-	public void setTitoloFotoModifica(String titoloFotoModifica) {
-		this.titoloFotoModifica = titoloFotoModifica;
+	public void setListaAlbum(List<Album> listaAlbum) {
+		this.listaAlbum = listaAlbum;
 	}
 
 	public Album getNuovoAlbum() {
@@ -702,15 +589,6 @@ public class UtenteBean {
 		this.albumList = albumList;
 	}
 
-
-	public String getNewAlbumName() {
-		return newAlbumName;
-	}
-
-
-	public void setNewAlbumName(String newAlbumName) {
-		this.newAlbumName = newAlbumName;
-	}
 	
 	public Foto getRisultatoFoto() {
 		return risultatoFoto;
@@ -822,14 +700,6 @@ public class UtenteBean {
 		this.fotoId = fotoId;
 	}
 
-	public String getAlbumVisualizzato() {
-		return albumVisualizzato;
-	}
-
-	public void setAlbumVisualizzato(String albumVisualizzato) {
-		this.albumVisualizzato = albumVisualizzato;
-	}
-
 	public Integer getAlbumId() {
 		return albumId;
 	}
@@ -884,4 +754,212 @@ public class UtenteBean {
 
 	@ManagedProperty(value = "#{contentBean}")
 	private ContentBean contentBean;
+	
+	
+	//oLDSSS
+	
+	
+	
+	
+//	private List<PerPhotoswipe> pswp = new ArrayList<UtenteBean.PerPhotoswipe>();
+//	private String pswpS = "";
+//	
+//	public String getPswpS() {
+//		pswpS = "[";
+//		for (PerPhotoswipe p : pswp) {
+//			pswpS += "{";
+//			pswpS += "src:'"+p.getSrc()+"',";
+//			pswpS += "w:"+p.getW()+",";
+//			pswpS += "h:"+p.getH()+"";
+//			pswpS += "},";
+//		}
+//		pswpS=pswpS.substring(0,pswpS.length()-1);
+//		pswpS += "]";
+//		System.out.println("PSWP=="+pswpS+"GET");
+//		return pswpS;
+//	}
+//
+//	public void setPswpS(String pswpS) {
+//		this.pswpS = pswpS;
+//	}
+//
+//	public void listaAlbumUtente (Utente utente){
+//		
+//		EntityManager em = EMF.createEntityManager();
+//
+//		String hql = "from Album a where a.pubblicatore=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", utente);
+//		
+//		listaAlbum = (List<Album>) q.getResultList();
+//
+//	}
+	
+//	public void visualizzaAlbum(int albumId){
+//		
+//		EntityManager em = EMF.createEntityManager();
+//
+//		String hql = "from Album a where a.id=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", albumId);
+//		
+//		risultatoAlbum = (Album) q.getResultList().get(0);
+//		setAlbumVisualizzato((String)risultatoAlbum.getTitolo());
+//	}
+//	
+//	
+//	public void visualizzaFotos(int albumId){
+//		
+//		risultatoFotos.clear();
+//		EntityManager em = EMF.createEntityManager();
+//
+//		String hql = "from Foto f where f.album.id=:n";
+//		Query q = em.createQuery(hql, Foto.class);
+//		q.setParameter("n", albumId);
+//
+//		risultatoFotos = (List<Foto>) q.getResultList();
+//		System.out.println("RISULTATOFOToS SIZE=="+risultatoFotos.size());
+//		System.out.println("VisualizzaFosos-ALBUMID=="+albumId);
+////		if(risultatoFotos!=null) {
+//			visualizzaAlbum(albumId);
+//			pswp.clear();
+////			Integer i=0;
+//			for (Foto f : risultatoFotos) {
+////				i++;
+////				String str = i.toString();
+//				PerPhotoswipe pp = new PerPhotoswipe();
+//				pp.setSrc("/lil?path="+utente.getUsername()+"/"+getRisultatoAlbum().getTitolo()+"/"+f.getNomeFileFoto());
+//				pp.setH(f.getAltezzaFoto());
+//				pp.setW(f.getLarghezzaFoto());
+//				pswp.add(pp);
+//				System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW()+getRisultatoAlbum().getTitolo());	
+//			}
+//			System.out.println("PSWP=="+pswpS+"FINE");
+//			contentBean.setContent("fotos.xhtml");
+//			contentBean.setMessaggio(null);
+//			setAlbumId(albumId);
+//
+////			risultatoFotos.indexOf(risultatoFotos);
+//
+////		}else{
+////			System.out.println("errore lista foto non trovata!");
+////		}
+//	}
+	
+//	public List<PerPhotoswipe> getPswp() {
+//		return pswp;
+//	}
+//
+//	public void setPswp(List<PerPhotoswipe> pswp) {
+//		this.pswp = pswp;
+//	}
+//
+//	public class PerPhotoswipe{
+//		private String src;
+//		private int w;
+//		private int h;
+//		
+//		public String getSrc() {
+//			return src;
+//		}
+//		public void setSrc(String src) {
+//			this.src = src;
+//		}
+//		public int getW() {
+//			return w;
+//		}
+//		public void setW(int w) {
+//			this.w = w;
+//		}
+//		public int getH() {
+//			return h;
+//		}
+//		public void setH(int h) {
+//			this.h = h;
+//		}			
+//	}
+	
+//	
+//	public void cancellaFoto (int idFoto){
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Foto f where f.id=:n";
+//		Query q = em.createQuery(hql, Foto.class);
+//		q.setParameter("n", idFoto);
+//		System.out.println("FOTO DA CANCELLARE trovata::"+q.getResultList().get(0).toString());
+//		try {
+//			serv.delete((Foto)q.getResultList().get(0));
+//			serv.refresh(getUtente());
+//
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("Foto CANCELLATA!");
+//		visualizzaFotos(risultatoAlbum.getId());
+//	}
+//	
+//	public void cancellaAlbum (int idAlbum){
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Album a where a.id=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", idAlbum);
+//		System.out.println("ALBUM DA CANCELLARE trovato::"+q.getResultList().get(0).toString());
+//		//cancella cartella album
+//		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + getUtente().getUsername() + File.separator;
+//		File userAlbumFolder = new File(userAlbumFolderPath + getNewAlbumName() + File.separator);
+//		try {
+//			serv.delete((Album)q.getResultList().get(0));
+////			serv.persist(getUtente());
+////			getUtente().getPubblicati().remove((Album)q.getResultList().get(0));
+//			serv.refresh(getUtente());
+////			serv.refresh(getUtente().getPubblicati());
+////			serv.merge(getRisultatoAlbum());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println("Album CANCELLATO!");
+//		listaAlbumUtente(utente);
+////		visualizzaAlbum(albumId);
+////		contentBean.setContent("albums3.xhtml");
+//	}
+	
+//	public void aggiornaFoto2 (Foto foto){
+//		try {
+//			System.out.println("titoloModifica!"+getTitoloFotoModifica());
+//			foto.setTitolo(getTitoloFotoModifica());
+////			foto.setDataFoto(dataFoto);
+//			serv.merge(foto);
+//			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		contentBean.setContent("fotos.xhtml");	
+//		System.out.println("Foto AGGIORNATA2!");
+//		visualizzaFotos(risultatoAlbum.getId());
+//		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
+//	}
+//	
+//	
+//	public void aggiornaFoto (int idFoto){
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Foto f where f.id=:n";
+//		Query q = em.createQuery(hql, Foto.class);
+//		q.setParameter("n", idFoto);
+//		System.out.println("FOTO DA AGGIORNARE trovata::"+q.getResultList().get(0).toString());
+//		try {
+//			serv.merge((Foto)q.getResultList().get(0));
+//			serv.refresh(getUtente());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		contentBean.setContent("fotos.xhtml");	
+//		System.out.println("Foto AGGIORNATA!");
+//		visualizzaFotos(risultatoAlbum.getId());
+//		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
+//	}
+	
+	
 }

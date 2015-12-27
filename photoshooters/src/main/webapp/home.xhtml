@@ -4,10 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<h:outputStylesheet library="css" name="common.css"  />
 	<h:outputStylesheet library="css" name="home.css"  />
 	<h:outputStylesheet name="homePage.css" library="css" />
@@ -67,7 +67,10 @@
 		</div>
 		<div class="pattern-basso-guest"></div>
 	</h:panelGroup>
-
+<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" appendToBody="true">
+			        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+			    </p:confirmDialog>	
 
 </h:body>
 </html>

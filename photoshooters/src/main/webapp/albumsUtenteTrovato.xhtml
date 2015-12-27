@@ -19,7 +19,7 @@
 
 	<h:panelGroup styleClass="pannello homepage">
 			<f:facet name="header"> 		
-            		<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
+            		<h:outputText  id="username" value="#{utenteBean.cercaUtente.utente.username}"/>
             		<h:outputText value="&#160;-&#160;ALMBUMs PHOTOSHOOTEr"/>
 					<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
             		<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>	
@@ -38,41 +38,11 @@
 						<h:commandButton value="#{result.titolo}" styleClass="menubuttonwhite">
 		    				<f:ajax event="click" listener="#{inputBean.visualizzaFotos(result.id)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 		    	   		</h:commandButton>	<br></br>
-						<h:commandButton value="ELIMINa" styleClass="menubuttonorange" >
-							<f:ajax event="click" listener="#{inputBean.cancellaAlbum(result.id)}" render=":content :nuovoalbumform" />
-						</h:commandButton>		
-						<p:commandButton update="modalbumform:albumDetail" oncomplete="PF('albumOP').loadContents()" value="MODIFICa" >
-              				  <f:setPropertyActionListener value="#{result}" target="#{inputBean.albumVisualizzato}" />
-              				  <f:ajax event="click" listener="#{inputBean.titoloAlbumDaModificareSet(result.titolo)}"  />
-            			</p:commandButton>
-
+						<h:outputLabel for="descrAlbum">DESCRIZIONe</h:outputLabel>
+						<h:outputText id="descrAlbum" value="#{result.descrizione}"></h:outputText>
 					</p:column>
 					
 				</p:dataGrid>
-
-			    <p:overlayPanel widgetVar="albumOP" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
-			        <h:form id="modalbumform">
-			        <p:outputPanel id="albumDetail" style="text-align:center;">
-			            <p:panelGrid  columns="2" >
-			                <f:facet name="header">
-			                   	<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{inputBean.albumVisualizzato.copertinaAlbum.nomeFileFoto}"
-								height="51" width="50"></h:graphicImage>
-								<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
-								height="51" width="50"></h:graphicImage>
-			                </f:facet>
-			 
-			                <h:outputText value="NOMe" />
-			                <h:inputText value="#{inputBean.albumVisualizzato.titolo}" />
-			 
-			                <h:outputText value="DESCRIZIONe" />
-			                <h:inputText value="#{inputBean.albumVisualizzato.descrizione}" />
-			 
-			 				<h:commandButton id="modificaAlbum" value="&#160;AGGIORNa ALBUm" action="#{inputBean.aggiornaAlbum(inputBean.albumVisualizzato)}">
-							</h:commandButton>
-			            </p:panelGrid>
-			        </p:outputPanel>
-			        </h:form>
-			    </p:overlayPanel>
 
 				<h:dataTable id="tabella" value="#{inputBean.listaAlbum}" var="risultato" border="1">   	 	
 					<h:column>  

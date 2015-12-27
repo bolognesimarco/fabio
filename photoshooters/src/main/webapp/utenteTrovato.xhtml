@@ -4,12 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homePage.css" library="css" />
 	<h:outputStylesheet name="buttons.css" library="css" />
+	<h:outputStylesheet name="datagrid.css" library="css" />
 </h:head>
 
 <h:body>
@@ -118,6 +120,7 @@
 	      </h:panelGrid>
 			
 		  <h:panelGrid id="modellaGrid" border="1" columns="2" columnClasses="right, left" rendered="#{utenteBean.cercaUtente.utente.tipoUtente.id==2 || cercaUtenteVO.utente.tipoUtente.id==9}">
+			
 			<h:panelGrid border="1" columns="3" columnClasses="right, centercol, left">
 				
 				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
@@ -164,6 +167,28 @@
 		   
 		   </h:panelGrid>
 				
+		   <h:panelGrid>
+		   
+		   		<p:dataGrid  value="#{inputBean.albumsUtenteTrovato(utenteBean.cercaUtente.utente.id)}" var="result" columns="4" rows="3" paginator="true"  rowsPerPageTemplate="3,6,9">
+					
+					<p:column>
+						<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
+							height="51" width="50"></h:graphicImage>
+						<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
+							height="51" width="50"></h:graphicImage>
+						<h:panelGrid columns="2">
+							<h:outputLabel for="titAlbum">TITOLo</h:outputLabel>
+							<h:commandButton id="titAlbum" value="#{result.titolo}" styleClass="menubuttonwhite">
+			    				<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato(result.id)}" render=":content :modificafotoform" />
+			    	   		</h:commandButton>	<br></br>
+							<h:outputLabel for="descrAlbum">DESCRIZIONe</h:outputLabel>
+							<h:outputText id="descrAlbum" value="#{result.descrizione}"></h:outputText>	
+						</h:panelGrid>
+					</p:column>
+					
+				</p:dataGrid>
+		   
+		   </h:panelGrid>
 									
 				<f:facet name="footer">
 		            <h:panelGroup>

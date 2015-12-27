@@ -60,9 +60,9 @@
 		<h:panelGroup rendered="#{utenteBean.utente==null}" ><div class="pattern-alto-guest"></div></h:panelGroup>
 		
 		
-		
-		<h:panelGroup layout="block" class="pattern-alto-login" rendered="#{utenteBean.utente!=null}">
-			<h:form id="menuutenteform" rendered="#{utenteBean.utente!=null}">
+		<h:form id="menuutenteform">
+			<h:panelGroup layout="block" class="pattern-alto-login" rendered="#{utenteBean.utente!=null}">
+			
 				
 				<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" styleClass="circular"/>
 				<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" styleClass="circular"/>
@@ -72,7 +72,7 @@
 				</h:commandButton>
 
 	    	   	<h:commandButton value="ALBUMs" styleClass="menubuttonred">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(9)}" render=":content :nuovoalbumform" />
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(9)}" render=":content :nuovoalbumform :albumsform :modalbumform" />
 	    	   	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton value="MESSAGGi" styleClass="menubuttonred">
@@ -90,16 +90,16 @@
 	    	   	<h:commandButton value="CREDITi" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(13)}" render=":content :registratiform" />
 	    	   	</h:commandButton>
-	    	   	
+	    	   	    	   	
 	    	   	<h:commandButton onclick="if (! confirm('confermi il LOGOUt?')) return false" value="LOGOUt" styleClass="menubuttonred"  rendered="#{utenteBean.utente!=null}">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render=":content :headerform :menuutenteform" />
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render=":content :headerform menuutenteform" />
 	    	   	</h:commandButton>
 
-			</h:form>
-   	
+
+					  
 	
-		</h:panelGroup>
-		
+			</h:panelGroup>		 
+		</h:form>	
 	</ui:composition>
 
 

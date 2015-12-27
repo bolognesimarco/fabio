@@ -23,9 +23,7 @@
         		</f:facet>
 
 			<h:panelGrid columns="3" columnClasses="right, centercol, left">
-			
-
-
+	
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
 				<h:inputText id="username" value="#{registratiBean.username}"
 					required="true" requiredMessage="inserisci uno username" 
@@ -34,7 +32,6 @@
 					<h:message for="username" />
 				</h:panelGroup>
 
-
 				<h:outputLabel for="password">PASSWORd</h:outputLabel>
 				<h:inputSecret id="password" value="#{registratiBean.password}"
 					required="true" requiredMessage="inserisci una password">
@@ -42,7 +39,6 @@
 				<h:panelGroup>
 					<h:message for="password" />
 				</h:panelGroup>
-
 
 				<h:outputLabel for="confirm">CONFERMa PASSWORd</h:outputLabel>
 				<h:inputSecret id="confirm" value="#{registratiBean.confirm}"
@@ -55,7 +51,6 @@
 						message="Passwords do not match!" showMessageFor="confirm" /> -->
 				</h:panelGroup>
 
-
 				<h:outputLabel for="email">EMAIl</h:outputLabel>
 				<h:inputText id="email" value="#{registratiBean.email}"
 					required="true" requiredMessage="inserisci un indirizzo email"
@@ -64,7 +59,6 @@
 				<h:panelGroup>
 					<h:message for="email" />
 				</h:panelGroup>
-
 
 				<h:outputLabel for="nome">NOMe</h:outputLabel>
 				<h:inputText id="nome" value="#{registratiBean.nome}"
@@ -98,10 +92,10 @@
 				<h:outputLabel for="regolamento">ACCETTo REGOLAMENTo</h:outputLabel>
 				<h:selectBooleanCheckbox id="regolamento" value="#{registratiBean.accettoRegolamento}">
 				</h:selectBooleanCheckbox>
-				<h:panelGroup></h:panelGroup>
-			
+				<h:panelGroup></h:panelGroup>	
 				
 			</h:panelGrid>
+			
 				<iframe width="95%" src="/files/Regolamento_18Ago2015.html"></iframe>
 
 				<h:outputLink value="/files/Regolamento.docx">DOWNLOAd REGOLAMENTo</h:outputLink>

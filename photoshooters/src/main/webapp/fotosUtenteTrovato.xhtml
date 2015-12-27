@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+ 	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="homePage.css" library="css" />	
+	<h:outputStylesheet name="photoswipe.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
+	<h:outputStylesheet name="autocomplete.css" library="css" />
+	<h:outputStylesheet name="calendar.css" library="css" />
+	<link rel="stylesheet" href="resources/css/default-skin/default-skin.css"/> 
+	<h:outputScript name="photoswipe.js" library="js" />
+	<h:outputScript name="photoswipe-ui-default.js" library="js" /> 
+	<h:outputScript name="gallery.js" library="js" />
+
+</h:head>
+
+<h:body>
+	
+	
+	
+	<!-- Root element of PhotoSwipe. Must have class pswp. -->
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader-active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<h:panelGroup styleClass="pannello homepage">
+
+	<h:panelGrid>
+		<f:facet name="header">
+            <h:outputText id="username" value="#{utenteBean.cercaUtente.utente.username}"/>
+           	<h:outputText value="&#160;-&#160;FOTOs ALMBUm :&#160;"/>
+           	<h:outputText id="nomeAlbum" value="'#{inputBean.albumVisualizzato.titolo}'"/>
+        </f:facet>
+		
+			<p:dataGrid id="my-gallery" value="#{inputBean.risultatoFotosUtenteTrovato}" var="risultato" 
+	     	columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
+				<p:column>
+				
+					<figure itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
+						<a href="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
+							<h:graphicImage itemprop="thumbnail"
+								value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}"
+								height="51" width="50">
+							</h:graphicImage>
+						</a> 
+						<figcaption itemprop="caption description"> 
+							
+							<h:outputText value="#{risultato.titolo}" />
+							<h:outputText value="#{risultato.descrizione}" />
+							<h:outputText value="#{risultato.dataFoto}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+							</h:outputText>
+							<h:outputText value="#{risultato.luogoScatto}"/>
+							<h:outputText value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)}/10"></h:outputText>
+							
+						</figcaption> 				
+					</figure>
+						<p:commandButton update="votafotoform:fotoDetail" oncomplete="PF('fotoOP').loadContents()" value="VOTa" >
+              				  <f:setPropertyActionListener value="#{risultato}" target="#{inputBean.fotoDaVotare}" />
+            			</p:commandButton>
+				</p:column>
+			</p:dataGrid>	
+
+			    <p:overlayPanel widgetVar="fotoOP" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+			        <h:form id="votafotoform">
+			        <p:outputPanel id="fotoDetail" style="text-align:center;">
+			            <p:panelGrid  columns="2" >
+			                <f:facet name="header">
+			                   	<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{inputBean.albumVisualizzato.copertinaAlbum.nomeFileFoto}"
+								height="51" width="50"></h:graphicImage>
+								<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
+								height="51" width="50"></h:graphicImage>
+			                </f:facet>
+
+							<h:outputText value="TITOLo" />
+							<h:outputText value="#{inputBean.fotoDaVotare.titolo}" />
+			 
+			                <h:outputText value="VOTo Xx/10" />
+			                <h:inputText value="#{inputBean.votoFoto.score}" />
+			                
+			                <h:outputText value="MESSAGGIo" />
+			                <h:inputText value="#{inputBean.votoFoto.messaggio" />
+			 
+			 				<h:commandButton id="votaFoto" value="&#160;VOTa FOTo" action="#{inputBean.votaFoto(inputBean.fotoDaVotare)}">
+							</h:commandButton>
+			            </p:panelGrid>
+			        </p:outputPanel>
+			        </h:form>
+			    </p:overlayPanel>
+		
+<br>
+</br>
+
+
+		<f:facet name="footer">
+		    <h:panelGroup>
+				 <h:outputText value="&#160;&#160;FOTOs ALMBUm&#160;&#160;"/>
+	        </h:panelGroup>
+        </f:facet>
+
+	</h:panelGrid>
+
+</h:panelGroup>
+
+</h:body>
+</html>
