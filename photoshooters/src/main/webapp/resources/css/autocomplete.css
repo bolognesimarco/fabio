@@ -15,31 +15,92 @@ font-family: gisha;
 	box-shadow: inset 0px 0px 0px 0px transparent;	
 	padding-left: 7px;
 }
+
+
 /* multiple selection */
+
+/* contenitore items selezionati */
 .ui-autocomplete-multiple-container {
 	color: #212020;
 	font-family: gisha;
 	font-size: small;
 	border: none;
 	box-shadow: none;
-	height: 11px;
+	height: 18px!important;
+	width: 200px;
+	overflow: visible!important;
 }
+
 .ui-autocomplete-multiple {
 	color: #212020;
 	font-family: gisha;
 	font-size: small;
 	border: none;
 	box-shadow: none;
-	height: 41px;
+	height: 16px;
+	width: 200px;
 }
-.ui-autocomplete-input-token {
+
+/* label singola selezione */
+.ui-helper-hidden {
 	color: #212020;
 	font-family: gisha;
 	font-size: small;
 	border: none;
 	box-shadow: none;
-	height: 41px;
+	height: 16px;
+	width: 50px;
 }
+
+/* larghezza bottone item selezionato */
+.ui-autocomplete-token {
+/* 	color: #212020; */
+/* 	font-family: gisha; */
+/* 	font-size: small; */
+	border: none;
+	box-shadow: none;
+	height: 16px;
+	width: 50px;
+	background-color: red;
+/* 	position: relative; */
+/* 	overflow: visible!important; */
+	margin: 1px;
+    padding: 0;
+}
+
+/* testo item selezionato */
+.ui-autocomplete-token-label {
+	color: #EF4323;
+	font-family: gisha;
+	font-size: x-small;
+	border: none;
+	box-shadow: none;
+	height: 16px;
+	width: 30px;
+}
+
+
+/* .ui-autocomplete-token-icon { */
+/* 	color: #EF4323; */
+/* 	font-family: gisha; */
+/* 	font-size: small; */
+/* 	border: none; */
+/* 	box-shadow: none; */
+/* 	height: 16px; */
+/* 	width: 30px; */
+/* } */
+
+
+.ui-autocomplete-input-token input{
+	color: #212020;
+	font-family: gisha;
+	font-size: small;
+	border: none;
+	box-shadow: none;
+	height: 13px;
+	width: 200px;
+}
+
 
 /* quando faccio refresh cambia carattere */
 .ui-inputfield {
@@ -50,7 +111,7 @@ font-family: gisha;
 	border-radius: 10px;
 	border: none;
 	padding-left: 7px!important;
-	width: 167px;
+/* 	width: 167px; */
 }
 
 .ui-autocomlete-status{
@@ -100,18 +161,10 @@ font-family: gisha;
 	font-weight: normal!important;
 	border: none;
 }
-/* ? */
-/* .ui-autocomplete-panel { */
-/* color: yellow; */
-/* font-family: gisha; */
-/* background-color: yellow; */
-/* } */
 
-/* ?*/
 .ui-autocomplete-item {
 color: red;
 font-family: gisha;
-
 }
 
 .ui-state-highlight {

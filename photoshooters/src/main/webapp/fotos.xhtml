@@ -159,8 +159,12 @@
 				<p:autoComplete id="newFotosoggetto" value="#{inputBean.nuovaFoto.soggetto}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="sogg" itemValue="#{sogg}" itemLabel="#{sogg.username}"></p:autoComplete>
 				
 				<h:outputLabel for="newFotocollaboratoriFoto">COLLABORATORi FOTo</h:outputLabel>
-				<p:autoComplete id="newFotocollaboratoriFoto" value="#{inputBean.nuovaFoto.collaboratori}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true"></p:autoComplete>
-
+				<p:autoComplete id="newFotocollaboratoriFoto" value="#{inputBean.nuovaFoto.collaboratori}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true">
+		            <p:column>
+		                <h:outputText value="#{collab.username}" />
+		            </p:column>
+				</p:autoComplete>
+				
 				<h:outputLabel for="newFotodata">DATa SCATTo</h:outputLabel>
 				<p:calendar readonlyInput="true" id="newFotodata" value="#{inputBean.nuovaFoto.dataFoto}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />	
 

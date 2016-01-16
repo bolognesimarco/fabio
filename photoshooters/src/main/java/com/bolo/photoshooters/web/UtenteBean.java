@@ -17,14 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
-
-
-
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -69,14 +61,7 @@ public class UtenteBean {
     Foto risultatoFoto = new Foto();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private String avatarDefault = "avatarDefault.svg"; 
-
-	private Foto nuovaFoto = new Foto();
-	private String soggettoFoto ="";
-	private String fotografoFoto ="";
-	private Integer albumId;
-	private Integer fotoId;
-	private Album nuovoAlbum = new Album();
-	private List<Album> albumList = new ArrayList<Album>();
+	private String region ="";
 
 	
 
@@ -89,26 +74,7 @@ public class UtenteBean {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-	
-//	public class Bean implements Serializable {
-//
-//		   /**
-//		 * nel file html : styleClass="#{bean.inputValid?'':'inputInvalid'}"
-//		 */
-//			private static final long serialVersionUID = 1L;
-//			private String text; 
-//			public String getText() {
-//				return text;
-//			}
-//			public void setText(String text) {
-//				this.text = text;
-//			}
-//		    public boolean isInputValid (){
-//		      FacesContext context = FacesContext.getCurrentInstance();
-//		      UIInput input = (UIInput)context.getViewRoot().findComponent(":form:input");
-//		      return input.isValid();
-//		   }
-//		}
+	////////////////////////////////
 
 
 	public void cercaUtenti(){		
@@ -409,6 +375,11 @@ public class UtenteBean {
 	
 	public void aggiornaProfilo() {
 		try {
+			if (!controllaRegione(region)) {
+				System.out.println("AGGIUNGI REGIONEEEE=="+region);
+				utente.getRegioniitaliane().add(RegioneItaliana.valueOf(region));
+		}
+
 			serv.merge(utente);
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
@@ -423,7 +394,6 @@ public class UtenteBean {
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 
-
 	
 	public void lavoriPerTipoUtente() {
 		if (cercaUtente.getTipoUtente()!=-1){
@@ -434,9 +404,9 @@ public class UtenteBean {
 			risultatoLavori = q.getResultList();
 			System.out.println("===========XX=============XXX:" + risultatoLavori.toString());
 		}
-		
 	}
 
+	
 	public double calcolaMediaVotiFoto (List<Voto> listaVoti) {
 		if(listaVoti.size()>0) {
 		int numeroVoti=0;
@@ -451,6 +421,7 @@ public class UtenteBean {
 		}
 		return 0;
 	}
+	
 	
 	public int calcolaEtà(Date dataNascita) {
 		Date currentDate = new Date(); // current date
@@ -473,11 +444,7 @@ public class UtenteBean {
 
 	
 	public List<String> convertiUtenteInUsername (List<Utente> utenti) {
-//		List <String> prova = new ArrayList<String>();
-//		Integer i=0;
-//		for (i=0; i<6; i++) {
-//			prova.add(i.toString());
-//		}
+
 		List <String> usernames = new ArrayList<String>();
 		if (utenti==null){
 			return null;
@@ -513,31 +480,7 @@ public class UtenteBean {
 		return utenti;
 	}
 	
-//	public List<Utente> suggerisciUtenteById (int id) {	
-//
-//		Utente u = cercaUtenteById(id);
-//		System.out.println("ID UTENTE===== "+id);
-//		System.out.println("USERNAME UTENTE===== "+u.getUsername());
-//		EntityManager em = EMF.createEntityManager();
-//		List<Utente> utenti = em
-//		.createQuery("from Utente u where u.username like :user")
-//		.setParameter("user", u.getUsername()+"%")
-//		.getResultList();
-//		
-//		if(utenti!=null && utenti.size()>0){
-//
-//			for (Utente ut : utenti) {
-//				System.out.println("UTENTI LIKE"+ut.getUsername());
-//			}
-//			
-//		}else{
-//			System.out.println("errore utente non trovato!");
-//		}
-//		return utenti;
-//	}
-	
-	
-	
+
 	
 	public List<String> suggerisciCittà (String citta) throws Exception{
 		GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAg7ZoORXv7d2eMGKb-pB7_QZReIPiIzxw");
@@ -545,20 +488,99 @@ public class UtenteBean {
 		GeocodingResult[] results =  GeocodingApi.geocode(context, citta).await();
 		List<String> suggerimenti = new ArrayList<String>();
 		
+		
 		for (GeocodingResult geocodingResult : results) {
-//			System.out.println(geocodingResult.formattedAddress);	
+	
 			suggerimenti.add(geocodingResult.formattedAddress);
-//			utente.setCittà(geocodingResult.formattedAddress);
-//			
-//			
-//			
-//			utente.getRegioniitaliane().add(RegioneItaliana.valueOf(RegioneItaliana.valueOfOrDefault(geocodingResult.addressComponents[4].longName)));
-//			System.out.println("XXXX"+results[0].formattedAddress);
+			utente.setCittà(geocodingResult.formattedAddress);
+			
+			System.out.println("SUGGERISCIREGIONEEE=="+geocodingResult.addressComponents[3].longName);	
+			System.out.println("SUGGERISCICITTAAAAA=="+results[0].formattedAddress);
+			
+			//le regioni le trova in inglese
+			switch (geocodingResult.addressComponents[3].longName) {
+			case "Abruzzo":
+				region = "ABRUZZo";
+				break;
+			case "Basilicata":
+				region = "BASILICATa";
+				break;
+			case "Calabria":
+				region = "CALABRIa";
+				break;
+			case "Campania":
+				region = "CAMPANIa";
+				break;
+			case "Emilia-Romagna":
+				region = "EMILIa_ROMAGNa";
+				break;
+			case "Friuli-Venezia Giulia":
+				region = "FRIULi_VENEZIa_GIULIa";
+				break;
+			case "Lazio":
+				region = "LAZIo";
+				break;
+			case "Liguria":
+				region = "LIGURIa";
+				break;
+			case "Lombardy":
+				region = "LOMBARDIa";
+				break;
+			case "Marche":
+				region = "MARCHe";
+				break;
+			case "Molise":
+				region = "MOLISe";
+				break;
+			case "Piedmont":
+				region = "PIEMONTe";
+				break;
+			case "Apulia":
+				region = "PUGLIa";
+				break;
+			case "Sardegna":
+				region = "SARDEGNa";
+				break;
+			case "Sicilia":
+				region = "SICILIa";
+				break;
+			case "Tuscany":
+				region = "TOSCANa";
+				break;
+			case "Trentino-Alto Adige":
+				region = "TRENTINo_ALTo_ADIGe";
+				break;
+			case "Umbria":
+				region = "UMBRIa";
+				break;
+			case "Valle d'Aosta":
+				region = "VAl_dAOSTa";
+				break;
+			case "Veneto":
+				region = "VENETo";
+				break;		
+			default: 
+				region = "ESTERo";
+				break;
+			}
+				
+			System.out.println("SUGGERISCIREGIONEEE22=="+region);
 		}
+		
 	return suggerimenti;
 	}
 	
 
+	public boolean controllaRegione (String reg) {
+		for (RegioneItaliana regUtente : utente.getRegioniitaliane()) {
+			if (regUtente.toString().equals(reg)) {
+				return true;
+			}
+		}
+	return false;
+	}
+	
+	
 	
 	//************GETTERS & SETTERS*******************
 
@@ -569,26 +591,6 @@ public class UtenteBean {
 	public void setListaAlbum(List<Album> listaAlbum) {
 		this.listaAlbum = listaAlbum;
 	}
-
-	public Album getNuovoAlbum() {
-		return nuovoAlbum;
-	}
-
-
-	public void setNuovoAlbum(Album nuovoAlbum) {
-		this.nuovoAlbum = nuovoAlbum;
-	}
-
-
-	public List<Album> getAlbumList() {
-		return albumList;
-	}
-
-
-	public void setAlbumList(List<Album> albumList) {
-		this.albumList = albumList;
-	}
-
 	
 	public Foto getRisultatoFoto() {
 		return risultatoFoto;
@@ -691,30 +693,7 @@ public class UtenteBean {
 		}
 		return darit;
 	}
-	
-	public Integer getFotoId() {
-		return fotoId;
-	}
 
-	public void setFotoId(Integer fotoId) {
-		this.fotoId = fotoId;
-	}
-
-	public Integer getAlbumId() {
-		return albumId;
-	}
-
-	public void setAlbumId(Integer albumId) {
-		this.albumId = albumId;
-	}
-
-	public Foto getNuovaFoto() {
-		return nuovaFoto;
-	}
-
-	public void setNuovaFoto(Foto nuovaFoto) {
-		this.nuovaFoto = nuovaFoto;
-	}
 	
 	public Esperienza[] getEsperienze() {
         return Esperienza.values();
@@ -728,21 +707,6 @@ public class UtenteBean {
 		return RegioneItaliana.values();
 	}
 	
-	public String getSoggettoFoto() {
-		return soggettoFoto;
-	}
-
-	public void setSoggettoFoto(String soggettoFoto) {
-		this.soggettoFoto = soggettoFoto;
-	}
-
-	public String getFotografoFoto() {
-		return fotografoFoto;
-	}
-
-	public void setFotografoFoto(String fotografoFoto) {
-		this.fotografoFoto = fotografoFoto;
-	}
 
 	public ContentBean getContentBean() {
 		return contentBean;
@@ -755,211 +719,6 @@ public class UtenteBean {
 	@ManagedProperty(value = "#{contentBean}")
 	private ContentBean contentBean;
 	
-	
-	//oLDSSS
-	
-	
-	
-	
-//	private List<PerPhotoswipe> pswp = new ArrayList<UtenteBean.PerPhotoswipe>();
-//	private String pswpS = "";
-//	
-//	public String getPswpS() {
-//		pswpS = "[";
-//		for (PerPhotoswipe p : pswp) {
-//			pswpS += "{";
-//			pswpS += "src:'"+p.getSrc()+"',";
-//			pswpS += "w:"+p.getW()+",";
-//			pswpS += "h:"+p.getH()+"";
-//			pswpS += "},";
-//		}
-//		pswpS=pswpS.substring(0,pswpS.length()-1);
-//		pswpS += "]";
-//		System.out.println("PSWP=="+pswpS+"GET");
-//		return pswpS;
-//	}
-//
-//	public void setPswpS(String pswpS) {
-//		this.pswpS = pswpS;
-//	}
-//
-//	public void listaAlbumUtente (Utente utente){
-//		
-//		EntityManager em = EMF.createEntityManager();
-//
-//		String hql = "from Album a where a.pubblicatore=:n";
-//		Query q = em.createQuery(hql, Album.class);
-//		q.setParameter("n", utente);
-//		
-//		listaAlbum = (List<Album>) q.getResultList();
-//
-//	}
-	
-//	public void visualizzaAlbum(int albumId){
-//		
-//		EntityManager em = EMF.createEntityManager();
-//
-//		String hql = "from Album a where a.id=:n";
-//		Query q = em.createQuery(hql, Album.class);
-//		q.setParameter("n", albumId);
-//		
-//		risultatoAlbum = (Album) q.getResultList().get(0);
-//		setAlbumVisualizzato((String)risultatoAlbum.getTitolo());
-//	}
-//	
-//	
-//	public void visualizzaFotos(int albumId){
-//		
-//		risultatoFotos.clear();
-//		EntityManager em = EMF.createEntityManager();
-//
-//		String hql = "from Foto f where f.album.id=:n";
-//		Query q = em.createQuery(hql, Foto.class);
-//		q.setParameter("n", albumId);
-//
-//		risultatoFotos = (List<Foto>) q.getResultList();
-//		System.out.println("RISULTATOFOToS SIZE=="+risultatoFotos.size());
-//		System.out.println("VisualizzaFosos-ALBUMID=="+albumId);
-////		if(risultatoFotos!=null) {
-//			visualizzaAlbum(albumId);
-//			pswp.clear();
-////			Integer i=0;
-//			for (Foto f : risultatoFotos) {
-////				i++;
-////				String str = i.toString();
-//				PerPhotoswipe pp = new PerPhotoswipe();
-//				pp.setSrc("/lil?path="+utente.getUsername()+"/"+getRisultatoAlbum().getTitolo()+"/"+f.getNomeFileFoto());
-//				pp.setH(f.getAltezzaFoto());
-//				pp.setW(f.getLarghezzaFoto());
-//				pswp.add(pp);
-//				System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW()+getRisultatoAlbum().getTitolo());	
-//			}
-//			System.out.println("PSWP=="+pswpS+"FINE");
-//			contentBean.setContent("fotos.xhtml");
-//			contentBean.setMessaggio(null);
-//			setAlbumId(albumId);
-//
-////			risultatoFotos.indexOf(risultatoFotos);
-//
-////		}else{
-////			System.out.println("errore lista foto non trovata!");
-////		}
-//	}
-	
-//	public List<PerPhotoswipe> getPswp() {
-//		return pswp;
-//	}
-//
-//	public void setPswp(List<PerPhotoswipe> pswp) {
-//		this.pswp = pswp;
-//	}
-//
-//	public class PerPhotoswipe{
-//		private String src;
-//		private int w;
-//		private int h;
-//		
-//		public String getSrc() {
-//			return src;
-//		}
-//		public void setSrc(String src) {
-//			this.src = src;
-//		}
-//		public int getW() {
-//			return w;
-//		}
-//		public void setW(int w) {
-//			this.w = w;
-//		}
-//		public int getH() {
-//			return h;
-//		}
-//		public void setH(int h) {
-//			this.h = h;
-//		}			
-//	}
-	
-//	
-//	public void cancellaFoto (int idFoto){
-//		EntityManager em = EMF.createEntityManager();
-//		String hql = "from Foto f where f.id=:n";
-//		Query q = em.createQuery(hql, Foto.class);
-//		q.setParameter("n", idFoto);
-//		System.out.println("FOTO DA CANCELLARE trovata::"+q.getResultList().get(0).toString());
-//		try {
-//			serv.delete((Foto)q.getResultList().get(0));
-//			serv.refresh(getUtente());
-//
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println("Foto CANCELLATA!");
-//		visualizzaFotos(risultatoAlbum.getId());
-//	}
-//	
-//	public void cancellaAlbum (int idAlbum){
-//		EntityManager em = EMF.createEntityManager();
-//		String hql = "from Album a where a.id=:n";
-//		Query q = em.createQuery(hql, Album.class);
-//		q.setParameter("n", idAlbum);
-//		System.out.println("ALBUM DA CANCELLARE trovato::"+q.getResultList().get(0).toString());
-//		//cancella cartella album
-//		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + getUtente().getUsername() + File.separator;
-//		File userAlbumFolder = new File(userAlbumFolderPath + getNewAlbumName() + File.separator);
-//		try {
-//			serv.delete((Album)q.getResultList().get(0));
-////			serv.persist(getUtente());
-////			getUtente().getPubblicati().remove((Album)q.getResultList().get(0));
-//			serv.refresh(getUtente());
-////			serv.refresh(getUtente().getPubblicati());
-////			serv.merge(getRisultatoAlbum());
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println("Album CANCELLATO!");
-//		listaAlbumUtente(utente);
-////		visualizzaAlbum(albumId);
-////		contentBean.setContent("albums3.xhtml");
-//	}
-	
-//	public void aggiornaFoto2 (Foto foto){
-//		try {
-//			System.out.println("titoloModifica!"+getTitoloFotoModifica());
-//			foto.setTitolo(getTitoloFotoModifica());
-////			foto.setDataFoto(dataFoto);
-//			serv.merge(foto);
-//			
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		contentBean.setContent("fotos.xhtml");	
-//		System.out.println("Foto AGGIORNATA2!");
-//		visualizzaFotos(risultatoAlbum.getId());
-//		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
-//	}
-//	
-//	
-//	public void aggiornaFoto (int idFoto){
-//		EntityManager em = EMF.createEntityManager();
-//		String hql = "from Foto f where f.id=:n";
-//		Query q = em.createQuery(hql, Foto.class);
-//		q.setParameter("n", idFoto);
-//		System.out.println("FOTO DA AGGIORNARE trovata::"+q.getResultList().get(0).toString());
-//		try {
-//			serv.merge((Foto)q.getResultList().get(0));
-//			serv.refresh(getUtente());
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		contentBean.setContent("fotos.xhtml");	
-//		System.out.println("Foto AGGIORNATA!");
-//		visualizzaFotos(risultatoAlbum.getId());
-//		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
-//	}
 	
 	
 }

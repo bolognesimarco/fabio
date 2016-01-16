@@ -46,6 +46,8 @@
 .ui-state-active{
 	color: yellow;
 	background-color: yellow;
+	background-position-x: initial;
+    background-position-y: initial;
 }
 
 .ui-widget {

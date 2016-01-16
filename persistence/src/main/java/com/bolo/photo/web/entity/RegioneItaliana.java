@@ -21,7 +21,8 @@ public enum RegioneItaliana {
 	TRENTINo_ALTo_ADIGe ("TRENTINo_ALTo_ADIGe"),
 	UMBRIa	("UMBRIa"),
 	VAl_dAOSTa	("VAl_dAOSTa"),
-	VENETo	("VENETo");
+	VENETo	("VENETo"),
+	ESTERo ("ESTERo");
 	
 	private final String regioneitaliana;
 	

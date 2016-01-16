@@ -52,10 +52,11 @@
             	</h:selectOneMenu>
 			
 				<h:outputLabel for="dataNascita">DATa Di NASCITa <br></br>(viene visualizzata l'ETà)</h:outputLabel>
-				<p:calendar readonlyInput="true" id="dataNascita" value="#{utenteBean.utente.dataNascita}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />			
+				<p:calendar readonlyInput="false" id="dataNascita" value="#{utenteBean.utente.dataNascita}" navigator="true" styleClass="calendar" yearRange="c-80:c+20" pattern="dd-MMM-yyyy" />			
 	
 				<h:outputLabel for="città">CITTà</h:outputLabel>
- 				<p:autoComplete maxlength="130" id="città"  value="#{utenteBean.utente.città}"  completeMethod="#{utenteBean.suggerisciCittà}" />
+ 				<p:autoComplete maxlength="130" id="città"  value="#{utenteBean.utente.città}"  completeMethod="#{utenteBean.suggerisciCittà}" >
+ 				</p:autoComplete>
 
 				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
 				<h:panelGroup styleClass="selection">

@@ -101,8 +101,8 @@ public class InputBean {
 				contentBean.setMessaggio("errore nell'aggiunta album");
 			}
 		} else {
-			System.out.println("GETTITOLO:"+utenteBean.getNuovoAlbum().getTitolo());
-			System.out.println("GEDESCRIZIONE:"+utenteBean.getNuovoAlbum().getDescrizione());
+			System.out.println("GETTITOLO:"+getNuovoAlbum().getTitolo());
+			System.out.println("GEDESCRIZIONE:"+getNuovoAlbum().getDescrizione());
 			contentBean.setMessaggio("Album già esistente!2");
 //			statusMessage = "Album già esistente!";
 			System.out.println("Album già esistente!");
