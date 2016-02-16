@@ -101,7 +101,7 @@
 		            	</h:commandButton>  
 	            	</h:panelGroup>
 	            		<br></br>
-	            	<h:panelGroup><h:messages/>***</h:panelGroup>
+	            	<h:panelGroup><h:messages/></h:panelGroup>
         		</f:facet>
 				
 			</h:panelGrid>
@@ -113,12 +113,12 @@
 	<p:dataGrid var="utenti" value="#{utenteBean.risultato}" 
       columns="3" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 
-	    <h:panelGrid columns="1">  
+	    <h:panelGrid columns="1" >  
 	        <h:outputText value="#{utenti.username}" />  
-	      	<h:graphicImage rendered="#{utenti.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenti.username}/#{utenti.avatar}" height="51" width="50" >
+	      	<h:graphicImage rendered="#{utenti.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenti.username}/#{utenti.avatar}" height="50" width="50" >
 				<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(utenti.id)}" render=":content :profiloform" />
 			</h:graphicImage>
-			<h:graphicImage rendered="#{utenti.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50" >
+			<h:graphicImage rendered="#{utenti.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="50" width="50" >
 				<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(utenti.id)}" render=":content :profiloform" />
 			</h:graphicImage>
 	    </h:panelGrid>  

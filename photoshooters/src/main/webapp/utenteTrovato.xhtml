@@ -173,9 +173,13 @@
 					
 					<p:column>
 						<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
-							height="51" width="50"></h:graphicImage>
+							height="51" style="cursor: pointer;">
+						<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato(result.id)}" render=":content :modificafotoform" />
+						</h:graphicImage>
 						<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
-							height="51" width="50"></h:graphicImage>
+							height="51" style="cursor: pointer;">
+						<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato(result.id)}" render=":content :modificafotoform" />
+						</h:graphicImage>
 						<h:panelGrid columns="2">
 							<h:outputLabel for="titAlbum">TITOLo</h:outputLabel>
 							<h:commandButton id="titAlbum" value="#{result.titolo}" styleClass="menubuttonwhite">

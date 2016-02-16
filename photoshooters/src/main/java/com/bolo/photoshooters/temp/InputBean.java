@@ -57,6 +57,8 @@ public class InputBean {
 	private int idFotoDaModificare;
 	private Foto fotoDaVotare = new Foto();
 	private Voto votoFoto = new Voto();
+	private Foto fotoVM18 = new Foto();
+	private Foto fotoSoloPS = new Foto();
 	
 	List<Album> listaAlbum = new ArrayList<Album>();
 	Album albumVisualizzato = new Album();
@@ -390,6 +392,17 @@ public class InputBean {
 		q.setParameter("n", albumId);
 
 		risultatoFotosUtenteTrovato = (List<Foto>) q.getResultList();
+//		creazione lista con foto only P|S+ (vm18) e only P|S
+//		for (Foto fot : risultatoFotosUtenteTrovato) {
+//			List<Foto> risultatoFotosUtenteTrovatoFiltrata = new ArrayList<Foto>();
+//			if (fot.isVietataMinori() && utenteBean.tipoMembershipUtente()!=2) {
+//				fot.setNomeFileFoto(fotoVM18.getNomeFileFoto());
+//			}
+//			if (fot.isVisibileSoloMembri() && utenteBean.tipoMembershipUtente()==0) {
+//				fot.setNomeFileFoto(fotoSoloPS.getNomeFileFoto());
+//			}	
+//			risultatoFotosUtenteTrovatoFiltrata.add(fot);
+//		}
 
 		visualizzaAlbum(albumId);
 			pswp.clear();
@@ -632,6 +645,26 @@ public class InputBean {
 		}
 	
 	
+		public void votaFoto (Foto f) {
+			if (votoFoto.getScore()>-1) {
+				try {
+					votoFoto.setRilasciatoDa(utenteBean.getUtente());
+					votoFoto.setFoto(f);
+					f.getVoti().add(votoFoto);
+//					serv.merge(votoFoto);
+					serv.merge(f);
+					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("my-gallery");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}		
+		}
+		
+		
+		
+		
+		
 	//*********GETTERS&SETTERS************
 	
 	public String getPswpS() {

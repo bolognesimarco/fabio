@@ -62,6 +62,7 @@ public class LoginBean {
 					serv.merge(u);
 					utenteBean.setUtente(u);
 					parametersBean.fillSelectItems();
+					threadBean.nuoviMessaggiThread(u.getId());
 					contentBean.setMessaggio(mm2);
 					contentBean.setContent("homePage.xhtml");
 					
@@ -110,6 +111,10 @@ public class LoginBean {
 		}
 	}
 	
+//	****************GETTERS&SETTERS************
+	
+	
+	
 	public String getUsername() {
 		return username;
 	}
@@ -125,7 +130,6 @@ public class LoginBean {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 
 	public ContentBean getContentBean() {
 		return contentBean;
@@ -144,6 +148,17 @@ public class LoginBean {
 	@ManagedProperty(value = "#{utenteBean}")
 	private UtenteBean utenteBean;
 
+	@ManagedProperty(value = "#{threadBean}")
+	private ThreadBean threadBean;
+	
+	public ThreadBean getThreadBean() {
+		return threadBean;
+	}
+
+	public void setThreadBean(ThreadBean threadBean) {
+		this.threadBean = threadBean;
+	}
+
 	public ParametersBean getParametersBean() {
 		return parametersBean;
 	}
@@ -151,7 +166,6 @@ public class LoginBean {
 	public void setParametersBean(ParametersBean parametersBean) {
 		this.parametersBean = parametersBean;
 	}
-
 
 	public UtenteBean getUtenteBean() {
 		return utenteBean;

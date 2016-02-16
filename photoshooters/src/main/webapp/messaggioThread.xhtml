@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+
+		<h:form id="threadmessaggiform">
+		
+		<h:dataTable id="threadMessaggi" var="thr" value="#{threadBean.threadMessaggi.messaggi}">
+			<f:facet name="header">
+           		<h:outputText styleClass="common" value="&#160;&#160;MESSAGGi PHOTOSHOOTEr [&#160;"/>
+           		<h:outputText id="nomeMitt" value="#{utenteBean.utente.username}&#160;-&#160;"/>
+           		<h:outputText styleClass="common" value="#{threadBean.threadMessaggi.destinatarioPrimo.username}&#160;]"/>	
+           		<br></br>
+       		</f:facet>
+			<h:column>
+			
+				<h:panelGrid columns="2" border="1">
+					<h:panelGrid columns="1">
+						<h:outputText styleClass="common" value="DESTINATARIo&#160;"/>
+						<h:outputText styleClass="common" value="#{thr.destinatario.username}&#160;-&#160;"/>
+	            		<h:outputText styleClass="common" value="&#160;MESSAGGIo DATa-&#160;"/>
+	            		<h:outputText styleClass="common" value="#{thr.data}"/>
+					</h:panelGrid>
+	        		<h:panelGrid columns="1">
+		        		<h:panelGrid columns="2">
+		        			<h:outputLabel for="oggetto">OGGETTo</h:outputLabel>
+							<h:outputText id="oggetto"  value="#{thr.oggetto}" styleClass="textareatonda"/>
+		    	   				<h:panelGroup rendered="#{thr.letto==false}">
+		    	   					<sup style="color:red;font-size:8px;">new</sup>
+		    	   				</h:panelGroup>
+		        		</h:panelGrid>
+					    <h:panelGrid columns="1">   
+					        <h:outputLabel for="messaggio">MESSAGGIo</h:outputLabel>
+							<h:inputTextarea readonly="true" size="50" rows="15" id="messaggio" value="#{thr.messaggio}"/>
+						</h:panelGrid>
+	        		</h:panelGrid>
+        		</h:panelGrid>
+        			
+			</h:column>
+
+		</h:dataTable>
+	
+		</h:form>
+
+	</h:panelGroup>
+
+</h:body>
+</html>

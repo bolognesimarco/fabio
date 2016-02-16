@@ -12,6 +12,7 @@ public class ContentBean {
 	private String messaggio;
 	
 	public String getContent() {
+		System.out.println("gettingcontent:"+content);
 		return content;
 	}
 	public void setContent(String content) {

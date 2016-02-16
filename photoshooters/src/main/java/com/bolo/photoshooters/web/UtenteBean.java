@@ -32,8 +32,10 @@ import javax.persistence.criteria.CriteriaBuilder.Case;
 import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.Foto;
+import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Sesso;
+import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.TipoLavoro;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
@@ -55,26 +57,20 @@ public class UtenteBean {
 	private CercaUtenteVO cercaUtente = new CercaUtenteVO();
 	List<Utente> risultato = new ArrayList<Utente>();
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
-    Album risultatoAlbum = new Album();
-    List<Album> listaAlbum = new ArrayList<Album>();
-    List<Foto> risultatoFotos = new ArrayList<Foto>();
-    Foto risultatoFoto = new Foto();
+    List<Thread> messaggiInviatiUtente = new ArrayList<Thread>();
+    List<Thread> messaggiRicevutiUtente = new ArrayList<Thread>();
+    Thread messaggioThread = new Thread();
+//    Album risultatoAlbum = new Album();
+//    List<Album> listaAlbum = new ArrayList<Album>();
+//    List<Foto> risultatoFotos = new ArrayList<Foto>();
+//    Foto risultatoFoto = new Foto();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private String avatarDefault = "avatarDefault.svg"; 
 	private String region ="";
-
-	
-
-	// primefaces confim dialog- provaaaaa
-    public void destroyWorld() {
-        addMessage("System Error", "Please try again later.");
-    }
-     
-    public void addMessage(String summary, String detail) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-	////////////////////////////////
+	private Thread thread = new Thread();
+	private Messaggio messaggio = new Messaggio();
+//	private Utente destinatarioPrimo = new Utente();
+	private Thread threadEsistente = new Thread();
 
 
 	public void cercaUtenti(){		
@@ -333,8 +329,13 @@ public class UtenteBean {
 		.setParameter("idutente", id)
 		.getResultList();
 		if(utenti!=null && utenti.size()>0){
-			cercaUtente.setUtente(utenti.get(0));
-			contentBean.setContent("utenteTrovato.xhtml");
+			if (utente!= null && utenti.get(0).getId()==utente.getId()){
+				contentBean.setContent("albums3.xhtml");
+			}
+			else {
+				cercaUtente.setUtente(utenti.get(0));
+				contentBean.setContent("utenteTrovato.xhtml");
+			}
 		}else{
 			System.out.println("errore utente non trovato!");
 		}
@@ -378,7 +379,7 @@ public class UtenteBean {
 			if (!controllaRegione(region)) {
 				System.out.println("AGGIUNGI REGIONEEEE=="+region);
 				utente.getRegioniitaliane().add(RegioneItaliana.valueOf(region));
-		}
+			}
 
 			serv.merge(utente);
 			String mm = "PROFILo AGGIORNATo";
@@ -407,21 +408,45 @@ public class UtenteBean {
 	}
 
 	
-	public double calcolaMediaVotiFoto (List<Voto> listaVoti) {
+	public double calcolaMediaVotiFoto2 (List<Voto> listaVoti) {
 		if(listaVoti.size()>0) {
-		int numeroVoti=0;
-		int sommaVoti=0;
+		double numeroVoti=0;
+		double sommaVoti=0;
 		for (Voto v : listaVoti) {
 			sommaVoti += v.getScore();
 			numeroVoti++;	
 		}
+		System.out.println("NUMERO--VOTI---:" + numeroVoti);
+		System.out.println("SOMMA--VOTI---:" + sommaVoti);
 		double mediaVoti = sommaVoti/numeroVoti;
+		System.out.println("MEDIA--VOTI---:" + mediaVoti);
 		mediaVoti = Double.parseDouble(new DecimalFormat("##.##").format(mediaVoti));
 		return mediaVoti;
 		}
 		return 0;
 	}
-	
+//	public double calcolaMediaVotiFoto (int idFoto) {
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Voto v where v.foto.id=:n ";
+//		Query q = em.createQuery(hql, Foto.class);
+//		q.setParameter("n",idFoto);
+//		List<Voto> voti = (List<Voto>) q.getResultList();
+//		if(voti.size()>0) {
+//			double numeroVoti=0;
+//			double sommaVoti=0;
+//			for (Voto v : voti) {
+//				sommaVoti += v.getScore();
+//				numeroVoti++;	
+//			}
+//			System.out.println("NUMERO--VOTI---:" + numeroVoti);
+//			System.out.println("SOMMA--VOTI---:" + sommaVoti);
+//			double mediaVoti = sommaVoti/numeroVoti;
+//			System.out.println("MEDIA--VOTI---:" + mediaVoti);
+//			mediaVoti = Double.parseDouble(new DecimalFormat("##.##").format(mediaVoti));
+//			return mediaVoti;
+//		}
+//		return 0;
+//	}
 	
 	public int calcolaEtà(Date dataNascita) {
 		Date currentDate = new Date(); // current date
@@ -486,8 +511,7 @@ public class UtenteBean {
 		GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAg7ZoORXv7d2eMGKb-pB7_QZReIPiIzxw");
 
 		GeocodingResult[] results =  GeocodingApi.geocode(context, citta).await();
-		List<String> suggerimenti = new ArrayList<String>();
-		
+		List<String> suggerimenti = new ArrayList<String>();		
 		
 		for (GeocodingResult geocodingResult : results) {
 	
@@ -581,36 +605,175 @@ public class UtenteBean {
 	}
 	
 	
+	public int tipoMembershipUtente () {
+		if (utente==null) {
+			return 0;
+		}
+		return utente.getMemberships().get(utente.getMemberships().size()-1).getTipoMembership().getId();
+	}
+	
+	
+	public void inviaMessaggio () {
+		System.out.println("INVIA MESSAGGIO function");
+		if (!esisteThreadMessaggi(utente.getId(), thread.getDestinatarioPrimo().getId(), messaggio.getOggetto())){
+			System.out.println("INVIA MESSAGGIO==nuovo messaggiooooo");
+			Thread thr = new Thread();	
+			Messaggio mess = new Messaggio();
+			thr.setMittentePrimo(utente);
+			thr.setDestinatarioPrimo(thread.getDestinatarioPrimo());
+			thr.setOggettoThread(messaggio.getOggetto());
+			mess.setMessaggio(messaggio.getMessaggio());
+			mess.setMittente(utente);
+			mess.setDestinatario(thread.getDestinatarioPrimo());
+			mess.setOggetto(messaggio.getOggetto());
+			mess.setThread(thr);
+			Date ora = new Date();
+			mess.setData(ora);
+			System.out.println("MESSAGGIO messaggio"+mess.getMessaggio());
+			thr.getMessaggi().add(mess);
+			try {
+				serv.persist(thr);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(); 
+			}
+			contentBean.setContent("messaggi.xhtml");
+			contentBean.setMessaggio("Thread nuovo");
+		} else {
+			System.out.println("INVIA MESSAGGIO==thread esistente");
+			Messaggio mess = new Messaggio();
+			mess.setMessaggio(messaggio.getMessaggio());
+			mess.setMittente(utente);
+			mess.setDestinatario(threadEsistente.getDestinatarioPrimo());
+			mess.setOggetto(messaggio.getOggetto());
+			mess.setThread(threadEsistente);
+			Date ora = new Date();
+			mess.setData(ora);
+			threadEsistente.getMessaggi().add(mess);
+			try {
+				serv.merge(threadEsistente);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			contentBean.setContent("messaggi.xhtml");
+			contentBean.setMessaggio("Thread esistente");
+		}
+	}
+	
+	
+	public boolean esisteThreadMessaggi (int mittId, int destId, String oggThr) {
+		System.out.println("ESISTETHREADH function");
+		EntityManager em = EMF.createEntityManager();
+		List<Thread> threads = em
+		.createQuery("from Thread t where t.mittentePrimo.id =:mitt and t.destinatarioPrimo.id =:dest and t.oggettoThread =:ogg")
+		.setParameter("mitt", mittId)
+		.setParameter("dest", destId)
+		.setParameter("ogg", oggThr)
+		.getResultList();
+		
+		if(threads!=null && threads.size()>0) {
+			setThreadEsistente(threads.get(0));
+			return true;		
+		}
+		return false;
+	}
+	
+	
+	public void cercaMessaggiInviatiUtente (int idUtente) {
+
+		EntityManager em = EMF.createEntityManager();
+		messaggiInviatiUtente = em
+		.createQuery("from Thread t where t.mittentePrimo.id =:mitt")
+		.setParameter("mitt", idUtente)
+		.getResultList();	
+	}
+	
+	
+	public void cercaMessaggiRicevutiUtente (int idUtente) {
+
+		EntityManager em = EMF.createEntityManager();
+		messaggiRicevutiUtente = em
+		.createQuery("from Thread t where t.destinatarioPrimo.id =:mitt")
+		.setParameter("mitt", idUtente)
+		.getResultList();	
+	}
+	
+	
+	public void visualizzaMessaggio (int idMess) {
+		EntityManager em = EMF.createEntityManager();
+		List<Thread> threads = em
+		.createQuery("from Thread t where t.id =:idThr")
+		.setParameter("idThr", idMess)
+		.getResultList();	
+		if(threads!=null && threads.size()>0) {
+			setMessaggioThread(threads.get(0));	
+			contentBean.setContent("messaggioThread.xhtml");
+		}
+	}
+	
 	
 	//************GETTERS & SETTERS*******************
 
-	public List<Album> getListaAlbum() {
-		return listaAlbum;
-	}
-
-	public void setListaAlbum(List<Album> listaAlbum) {
-		this.listaAlbum = listaAlbum;
-	}
 	
-	public Foto getRisultatoFoto() {
-		return risultatoFoto;
-	}
-
-	public void setRisultatoFoto(Foto risultatoFoto) {
-		this.risultatoFoto = risultatoFoto;
-	}
-
-	public List<Foto> getRisultatoFotos() {
-		return risultatoFotos;
-	}
-
-	public void setRisultatoFotos(List<Foto> risultatoFotos) {
-		this.risultatoFotos = risultatoFotos;
-	}
 	
-
+	
 	public String getAvatarDefault() {
 		return avatarDefault;
+	}
+
+	public List<Thread> getMessaggiRicevutiUtente() {
+		return messaggiRicevutiUtente;
+	}
+
+
+	public void setMessaggiRicevutiUtente(List<Thread> messaggiRicevutiUtente) {
+		this.messaggiRicevutiUtente = messaggiRicevutiUtente;
+	}
+
+
+	public Thread getMessaggioThread() {
+		return messaggioThread;
+	}
+
+
+	public void setMessaggioThread(Thread messaggioThread) {
+		this.messaggioThread = messaggioThread;
+	}
+
+
+	public List<Thread> getMessaggiInviatiUtente() {
+		return messaggiInviatiUtente;
+	}
+
+
+	public void setMessaggiInviatiUtente(List<Thread> messaggiInviatiUtente) {
+		this.messaggiInviatiUtente = messaggiInviatiUtente;
+	}
+
+
+	public Thread getThread() {
+		return thread;
+	}
+	
+	public Thread getThreadEsistente() {
+		return threadEsistente;
+	}
+
+	public void setThreadEsistente(Thread threadEsistente) {
+		this.threadEsistente = threadEsistente;
+	}
+
+	public void setThread(Thread thread) {
+		this.thread = thread;
+	}
+
+	public Messaggio getMessaggio() {
+		return messaggio;
+	}
+
+	public void setMessaggio(Messaggio messaggio) {
+		this.messaggio = messaggio;
 	}
 
 	public void setAvatarDefault(String avatarDefault) {
@@ -620,17 +783,6 @@ public class UtenteBean {
 	public List<Utente> getRisultato() {
 		return risultato;
 	}
-
-
-	public Album getRisultatoAlbum() {
-		return risultatoAlbum;
-	}
-
-
-	public void setRisultatoAlbum(Album risultatoAlbum) {
-		this.risultatoAlbum = risultatoAlbum;
-	}
-
 
 	public void setRisultato(List<Utente> risultato) {
 		this.risultato = risultato;

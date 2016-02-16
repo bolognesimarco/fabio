@@ -130,7 +130,7 @@ font-family: gisha;
 	box-shadow: none!important;
 	border-radius: 10px!important;
 	font-size: small;
-	font-family: gisha;
+	font-family: gisha!important;
 	font-weight: normal;
 	border: none;
 }
@@ -153,13 +153,14 @@ font-family: gisha;
 .ui-state-default{
 	border: none!important;
 	box-shadow: none!important;
-	-webkit-box-shadow: inset 0px 0px 0px 0px #dddddd;
-	-moz-box-shadow: inset 0px 0px 0px 0px #dddddd;
+	-webkit-box-shadow: inset 0px 0px 0px 0px transparent;
+	-moz-box-shadow: inset 0px 0px 0px 0px transparent;
 	box-shadow: inset 0px 0px 0px 0px transparent;	
 	font-family: gisha!important;
 	font-size: small!important;
 	font-weight: normal!important;
 	border: none;
+	color: #80959E!important;
 }
 
 .ui-autocomplete-item {

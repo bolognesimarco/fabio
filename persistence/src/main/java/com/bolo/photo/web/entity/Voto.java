@@ -1,5 +1,7 @@
 package com.bolo.photo.web.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +10,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Voto {
+public class Voto implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1656079053888362981L;
+
 	@Id
 	@GeneratedValue
 	private int id;

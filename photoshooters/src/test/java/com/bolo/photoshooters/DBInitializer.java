@@ -1,17 +1,21 @@
 package com.bolo.photoshooters;
 
-import java.sql.Date;
+//import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.persistence.EntityManager;
 
 import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Foto;
+import com.bolo.photo.web.entity.Membership;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
+import com.bolo.photo.web.entity.TipoMembership;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
@@ -58,7 +62,15 @@ public class DBInitializer {
 //    }
 	
 	public void initTipiUtentiLavori(EntityManager em) throws Exception{
-
+		
+//		tipologie merbership
+		TipoMembership free = new TipoMembership();
+		TipoMembership plus = new TipoMembership();
+		free.setId(1);
+		free.setDescrizione("FREe");
+		plus.setId(2);
+		plus.setDescrizione("PLUs");
+		
 		TipoUtente fotografo = new TipoUtente();
 		fotografo.setId(1);
 		fotografo.setDescrizione("FOTOGRAFo/a");
@@ -314,6 +326,8 @@ public class DBInitializer {
 		hostess.getTipiLavoro().add(fotomodella);
 		fotomodella.getTipiUtente().add(hostess);
 		
+		
+//		utenti test
 		Utente test = new Utente();
 		test.setId(1);
 		test.setName("fabio");
@@ -350,6 +364,23 @@ public class DBInitializer {
 		foto1.setLarghezzaFoto(800);
 		foto1.setNomeFileFoto("nomeFotoFB1.jpg");
 		
+		Membership testMShip = new Membership();
+		testMShip.setTipoMembership(plus);
+		Date dataInizio = new Date();
+		String strdataInizio = "02-04-2013 00:35:42";
+		dataInizio = dateformat.parse(strdataInizio);
+		testMShip.setDataInizio(dataInizio);
+		Date dataFine = new Date();
+		String strdataFine = "02-04-2017 00:35:42";
+		dataFine = dateformat.parse(strdataFine);
+		testMShip.setDataFine(dataFine);
+		testMShip.setUtente(test);
+		List<Membership> listaMShip = new ArrayList<Membership>();
+		listaMShip.add(testMShip);
+		test.setMemberships(listaMShip);
+		
+		
+		
 		Utente test2 = new Utente();
 		test2.setId(2);
 		test2.setName("fabio2");
@@ -377,6 +408,21 @@ public class DBInitializer {
 		album2.setPubblicatore(test2);
 		album2.setTitolo("fabiofb2");
 		
+		Membership test2MShip = new Membership();
+		test2MShip.setTipoMembership(free);
+		Date dataInizio2 = new Date();
+		String strdataInizio2 = "02-04-2013 00:35:42";
+		dataInizio2 = dateformat.parse(strdataInizio2);
+		test2MShip.setDataInizio(dataInizio2);
+		Date dataFine2 = new Date();
+		String strdataFine2 = "02-04-2017 00:35:42";
+		dataFine = dateformat.parse(strdataFine2);
+		test2MShip.setDataFine(dataFine2);
+		test2MShip.setUtente(test2);
+		List<Membership> listaMShip2 = new ArrayList<Membership>();
+		listaMShip2.add(test2MShip);
+		test.setMemberships(listaMShip2);
+		
 		
 		Utente test3 = new Utente();
 		test3.setId(3);
@@ -397,6 +443,22 @@ public class DBInitializer {
 		test3.setDataIscrizione(dataIscr3);
 		test3.setSesso(Sesso.Uomo);
 		
+		Membership test3MShip = new Membership();
+		test3MShip.setTipoMembership(plus);
+		Date dataInizio3 = new Date();
+		String strdataInizio3 = "03-04-2013 00:35:43";
+		dataInizio3 = dateformat.parse(strdataInizio3);
+		test3MShip.setDataInizio(dataInizio3);
+		Date dataFine3 = new Date();
+		String strdataFine3 = "03-04-2017 00:35:43";
+		dataFine = dateformat.parse(strdataFine3);
+		test3MShip.setDataFine(dataFine3);
+		test3MShip.setUtente(test3);
+		List<Membership> listaMShip3 = new ArrayList<Membership>();
+		listaMShip3.add(test3MShip);
+		test.setMemberships(listaMShip3);
+		
+		
 		Utente test4 = new Utente();
 		test4.setId(4);
 		test4.setName("fabio");
@@ -416,18 +478,43 @@ public class DBInitializer {
 		test4.setDataIscrizione(dataIscr4);
 		test4.setSesso(Sesso.Società);
 		
+		Membership test4MShip = new Membership();
+		test4MShip.setTipoMembership(free);
+		Date dataInizio4 = new Date();
+		String strdataInizio4 = "04-04-2014 00:45:44";
+		dataInizio4 = dateformat.parse(strdataInizio4);
+		test4MShip.setDataInizio(dataInizio4);
+		Date dataFine4 = new Date();
+		String strdataFine4 = "04-04-2017 00:45:44";
+		dataFine = dateformat.parse(strdataFine4);
+		test4MShip.setDataFine(dataFine4);
+		test4MShip.setUtente(test4);
+		List<Membership> listaMShip4 = new ArrayList<Membership>();
+		listaMShip4.add(test4MShip);
+		test.setMemberships(listaMShip4);
+		
+		
 		serv.deleteAll(Album.class, em);
 		serv.deleteAll(Foto.class, em);
 		serv.deleteAll(Utente.class, em);
 		serv.deleteAll(TipoLavoro.class, em);
 		serv.deleteAll(TipoUtente.class, em);		
-	
+		serv.deleteAll(Membership.class, em);
+		serv.deleteAll(TipoMembership.class, em);
+		
 		serv.persist(test, em);	
 		serv.persist(test2, em);
 		serv.persist(test3, em);
 		serv.persist(test4, em);
 //		serv.persist(album1, em);
 //		serv.persist(foto1, em);
+		
+		serv.persist(free, em);
+		serv.persist(plus, em);
+		serv.persist(testMShip, em);
+		serv.persist(test2MShip, em);
+		serv.persist(test3MShip, em);
+		serv.persist(test4MShip, em);
 		
 		serv.persist(hairmodel, em);
 		serv.persist(ritratto, em);

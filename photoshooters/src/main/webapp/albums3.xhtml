@@ -10,9 +10,8 @@
 <h:head>
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homePage.css" library="css" />
-	<h:outputStylesheet name="datagrid.css" library="css" />
-	<h:outputStylesheet name="autocomplete.css" library="css" />
-	<h:outputStylesheet name="calendar.css" library="css" />
+
+	<link type="text/css" rel="stylesheet" href="/javax.faces.resource/datagrid.css.xhtml?ln=css"/> 
 </h:head>
 
 <h:body>
@@ -30,17 +29,29 @@
 				<p:dataGrid  value="#{inputBean.listaAlbum}" var="result" columns="4" rows="3" paginator="true"  rowsPerPageTemplate="3,6,9">
 					
 					<p:column>
-						<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
-							height="51" width="50"></h:graphicImage>
-						<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
-							height="51" width="50"></h:graphicImage>
+						<h:graphicImage rendered="#{result.copertinaAlbum!=null}" value="/lil?path=#{utenteBean.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
+							 width="50" style="cursor: pointer;">
+							<f:ajax event="click" listener="#{inputBean.visualizzaFotos(result.id)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+						</h:graphicImage>
+						<h:graphicImage rendered="#{result.copertinaAlbum==null}" value="/resources/images/avatarDefault.svg"
+							 width="50" style="cursor: pointer;">
+							 <f:ajax event="click" listener="#{inputBean.visualizzaFotos(result.id)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+						</h:graphicImage>
 						
 						<h:commandButton value="#{result.titolo}" styleClass="menubuttonwhite">
 		    				<f:ajax event="click" listener="#{inputBean.visualizzaFotos(result.id)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 		    	   		</h:commandButton>	<br></br>
-						<h:commandButton value="ELIMINa" styleClass="menubuttonorange" >
-							<f:ajax event="click" listener="#{inputBean.cancellaAlbum(result.id)}" render=":content :nuovoalbumform" />
-						</h:commandButton>		
+		    	   		
+		    	   		<p:commandButton value="ELIMINa" styleClass="menubuttonorange; color: #EF4323;" actionListener="#{inputBean.cancellaAlbum(result.id)}" update=":content :headerform :patternguestform menuutenteform">
+        					<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe?" icon="ui-icon-alert" />
+    					</p:commandButton>
+ 
+					    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+					        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+					    </p:confirmDialog>	
+					    
+	
 						<p:commandButton update="modalbumform:albumDetail" oncomplete="PF('albumOP').loadContents()" value="MODIFICa" >
               				  <f:setPropertyActionListener value="#{result}" target="#{inputBean.albumVisualizzato}" />
               				  <f:ajax event="click" listener="#{inputBean.titoloAlbumDaModificareSet(result.titolo)}"  />

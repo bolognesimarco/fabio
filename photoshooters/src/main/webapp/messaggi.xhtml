@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+
+		<h:form id="threadsmessaggiform">
+		
+			<h:panelGrid columns="2" columnClasses="right, left" >
+	            <h:panelGroup>
+	                <h:commandButton value="NUOVo MESSAGGIo&#160;&#160;"
+					 	action="#{menuBean.menuClick(18)}" >
+	            	</h:commandButton>  
+            	</h:panelGroup>
+            	<h:panelGroup>
+            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+            		<h:messages/>
+            	</h:panelGroup>
+			</h:panelGrid>
+		
+		<h:dataTable id="threadsricevutiutente" var="thrs" value="#{threadBean.threadsRicevutiUtente}">
+			<f:facet name="header">
+           		<h:outputText styleClass="common" value="&#160;&#160;MESSAGGi RICEVUTi -&#160;"/>
+           		<h:outputText id="nomePS" value="#{utenteBean.utente.username}"/>
+           		<br></br>
+       		</f:facet>
+			<h:column>
+			
+				<f:facet name="header">
+            		<h:panelGrid columns="3" border="0">
+	            		<h:outputText styleClass="common" value="&#160;&#160;MITTENTe"/>
+						<h:outputText styleClass="common" value="&#160;&#160;OGGETTo"/>
+						<h:outputText styleClass="common" value="&#160;&#160;SELEZIONa"/>
+					</h:panelGrid>
+        		</f:facet>
+        		
+				<h:panelGrid columns="3" border="1">
+					<h:panelGrid>
+	        			<h:outputText id="mittente" value="#{thrs.mittentePrimo.username}" />
+					</h:panelGrid>
+					<h:panelGrid>
+			    		<h:commandButton value="#{thrs.oggettoThread}" styleClass="menubuttonwhite">
+			    			<h:panelGroup rendered="#{thrs.nuovoMessaggio==true}">
+		    	   				<sup style="color:red;font-size:8px;">new</sup>
+		    	   			</h:panelGroup>
+		    				<f:ajax event="click" listener="#{threadBean.visualizzaThread(thrs.id)}" render=":content :threadmessaggiform :menuutenteform:numeromessaggi" />
+		    	   		</h:commandButton>
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:selectBooleanCheckbox id="selezionemessaggiricevuti" value="#{threadBean.idThreadsSelezionati[thrs.id]}">
+						</h:selectBooleanCheckbox>
+					</h:panelGrid>
+				</h:panelGrid>		       		
+			</h:column>
+			
+			<f:facet name="footer">
+           		<h:panelGrid columns="2" border="0">
+					<h:commandButton value="ELIMINa MESSAGGi SELEZIONATi" action="#{threadBean.cancellaThreadsRicevutiSelezionati()}" ></h:commandButton>
+				</h:panelGrid>
+       		</f:facet>
+
+		</h:dataTable>
+		
+
+		<h:dataTable id="threadsinviatiutente" var="thrs" value="#{threadBean.threadsInviatiUtente}">
+			<f:facet name="header">
+           		<h:outputText styleClass="common" value="&#160;&#160;MESSAGGi INVIATi -&#160;"/>
+           		<h:outputText id="nomePS" value="#{utenteBean.utente.username}"/>
+           		<br></br>
+       		</f:facet>
+			<h:column>
+					<f:facet name="header">
+	            		<h:panelGrid columns="3" border="0">
+		            		<h:outputText styleClass="common" value="&#160;&#160;DESTINATARIo"/>
+							<h:outputText styleClass="common" value="&#160;&#160;OGGETTo"/>
+							<h:outputText styleClass="common" value="&#160;&#160;SELEZIONa"/>
+						</h:panelGrid>
+	        		</f:facet>
+				<h:panelGrid columns="3" border="1">
+					<h:panelGrid>
+	        			<h:outputText id="destinatario" value="#{thrs.destinatarioPrimo.username}" />
+					</h:panelGrid>
+					<h:panelGrid>
+			    		<h:commandButton value="#{thrs.oggettoThread}" styleClass="menubuttonwhite">
+		    				<f:ajax event="click" listener="#{threadBean.visualizzaThread(thrs.id)}" render=":content :threadmessaggiform" />
+		    	   		</h:commandButton>
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:selectBooleanCheckbox id="selezionemessaggiinviati" value="#{threadBean.idThreadsSelezionati[thrs.id]}">
+						</h:selectBooleanCheckbox>
+					</h:panelGrid>
+				</h:panelGrid>		       		
+			</h:column>
+			<f:facet name="footer">
+           		<h:panelGrid columns="2" border="0">
+					<h:commandButton value="ELIMINa MESSAGGi SELEZIONATi" action="#{threadBean.cancellaThreadsInviatiSelezionati()}" ></h:commandButton>
+				</h:panelGrid>
+       		</f:facet>
+		</h:dataTable>
+
+		</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

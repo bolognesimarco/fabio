@@ -12,13 +12,11 @@
 	<h:outputStylesheet name="homePage.css" library="css" />	
 	<h:outputStylesheet name="photoswipe.css" library="css" />
 	<h:outputStylesheet name="dataGrid.css" library="css" />
-	<h:outputStylesheet name="autocomplete.css" library="css" />
-	<h:outputStylesheet name="calendar.css" library="css" />
 	<link rel="stylesheet" href="resources/css/default-skin/default-skin.css"/> 
 	<h:outputScript name="photoswipe.js" library="js" />
 	<h:outputScript name="photoswipe-ui-default.js" library="js" /> 
-	<h:outputScript name="gallery.js" library="js" />
-
+	
+	
 </h:head>
 
 <h:body>
@@ -103,8 +101,8 @@
            	<h:outputText value="&#160;-&#160;FOTOs ALMBUm :&#160;"/>
            	<h:outputText id="nomeAlbum" value="'#{inputBean.albumVisualizzato.titolo}'"/>
         </f:facet>
-		
-			<p:dataGrid id="my-gallery" value="#{inputBean.risultatoFotosUtenteTrovato}" var="risultato" 
+	
+			<p:dataGrid id="my-gallery" styleClass="mygalleryclass" value="#{inputBean.risultatoFotosUtenteTrovato}" var="risultato" 
 	     	columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 				<p:column>
 				
@@ -112,22 +110,34 @@
 						<a href="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
 							<h:graphicImage itemprop="thumbnail"
 								value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}"
-								height="51" width="50">
+								height="51" rendered="#{(utenteBean.tipoMembershipUtente()==2) || (risultato.vietataMinori==false and risultato.visibileSoloMembri==false) || (utenteBean.tipoMembershipUtente()==1 and risultato.vietataMinori==false)}">
+							</h:graphicImage>
+							<h:graphicImage itemprop="thumbnail"
+								value="/resources/images/LogoCerchioVM18.svg"
+								height="51" rendered="#{risultato.vietataMinori==true and utenteBean.tipoMembershipUtente()!=2}">
+							</h:graphicImage>
+							<h:graphicImage itemprop="thumbnail"
+								value="/resources/images/LogoCerchioOnlyPs.svg"
+								height="51" rendered="#{risultato.visibileSoloMembri==true and risultato.vietataMinori==false and utenteBean.tipoMembershipUtente()==0}">
 							</h:graphicImage>
 						</a> 
 						<figcaption itemprop="caption description"> 
-							
-							<h:outputText value="#{risultato.titolo}" />
-							<h:outputText value="#{risultato.descrizione}" />
-							<h:outputText value="#{risultato.dataFoto}">
-								<f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
-							</h:outputText>
-							<h:outputText value="#{risultato.luogoScatto}"/>
-							<h:outputText value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)}/10"></h:outputText>
-							
+							<h:panelGrid columns="2">
+								<h:outputLabel>TITOLo</h:outputLabel>
+								<h:outputText value="#{risultato.titolo}" />
+								<h:outputLabel>DESCRIZIONe</h:outputLabel>
+								<h:outputText value="#{risultato.descrizione}" />
+								<h:outputLabel>DATa SCATTo</h:outputLabel>
+								<h:outputText value="#{risultato.dataFoto}">
+									<f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+								</h:outputText>
+								<h:outputLabel>LUOGo SCATTo</h:outputLabel>
+								<h:outputText value="#{risultato.luogoScatto}"/>
+								<h:outputText value="#{utenteBean.calcolaMediaVotiFoto2(risultato.voti)}/10"></h:outputText>
+							</h:panelGrid>
 						</figcaption> 				
 					</figure>
-						<p:commandButton update="votafotoform:fotoDetail" oncomplete="PF('fotoOP').loadContents()" value="VOTa" >
+						<p:commandButton update="votafotoform:fotoDetail" oncomplete="PF('fotoOP').loadContents()" value="VOTa" rendered="#{utenteBean.tipoMembershipUtente()==2}">
               				  <f:setPropertyActionListener value="#{risultato}" target="#{inputBean.fotoDaVotare}" />
             			</p:commandButton>
 				</p:column>
@@ -148,10 +158,12 @@
 							<h:outputText value="#{inputBean.fotoDaVotare.titolo}" />
 			 
 			                <h:outputText value="VOTo Xx/10" />
-			                <h:inputText value="#{inputBean.votoFoto.score}" />
+			                <h:selectOneMenu required="true"  id="voto" value="#{inputBean.votoFoto.score}" >
+			                <f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
+							<f:selectItems value="#{parametersBean.rangeVoto}" /></h:selectOneMenu >            
 			                
 			                <h:outputText value="MESSAGGIo" />
-			                <h:inputText value="#{inputBean.votoFoto.messaggio" />
+			                <h:inputText value="#{inputBean.votoFoto.messaggio}" />
 			 
 			 				<h:commandButton id="votaFoto" value="&#160;VOTa FOTo" action="#{inputBean.votaFoto(inputBean.fotoDaVotare)}">
 							</h:commandButton>
@@ -173,6 +185,6 @@
 	</h:panelGrid>
 
 </h:panelGroup>
-
+<script type="text/javascript" src="resources/js/gallery.js"></script>	
 </h:body>
 </html>

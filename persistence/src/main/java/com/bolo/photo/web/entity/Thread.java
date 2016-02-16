@@ -1,5 +1,7 @@
 package com.bolo.photo.web.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,8 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Thread {
+public class Thread implements Serializable{
 	
+	private static final long serialVersionUID = 1378092449665363764L;
+
 	@Id
 	@GeneratedValue
 	private int id;
@@ -24,12 +28,24 @@ public class Thread {
 	@Column
 	private boolean cancellatoDestinatarioPrimo;
 	
+	@Column
+	private boolean nuovoMessaggio = false;
+	
+	@Column
+	private boolean cancellatoThreadMittente = false;
+	
+	@Column
+	private boolean cancellatoThreadDestinatario = false;
+	
+	@Column
+	private String oggettoThread;
+	
 	@ManyToOne(optional=false)
-	@JoinColumn(name="annuncio", nullable=false, updatable=false)
+	@JoinColumn(name="annuncio", nullable=true, updatable=false)
 	private Annuncio annuncio;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="thread")
-	private List<Messaggio> messaggi;
+	private List<Messaggio> messaggi = new ArrayList<Messaggio>();
 	
 	@ManyToOne(optional=false)
 	@JoinColumn(name="mittentePrimo", nullable=false, updatable=false)
@@ -39,12 +55,42 @@ public class Thread {
 	@JoinColumn(name="destinatarioPrimo", nullable=false, updatable=false)
 	private Utente destinatarioPrimo;
 
+	
+	
+//	**********GETTERS&SETTERS**************
+	
+	
+
+	public boolean isCancellatoThreadMittente() {
+		return cancellatoThreadMittente;
+	}
+
+	public void setCancellatoThreadMittente(boolean cancellatoThreadMittente) {
+		this.cancellatoThreadMittente = cancellatoThreadMittente;
+	}
+
+	public boolean isCancellatoThreadDestinatario() {
+		return cancellatoThreadDestinatario;
+	}
+
+	public void setCancellatoThreadDestinatario(boolean cancellatoThreadDestinatario) {
+		this.cancellatoThreadDestinatario = cancellatoThreadDestinatario;
+	}
+
 	public int getId() {
 		return id;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getOggettoThread() {
+		return oggettoThread;
+	}
+
+	public void setOggettoThread(String oggettoThread) {
+		this.oggettoThread = oggettoThread;
 	}
 
 	public boolean isCancellatoMittentePrimo() {
@@ -61,6 +107,14 @@ public class Thread {
 
 	public void setCancellatoDestinatarioPrimo(boolean cancellatoDestinatarioPrimo) {
 		this.cancellatoDestinatarioPrimo = cancellatoDestinatarioPrimo;
+	}
+	
+	public boolean isNuovoMessaggio() {
+		return nuovoMessaggio;
+	}
+
+	public void setNuovoMessaggio(boolean nuovoMessaggio) {
+		this.nuovoMessaggio = nuovoMessaggio;
 	}
 
 	public Annuncio getAnnuncio() {

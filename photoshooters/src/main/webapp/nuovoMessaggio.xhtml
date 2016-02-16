@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+	<p:focus for="messaggioform:destinatari"/>
+		<h:form id="messaggioform">
+		
+			<h:panelGrid columns="2" columnClasses="right, left" >
+			
+				<f:facet name="header">
+            		<h:outputText styleClass="common" value="&#160;&#160;MESSAGGi PHOTOSHOOTEr -&#160;"/>
+            		<h:outputText id="nomePS" value="#{utenteBean.utente.username}"/>
+            		<br></br>
+        		</f:facet>
+
+				<h:outputLabel for="mittente">MITTENTe</h:outputLabel>
+				<h:outputText id="mittente" value="#{utenteBean.utente.username}" />
+
+				<h:outputLabel for="destinatari">DESTINATARi</h:outputLabel>
+				<p:autoComplete id="destinatari" value="#{threadBean.thread.destinatarioPrimo}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="dest" itemValue="#{dest}" itemLabel="#{dest.username}"></p:autoComplete>
+
+				<h:outputLabel for="oggetto">OGGETTo</h:outputLabel>
+				<h:inputText id="oggetto" required="true" requiredMessage="L'oggetto non può essere vuoto!" value="#{threadBean.messaggio.oggetto}" styleClass="textareatonda"/>
+
+				<h:outputLabel for="messaggio">MESSAGGIo</h:outputLabel>
+				<h:inputTextarea size="50" required="true" requiredMessage="Il messaggio non può essere vuoto!" rows="15" id="messaggio" value="#{threadBean.messaggio.messaggio}"/>
+				
+				<f:facet name="footer">
+		            <br></br>
+
+		            <h:panelGroup>
+		                <h:commandButton value="INVIa MESSAGGIo&#160;&#160;"
+						 	action="#{threadBean.inviaMessaggio()}" >
+		            	</h:commandButton>  
+	            	</h:panelGroup>
+	            		<br></br>
+	            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+	            	<h:panelGroup><h:messages/></h:panelGroup>
+        		</f:facet>
+				
+			</h:panelGrid>
+
+		</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

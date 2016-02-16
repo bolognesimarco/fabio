@@ -1,5 +1,5 @@
 var initPhotoSwipeFromDOM = function(gallerySelector) {
-
+alert("chiamato")
     // parse slide data (url, title, size ...) from DOM elements 
     // (children of gallerySelector)
     var parseThumbnailElements = function(el) {
@@ -29,7 +29,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
 		            // create slide object
 		            item = {
-		                src: linkEl.getAttribute('href'),
+		                src: linkEl.children[0].getAttribute('src'), //linkEl.getAttribute('href'),
 		                w: parseInt(size[0], 10),
 		                h: parseInt(size[1], 10)
 		            };
@@ -138,6 +138,13 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
         items = parseThumbnailElements(galleryElement);
 
+        
+//        modifica per foto VM18 - e only P|S
+        for (var int = 0; int < items.length; int++) {
+			alert(items[int].msrc)
+		}
+        
+        
         // define options (if needed)
         options = {
 

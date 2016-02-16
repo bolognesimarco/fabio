@@ -56,7 +56,9 @@ public class MenuBean {
 			break;
 		case 10://MESSAGGI
 			contentBean.setMessaggio(null);
-			contentBean.setContent("wip.xhtml");
+			contentBean.setContent("messaggi.xhtml");
+			threadBean.cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
+			threadBean.cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
 			break;
 		case 11://CHAT
 			contentBean.setContent("wip.xhtml");
@@ -75,9 +77,7 @@ public class MenuBean {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("LOGOUTTTTT"+utenteBean.getUtente().getUsername());
 			utenteBean.setUtente(null);
-			System.out.println("LOGOUTTTTT utente null??"+utenteBean.getUtente());
 			contentBean.setMessaggio(null);
 			contentBean.setContent("homePage.xhtml");
 			break;
@@ -94,6 +94,9 @@ public class MenuBean {
 			contentBean.setMessaggio(null);
 			contentBean.setContent("fotos.xhtml");
 			break;
+		case 18://NUOVO MESSAGGIO
+			contentBean.setMessaggio(null);
+			contentBean.setContent("nuovoMessaggio.xhtml");
 		default:
 			break;
 		}
@@ -104,6 +107,10 @@ public class MenuBean {
 	public void messaggioAvvenutaRegistrazione(){
 		contentBean.setContent("messaggioAvvenutaRegistrazione.xhtml");
 	}
+	
+	
+	
+//	****GETTERS&SETTERS**********************
 	
 	public ContentBean getContentBean() {
 		return contentBean;
@@ -125,6 +132,17 @@ public class MenuBean {
 	@ManagedProperty(value="#{parametersBean}")
 	private ParametersBean parametersBean;
 	
+	@ManagedProperty(value="#{threadBean}")
+	private ThreadBean threadBean;
+			
+	public ThreadBean getThreadBean() {
+		return threadBean;
+	}
+
+	public void setThreadBean(ThreadBean threadBean) {
+		this.threadBean = threadBean;
+	}
+
 	public UtenteBean getUtenteBean() {
 		return utenteBean;
 	}
@@ -133,13 +151,9 @@ public class MenuBean {
 		return parametersBean;
 	}
 
-
-
 	public void setParametersBean(ParametersBean parametersBean) {
 		this.parametersBean = parametersBean;
 	}
-
-
 
 	public InputBean getInputBean() {
 		return inputBean;

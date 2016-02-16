@@ -1,11 +1,13 @@
 package com.bolo.photo.web.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class TipoMembership {
+public class TipoMembership implements Serializable{
 	
 	@Id
 	private int id;

@@ -12,11 +12,8 @@
 	<h:outputStylesheet name="homePage.css" library="css" />	
 	<h:outputStylesheet name="photoswipe.css" library="css" />
 	<h:outputStylesheet name="dataGrid.css" library="css" />
-	<h:outputStylesheet name="autocomplete.css" library="css" />
-	<h:outputStylesheet name="calendar.css" library="css" />
 	<h:outputScript name="photoswipe.js" library="js" />
 	<h:outputScript name="photoswipe-ui-default.js" library="js" /> 
-	<h:outputScript name="gallery.js" library="js" />
 	<link rel="stylesheet" href="resources/css/default-skin/default-skin.css"/> 
 
 </h:head>
@@ -112,7 +109,7 @@
 						<a href="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
 							<h:graphicImage itemprop="thumbnail"
 								value="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}"
-								height="51" width="50">
+								 width="50">
 							</h:graphicImage>
 						</a> 
 						<figcaption itemprop="caption description"> 
@@ -203,6 +200,6 @@
 	</h:panelGrid>
 
 </h:panelGroup>
-
+<script type="text/javascript" src="resources/js/gallery.js"></script>	
 </h:body>
 </html>

@@ -57,6 +57,7 @@ public class ParametersBean {
 		rangeScarpe.clear();
 		rangeTatuaggi.clear();
 		rangePiercing.clear();
+		rangeVoto.clear();
 		rangeFill(rangeFianchi, 55, 160);
 		rangeFill(rangeVita, 45, 130);
 		rangeFill(rangeAltezza, 55, 160);
@@ -66,6 +67,7 @@ public class ParametersBean {
 		rangeFill(rangeScarpe, 30, 50);
 		rangeFill(rangeTatuaggi, 0, 10);
 		rangeFill(rangePiercing, 0, 10);
+		rangeFill(rangeVoto, 0, 10);
 	}
 		
 	private List<Integer> rangeFianchi = new ArrayList<Integer>();
@@ -78,6 +80,7 @@ public class ParametersBean {
 	private List<Integer> rangeTatuaggi = new ArrayList<Integer>();
 	private List<Integer> rangePiercing = new ArrayList<Integer>();
 	private List<Integer> rangeEtà = new ArrayList<Integer>();
+	private List<Integer> rangeVoto = new ArrayList<Integer>();
 	
 	public void fillEtà(){
 		fasciaEtà.put("<18",1);
@@ -87,10 +90,21 @@ public class ParametersBean {
 		fasciaEtà.put("31-40",5);
 		fasciaEtà.put(">40",6);
 	}
+
 	
+	
+//	**************GETTER&SETTERS********
 	
 	public List<Integer> getRangeEtà() {
 		return rangeEtà;
+	}
+
+	public List<Integer> getRangeVoto() {
+		return rangeVoto;
+	}
+
+	public void setRangeVoto(List<Integer> rangeVoto) {
+		this.rangeVoto = rangeVoto;
 	}
 
 
@@ -98,16 +112,13 @@ public class ParametersBean {
 		return fasciaEtà;
 	}
 
-
 	public void setFasciaEtà(Map<String, Object> fasciaEtà) {
 		this.fasciaEtà = fasciaEtà;
 	}
 
-
 	public void setRangeEtà(List<Integer> rangeEtà) {
 		this.rangeEtà = rangeEtà;
 	}
-
 
 	public List<Integer> getRangeTatuaggi() {
 		return rangeTatuaggi;
