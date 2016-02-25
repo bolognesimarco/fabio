@@ -57,6 +57,7 @@ public class MenuBean {
 		case 10://MESSAGGI
 			contentBean.setMessaggio(null);
 			contentBean.setContent("messaggi.xhtml");
+			threadBean.getIdThreadsSelezionati().clear();
 			threadBean.cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
 			threadBean.cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
 			break;

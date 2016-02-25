@@ -1,6 +1,7 @@
 package com.bolo.photo.web.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -18,8 +20,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 public class Messaggio implements Serializable{
-	
-	private static final long serialVersionUID = 3730424135117849120L;
+	private static final long serialVersionUID = -28507242949026175L;
 
 	@Id
 	@GeneratedValue
@@ -31,8 +32,8 @@ public class Messaggio implements Serializable{
 	@Column 
 	private String oggetto;
 	
-	@Column 
-	private boolean letto = false;
+	@ManyToMany 
+	private List<Utente> letto = new ArrayList<Utente>();
 	
 	@Column
 	@Temporal(TemporalType.TIMESTAMP)
@@ -62,20 +63,21 @@ public class Messaggio implements Serializable{
 	
 //	**************GETTERS&SETTERS*************
 	
-	
-	
-	public int getId() {
-		return id;
-	}
 
-	public boolean isLetto() {
+
+
+	public List<Utente> getLetto() {
 		return letto;
 	}
 
-	public void setLetto(boolean letto) {
+	public void setLetto(List<Utente> letto) {
 		this.letto = letto;
 	}
 
+	public int getId() {
+		return id;
+	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -14,45 +14,92 @@
 </h:head>
 <h:body>
 
-	<h:panelGroup styleClass="pannello cerca">
+	<h:panelGroup id="messaggiothread" styleClass="pannello cerca">
 
 		<h:form id="threadmessaggiform">
 		
-		<h:dataTable id="threadMessaggi" var="thr" value="#{threadBean.threadMessaggi.messaggi}">
-			<f:facet name="header">
-           		<h:outputText styleClass="common" value="&#160;&#160;MESSAGGi PHOTOSHOOTEr [&#160;"/>
-           		<h:outputText id="nomeMitt" value="#{utenteBean.utente.username}&#160;-&#160;"/>
-           		<h:outputText styleClass="common" value="#{threadBean.threadMessaggi.destinatarioPrimo.username}&#160;]"/>	
-           		<br></br>
-       		</f:facet>
-			<h:column>
-			
-				<h:panelGrid columns="2" border="1">
-					<h:panelGrid columns="1">
-						<h:outputText styleClass="common" value="DESTINATARIo&#160;"/>
-						<h:outputText styleClass="common" value="#{thr.destinatario.username}&#160;-&#160;"/>
-	            		<h:outputText styleClass="common" value="&#160;MESSAGGIo DATa-&#160;"/>
-	            		<h:outputText styleClass="common" value="#{thr.data}"/>
+			<h:dataTable id="threadMessaggi" var="mess" value="#{threadBean.threadMessaggi.messaggi}">
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;MESSAGGi&#160;"/>
+	           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.mittentePrimo.id}" styleClass="common" value="INVIATi [&#160;"/>
+	           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.destinatarioPrimo.id}" styleClass="common" value="RICEVUTi [&#160;"/>
+	           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.mittentePrimo.id}" id="MittDest" value="#{utenteBean.utente.username}&#160;-&#160;#{threadBean.threadMessaggi.destinatarioPrimo.username}&#160;]"/>
+	           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.destinatarioPrimo.id}" id="DestMitt" value="#{threadBean.threadMessaggi.mittentePrimo.username}&#160;-&#160;#{utenteBean.utente.username}&#160;]"/>
+	           		<br></br>
+	       		</f:facet>
+				
+				<h:column>
+				
+					<h:panelGrid columns="2" columnClasses="leftprofilo, leftprofilo" border="1">
+						<h:panelGrid columns="2">
+							<h:outputText value="Da:&#160;"></h:outputText>
+							<h:outputText value="#{mess.mittente.username}"></h:outputText>
+							<h:outputText value="A:&#160;"></h:outputText>
+							<h:outputText value="#{mess.destinatario.username}"></h:outputText>
+		            		<h:outputText styleClass="common" value="&#160;MESSAGGIo DATa-&#160;"/>
+		            		<h:outputText styleClass="common" value="#{mess.data}">
+		            			<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+		            		</h:outputText>
+						</h:panelGrid>
+		        		<h:panelGrid columns="1">
+			        		<h:panelGrid columns="2">
+			        			<h:outputLabel for="oggetto">OGGETTo</h:outputLabel>
+	
+								<h:outputText id="oggetto"  value="#{mess.oggetto}" styleClass="textareatonda"/>
+		    	   				<h:panelGroup rendered="#{threadBean.messaggioIsLetto(mess.destinatario.id, mess.id)==false and mess.destinatario.id==utenteBean.utente.id}">
+		    	   					<sup style="color:red;font-size:8px;">new</sup>
+		    	   				</h:panelGroup>
+		    	   				<h:panelGroup rendered="#{threadBean.threadMessaggi.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess.id)==false and mess.mittente.id==utenteBean.utente.id}">
+		    	   					<sup style="color:red;font-size:8px;">unread</sup>
+		    	   				</h:panelGroup>
+		
+			        		</h:panelGrid>
+						    <h:panelGrid columns="1">   
+						        <h:outputLabel for="messaggio">MESSAGGIo</h:outputLabel>
+								<h:inputTextarea readonly="true" size="100" rows="8" id="messaggio" value="#{mess.messaggio}"/>
+							</h:panelGrid>
+		        		</h:panelGrid>
+	        		</h:panelGrid>
+	        			
+				</h:column>
+	
+			</h:dataTable>
+	
+		</h:form >
+		
+		<h:form id="nuovomessaggiothreadform">
+				<h:panelGrid id="panelgridnuovomess" columns="2" columnClasses="leftprofilo, leftprofilo" border="0">
+					<h:panelGrid columns="2">
+	           		<h:outputText  value="Da:&#160;"/>
+	         		<h:outputText value="#{utenteBean.utente.username}"></h:outputText>
+					<h:outputText value="A:&#160;"></h:outputText>
+	           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.mittentePrimo.id}" id="MittDest" value="#{threadBean.threadMessaggi.destinatarioPrimo.username}"/>
+	           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.destinatarioPrimo.id}" id="DestMitt" value="#{threadBean.threadMessaggi.mittentePrimo.username}"/>
 					</h:panelGrid>
 	        		<h:panelGrid columns="1">
 		        		<h:panelGrid columns="2">
-		        			<h:outputLabel for="oggetto">OGGETTo</h:outputLabel>
-							<h:outputText id="oggetto"  value="#{thr.oggetto}" styleClass="textareatonda"/>
-		    	   				<h:panelGroup rendered="#{thr.letto==false}">
-		    	   					<sup style="color:red;font-size:8px;">new</sup>
-		    	   				</h:panelGroup>
+		        			<h:outputLabel for="oggettonew">OGGETTo</h:outputLabel>
+							<h:outputText id="oggettonew"  value="#{threadBean.threadMessaggi.oggettoThread}" styleClass="textareatonda">
+		    	   			</h:outputText>
 		        		</h:panelGrid>
 					    <h:panelGrid columns="1">   
 					        <h:outputLabel for="messaggio">MESSAGGIo</h:outputLabel>
-							<h:inputTextarea readonly="true" size="50" rows="15" id="messaggio" value="#{thr.messaggio}"/>
+							<h:inputTextarea  size="100" rows="8" id="messaggioaggiunto" value="#{threadBean.messaggioAggiunto.messaggio}"/>
 						</h:panelGrid>
 	        		</h:panelGrid>
-        		</h:panelGrid>
-        			
-			</h:column>
+	        	 
+		        	 <f:facet name="footer">
+			            <h:panelGroup>
+			                <h:commandButton value="INVIa MESSAGGIo&#160;&#160;"
+							 	action="#{threadBean.aggiungiMessaggio()}" >
+			            	</h:commandButton>  
+		            	</h:panelGroup>
+		            		<br></br>
+		            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+		            	<h:panelGroup><h:messages/></h:panelGroup>
+	        		</f:facet>	
+        		</h:panelGrid>		
 
-		</h:dataTable>
-	
 		</h:form>
 
 	</h:panelGroup>

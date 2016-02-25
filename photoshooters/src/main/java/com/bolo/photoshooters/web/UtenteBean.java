@@ -1,10 +1,6 @@
 package com.bolo.photoshooters.web;
 
 import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
-
-import java.io.File;
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,32 +8,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.faces.model.ArrayDataModel;
-import javax.faces.model.DataModel;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder.Case;
-
-import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Esperienza;
-import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.TipoLavoro;
-import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photo.web.entity.Voto;
 import com.bolo.photoshooters.service.ServiziComuni;
@@ -46,7 +29,6 @@ import com.bolo.photoshooters.vo.CercaUtenteVO;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
-import com.google.maps.model.LatLng;
 
 
 @ManagedBean
@@ -280,8 +262,7 @@ public class UtenteBean {
 	
 	
 	public String ordinaPerAccessoIscrizione() {	 
-		   if(cercaUtente.getLastOnlineIscritto()==1){
-	 
+		   if(cercaUtente.getLastOnlineIscritto()==1){	 
 			//ordina per ultimo accesso
 			Collections.sort(risultato, new Comparator<Utente>() {
 	 
@@ -291,8 +272,7 @@ public class UtenteBean {
 				}
 			});
 	 
-		   }else{
-	 
+		   }else{	 
 			//ordina per ultimo iscritto
 			Collections.sort(risultato, new Comparator<Utente>() {
 
@@ -301,8 +281,7 @@ public class UtenteBean {
 					return u2.getDataIscrizione().compareTo(u1.getDataIscrizione());
 				} 
 			});
-		   }
-	
+		   }	
 		   return null;
 		}
 
