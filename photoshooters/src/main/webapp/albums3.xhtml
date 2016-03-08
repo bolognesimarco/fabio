@@ -17,6 +17,7 @@
 <h:body>
 
 	<h:panelGroup styleClass="pannello homepage">
+		<h:panelGrid>
 			<f:facet name="header"> 		
             		<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
             		<h:outputText value="&#160;-&#160;ALMBUMs PHOTOSHOOTEr"/>
@@ -58,7 +59,6 @@
             			</p:commandButton>
 
 					</p:column>
-					
 				</p:dataGrid>
 
 			    <p:overlayPanel widgetVar="albumOP" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
@@ -84,38 +84,32 @@
 			        </p:outputPanel>
 			        </h:form>
 			    </p:overlayPanel>
-
-				<h:dataTable id="tabella" value="#{inputBean.listaAlbum}" var="risultato" border="1">   	 	
-					<h:column>  
-						<h:outputText value="#{risultato.titolo}"></h:outputText> 	
-
-					</h:column>
-				</h:dataTable>	
-				
-<!-- 			</h:form> -->
-			
-			<f:facet name="footer">
+			    
+		</h:panelGrid>
+		
+		<h:panelGrid border="1">
+			<f:facet name="header">
 		            <h:panelGroup>
-						<h:outputText value="&#160;&#160;SELEZIONa ALBUm da VISUALIZZARe o MODIFICARe"/>
+						<h:outputText value="&#160;&#160;NUOVo ALBUm"/>
 	            	</h:panelGroup>
         	</f:facet>
         	
 			<h:form id="nuovoalbumform" enctype="multipart/form-data" >
-				<h:panelGrid columns="2" border="1">
+				<h:panelGrid columns="2" border="0" columnClasses="rightcolonna,leftcolonna">
 					<h:outputLabel for="newAlbumName">NOMe NUOVo ALBUm:</h:outputLabel>
 					<h:inputText id="newAlbumName" value="#{inputBean.nuovoAlbum.titolo}" required="true" requiredMessage="Inserire il nome del nuovo album!"/>
 
 					<h:outputLabel for="newAlbumDescrizione">DESCRIZIONe NUOVo ALBUm:</h:outputLabel>
 					<h:inputTextarea size="50" rows="6" id="newAlbumDescrizione" value="#{inputBean.nuovoAlbum.descrizione}"/>
-		
-					<h:commandButton id="submit" action="#{inputBean.nuovoAlbum()}" value="CREa ALBUm"/>
-					
-					<h:messages />
-					<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />
-					<h:outputText style="color: red" value="#{contentBean.messaggio}"></h:outputText>
+					<f:facet name="footer">
+						<h:commandButton id="submit" action="#{inputBean.nuovoAlbum()}" value="CREa ALBUm"/>
+						<h:messages />
+						<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />
+						<h:outputText style="color: red" value="#{contentBean.messaggio}"></h:outputText>
+					</f:facet>
 				</h:panelGrid>
 			</h:form>
-
+		</h:panelGrid>
 	</h:panelGroup>
 
 </h:body>

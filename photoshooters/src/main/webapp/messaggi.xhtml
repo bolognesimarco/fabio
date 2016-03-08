@@ -18,7 +18,7 @@
 
 		<h:form id="threadsmessaggiform">
 		
-			<h:panelGrid columns="2" columnClasses="right, left" >
+			<h:panelGrid columns="2" columnClasses="right,left" >
 	            <h:panelGroup>
 	                <h:commandButton value="NUOVo MESSAGGIo&#160;&#160;"
 					 	action="#{menuBean.menuClick(18)}" >
@@ -42,12 +42,12 @@
             		<h:panelGrid columns="4" border="0">
 	            		<h:outputText styleClass="common" value="&#160;&#160;MITTENTe"/>
 						<h:outputText styleClass="common" value="&#160;&#160;OGGETTo"/>
-						<h:outputText styleClass="common" value="&#160;&#160;SELEZIONa"/>
 						<h:outputText styleClass="common" value="&#160;&#160;DATa"/>
+						<h:outputText styleClass="common" value="&#160;&#160;SELEZIONa"/>
 					</h:panelGrid>
         		</f:facet>
         		
-				<h:panelGrid columns="4" columnClasses="leftprofilo, leftprofilo, leftprofilo, leftprofilo" border="1">
+				<h:panelGrid columns="4" columnClasses="leftprofilo,leftprofilo,leftprofilo,leftprofilo" border="1">
 					<h:panelGrid>
 	        			<h:outputText id="mittente" value="#{thrs.mittentePrimo.username}" />
 					</h:panelGrid>
@@ -60,13 +60,13 @@
 		    	   		</h:commandButton>
 					</h:panelGrid>
 					<h:panelGrid>
-						<h:selectBooleanCheckbox id="selezionemessaggiricevuti" value="#{threadBean.idThreadsSelezionati[thrs.id]}">
-						</h:selectBooleanCheckbox>
-					</h:panelGrid>
-					<h:panelGrid>
 						<h:outputText id="datamessaggiricevuti" value="#{thrs.messaggi.get(thrs.messaggi.size()-1).data}">
 							<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
 						</h:outputText >
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:selectBooleanCheckbox id="selezionemessaggiricevuti" value="#{threadBean.idThreadsSelezionati[thrs.id]}">
+						</h:selectBooleanCheckbox>
 					</h:panelGrid>
 				</h:panelGrid>		       		
 			</h:column>
@@ -91,11 +91,11 @@
 	            		<h:panelGrid columns="4" border="0">
 		            		<h:outputText styleClass="common" value="&#160;&#160;DESTINATARIo"/>
 							<h:outputText styleClass="common" value="&#160;&#160;OGGETTo"/>
-							<h:outputText styleClass="common" value="&#160;&#160;SELEZIONa"/>
 							<h:outputText styleClass="common" value="&#160;&#160;DATa"/>
+							<h:outputText styleClass="common" value="&#160;&#160;SELEZIONa"/>
 						</h:panelGrid>
 	        		</f:facet>
-				<h:panelGrid columns="4" columnClasses="leftprofilo, leftprofilo, leftprofilo, leftprofilo" border="1">
+				<h:panelGrid columns="4" columnClasses="singolacolonna,singolacolonna,singolacolonna,singolacolonna" border="1">
 					<h:panelGrid>
 	        			<h:outputText id="destinatario" value="#{thrs.destinatarioPrimo.username}" />
 					</h:panelGrid>
@@ -108,14 +108,15 @@
 		    	   		</h:commandButton>
 					</h:panelGrid>
 					<h:panelGrid>
-						<h:selectBooleanCheckbox id="selezionemessaggiinviati" value="#{threadBean.idThreadsSelezionati[thrs.id]}">
-						</h:selectBooleanCheckbox>
-					</h:panelGrid>
-					<h:panelGrid>
 						<h:outputText id="datamessaggiinviati" value="#{thrs.messaggi.get(thrs.messaggi.size()-1).data}">
 							<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
 						</h:outputText >
 					</h:panelGrid>
+					<h:panelGrid>
+						<h:selectBooleanCheckbox id="selezionemessaggiinviati" value="#{threadBean.idThreadsSelezionati[thrs.id]}">
+						</h:selectBooleanCheckbox>
+					</h:panelGrid>
+
 				</h:panelGrid>		       		
 			</h:column>
 			<f:facet name="footer">

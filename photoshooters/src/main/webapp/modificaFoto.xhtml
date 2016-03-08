@@ -10,10 +10,7 @@
 <h:head>
  	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homePage.css" library="css" />	
-	<h:outputStylesheet name="photoswipe.css" library="css" />
 	<h:outputStylesheet name="dataGrid.css" library="css" />
-	<h:outputStylesheet name="autocomplete.css" library="css" />
-	<h:outputStylesheet name="calendar.css" library="css" />
 </h:head>
 
 <h:body>
@@ -24,7 +21,7 @@
 
 		<h:form id="modificafotoform">
 			
-			<h:panelGrid border="1">
+			<h:panelGrid border="0">
 				<f:facet name="header">
 		            <h:outputText id="username" value="#{utenteBean.utente.username}"/>
 		           	<h:outputText value="&#160;-&#160;FOTo Da MODIFICARe - ALMBUm :&#160;"/>
@@ -35,7 +32,7 @@
 								height="250" width="250">
 			</h:graphicImage>
 		
-				<h:panelGrid columns="2" border="1">
+				<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna" border="1">
 				
 					<h:outputLabel for="fotoTitolo">TITOLo FOTo</h:outputLabel>
 					<h:inputText id="fotoTitolo" value="#{inputBean.fotoDaModificare.titolo}"/>
@@ -71,7 +68,8 @@
 				
 			<f:facet name="footer">
 			    <h:panelGroup>
-			    		<h:commandButton id="indietro" value="INDIETRo&#160;&#160;" action="#{menuBean.menuClick(17)}">
+			    		<h:commandButton id="indietro" value="INDIETRo&#160;&#160;">
+							<f:ajax event="click" listener="#{menuBean.menuClick(17)}" render=":content :fotosform :nuovafotoform" />		    	   
 						</h:commandButton>
 						<h:commandButton id="modificaFotoButton2" value="&#160;AGGIORNa FOTo" action="#{inputBean.aggiornaFoto()}">
 						</h:commandButton>

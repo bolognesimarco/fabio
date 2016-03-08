@@ -61,7 +61,8 @@ public class UtenteBean {
 		String hqlstart = "from Utente u ";
 		String hqlcerca = "";
 		String hql = "";
-
+		
+		boolean utenteLoggato = false;
 		boolean nomeInserito = false;
 		boolean usernameInserito = false;
 		boolean esperienzaInserito = false;
@@ -71,7 +72,15 @@ public class UtenteBean {
 		boolean et‡Inserita = false;
 		int i = 0;
 		
+		if(utente!=null){
+			hqlcerca += " u.id<>:idUt ";
+			utenteLoggato = true;
+			i++;
+		}
 		if (cercaUtente.getName()!="") {
+			if (i>0){
+				hqlcerca += "and";
+			}
 			hqlcerca += " u.name=:n ";
 			nomeInserito = true;
 			i++;
@@ -177,6 +186,9 @@ public class UtenteBean {
 		}
 			
 		Query q = em.createQuery(hql, Utente.class);
+		if(utenteLoggato){
+			q.setParameter("idUt",utente.getId());
+		}
 		if(nomeInserito){
 			q.setParameter("n",cercaUtente.getName());
 		}
@@ -313,10 +325,10 @@ public class UtenteBean {
 			}
 			else {
 				cercaUtente.setUtente(utenti.get(0));
-				contentBean.setContent("utenteTrovato.xhtml");
+				contentBean.setContent("utenteTrovato2.xhtml");
 			}
 		}else{
-			System.out.println("errore utente non trovato!");
+			System.out.println("errore id utente non trovato!");
 		}
 	}
 	
@@ -462,8 +474,7 @@ public class UtenteBean {
 	
 	
 	public List<Utente> suggerisciUtente (String username) {	
-//		List<String> suggerimentiUtente = new ArrayList<String>();
-		
+//		List<String> suggerimentiUtente = new ArrayList<String>();		
 		EntityManager em = EMF.createEntityManager();
 		List<Utente> utenti = em
 		.createQuery("from Utente u where u.username like :user")
@@ -471,12 +482,10 @@ public class UtenteBean {
 		.getResultList();
 		
 		if(utenti!=null && utenti.size()>0){
-
 			for (Utente ut : utenti) {
 //				suggerimentiUtente.add(ut.getUsername());
 				System.out.println("UTENTI LIKE"+ut.getUsername());
-			}
-			
+			}			
 		}else{
 			System.out.println("errore utente non trovato!");
 		}
@@ -485,6 +494,16 @@ public class UtenteBean {
 	}
 	
 
+	public List<Utente> suggerisciUtenteTranneLoggato (String username) {			
+		EntityManager em = EMF.createEntityManager();
+		List<Utente> utenti = em
+		.createQuery("from Utente u where u.username like :user and u.id<>:idUt")
+		.setParameter("user", username+"%")
+		.setParameter("idUt", utente.getId())
+		.getResultList();
+		return utenti;
+	}
+	
 	
 	public List<String> suggerisciCitt‡ (String citta) throws Exception{
 		GeoApiContext context = new GeoApiContext().setApiKey("AIzaSyAg7ZoORXv7d2eMGKb-pB7_QZReIPiIzxw");

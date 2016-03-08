@@ -107,14 +107,14 @@ html, body{
 	font-size: 12px;
 }
 
-/* colonne tabelle a 2 standard  */
+/* colonne tabelle a 2 con sottocolonne */
 .2right{
 /* 	padding-top: 0px; */
 /* 	position: absolute; */
 	top: 0px;
 	width: 50%!important;
 	margin-top: 0%;
-	font-size: 12px;
+	font-size: 12px!important;
 }
 
 .2left{
@@ -123,10 +123,10 @@ html, body{
 	margin-top: 0%;
 	width: 50%!important;
 	margin-top: 0%;
-	font-size: 12px;
+	font-size: 12px!important;
 }
 
-/* colonne tabelle a 2 profilo   */
+/* colonne tabelle a 2 profilo (sottocolonne -totale a 4)   */
 .rightprofilo{
 	text-align: right;
 	color: #EF4323;
@@ -148,6 +148,56 @@ html, body{
 /* 	border: 1px; */
 }
 
+/* colonne tabelle a 2 standard */
+.rightcolonna{
+	text-align: right;
+	color: #EF4323;
+	margin-right: 0px;
+	width: 35%!important;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-top: 0px!important;
+	font-size: 12px;
+}
+
+.leftcolonna{
+	text-align: left;
+	color: white;
+	width: 65%!important;
+	margin-left: 0px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-top: 0px!important;
+	font-size: 12px;
+}
+/* sigola colonna */
+.singolacolonna{
+	text-align: left;
+	color: white;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-top: 0px!important;
+	font-size: 12px;
+}
+
+/* messaggi diverso ccs con true-false */
+/* ricevuto */
+.messtrue{
+	text-align: right;
+	color: white;
+	margin-right: 0px;
+	width: 65%!important;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-top: 0px!important;
+	font-size: 12px;
+}
+/* spedito */
+.messfalse {
+	text-align: left;
+	color: white;
+	width: 65%!important;
+	margin-left: 0px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-top: 0px!important;
+	font-size: 12px;
+}
 
 table.center{
 	text-align: center;

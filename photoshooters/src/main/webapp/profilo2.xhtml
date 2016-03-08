@@ -97,8 +97,7 @@
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
 				<h:outputText id="tipoLavoro" value="#{utenteBean.utente.tipiLavoroDescrizione}" />	
 
-			</h:panelGrid>	
-			
+			</h:panelGrid>			
 	      </h:panelGrid>
 			
 		  <h:panelGrid id="modellaGrid" border="1" columns="2" columnClasses="2right, 2left" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
@@ -112,13 +111,12 @@
 				
 				<h:outputLabel for="fianchi">FIANCHi [Cm]</h:outputLabel>
 				<h:outputText  id="fianchi" value="#{utenteBean.utente.fianchi}" />
-			
-			</h:panelGrid>
-						
-			<h:panelGrid border="1" columns="2" columnClasses="rightprofilo, leftprofilo">
-			
+				
 				<h:outputLabel for="altezza">ALTEZZa [Cm]</h:outputLabel>
 				<h:outputText  id="altezza" value="#{utenteBean.utente.altezza}" />
+			
+			</h:panelGrid>			
+			<h:panelGrid border="1" columns="2" columnClasses="rightprofilo, leftprofilo">
 
 				<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
 				<h:outputText  id="peso" value="#{utenteBean.utente.peso}" />
@@ -135,9 +133,8 @@
 				<h:outputLabel for="piercing">PIERCINg [#]</h:outputLabel>
 				<h:outputText  id="piercing" value="#{utenteBean.utente.piercing}" />
 
-			</h:panelGrid>
-		   
-		   </h:panelGrid>
+			</h:panelGrid>   
+		  </h:panelGrid>
 									
 				<f:facet name="footer">
 		            <h:panelGroup>

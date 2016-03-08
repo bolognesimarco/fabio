@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -57,8 +58,8 @@ public class InputBean {
 	private int idFotoDaModificare;
 	private Foto fotoDaVotare = new Foto();
 	private Voto votoFoto = new Voto();
-	private Foto fotoVM18 = new Foto();
-	private Foto fotoSoloPS = new Foto();
+//	private Foto fotoVM18 = new Foto();
+//	private Foto fotoSoloPS = new Foto();
 	
 	List<Album> listaAlbum = new ArrayList<Album>();
 	Album albumVisualizzato = new Album();
@@ -142,16 +143,14 @@ public class InputBean {
 		visualizzaAlbums(utenteBean.getUtente());
 	}	
 
-	
+//	mi serve il vecchio titolo per rinominare la cartella con il nuovo titolo
 	public void titoloAlbumDaModificareSet (String tit){
 	setTitoloAlbumDaModificare(tit);
-	System.out.println("titoloooo***************"+tit);
 	}
 	
-	public void aggiornaAlbum (Album a){
-		
+	
+	public void aggiornaAlbum (Album a){	
 		System.out.println("AggiornaAlbum-start----==="+titoloAlbumDaModificare);
-
 		try {
 			//rinomino cartella se cambio titolo album
 			String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
@@ -162,8 +161,7 @@ public class InputBean {
 				File newUserAlbumFolder = new File(newUserAlbumFolderPath + a.getTitolo() + File.separator);
 				System.out.println("ALBUM DA AGGIORNARE NUOVA CARTELLA=="+newUserAlbumFolder);
 				userAlbumFolder.renameTo(newUserAlbumFolder);
-			}	
-			
+			}				
 			serv.merge(a);
 //			albumDaModificare = new Album();
 		} catch (Exception e) {
@@ -176,39 +174,30 @@ public class InputBean {
 	}
 
 	
-	public void visualizzaAlbums (Utente utente){
-		
+	public void visualizzaAlbums (Utente utente){	
 		EntityManager em = EMF.createEntityManager();
-
 		String hql = "from Album a where a.pubblicatore=:n";
 		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", utente);
-		
+		q.setParameter("n", utente);		
 		listaAlbum = (List<Album>) q.getResultList();
 	}
 	
 	
-	public void visualizzaAlbum(int albumId){
-		
+	public void visualizzaAlbum(int albumId){		
 		EntityManager em = EMF.createEntityManager();
-
 		String hql = "from Album a where a.id=:n";
 		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", albumId);
-		
+		q.setParameter("n", albumId);		
 		albumVisualizzato = (Album) q.getResultList().get(0);
 //		contentBean.setContent("albums3.xhtml");
 	}
 	
 	
-	public List<Album> albumsUtenteTrovato (int idUtente){
-		
+	public List<Album> albumsUtenteTrovato (int idUtente){		
 		EntityManager em = EMF.createEntityManager();
-
 		String hql = "from Album a where a.pubblicatore.id=:n";
 		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", idUtente);
-		
+		q.setParameter("n", idUtente);	
 		return (List<Album>) q.getResultList();
 	}
 	
@@ -350,8 +339,7 @@ public class InputBean {
 	}
 
 
-	public void visualizzaFotos(int albumId){
-		
+	public void visualizzaFotos(int albumId){	
 		risultatoFotos.clear();
 		EntityManager em = EMF.createEntityManager();
 
@@ -392,18 +380,6 @@ public class InputBean {
 		q.setParameter("n", albumId);
 
 		risultatoFotosUtenteTrovato = (List<Foto>) q.getResultList();
-//		creazione lista con foto only P|S+ (vm18) e only P|S
-//		for (Foto fot : risultatoFotosUtenteTrovato) {
-//			List<Foto> risultatoFotosUtenteTrovatoFiltrata = new ArrayList<Foto>();
-//			if (fot.isVietataMinori() && utenteBean.tipoMembershipUtente()!=2) {
-//				fot.setNomeFileFoto(fotoVM18.getNomeFileFoto());
-//			}
-//			if (fot.isVisibileSoloMembri() && utenteBean.tipoMembershipUtente()==0) {
-//				fot.setNomeFileFoto(fotoSoloPS.getNomeFileFoto());
-//			}	
-//			risultatoFotosUtenteTrovatoFiltrata.add(fot);
-//		}
-
 		visualizzaAlbum(albumId);
 			pswp.clear();
 			for (Foto f : risultatoFotosUtenteTrovato) {
@@ -423,31 +399,9 @@ public class InputBean {
 	FacesContext facesContext = FacesContext.getCurrentInstance();
     ExternalContext externalContext = facesContext.getExternalContext();
 
-     //Obtener parametros del request
-//    Map<String, String> parameterMap = (Map<String, String>) externalContext.getRequestParameterMap();
-//    long iduser = Long.valueOf(parameterMap.get("id_usuario"));
-	
-//	Map<String, String> parameterMap = (Map<String, String>) externalContext.getRequestParameterMap();
-//	String param = parameterMap.get("paramName");
 
-//	private String titoloFotoModifica = parameterMap.get("fotosform:my-gallery:1:modificafotoform:tit");
-//	private String descrizioneFotoModifica = parameterMap.get("fotosform:my-gallery:1:modificafotoform:des");
-//	private String dataFotoModifica = parameterMap.get("dat");
-//	private String luogoFotoModifica = parameterMap.get("luo");
-//	private String soggettoFotoModifica = parameterMap.get("sog");
-//	private String fotografoFotoModifica = parameterMap.get("fot");
-//	private String collaboratoriFotoModifica = parameterMap.get("col");
-//	private String vietataMinoriFotoModifica = parameterMap.get("vie");
-//	private String visibileSoloMembriFotoModifica = parameterMap.get("vis");
-//	private String copertinaFotoModifica = parameterMap.get("cop");
 	
-//    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-//    private String titoloFotoModifica = ec.getRequestParameterMap().get("fotosform:my-gallery:1:modificafotoform:tit");
-//    private String descrizioneFotoModifica = ec.getRequestParameterMap().get("fotosform:my-gallery:1:modificafotoform:des");
-	
-	
-	public void aggiornaFoto (){
-		
+	public void aggiornaFoto (){	
 		System.out.println("AggiornaFoto1111-start----IDFOTODAMODIFICARE==="+fotoDaModificare.getDescrizione());
 //		EntityManager em = EMF.createEntityManager();
 //		String hql = "from Foto f where f.id=:n";
@@ -469,7 +423,7 @@ public class InputBean {
 //			f.setVietataMinori(fotoDaModificare.isVietataMinori());
 //			f.setVisibileSoloMembri(fotoDaModificare.isVisibileSoloMembri());
 //			System.out.println("FOTO DA AGGIORNARE trovata::"+f.getTitolo()+"--IDFoto="+f.getId());
-			
+
 			serv.merge(fotoDaModificare);
 			fotoDaModificare = new Foto();
 		} catch (Exception e) {
@@ -482,18 +436,14 @@ public class InputBean {
 	}
 	
 	
-    public void modificaFoto (Foto foto){
-		
-		System.out.println("MOFIFICAFOTO-----------------start");	
+    public void modificaFoto (Foto foto){	
+		System.out.println("MODIFICAFOTO-----------------start");	
 		setFotoDaModificare(foto);
 		setIdFotoDaModificare(foto.getId());
-
 		contentBean.setContent("modificaFoto.xhtml");
-		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
-		
+		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");	
 	}
-	
-	
+		
 	
 	public void cancellaFoto (int idFoto){
 		EntityManager em = EMF.createEntityManager();
@@ -525,8 +475,7 @@ public class InputBean {
 	}
 	
 
-	public void uploadAvatar() {
-		
+	public void uploadAvatar() {	
 		// Extract file name from content-disposition header of file part
 		if (part==null){
 			return;
@@ -622,7 +571,6 @@ public class InputBean {
 	private List<PerPhotoswipe> pswp = new ArrayList<InputBean.PerPhotoswipe>();
 	private String pswpS = "";
 	
-
 	 
 		// Extract file name from content-disposition header of file part
 		private String getFileName(Part part) {
@@ -662,8 +610,74 @@ public class InputBean {
 		}
 		
 		
+		public boolean fotoGiaVotata (int idFoto, int idUtente) {
+			EntityManager em = EMF.createEntityManager();
+			String hql = "from Voto v where v.foto.id=:n and v.rilasciatoDa.id=:u";
+			Query q = em.createQuery(hql, Voto.class);
+			q.setParameter("n", idFoto);
+			q.setParameter("u", idUtente);
+			if (q.getResultList()!=null && q.getResultList().size()>0) {
+				System.out.println("FOTO GIa' VOTATA= TRUE");
+				return true;
+			}
+			System.out.println("FOTO GIa' VOTATA= FALSE");
+			return false;
+		}
 		
 		
+		public void aggiungiFotoPreferita (Foto foto) {
+			System.out.println("aggiungifotoPreferita start");
+			foto.getUtentiChePreferisconoFoto().add(utenteBean.getUtente());
+			if (foto.getUtentiChePreferisconoFoto()==null){
+				try {
+					serv.persist(foto);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					serv.merge(foto);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+//			fotosUtenteTrovato(getIdAlbumVisualizzato());
+//			contentBean.setContent("fotosUtenteTrovato.xhtml");
+		}
+	
+		
+		public void rimuoviFotoPreferita (Foto foto) {
+			System.out.println("rimuovifotoPreferita start");
+			Iterator<Utente> it = foto.getUtentiChePreferisconoFoto().iterator();
+			while(it.hasNext()) {
+				Utente ut = it.next();
+				if(ut.getId()==utenteBean.getUtente().getId()) {
+					it.remove();
+				}
+			}
+			try {
+				serv.merge(foto);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			fotosUtenteTrovato(getIdAlbumVisualizzato());
+//			contentBean.setContent("fotosUtenteTrovato.xhtml");
+		}
+		
+		
+		public boolean fotoPreferita (Foto foto) {
+			for (Utente ut : foto.getUtentiChePreferisconoFoto()) {
+				if(ut.getId()==utenteBean.getUtente().getId()) {
+					System.out.println("fotoPreferita=TRUE");
+					return true;
+				}
+			}
+			System.out.println("fotoPreferita=FALSE");
+			return false;
+		}	
 		
 	//*********GETTERS&SETTERS************
 	

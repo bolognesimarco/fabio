@@ -125,11 +125,18 @@
 						</figcaption> 
 					</figure>
 					
-					<h:commandButton value="ELIMINa" styleClass="menubuttonorange" >
+					<p:commandButton value="ELIMINa" styleClass="menubuttonorange" >
 						<f:ajax event="click" listener="#{inputBean.cancellaFoto(risultato.id)}" render=":content :nuovafotoform :fotosform" />
-					</h:commandButton>		
+						<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe?" icon="ui-icon-alert" />
+					</p:commandButton>		
 					
-					<h:commandButton value="MODIFICa FOTo" styleClass="menubuttonwhite" action="#{inputBean.modificaFoto(risultato)}">
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+				        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+			   		</p:confirmDialog>	
+					
+					<h:commandButton value="MODIFICa FOTo" styleClass="menubuttonwhite">
+						<f:ajax event="click" listener="#{inputBean.modificaFoto(risultato)}" render=":content :modificafotoform" />		    	   
 		    	   	</h:commandButton>
 					
 				</p:column>
@@ -139,9 +146,14 @@
 
 <br>
 </br>
-
+		<h:panelGrid border="1">
+			<f:facet name="header">
+		            <h:panelGroup>
+						<h:outputText value="&#160;&#160;NUOVa FOTo"/>
+	            	</h:panelGroup>
+        	</f:facet>
 		<h:form id="nuovafotoform" enctype="multipart/form-data" >
-			<h:panelGrid columns="2" border="1">
+			<h:panelGrid columns="2" columnClasses="rightcolonna, leftcolonna" border="0">
 			   
 				<h:outputLabel for="newFotoTitolo">TITOLo FOTo</h:outputLabel>
 				<h:inputText id="newFotoTitolo" value="#{inputBean.nuovaFoto.titolo}"/>
@@ -186,17 +198,13 @@
 				<h:outputText value="#{inputBean.statusMessage}" rendered="#{not empty inputBean.statusMessage}" />
 				<h:outputText style="color: red" value="#{contentBean.messaggio}"></h:outputText>
 				
-				<h:commandButton id="submit" action="#{inputBean.uploadFoto()}" value="UPLOAd FOTo" />
-				
+				<f:facet name="footer">
+					<h:commandButton id="submit" action="#{inputBean.uploadFoto()}" value="UPLOAd FOTo" />
+				</f:facet>
 			</h:panelGrid>
 		</h:form>
 
-		<f:facet name="footer">
-		    <h:panelGroup>
-				 <h:outputText value="&#160;&#160;FOTOs ALMBUm&#160;&#160;"/>
-	        </h:panelGroup>
-        </f:facet>
-
+		</h:panelGrid>
 	</h:panelGrid>
 
 </h:panelGroup>

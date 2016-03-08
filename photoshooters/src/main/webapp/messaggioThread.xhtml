@@ -30,13 +30,13 @@
 				
 				<h:column>
 				
-					<h:panelGrid columns="2" columnClasses="leftprofilo, leftprofilo" border="1">
+					<h:panelGrid columns="2" columnClasses="rightcolonna,mess#{threadBean.messaggioRicevutoOSpedito(mess)}" border="1">
 						<h:panelGrid columns="2">
 							<h:outputText value="Da:&#160;"></h:outputText>
 							<h:outputText value="#{mess.mittente.username}"></h:outputText>
 							<h:outputText value="A:&#160;"></h:outputText>
 							<h:outputText value="#{mess.destinatario.username}"></h:outputText>
-		            		<h:outputText styleClass="common" value="&#160;MESSAGGIo DATa-&#160;"/>
+		            		<h:outputText styleClass="common" value="MESSAGGIo DATa:&#160;"/>
 		            		<h:outputText styleClass="common" value="#{mess.data}">
 		            			<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
 		            		</h:outputText>
@@ -56,7 +56,7 @@
 			        		</h:panelGrid>
 						    <h:panelGrid columns="1">   
 						        <h:outputLabel for="messaggio">MESSAGGIo</h:outputLabel>
-								<h:inputTextarea readonly="true" size="100" rows="8" id="messaggio" value="#{mess.messaggio}"/>
+								<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{mess.messaggio}"/>
 							</h:panelGrid>
 		        		</h:panelGrid>
 	        		</h:panelGrid>
@@ -84,7 +84,7 @@
 		        		</h:panelGrid>
 					    <h:panelGrid columns="1">   
 					        <h:outputLabel for="messaggio">MESSAGGIo</h:outputLabel>
-							<h:inputTextarea  size="100" rows="8" id="messaggioaggiunto" value="#{threadBean.messaggioAggiunto.messaggio}"/>
+							<h:inputTextarea  size="120" rows="8" id="messaggioaggiunto" value="#{threadBean.messaggioAggiunto.messaggio}"/>
 						</h:panelGrid>
 	        		</h:panelGrid>
 	        	 

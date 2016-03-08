@@ -12,9 +12,6 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Voto implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1656079053888362981L;
 
 	@Id

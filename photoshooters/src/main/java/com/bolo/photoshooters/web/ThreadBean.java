@@ -38,74 +38,85 @@ public class ThreadBean {
 	private Thread threadEsistente = new Thread();
 	private int nuoviMessaggi = 0;
 	List<Messaggio> mm = new ArrayList<Messaggio>();
+	private String cssMessaggio = "";
 	
 	
 	public void inviaNuovoMessaggio () {
 		System.out.println("INVIA NUOVO MESSAGGIO function");
-		if (!esisteThreadMessaggi(utenteBean.getUtente().getId(), messaggio.getDestinatario().getId(), messaggio.getOggetto())){
-			System.out.println("INVIA MESSAGGIO==nuovo threadddddd");
-			Thread thr = new Thread();	
-			Messaggio mess = new Messaggio();
-			thr.setMittentePrimo(utenteBean.getUtente());
-			thr.setDestinatarioPrimo(messaggio.getDestinatario());
-			thr.setOggettoThread(messaggio.getOggetto());
-			mess.setMessaggio(messaggio.getMessaggio());
-			mess.setMittente(utenteBean.getUtente());
-			mess.setDestinatario(messaggio.getDestinatario());
-			mess.setOggetto(messaggio.getOggetto());
-			mess.setThread(thr);
-			Date ora = new Date();
-			mess.setData(ora);
-			mess.getLetto().add(utenteBean.getUtente());
-			thr.getMessaggi().add(mess);
-			thr.setNuovoMessaggio(true);
-			try {
-				serv.persist(thr);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace(); 
+		if(messaggio.getDestinatario().getId()==utenteBean.getUtente().getId()){
+			contentBean.setMessaggio("Destinatario non valido!");
+		}
+		else {
+			if (!esisteThreadMessaggi(utenteBean.getUtente().getId(), messaggio.getDestinatario().getId(), messaggio.getOggetto())){
+				System.out.println("INVIA MESSAGGIO==nuovo threadddddd");
+				Thread thr = new Thread();	
+				Messaggio mess = new Messaggio();
+				thr.setMittentePrimo(utenteBean.getUtente());
+				thr.setDestinatarioPrimo(messaggio.getDestinatario());
+				thr.setOggettoThread(messaggio.getOggetto());
+				mess.setMessaggio(messaggio.getMessaggio());
+				mess.setMittente(utenteBean.getUtente());
+				mess.setDestinatario(messaggio.getDestinatario());
+				mess.setOggetto(messaggio.getOggetto());
+				mess.setThread(thr);
+				Date ora = new Date();
+				mess.setData(ora);
+				mess.getLetto().add(utenteBean.getUtente());
+				thr.getMessaggi().add(mess);
+				thr.setNuovoMessaggio(true);
+				try {
+					serv.persist(thr);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace(); 
+				}
+				cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
+				cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
+				int i=0;
+				for (Messaggio m : thr.getMessaggi()) {
+					System.out.println("InviaMessaggio-ordine MESS: #"+i+"-data-"+m.getData());
+					i++;
+				}	
+			
+				contentBean.setContent("messaggi.xhtml");
+				contentBean.setMessaggio("Thread nuovo");
+			} else {
+				System.out.println("INVIA MESSAGGIO==thread esistente");
+				if (threadEsistente.getMittentePrimo().getId()==utenteBean.getUtente().getId() && threadEsistente.isCancellatoThreadMittente()) {
+					getContentBean().setMessaggio("Thread spedito già esistente: messaggio aggiunto!");
+					threadEsistente.setCancellatoThreadMittente(false);
+				} else {
+					if (threadEsistente.isCancellatoThreadDestinatario()) {
+						getContentBean().setMessaggio("Thread ricevuto già esistente: messaggio aggiunto!");
+						threadEsistente.setCancellatoThreadDestinatario(false);
+					}
+				}
+				Messaggio mess = new Messaggio();
+				mess.setMessaggio(messaggio.getMessaggio());
+				mess.setMittente(utenteBean.getUtente());
+				mess.setDestinatario(messaggio.getDestinatario());
+				mess.setOggetto(messaggio.getOggetto());
+				mess.setThread(threadEsistente);
+				Date ora = new Date();
+				mess.setData(ora);
+				mess.getLetto().add(utenteBean.getUtente());
+				threadEsistente.getMessaggi().add(mess);
+				threadEsistente.setNuovoMessaggio(true);
+				try {
+					serv.merge(threadEsistente);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
+				cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
+				int i=0;
+				for (Messaggio m : threadEsistente.getMessaggi()) {
+					System.out.println("InviaMessaggio2-ordine MESS: #"+i+"-data-"+m.getData());
+					i++;
+				}
+				contentBean.setContent("messaggi.xhtml");
 			}
-			cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
-			cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
-			int i=0;
-			for (Messaggio m : thr.getMessaggi()) {
-				System.out.println("InviaMessaggio-ordine MESS: #"+i+"-data-"+m.getData());
-				i++;
-			}	
-		
-			contentBean.setContent("messaggi.xhtml");
-			contentBean.setMessaggio("Thread nuovo");
-		} else {
-			System.out.println("INVIA MESSAGGIO==thread esistente");
-			if (threadEsistente.isCancellatoThreadMittente()) {
-				getContentBean().setMessaggio("Thread già esistente: messaggio aggiunto!");
-				threadEsistente.setCancellatoThreadMittente(false);
-			}
-			Messaggio mess = new Messaggio();
-			mess.setMessaggio(messaggio.getMessaggio());
-			mess.setMittente(utenteBean.getUtente());
-			mess.setDestinatario(messaggio.getDestinatario());
-			mess.setOggetto(messaggio.getOggetto());
-			mess.setThread(threadEsistente);
-			Date ora = new Date();
-			mess.setData(ora);
-			mess.getLetto().add(utenteBean.getUtente());
-			threadEsistente.getMessaggi().add(mess);
-			threadEsistente.setNuovoMessaggio(true);
-			try {
-				serv.merge(threadEsistente);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
-			cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
-			int i=0;
-			for (Messaggio m : threadEsistente.getMessaggi()) {
-				System.out.println("InviaMessaggio2-ordine MESS: #"+i+"-data-"+m.getData());
-				i++;
-			}
-			contentBean.setContent("messaggi.xhtml");
 		}
 	}
 	
@@ -125,14 +136,16 @@ public class ThreadBean {
 		Date ora = new Date();
 		mess.setData(ora);
 		mess.getLetto().add(utenteBean.getUtente());
+//		System.out.println("thread isNuovoMessaggio="+threadMessaggi.isNuovoMessaggio());
 		if(!threadMessaggi.isNuovoMessaggio()){
 			for (Messaggio m : threadMessaggi.getMessaggi()) {
-				if (m.getMittente().getId()==utenteBean.getUtente().getId()){
-					System.out.println("AGGIUNGO MESSAGGIO - aggiungo destinatario in m.letto");
-					if (!messaggioIsLetto(mess.getDestinatario().getId(), m.getId())) {
-						m.getLetto().add(mess.getDestinatario());
+//				System.out.println("MESSAGGIO id="+m.getId()+" - UTENTE (Destinatario) id="+m.getDestinatario().getId());
+//				if (m.getMittente().getId()==utenteBean.getUtente().getId()){
+					if (!messaggioIsLetto(m.getDestinatario().getId(), m.getId())) {
+//						System.out.println("AGGIUNGO MESSAGGIO - UTENTE (Destinatario) id="+m.getDestinatario().getId()+" in m.letto messID="+m.getId());
+						m.getLetto().add(m.getDestinatario());
 					}
-				}
+//				}
 			}
 		}
 		threadMessaggi.getMessaggi().add(mess);
@@ -210,48 +223,20 @@ public class ThreadBean {
 		.setParameter("idThr", idThread)
 		.getResultList();	
 		if(threads!=null && threads.size()>0) {	
-//			setThreadMessaggi(threads.get(0));
 			threadMessaggi = null;
 			threadMessaggi = threads.get(0);
 			System.out.println("VISUALIZZA THREAD threadMessaggi.getMessaggi().size="+threadMessaggi.getMessaggi().size());
-//			mm = threadMessaggi.getMessaggi();
-//			int j=0;
-//			for (Messaggio m : mm) {	
-//				System.out.println("NON ORDINATO-Messaggio #("+j+")-data"+m.getData());	
-//				j++;
-//			}
-//			ordinaMessaggiPerData(mm);
-//			int i =0;
-//			for (Messaggio m : mm) {	
-//				System.out.println("ORDINATO-Messaggio #("+i+")-data"+m.getData());	
-//				i++;
-//			}
-			
+//			mm = threadMessaggi.getMessaggi();		
 //			se non è nuovo thread 				
 			if (!threadMessaggi.isNuovoMessaggio()) {
 				System.out.println("VISUALIZZA thread - thread isNuovoMess=false");
 				for (Messaggio m : threadMessaggi.getMessaggi()) {
-//					se utente ha ricevuto il messaggio			
-//					if(m.getDestinatario().getId()==utenteBean.getUtente().getId()){
-
 //						se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
-						if (!messaggioIsLetto(m.getDestinatario().getId(), m.getId()))
-						{
-							System.out.println("messaggio non letto da destinatario (me)!");
-							m.getLetto().add(m.getDestinatario());
-						}
-//					}
-//					utente ha spedito il messaggio
-//					else
-//					{
-////						se L'altro utente non ha letto il messaggio (x non duplicare primary key)
-//						if (!messaggioIsLetto(m.getDestinatario().getId(), m.getId()))
-//						{
-//							System.out.println("messaggio non letto da destinatario (l'altro)");
-//							m.getLetto().add(m.getDestinatario());
-//						}
-//					}
-					
+					if (!messaggioIsLetto(m.getDestinatario().getId(), m.getId()))
+					{
+						System.out.println("messaggio non letto da destinatario (me)!");
+						m.getLetto().add(m.getDestinatario());
+					}		
 				}
 			}
 				
@@ -285,11 +270,19 @@ public class ThreadBean {
 				e.printStackTrace();
 			}
 			nuoviMessaggiThread(utenteBean.getUtente().getId());
-			}
+		}
 //			FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("menuutenteform");
 		contentBean.setContent("messaggioThread.xhtml");		
 	}
 	
+	public boolean messaggioRicevutoOSpedito (Messaggio M) {
+		if (M.getDestinatario().getId()==utenteBean.getUtente().getId()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 	public boolean messaggioIsLetto (int idUtente, int idMess) {
 //		System.out.println("messaggioIsLetto?");
@@ -318,11 +311,17 @@ public class ThreadBean {
 		System.out.println("****Threads con isNuovoMessaggio=TRUE_trovati #"+threadsConNuoviMessaggiToT.size());
 
 		int numthr = 0;	
+		
 		for (Thread thr : threadsConNuoviMessaggiToT) {
-			if (threadContieneMessaggiNonLetti(idUtente, thr)) {
-				System.out.println("TRUE=contiene"+threadContieneMessaggiNonLetti(idUtente, thr));
-				numthr++;
-				threadsConNuoviMessaggi.add(thr);
+//			System.out.println("mitt:"+thr.getMittentePrimo().getId()+"cancellato? "+thr.isCancellatoMittentePrimo());
+//			System.out.println("dest:"+thr.getDestinatarioPrimo().getId()+"cancellato? "+thr.isCancellatoMittentePrimo());
+//			controllo se non ho cancellato il thread - in caso lo avessi cancellato, non lo conteggio anche se contiene mess nuovi x me
+			if ((thr.getMittentePrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadMittente()==false) || (thr.getDestinatarioPrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadDestinatario()==false)) {	
+				if (threadContieneMessaggiNonLetti(idUtente, thr)) {
+					System.out.println("TRUE=contiene"+threadContieneMessaggiNonLetti(idUtente, thr));
+					numthr++;
+					threadsConNuoviMessaggi.add(thr);
+				}
 			}
 		}
 		System.out.println("thread size"+threadsConNuoviMessaggi.size());
@@ -348,10 +347,10 @@ public class ThreadBean {
 			}
 		}
 		if (j>0) {
-			System.out.println("threadContieneMessaggiNonLetti=TRUE");
+			System.out.println("threadContieneMessaggiNonLetti=TRUE_oggetto: "+thread.getOggettoThread());
 			return true;
 		}
-		System.out.println("threadContieneMessaggiNonLetti=FALSE");
+		System.out.println("threadContieneMessaggiNonLetti=FALSE_oggetto: "+thread.getOggettoThread());
 		return false;
 	}
 	
