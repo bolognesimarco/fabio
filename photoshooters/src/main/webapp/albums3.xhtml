@@ -10,7 +10,7 @@
 <h:head>
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="homePage.css" library="css" />
-
+	<h:outputStylesheet name="dataGrid.css" library="css" />
 	<link type="text/css" rel="stylesheet" href="/javax.faces.resource/datagrid.css.xhtml?ln=css"/> 
 </h:head>
 
@@ -32,18 +32,19 @@
 					<p:column>
 						<h:graphicImage rendered="#{result.copertinaAlbum!=null}" value="/lil?path=#{utenteBean.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
 							 width="50" style="cursor: pointer;">
-							<f:ajax event="click" listener="#{inputBean.visualizzaFotos(result.id)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+							<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 						</h:graphicImage>
 						<h:graphicImage rendered="#{result.copertinaAlbum==null}" value="/resources/images/avatarDefault.svg"
 							 width="50" style="cursor: pointer;">
-							 <f:ajax event="click" listener="#{inputBean.visualizzaFotos(result.id)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+							 <f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 						</h:graphicImage>
 						
 						<h:commandButton value="#{result.titolo}" styleClass="menubuttonwhite">
-		    				<f:ajax event="click" listener="#{inputBean.visualizzaFotos(result.id)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+		    				<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 		    	   		</h:commandButton>	<br></br>
 		    	   		
-		    	   		<p:commandButton value="ELIMINa" styleClass="menubuttonorange; color: #EF4323;" actionListener="#{inputBean.cancellaAlbum(result.id)}" update=":content :headerform :patternguestform menuutenteform">
+		    	   		<p:commandButton value="ELIMINa" styleClass="menubuttonorange; color: #EF4323;"  >
+        					<f:ajax event="click" listener="#{inputBean.cancellaAlbum(result.id)}" render=":content :headerform :patternguestform menuutenteform" />
         					<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe?" icon="ui-icon-alert" />
     					</p:commandButton>
  

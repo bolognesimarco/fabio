@@ -27,21 +27,21 @@
 	            		<h:outputText value="ALBUMs PHOTOSHOOTEr"/>
 		       		</f:facet>
 			   		
-			   		<p:dataGrid  value="#{inputBean.albumsUtenteTrovato(utenteBean.cercaUtente.utente.id)}" var="result" columns="6" rows="1" paginator="true"  rowsPerPageTemplate="1,2,3">
+			   		<p:dataGrid  value="#{utenteBean.cercaUtente.utente.pubblicati}" var="result" columns="6" rows="1" paginator="true"  rowsPerPageTemplate="1,2,3">
 						
 						<p:column>
 							<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
 								height="51" style="cursor: pointer;">
-							<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato(result.id)}" render=":content :modificafotoform" />
+								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
 							</h:graphicImage>
 							<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
 								height="51" style="cursor: pointer;">
-							<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato(result.id)}" render=":content :modificafotoform" />
+								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
 							</h:graphicImage>
 							<h:panelGrid columns="2">
 								<h:outputLabel for="titAlbum">TITOLo</h:outputLabel>
 								<h:commandButton id="titAlbum" value="#{result.titolo}" styleClass="menubuttonwhite">
-				    				<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato(result.id)}" render=":content :modificafotoform" />
+				    				<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
 				    	   		</h:commandButton>	<br></br>
 								<h:outputLabel for="descrAlbum">DESCRIZIONe</h:outputLabel>
 								<h:outputText id="descrAlbum" value="#{result.descrizione}"></h:outputText>	
@@ -177,12 +177,12 @@
 					
 					<h:panelGrid id="attivitàutentetrovatopanel">
 					
-						<h:commandButton value="COLLABORAZIONi"></h:commandButton>
-						<h:commandButton value="PREFERITi"></h:commandButton>
+						<h:commandButton disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" value="COLLABORAZIONi" action="#{utenteBean.cercaCollaborazioniUtenteFoto(utenteBean.cercaUtente.utente.id)}"></h:commandButton>
+						<h:commandButton disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" value="PREFERITi" action="#{utenteBean.cercaPreferitiUtenteFoto()}"></h:commandButton>
 						<h:commandButton value="ANNUNCi"></h:commandButton>
 						<h:commandButton value="POSTs"></h:commandButton>
 						<h:commandButton value="INVIa MESSAGGIo"></h:commandButton>
-						<h:commandButton value="CHAt"></h:commandButton>
+						<h:commandButton disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" value="CHAt"></h:commandButton>
 					
 					</h:panelGrid>
 											

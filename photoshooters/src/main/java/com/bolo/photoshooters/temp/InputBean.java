@@ -58,9 +58,6 @@ public class InputBean {
 	private int idFotoDaModificare;
 	private Foto fotoDaVotare = new Foto();
 	private Voto votoFoto = new Voto();
-//	private Foto fotoVM18 = new Foto();
-//	private Foto fotoSoloPS = new Foto();
-	
 	List<Album> listaAlbum = new ArrayList<Album>();
 	Album albumVisualizzato = new Album();
 	private Album nuovoAlbum = new Album(); 
@@ -68,8 +65,9 @@ public class InputBean {
 	private Album albumDaModificare = new Album();
 	private String titoloAlbumDaModificare = ""; 
 	
+	
 	public void nuovoAlbum () {
-		
+		System.out.println("funzione nuovoAlbum() start!!!");
 		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
 		File userAlbumFolder = new File(userAlbumFolderPath + nuovoAlbum.getTitolo() + File.separator);
 		if (!userAlbumFolder.exists()) {
@@ -114,6 +112,7 @@ public class InputBean {
 
 	
 	public void cancellaAlbum (int idAlbum){
+		System.out.println("funzione cancellaAlbum start ////");
 		EntityManager em = EMF.createEntityManager();
 		String hql = "from Album a where a.id=:n";
 		Query q = em.createQuery(hql, Album.class);
@@ -131,15 +130,13 @@ public class InputBean {
 			}	
 			serv.delete((Album)q.getResultList().get(0));
 			serv.refresh(utenteBean.getUtente());
-//			serv.persist(getUtente());
-//			getUtente().getPubblicati().remove((Album)q.getResultList().get(0));
-//			serv.refresh(getUtente().getPubblicati());
-//			serv.merge(getRisultatoAlbum());
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Album CANCELLATO!");
+		contentBean.setMessaggio("Album CANCELLATO!");
 		visualizzaAlbums(utenteBean.getUtente());
 	}	
 
@@ -169,17 +166,19 @@ public class InputBean {
 			e.printStackTrace();
 		}
 		System.out.println("Album AGGIORNATOOOOOOOOO");
+		contentBean.setMessaggio("Album AGGIORNATo!");
 		visualizzaAlbums(utenteBean.getUtente());
 		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 
 	
 	public void visualizzaAlbums (Utente utente){	
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Album a where a.pubblicatore=:n";
-		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", utente);		
-		listaAlbum = (List<Album>) q.getResultList();
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Album a where a.pubblicatore=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", utente);		
+//		listaAlbum = (List<Album>) q.getResultList();
+		listaAlbum = utente.getPubblicati();
 	}
 	
 	
@@ -193,13 +192,13 @@ public class InputBean {
 	}
 	
 	
-	public List<Album> albumsUtenteTrovato (int idUtente){		
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Album a where a.pubblicatore.id=:n";
-		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", idUtente);	
-		return (List<Album>) q.getResultList();
-	}
+//	public List<Album> albumsUtenteTrovato (int idUtente){		
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Album a where a.pubblicatore.id=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", idUtente);	
+//		return (List<Album>) q.getResultList();
+//	}
 	
 	
 	public void uploadFoto() {
@@ -318,7 +317,8 @@ public class InputBean {
 					String mm = e.getMessage()+" ERRORe UPLOAd FOTo nel merge!";
 					contentBean.setMessaggio(mm);
 				}
-				visualizzaFotos(getIdAlbumVisualizzato());
+				visualizzaFotos2(albumVisualizzato);
+				
 
 				System.out.println("FINE INPUT FOTO////titolo="+nuovaFoto.getTitolo());
 				nuovaFoto.setTitolo(null);
@@ -342,7 +342,6 @@ public class InputBean {
 	public void visualizzaFotos(int albumId){	
 		risultatoFotos.clear();
 		EntityManager em = EMF.createEntityManager();
-
 		String hql = "from Foto f where f.album.id=:n";
 		Query q = em.createQuery(hql, Foto.class);
 		q.setParameter("n", albumId);
@@ -367,20 +366,57 @@ public class InputBean {
 		contentBean.setMessaggio(null);
 		setIdAlbumVisualizzato(albumId);
 	}
+
+	
+	public void visualizzaFotos2(Album album){	
+		risultatoFotos.clear();
+		risultatoFotos = album.getFotos();
+		albumVisualizzato = album; 
+		pswp.clear();
+		for (Foto f : risultatoFotos) {
+			PerPhotoswipe pp = new PerPhotoswipe();
+			pp.setSrc("/lil?path="+utenteBean.getUtente().getUsername()+"/"+albumVisualizzato.getTitolo()+"/"+f.getNomeFileFoto());
+			pp.setH(f.getAltezzaFoto());
+			pp.setW(f.getLarghezzaFoto());
+			pswp.add(pp);
+			System.out.println("PHOTOSWIPE"+pp.getSrc()+pp.getH()+pp.getW()+albumVisualizzato.getTitolo());	
+		}
+		System.out.println("PSWP=="+pswpS+"FINE");
+		contentBean.setContent("fotos.xhtml");
+		contentBean.setMessaggio(null);
+	}
 	
 	
-	public void fotosUtenteTrovato (int albumId){
-		
-		System.out.println("fotosUtenteTrovato");
+//	public void fotosUtenteTrovato (int albumId){	
+//		System.out.println("fotosUtenteTrovato");
+//		risultatoFotosUtenteTrovato.clear();
+//		EntityManager em = EMF.createEntityManager();
+//
+//		String hql = "from Foto f where f.album.id=:n";
+//		Query q = em.createQuery(hql, Foto.class);
+//		q.setParameter("n", albumId);
+//
+//		risultatoFotosUtenteTrovato = (List<Foto>) q.getResultList();
+//		visualizzaAlbum(albumId);
+//			pswp.clear();
+//			for (Foto f : risultatoFotosUtenteTrovato) {
+//				System.out.println("fotosUtenteTrovato - nomeFile=="+f.getNomeFileFoto());
+//				PerPhotoswipe pp = new PerPhotoswipe();
+//				pp.setSrc("/lil?path="+utenteBean.getCercaUtente().getUtente().getUsername()+"/"+albumVisualizzato.getTitolo()+"/"+f.getNomeFileFoto());
+//				pp.setH(f.getAltezzaFoto());
+//				pp.setW(f.getLarghezzaFoto());
+//				pswp.add(pp);
+//			}
+//			contentBean.setContent("fotosUtenteTrovato.xhtml");
+//			contentBean.setMessaggio(null);
+//			setIdAlbumVisualizzato(albumId);
+//	}
+
+	
+	public void fotosUtenteTrovato2 (Album album) {
 		risultatoFotosUtenteTrovato.clear();
-		EntityManager em = EMF.createEntityManager();
-
-		String hql = "from Foto f where f.album.id=:n";
-		Query q = em.createQuery(hql, Foto.class);
-		q.setParameter("n", albumId);
-
-		risultatoFotosUtenteTrovato = (List<Foto>) q.getResultList();
-		visualizzaAlbum(albumId);
+		risultatoFotosUtenteTrovato = album.getFotos();
+		albumVisualizzato = album; 
 			pswp.clear();
 			for (Foto f : risultatoFotosUtenteTrovato) {
 				System.out.println("fotosUtenteTrovato - nomeFile=="+f.getNomeFileFoto());
@@ -392,9 +428,8 @@ public class InputBean {
 			}
 			contentBean.setContent("fotosUtenteTrovato.xhtml");
 			contentBean.setMessaggio(null);
-			setIdAlbumVisualizzato(albumId);
 	}
-
+	
 	
 	FacesContext facesContext = FacesContext.getCurrentInstance();
     ExternalContext externalContext = facesContext.getExternalContext();
@@ -431,7 +466,7 @@ public class InputBean {
 			e.printStackTrace();
 		}
 		System.out.println("Foto AGGIORNATA111!");
-		visualizzaFotos(albumVisualizzato.getId());
+		visualizzaFotos2(albumVisualizzato);
 		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 	
@@ -471,7 +506,7 @@ public class InputBean {
 			e.printStackTrace();
 		}
 		System.out.println("Foto CANCELLATA!");
-		visualizzaFotos(albumVisualizzato.getId());
+		visualizzaFotos2(albumVisualizzato);
 	}
 	
 
@@ -670,7 +705,7 @@ public class InputBean {
 		
 		public boolean fotoPreferita (Foto foto) {
 			for (Utente ut : foto.getUtentiChePreferisconoFoto()) {
-				if(ut.getId()==utenteBean.getUtente().getId()) {
+				if(utenteBean.getUtente()!=null && ut.getId()==utenteBean.getUtente().getId()) {
 					System.out.println("fotoPreferita=TRUE");
 					return true;
 				}

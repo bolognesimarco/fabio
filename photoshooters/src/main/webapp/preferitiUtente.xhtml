@@ -8,15 +8,11 @@
     xmlns:p="http://primefaces.org/ui">
 
 <h:head>
- 	<h:outputStylesheet name="common.css" library="css" />
-	<h:outputStylesheet name="homePage.css" library="css" />	
 	<h:outputStylesheet name="photoswipe.css" library="css" />
 	<h:outputStylesheet name="dataGrid.css" library="css" />
 	<link rel="stylesheet" href="resources/css/default-skin/default-skin.css"/> 
 	<h:outputScript name="photoswipe.js" library="js" />
-	<h:outputScript name="photoswipe-ui-default.js" library="js" /> 
-	
-	
+	<h:outputScript name="photoswipe-ui-default.js" library="js" /> 	
 </h:head>
 
 <h:body>
@@ -25,19 +21,20 @@
 
 	<h:panelGrid>
 		<f:facet name="header">
-            <h:outputText id="username" value="#{utenteBean.cercaUtente.utente.username}"/>
-           	<h:outputText value="&#160;-&#160;FOTOs ALMBUm :&#160;"/>
-           	<h:outputText id="nomeAlbum" value="'#{inputBean.albumVisualizzato.titolo}'"/>
+           	<h:outputText value="PREFERITi PHOTOSHOOTEr :&#160;"/>
+            <h:outputText id="username" value="#{utenteBean.cercaUtente.utente.username}&#160;-&#160;"/>
+            <h:outputText value="NUMERo :&#160;"/>
+            <h:outputText  value="#{utenteBean.preferitiFoto.size()}"/>
         </f:facet>
 	
-			<p:dataGrid id="my-gallery" styleClass="mygalleryclass" value="#{inputBean.risultatoFotosUtenteTrovato}" var="risultato" 
+			<p:dataGrid id="my-gallery" styleClass="mygalleryclass" value="#{utenteBean.cercaUtente.utente.fotoPreferite}" var="risultato" 
 	     	columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 				<p:column>
 				
 					<figure itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
-						<a href="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
+						<a href="/lil?path=#{risultato.album.pubblicatore.username}/#{risultato.album.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
 							<h:graphicImage itemprop="thumbnail"
-								value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}"
+								value="/lil?path=#{risultato.album.pubblicatore.username}/#{risultato.album.titolo}/#{risultato.nomeFileFoto}"
 								height="51" rendered="#{(utenteBean.tipoMembershipUtente()==2) || (risultato.vietataMinori==false and risultato.visibileSoloMembri==false) || (utenteBean.tipoMembershipUtente()==1 and risultato.vietataMinori==false)}">
 							</h:graphicImage>
 							<h:graphicImage itemprop="thumbnail"
@@ -51,6 +48,8 @@
 						</a> 
 						<figcaption itemprop="caption description"> 
 							<h:panelGrid columns="2" columnClasses="rightfoto,leftfoto">
+								<h:outputLabel>PUBBLICATa Da</h:outputLabel>
+								<h:outputText value="&#160;#{risultato.album.pubblicatore.username}" />								
 								<h:outputLabel>TITOLo</h:outputLabel>
 								<h:outputText value="#{risultato.titolo}" />
 								<h:outputLabel>DESCRIZIONe</h:outputLabel>
@@ -76,7 +75,7 @@
 					    </h:graphicImage>
 				    </h:panelGroup>					
 
-					<p:commandButton update="votafotoform:fotoDetail" oncomplete="PF('fotoOP').loadContents()" value="VOTa" rendered="#{utenteBean.tipoMembershipUtente()==2 and inputBean.fotoGiaVotata(risultato.id, utenteBean.utente.id)==false}">
+					<p:commandButton update="votafotoform:fotoDetail" oncomplete="PF('fotoOP').loadContents()" value="VOTa" rendered="#{utenteBean.tipoMembershipUtente()==2 and inputBean.fotoGiaVotata(risultato.id, utenteBean.utente.id)==false and risultato.album.pubblicatore.id!=utenteBean.utente.id}">
              				  <f:setPropertyActionListener value="#{risultato}" target="#{inputBean.fotoDaVotare}" />
            			</p:commandButton>
             			
@@ -111,21 +110,12 @@
 			        </p:outputPanel>
 			        </h:form>
 			    </p:overlayPanel>
-		
-<br>
-</br>
-
-
-		<f:facet name="footer">
-		    <h:panelGroup>
-				 <h:outputText value="&#160;&#160;FOTOs ALMBUm&#160;&#160;"/>
-	        </h:panelGroup>
-        </f:facet>
 
 	</h:panelGrid>
 
 </h:panelGroup>
 <script type="text/javascript" src="resources/js/gallery.js"></script>	
+
 
 	
 	

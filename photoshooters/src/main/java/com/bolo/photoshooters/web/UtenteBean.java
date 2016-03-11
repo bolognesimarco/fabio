@@ -1,6 +1,7 @@
 package com.bolo.photoshooters.web;
 
 import javax.faces.context.FacesContext;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,12 +11,15 @@ import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 import com.bolo.photo.web.entity.Esperienza;
+import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Sesso;
@@ -39,21 +43,11 @@ public class UtenteBean {
 	private CercaUtenteVO cercaUtente = new CercaUtenteVO();
 	List<Utente> risultato = new ArrayList<Utente>();
     List<TipoLavoro> risultatoLavori = new ArrayList<TipoLavoro>();
-    List<Thread> messaggiInviatiUtente = new ArrayList<Thread>();
-    List<Thread> messaggiRicevutiUtente = new ArrayList<Thread>();
-    Thread messaggioThread = new Thread();
-//    Album risultatoAlbum = new Album();
-//    List<Album> listaAlbum = new ArrayList<Album>();
-//    List<Foto> risultatoFotos = new ArrayList<Foto>();
-//    Foto risultatoFoto = new Foto();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private String avatarDefault = "avatarDefault.svg"; 
 	private String region ="";
-	private Thread thread = new Thread();
-	private Messaggio messaggio = new Messaggio();
-//	private Utente destinatarioPrimo = new Utente();
-	private Thread threadEsistente = new Thread();
-
+	List<Foto> collaborazioniFoto = new ArrayList<Foto>();
+	List<Foto> preferitiFoto = new ArrayList<Foto>();	
 
 	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();
@@ -298,19 +292,19 @@ public class UtenteBean {
 		}
 
 
-	public void utenteTrovato (String username){
-		EntityManager em = EMF.createEntityManager();
-		List<Utente> utenti = em
-		.createQuery("from Utente u where u.username=:user")
-		.setParameter("user", username)
-		.getResultList();
-		if(utenti!=null && utenti.size()>0){
-			cercaUtente.setUtente(utenti.get(0));
-			contentBean.setContent("utenteTrovato.xhtml");
-		}else{
-			System.out.println("errore utente non trovato!");
-		}
-	}
+//	public void utenteTrovato (String username){
+//		EntityManager em = EMF.createEntityManager();
+//		List<Utente> utenti = em
+//		.createQuery("from Utente u where u.username=:user")
+//		.setParameter("user", username)
+//		.getResultList();
+//		if(utenti!=null && utenti.size()>0){
+//			cercaUtente.setUtente(utenti.get(0));
+//			contentBean.setContent("utenteTrovato.xhtml");
+//		}else{
+//			System.out.println("errore utente non trovato!");
+//		}
+//	}
 	
 	
 	public void utenteTrovatoId (int id){
@@ -333,21 +327,22 @@ public class UtenteBean {
 	}
 	
 	
-	public Utente cercaUtenteById (int id){
-		EntityManager em = EMF.createEntityManager();
-		
-		Utente u = em.find(Utente.class, id);
-
-		if(u!=null){
-			return u;
-		}else{
-			contentBean.setMessaggio("errore utentebyid non trovato!");
-			System.out.println("UTENTEbyId NON TROVATOOOOO");
-			return null;
-		}
-	}
+//	public Utente cercaUtenteById (int id){
+//		EntityManager em = EMF.createEntityManager();
+//		
+//		Utente u = em.find(Utente.class, id);
+//
+//		if(u!=null){
+//			return u;
+//		}else{
+//			contentBean.setMessaggio("errore utentebyid non trovato!");
+//			System.out.println("UTENTEbyId NON TROVATOOOOO");
+//			return null;
+//		}
+//	}
 	
 	
+//	usato da EntityConverter
 	public Utente cercaUtente (String username){
 		EntityManager em = EMF.createEntityManager();
 		
@@ -371,7 +366,6 @@ public class UtenteBean {
 				System.out.println("AGGIUNGI REGIONEEEE=="+region);
 				utente.getRegioniitaliane().add(RegioneItaliana.valueOf(region));
 			}
-
 			serv.merge(utente);
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
@@ -382,7 +376,6 @@ public class UtenteBean {
 			String mm = e.getMessage()+" ERRORe";
 			contentBean.setMessaggio(mm);
 		}
-			//contentBean.setContent(null);
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 
@@ -399,7 +392,7 @@ public class UtenteBean {
 	}
 
 	
-	public double calcolaMediaVotiFoto2 (List<Voto> listaVoti) {
+	public double calcolaMediaVotiFoto (List<Voto> listaVoti) {
 		if(listaVoti.size()>0) {
 		double numeroVoti=0;
 		double sommaVoti=0;
@@ -416,28 +409,7 @@ public class UtenteBean {
 		}
 		return 0;
 	}
-//	public double calcolaMediaVotiFoto (int idFoto) {
-//		EntityManager em = EMF.createEntityManager();
-//		String hql = "from Voto v where v.foto.id=:n ";
-//		Query q = em.createQuery(hql, Foto.class);
-//		q.setParameter("n",idFoto);
-//		List<Voto> voti = (List<Voto>) q.getResultList();
-//		if(voti.size()>0) {
-//			double numeroVoti=0;
-//			double sommaVoti=0;
-//			for (Voto v : voti) {
-//				sommaVoti += v.getScore();
-//				numeroVoti++;	
-//			}
-//			System.out.println("NUMERO--VOTI---:" + numeroVoti);
-//			System.out.println("SOMMA--VOTI---:" + sommaVoti);
-//			double mediaVoti = sommaVoti/numeroVoti;
-//			System.out.println("MEDIA--VOTI---:" + mediaVoti);
-//			mediaVoti = Double.parseDouble(new DecimalFormat("##.##").format(mediaVoti));
-//			return mediaVoti;
-//		}
-//		return 0;
-//	}
+
 	
 	public int calcolaEtà(Date dataNascita) {
 		Date currentDate = new Date(); // current date
@@ -459,22 +431,19 @@ public class UtenteBean {
 	}
 
 	
-	public List<String> convertiUtenteInUsername (List<Utente> utenti) {
-
-		List <String> usernames = new ArrayList<String>();
-		if (utenti==null){
-			return null;
-		}
-
-		for (Utente ut : utenti) {
-			usernames.add(ut.getUsername());
-		}
-		return usernames;
-	}
+//	public List<String> convertiUtenteInUsername (List<Utente> utenti) {
+//		List <String> usernames = new ArrayList<String>();
+//		if (utenti==null){
+//			return null;
+//		}
+//		for (Utente ut : utenti) {
+//			usernames.add(ut.getUsername());
+//		}
+//		return usernames;
+//	}
 	
 	
-	public List<Utente> suggerisciUtente (String username) {	
-//		List<String> suggerimentiUtente = new ArrayList<String>();		
+	public List<Utente> suggerisciUtente (String username) {		
 		EntityManager em = EMF.createEntityManager();
 		List<Utente> utenti = em
 		.createQuery("from Utente u where u.username like :user")
@@ -483,13 +452,11 @@ public class UtenteBean {
 		
 		if(utenti!=null && utenti.size()>0){
 			for (Utente ut : utenti) {
-//				suggerimentiUtente.add(ut.getUsername());
 				System.out.println("UTENTI LIKE"+ut.getUsername());
 			}			
 		}else{
 			System.out.println("errore utente non trovato!");
 		}
-//		return suggerimentiUtente;
 		return utenti;
 	}
 	
@@ -584,11 +551,9 @@ public class UtenteBean {
 			default: 
 				region = "ESTERo";
 				break;
-			}
-				
+			}			
 			System.out.println("SUGGERISCIREGIONEEE22=="+region);
-		}
-		
+		}	
 	return suggerimenti;
 	}
 	
@@ -609,171 +574,57 @@ public class UtenteBean {
 		}
 		return utente.getMemberships().get(utente.getMemberships().size()-1).getTipoMembership().getId();
 	}
+
 	
-	
-	public void inviaMessaggio () {
-		System.out.println("INVIA MESSAGGIO function");
-		if (!esisteThreadMessaggi(utente.getId(), thread.getDestinatarioPrimo().getId(), messaggio.getOggetto())){
-			System.out.println("INVIA MESSAGGIO==nuovo messaggiooooo");
-			Thread thr = new Thread();	
-			Messaggio mess = new Messaggio();
-			thr.setMittentePrimo(utente);
-			thr.setDestinatarioPrimo(thread.getDestinatarioPrimo());
-			thr.setOggettoThread(messaggio.getOggetto());
-			mess.setMessaggio(messaggio.getMessaggio());
-			mess.setMittente(utente);
-			mess.setDestinatario(thread.getDestinatarioPrimo());
-			mess.setOggetto(messaggio.getOggetto());
-			mess.setThread(thr);
-			Date ora = new Date();
-			mess.setData(ora);
-			System.out.println("MESSAGGIO messaggio"+mess.getMessaggio());
-			thr.getMessaggi().add(mess);
-			try {
-				serv.persist(thr);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace(); 
-			}
-			contentBean.setContent("messaggi.xhtml");
-			contentBean.setMessaggio("Thread nuovo");
-		} else {
-			System.out.println("INVIA MESSAGGIO==thread esistente");
-			Messaggio mess = new Messaggio();
-			mess.setMessaggio(messaggio.getMessaggio());
-			mess.setMittente(utente);
-			mess.setDestinatario(threadEsistente.getDestinatarioPrimo());
-			mess.setOggetto(messaggio.getOggetto());
-			mess.setThread(threadEsistente);
-			Date ora = new Date();
-			mess.setData(ora);
-			threadEsistente.getMessaggi().add(mess);
-			try {
-				serv.merge(threadEsistente);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			contentBean.setContent("messaggi.xhtml");
-			contentBean.setMessaggio("Thread esistente");
-		}
-	}
-	
-	
-	public boolean esisteThreadMessaggi (int mittId, int destId, String oggThr) {
-		System.out.println("ESISTETHREADH function");
+	public void cercaCollaborazioniUtenteFoto (int idUtente) {
+		System.out.println("cercaCollaborazioniUtenteFoto startttt----");
 		EntityManager em = EMF.createEntityManager();
-		List<Thread> threads = em
-		.createQuery("from Thread t where t.mittentePrimo.id =:mitt and t.destinatarioPrimo.id =:dest and t.oggettoThread =:ogg")
-		.setParameter("mitt", mittId)
-		.setParameter("dest", destId)
-		.setParameter("ogg", oggThr)
+		collaborazioniFoto = em
+		.createQuery("from Foto f join f.collaboratori c where c.id=:idUt")
+		.setParameter("idUt", idUtente)
 		.getResultList();
-		
-		if(threads!=null && threads.size()>0) {
-			setThreadEsistente(threads.get(0));
-			return true;		
-		}
-		return false;
+		contentBean.setContent("collaborazioniFotos.xhtml");
+		System.out.println("size"+collaborazioniFoto.size());
 	}
 	
 	
-	public void cercaMessaggiInviatiUtente (int idUtente) {
+	public void cercaPreferitiUtenteFoto () {
+//		System.out.println("cercaCollaborazioniUtenteFoto startttt----");
+//		EntityManager em = EMF.createEntityManager();
+//		preferitiFoto = em
+//		.createQuery("from Foto f join f.utentiChePreferisconoFoto c where c.id=:idUt")
+//		.setParameter("idUt", idUtente)
+//		.getResultList();
+		contentBean.setContent("preferitiUtente.xhtml");
+//		System.out.println("size"+preferitiFoto.size());
+	}
+	
+	
 
-		EntityManager em = EMF.createEntityManager();
-		messaggiInviatiUtente = em
-		.createQuery("from Thread t where t.mittentePrimo.id =:mitt")
-		.setParameter("mitt", idUtente)
-		.getResultList();	
-	}
-	
-	
-	public void cercaMessaggiRicevutiUtente (int idUtente) {
-
-		EntityManager em = EMF.createEntityManager();
-		messaggiRicevutiUtente = em
-		.createQuery("from Thread t where t.destinatarioPrimo.id =:mitt")
-		.setParameter("mitt", idUtente)
-		.getResultList();	
-	}
-	
-	
-	public void visualizzaMessaggio (int idMess) {
-		EntityManager em = EMF.createEntityManager();
-		List<Thread> threads = em
-		.createQuery("from Thread t where t.id =:idThr")
-		.setParameter("idThr", idMess)
-		.getResultList();	
-		if(threads!=null && threads.size()>0) {
-			setMessaggioThread(threads.get(0));	
-			contentBean.setContent("messaggioThread.xhtml");
-		}
-	}
-	
-	
 	//************GETTERS & SETTERS*******************
+	
+	
 
+	public List<Foto> getPreferitiFoto() {
+		return preferitiFoto;
+	}
+
+	public void setPreferitiFoto(List<Foto> preferitiFoto) {
+		this.preferitiFoto = preferitiFoto;
+	}
+
+	public List<Foto> getCollaborazioniFoto() {
+		return collaborazioniFoto;
+	}
 	
-	
-	
+	public void setCollaborazioniFoto(List<Foto> collaborazioniFoto) {
+		this.collaborazioniFoto = collaborazioniFoto;
+	}
+
 	public String getAvatarDefault() {
 		return avatarDefault;
 	}
-
-	public List<Thread> getMessaggiRicevutiUtente() {
-		return messaggiRicevutiUtente;
-	}
-
-
-	public void setMessaggiRicevutiUtente(List<Thread> messaggiRicevutiUtente) {
-		this.messaggiRicevutiUtente = messaggiRicevutiUtente;
-	}
-
-
-	public Thread getMessaggioThread() {
-		return messaggioThread;
-	}
-
-
-	public void setMessaggioThread(Thread messaggioThread) {
-		this.messaggioThread = messaggioThread;
-	}
-
-
-	public List<Thread> getMessaggiInviatiUtente() {
-		return messaggiInviatiUtente;
-	}
-
-
-	public void setMessaggiInviatiUtente(List<Thread> messaggiInviatiUtente) {
-		this.messaggiInviatiUtente = messaggiInviatiUtente;
-	}
-
-
-	public Thread getThread() {
-		return thread;
-	}
 	
-	public Thread getThreadEsistente() {
-		return threadEsistente;
-	}
-
-	public void setThreadEsistente(Thread threadEsistente) {
-		this.threadEsistente = threadEsistente;
-	}
-
-	public void setThread(Thread thread) {
-		this.thread = thread;
-	}
-
-	public Messaggio getMessaggio() {
-		return messaggio;
-	}
-
-	public void setMessaggio(Messaggio messaggio) {
-		this.messaggio = messaggio;
-	}
-
 	public void setAvatarDefault(String avatarDefault) {
 		this.avatarDefault = avatarDefault;
 	}

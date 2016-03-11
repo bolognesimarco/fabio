@@ -168,6 +168,7 @@ html, body{
 	margin-top: 0px!important;
 	font-size: 12px;
 }
+
 /* sigola colonna */
 .singolacolonna{
 	text-align: left;
@@ -175,6 +176,25 @@ html, body{
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 	margin-top: 0px!important;
 	font-size: 12px;
+}
+
+/* colonne tabelle a 2 piccole per dati foto */
+.rightfoto{
+	text-align: right;
+	color: #EF4323;
+	margin-right: 0px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-top: 0px!important;
+	font-size: 10px;
+}
+
+.leftfoto{
+	text-align: left;
+	color: white;
+	margin-left: 0px;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+	margin-top: 0px!important;
+	font-size: 10px;
 }
 
 /* messaggi diverso ccs con true-false */
