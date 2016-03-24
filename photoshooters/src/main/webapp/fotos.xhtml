@@ -56,7 +56,7 @@
 					</figure>
 					
 					<p:commandButton value="ELIMINa" styleClass="menubuttonorange" >
-						<f:ajax event="click" listener="#{inputBean.cancellaFoto(risultato.id)}" render=":content :nuovafotoform :fotosform" />
+						<f:ajax event="click" listener="#{inputBean.cancellaFoto(risultato)}" render=":content :nuovafotoform :fotosform" />
 						<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe?" icon="ui-icon-alert" />
 					</p:commandButton>		
 					
@@ -98,7 +98,7 @@
 				<p:autoComplete id="newFotosoggetto" value="#{inputBean.nuovaFoto.soggetto}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="sogg" itemValue="#{sogg}" itemLabel="#{sogg.username}"></p:autoComplete>
 				
 				<h:outputLabel for="newFotocollaboratoriFoto">COLLABORATORi FOTo</h:outputLabel>
-				<p:autoComplete id="newFotocollaboratoriFoto" value="#{inputBean.nuovaFoto.collaboratori}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true">
+				<p:autoComplete id="newFotocollaboratoriFoto" value="#{inputBean.nuovaFoto.collaboratori}" completeMethod="#{utenteBean.suggerisciUtenteTranneLoggato}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true">
 		            <p:column>
 		                <h:outputText value="#{collab.username}" />
 		            </p:column>

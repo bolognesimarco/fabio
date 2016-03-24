@@ -34,7 +34,7 @@
 								height="51" style="cursor: pointer;">
 								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
 							</h:graphicImage>
-							<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
+							<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/album-copertina.svg"
 								height="51" style="cursor: pointer;">
 								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
 							</h:graphicImage>
@@ -174,17 +174,38 @@
 					  </h:panelGrid>
 							
 					</h:panelGrid>
-					
-					<h:panelGrid id="attivitàutentetrovatopanel">
-					
-						<h:commandButton disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" value="COLLABORAZIONi" action="#{utenteBean.cercaCollaborazioniUtenteFoto(utenteBean.cercaUtente.utente.id)}"></h:commandButton>
-						<h:commandButton disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" value="PREFERITi" action="#{utenteBean.cercaPreferitiUtenteFoto()}"></h:commandButton>
-						<h:commandButton value="ANNUNCi"></h:commandButton>
-						<h:commandButton value="POSTs"></h:commandButton>
-						<h:commandButton value="INVIa MESSAGGIo"></h:commandButton>
-						<h:commandButton disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" value="CHAt"></h:commandButton>
-					
+					<h:panelGrid >
+						<f:facet name="header">
+		            		<h:outputText value="ATTIVITà PHOTOSHOOTEr"/>
+		        		</f:facet>
+						<h:panelGrid id="attivitàutentetrovatopanel">
+						
+							<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaCollaborazioniUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="FOTo PREFERITe Da | SEGUITo Da" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferentiFollowerUtenteTrovato(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="ANNUNCi"></h:commandButton>
+							<h:commandButton value="POSTs"></h:commandButton>
+							
+						</h:panelGrid>	
+						
+						<h:panelGrid id="interagisciutentetrovatopanel">
+						
+							<h:commandButton value="INVIa MESSAGGIo" disabled="#{utenteBean.tipoMembershipUtente()==0}" title="attivo per membri" action="#{menuBean.menuClick(19)}"></h:commandButton>
+							<h:commandButton value="CHAt" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" ></h:commandButton>
+							<h:commandButton value="SEGUi PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==false}" action="#{utenteBean.seguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="NOn sEGUIRe PIù PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==true}" action="#{utenteBean.nonSeguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+						
+						</h:panelGrid>
+						<h:panelGrid id="visitepanel">
+							<f:facet name="header">
+            					<h:outputText styleClass="common" value="VISITe P|S (#{utenteBean.cercaUtente.utente.visite})"/>
+       						</f:facet>
+							<ui:repeat value="#{utenteBean.cercaUtente.utente.utentiVisitatori}" var="info">
+								<h:commandLink styleClass="leftprofilo" value="#{info.username}" action="#{utenteBean.utenteTrovatoId(info.id)}"></h:commandLink>
+								<h:outputText value=",&#160;"></h:outputText>
+							</ui:repeat>
+						</h:panelGrid>
 					</h:panelGrid>
+
 											
 					<f:facet name="footer">
 			            <h:panelGroup>

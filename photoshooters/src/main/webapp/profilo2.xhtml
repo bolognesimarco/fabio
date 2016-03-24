@@ -17,12 +17,12 @@
 	<h:panelGroup styleClass="pannello homepage">
 
 		<h:form id="profiloform">
-		<h:panelGrid border="1" columns="1" >
+		<h:panelGrid border="1" columns="2" >
 
 		  <h:panelGrid  columns="2" style="vertical-align: top" columnClasses="2right, 2left">
 			
 				<f:facet name="header">
-            		<h:outputText value="PROFILO PHOTOSHOOTEr"/>
+            		<h:outputText value="PROFILo PHOTOSHOOTEr"/>
         		</f:facet>
         		
 			<h:panelGrid  columns="2" columnClasses="rightprofilo, leftprofilo">
@@ -146,6 +146,49 @@
 	            	</h:panelGroup>
         		</f:facet>
         		
+        	<h:panelGrid  columns="1" style="vertical-align: top" >
+			
+				<f:facet name="header">
+            		<h:outputText value="ATTIVITà PHOTOSHOOTEr"/>
+        		</f:facet>	
+        		
+      			<h:panelGrid id="attivitàutente">
+				
+					<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaCollaborazioniUtente(utenteBean.utente)}"></h:commandButton>
+					<h:commandButton value="PREFERITe | SEGUITi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferitiSeguitiDaUtente()}"></h:commandButton>
+					<h:commandButton value="ANNUNCi"></h:commandButton>
+					<h:commandButton value="POSTs"></h:commandButton>
+					
+				</h:panelGrid>	
+				
+				<h:panelGrid id="avvisimailpanel" styleClass="leftprofilo">
+					
+					<f:facet name="header">
+            			<h:outputText value="AVVISi MAIl PHOTOSHOOTEr"/>
+        			</f:facet>
+        				
+					<h:outputLabel for="mailavviso">NUOVo MESSAGGIo</h:outputLabel>
+						<h:selectBooleanCheckbox id="mailavviso" value="#{utenteBean.utente.mailNuovoMessaggio}" disabled="true">
+					</h:selectBooleanCheckbox>		
+					<h:outputLabel for="votoavviso">TUa FOTo VOTATa</h:outputLabel>
+						<h:selectBooleanCheckbox id="votoavviso" value="#{utenteBean.utente.mailNuovoVoto}" disabled="true">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="preferitaavviso">TUa FOTo E' PREFERITa</h:outputLabel>
+						<h:selectBooleanCheckbox id="preferitaavviso" value="#{utenteBean.utente.mailNuovaFotoPreferita}" disabled="true">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="seguitoavviso">NUOVo P|S Ti SEGUe</h:outputLabel>
+						<h:selectBooleanCheckbox id="seguitoavviso" value="#{utenteBean.utente.mailNuovoFollower}" disabled="true">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="postavviso">NUOVo MESSAGGIo In TUo POSt</h:outputLabel>
+						<h:selectBooleanCheckbox id="postavviso" value="#{utenteBean.utente.mailNuovoMessaggioPostTuo}" disabled="true">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="annuncioavviso">NUOVa RISPOSTa TUo ANNUNCIo</h:outputLabel>
+						<h:selectBooleanCheckbox id="annuncioavviso" value="#{utenteBean.utente.mailNuovaRispostaAnnuncio}" disabled="true">
+					</h:selectBooleanCheckbox>	
+						
+				</h:panelGrid>
+        	</h:panelGrid>	
+        	
 		</h:panelGrid>			
 					
 		</h:form>

@@ -47,7 +47,9 @@ public class UtenteBean {
 	private String avatarDefault = "avatarDefault.svg"; 
 	private String region ="";
 	List<Foto> collaborazioniFoto = new ArrayList<Foto>();
-	List<Foto> preferitiFoto = new ArrayList<Foto>();	
+	List<Utente> collaborazioniUtenti = new ArrayList<Utente>();
+	List<Foto> fotosPreferite = new ArrayList<Foto>();	
+	List<Utente> seguitoDaUtenti = new ArrayList<Utente>();
 
 	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();
@@ -314,32 +316,60 @@ public class UtenteBean {
 		.setParameter("idutente", id)
 		.getResultList();
 		if(utenti!=null && utenti.size()>0){
-			if (utente!= null && utenti.get(0).getId()==utente.getId()){
-				contentBean.setContent("albums3.xhtml");
-			}
-			else {
+//			se non sono loggato
+			if (utente==null){
+				System.out.println("utente==null - username trovato= "+utenti.get(0).getUsername());
 				cercaUtente.setUtente(utenti.get(0));
 				contentBean.setContent("utenteTrovato2.xhtml");
+			}  
+			else { //utente trovato non sono io - aggiungo visita
+				if(utenti.get(0).getId()!=utente.getId()) {
+					aggiungiVisitaUtente(utenti.get(0));
+					cercaUtente.setUtente(utenti.get(0));
+					contentBean.setContent("utenteTrovato2.xhtml");
+				} 
+				else { //utente trovato sono io
+					contentBean.setContent("profilo2.xhtml");
+					System.out.println("sono iooooo");
+				}
 			}
-		}else{
+		}
+		else{
 			System.out.println("errore id utente non trovato!");
 		}
 	}
 	
 	
-//	public Utente cercaUtenteById (int id){
-//		EntityManager em = EMF.createEntityManager();
-//		
-//		Utente u = em.find(Utente.class, id);
-//
-//		if(u!=null){
-//			return u;
-//		}else{
-//			contentBean.setMessaggio("errore utentebyid non trovato!");
-//			System.out.println("UTENTEbyId NON TROVATOOOOO");
-//			return null;
-//		}
-//	}
+	public boolean utenteVisitato (Utente ut) {
+		for (Utente u : ut.getUtentiVisitatori()) {
+			if (u.getId()==utente.getId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	public void aggiungiVisitaUtente (Utente ut) {
+		if (ut.getVisite()<2000000000) {
+			int v = ut.getVisite()+1;
+			ut.setVisite(v);
+		}
+		if (!utenteVisitato(ut)){
+			if (ut.getUtentiVisitatori().size()<100) {
+				ut.getUtentiVisitatori().add(utente);
+			} else {
+				ut.getUtentiVisitatori().remove(0);
+				ut.getUtentiVisitatori().add(utente);
+			}
+		}
+		try {
+			serv.merge(ut);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 //	usato da EntityConverter
@@ -362,7 +392,7 @@ public class UtenteBean {
 	
 	public void aggiornaProfilo() {
 		try {
-			if (!controllaRegione(region)) {
+			if (region!="" && !controllaRegione(region)) {
 				System.out.println("AGGIUNGI REGIONEEEE=="+region);
 				utente.getRegioniitaliane().add(RegioneItaliana.valueOf(region));
 			}
@@ -370,7 +400,6 @@ public class UtenteBean {
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
 			contentBean.setContent("profilo2.xhtml");	
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			String mm = e.getMessage()+" ERRORe";
@@ -418,7 +447,6 @@ public class UtenteBean {
         int età = 0;
         int compiuti = 0;
         today.setTime(currentDate);
-
         if (dataNascita!=null){
             birth.setTime(dataNascita);
             if (today.get(Calendar.DAY_OF_YEAR) < birth.get(Calendar.DAY_OF_YEAR)) {
@@ -576,41 +604,112 @@ public class UtenteBean {
 	}
 
 	
-	public void cercaCollaborazioniUtenteFoto (int idUtente) {
+	public void cercaCollaborazioniUtente (Utente utente) {
 		System.out.println("cercaCollaborazioniUtenteFoto startttt----");
 		EntityManager em = EMF.createEntityManager();
 		collaborazioniFoto = em
-		.createQuery("from Foto f join f.collaboratori c where c.id=:idUt")
-		.setParameter("idUt", idUtente)
+		.createQuery("from Foto f inner join f.collaboratori c where c.id=:idUt")
+		.setParameter("idUt", utente.getId())
 		.getResultList();
-		contentBean.setContent("collaborazioniFotos.xhtml");
+		contentBean.setContent("collaborazioniUtente.xhtml");
 		System.out.println("size"+collaborazioniFoto.size());
+		collaborazioniUtenti = utente.getCollaboratori();
+		System.out.println("size colla utente"+collaborazioniUtenti.size());
 	}
 	
 	
-	public void cercaPreferitiUtenteFoto () {
-//		System.out.println("cercaCollaborazioniUtenteFoto startttt----");
-//		EntityManager em = EMF.createEntityManager();
-//		preferitiFoto = em
-//		.createQuery("from Foto f join f.utentiChePreferisconoFoto c where c.id=:idUt")
-//		.setParameter("idUt", idUtente)
-//		.getResultList();
+	public void cercaPreferitiSeguitiDaUtente () {
 		contentBean.setContent("preferitiUtente.xhtml");
-//		System.out.println("size"+preferitiFoto.size());
 	}
 	
 	
+	public void cercaPreferentiFollowerUtenteTrovato (Utente ut) {
+		EntityManager em = EMF.createEntityManager();
+		fotosPreferite = em
+		.createQuery("from Foto f where f.pubblicatore.id=:idU and f.utentiChePreferisconoFoto is not empty")
+		.setParameter("idU", ut.getId())
+		.getResultList();
+//		em.close();
+		seguitoDaUtenti = em
+		.createQuery("from Utente u inner join u.utentiSeguiti us on us.id=:idUt")
+		.setParameter("idUt", ut.getId())
+		.getResultList();		
+		contentBean.setContent("preferitiUtenteTrovato.xhtml");
+	}
+	
+	
+	public void seguiUtente(Utente u) {
+		utente.getUtentiSeguiti().add(u);
+		try {
+			if(u.isMailNuovoFollower()){
+				MailSender.sendNuovoFollowerMail(u.getEmail(), utente.getUsername());
+			}
+			System.out.println("seguiiiiiii");
+			serv.merge(utente);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+
+	public void nonSeguiUtente(Utente u) {
+		Iterator<Utente> it = utente.getUtentiSeguiti().iterator();
+		while(it.hasNext()) {
+			Utente ut = it.next();
+			if(ut.getId()==u.getId()) {
+				it.remove();
+			}
+		}
+		try {
+			System.out.println("non seguiiiiiii");
+			serv.merge(utente);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public boolean utenteSeguito(Utente u) {
+		if (utente!=null){
+			for (Utente ut : utente.getUtentiSeguiti()) {
+				if (u.getId()==ut.getId()) {
+					return true;
+				}	
+			}
+			return false;
+		}
+		return false;
+	}
+	
+	
 	//************GETTERS & SETTERS*******************
-	
-	
 
-	public List<Foto> getPreferitiFoto() {
-		return preferitiFoto;
+
+
+	public List<Utente> getCollaborazioniUtenti() {
+		return collaborazioniUtenti;
 	}
 
-	public void setPreferitiFoto(List<Foto> preferitiFoto) {
-		this.preferitiFoto = preferitiFoto;
+	public List<Utente> getSeguitoDaUtenti() {
+		return seguitoDaUtenti;
+	}
+
+	public void setSeguitoDaUtenti(List<Utente> seguitoDaUtenti) {
+		this.seguitoDaUtenti = seguitoDaUtenti;
+	}
+
+	public void setCollaborazioniUtenti(List<Utente> collaborazioniUtenti) {
+		this.collaborazioniUtenti = collaborazioniUtenti;
+	}
+
+	public List<Foto> getFotosPreferite() {
+		return fotosPreferite;
+	}
+
+	public void setFotosPreferite(List<Foto> fotosPreferite) {
+		this.fotosPreferite = fotosPreferite;
 	}
 
 	public List<Foto> getCollaborazioniFoto() {

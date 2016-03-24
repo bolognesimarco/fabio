@@ -52,6 +52,9 @@ public class Foto implements Serializable{
 	private boolean visibileSoloMembri;
 	
 	@Column
+	private int visite;
+	
+	@Column
 	private boolean inVotazione;
 	
 	@ManyToOne
@@ -62,7 +65,7 @@ public class Foto implements Serializable{
     @JoinColumn(name="fotografo", nullable=true)
 	private Utente fotografo;
 
-		// pubblicatore è chi pubblica foto sul sito
+	// pubblicatore è chi pubblica foto sul sito
 	@ManyToOne
     @JoinColumn(name="pubblicatore", nullable=false)
 	private Utente pubblicatore;
@@ -88,7 +91,7 @@ public class Foto implements Serializable{
 	
 	@ManyToMany
 	@JoinTable(name="Foto_Preferenti")
-	private List<Utente> utentiChePreferisconoFoto;
+	private List<Utente> utentiChePreferisconoFoto = new ArrayList<Utente>();
 	
 
 	
@@ -97,6 +100,14 @@ public class Foto implements Serializable{
 
 	public boolean isInVotazione() {
 		return inVotazione;
+	}
+
+	public int getVisite() {
+		return visite;
+	}
+
+	public void setVisite(int visite) {
+		this.visite = visite;
 	}
 
 	public void setInVotazione(boolean inVotazione) {

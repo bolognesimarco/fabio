@@ -17,7 +17,7 @@
 <h:body>
 
 	<h:panelGroup styleClass="pannello homepage">
-		<h:panelGrid>
+		<h:panelGrid id="albumspanel">
 			<f:facet name="header"> 		
             		<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
             		<h:outputText value="&#160;-&#160;ALMBUMs PHOTOSHOOTEr"/>
@@ -27,14 +27,14 @@
         	
 <!-- 			<h:form id="albumsform" enctype="multipart/form-data"> -->
 						
-				<p:dataGrid  value="#{inputBean.listaAlbum}" var="result" columns="4" rows="3" paginator="true"  rowsPerPageTemplate="3,6,9">
+				<p:dataGrid  value="#{utenteBean.utente.pubblicati}" var="result" columns="4" rows="3" paginator="true"  rowsPerPageTemplate="3,6,9">
 					
 					<p:column>
 						<h:graphicImage rendered="#{result.copertinaAlbum!=null}" value="/lil?path=#{utenteBean.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
 							 width="50" style="cursor: pointer;">
 							<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 						</h:graphicImage>
-						<h:graphicImage rendered="#{result.copertinaAlbum==null}" value="/resources/images/avatarDefault.svg"
+						<h:graphicImage rendered="#{result.copertinaAlbum==null}" value="/resources/images/album-copertina.svg"
 							 width="50" style="cursor: pointer;">
 							 <f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 						</h:graphicImage>
@@ -44,8 +44,8 @@
 		    	   		</h:commandButton>	<br></br>
 		    	   		
 		    	   		<p:commandButton value="ELIMINa" styleClass="menubuttonorange; color: #EF4323;"  >
-        					<f:ajax event="click" listener="#{inputBean.cancellaAlbum(result.id)}" render=":content :headerform :patternguestform menuutenteform" />
-        					<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe?" icon="ui-icon-alert" />
+        					<f:ajax event="click" listener="#{inputBean.cancellaAlbum(result)}" render=":content :headerform :patternguestform menuutenteform :albumspanel" />
+        					<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe? Verranno eliminate tutte le foto dell'album!" icon="ui-icon-alert" />
     					</p:commandButton>
  
 					    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

@@ -1,4 +1,4 @@
-package com.bolo.photoshooters.temp;
+package com.bolo.photoshooters.web;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,10 +31,6 @@ import com.bolo.photo.web.entity.Voto;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.service.SimpleImageInfo;
-import com.bolo.photoshooters.web.ContentBean;
-import com.bolo.photoshooters.web.EMF;
-import com.bolo.photoshooters.web.LoginBean;
-import com.bolo.photoshooters.web.UtenteBean;
 
 
 @ManagedBean(name = "inputBean")
@@ -81,13 +77,8 @@ public class InputBean {
 				listaAlbum.add(newAlbum);
 				System.out.println("nuovoAlbum ID==:"+newAlbum.getId());
 				try {
-//					serv.merge(utenteBean.getUtente());
-//					serv.refresh(utenteBean.getListaAlbum());
 					System.out.println("PERSIST************");
 					serv.persist(newAlbum);
-//					serv.refresh(utenteBean.getUtente().getPubblicati());
-//					serv.refresh(utenteBean.getNuovoAlbum().getId());
-//					serv.merge(utenteBean.getNuovoAlbum());
 				} catch (Exception e) {
 					e.printStackTrace();
 					String mm = e.getMessage()+" ERRORe CREAZIONe NUOVo ALBUm!";
@@ -96,7 +87,7 @@ public class InputBean {
 				contentBean.setMessaggio("Album aggiunto");
 				nuovoAlbum.setTitolo(null);
 				nuovoAlbum.setDescrizione(null);
-				visualizzaAlbums(utenteBean.getUtente());
+//				visualizzaAlbums(utenteBean.getUtente());
 			} else {
 				System.out.println("Errore nella creazione della cartella dell'album!");
 				contentBean.setMessaggio("errore nell'aggiunta album");
@@ -111,33 +102,42 @@ public class InputBean {
 	}
 
 	
-	public void cancellaAlbum (int idAlbum){
-		System.out.println("funzione cancellaAlbum start ////");
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Album a where a.id=:n";
-		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", idAlbum);
-		System.out.println("ALBUM DA CANCELLARE trovato::"+q.getResultList().get(0).toString());
-			
+	public void cancellaAlbum (Album daCancellare){
+		System.out.println("funzione cancellaAlbum start ////albumid=="+daCancellare.getId());
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Album a where a.id=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", album.getId());
+//		System.out.println("ALBUM DA CANCELLARE trovato::"+q.getResultList().get(0).toString());		
 		try {
 			//cancella cartella album
-			Album daCancellare = (Album) q.getResultList().get(0);
+//			Album daCancellare = (Album) q.getResultList().get(0);
 			String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
 			File userAlbumFolder = new File(userAlbumFolderPath + daCancellare.getTitolo() + File.separator);
 			if (userAlbumFolder.exists()) {
 				System.out.println("ALBUM DA CANCELLARE CARTELLA=="+userAlbumFolder);
+				for(File file: userAlbumFolder.listFiles()) {
+					file.delete();
+				}
 				userAlbumFolder.delete();
 			}	
-			serv.delete((Album)q.getResultList().get(0));
+			serv.delete(daCancellare);
+			Iterator<Album> it = utenteBean.getUtente().getPubblicati().iterator();
+			while(it.hasNext()) {
+				Album al = it.next();
+				if(al.getId()==daCancellare.getId()) {
+					it.remove();
+				}
+			}
+//			utenteBean.getUtente().getPubblicati().remove(daCancellare);
 			serv.refresh(utenteBean.getUtente());
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Album CANCELLATO!");
 		contentBean.setMessaggio("Album CANCELLATO!");
-		visualizzaAlbums(utenteBean.getUtente());
+//		visualizzaAlbums(utenteBean.getUtente());
 	}	
 
 //	mi serve il vecchio titolo per rinominare la cartella con il nuovo titolo
@@ -173,12 +173,12 @@ public class InputBean {
 
 	
 	public void visualizzaAlbums (Utente utente){	
-//		EntityManager em = EMF.createEntityManager();
-//		String hql = "from Album a where a.pubblicatore=:n";
-//		Query q = em.createQuery(hql, Album.class);
-//		q.setParameter("n", utente);		
-//		listaAlbum = (List<Album>) q.getResultList();
-		listaAlbum = utente.getPubblicati();
+		EntityManager em = EMF.createEntityManager();
+		String hql = "from Album a where a.pubblicatore.id=:n";
+		Query q = em.createQuery(hql, Album.class);
+		q.setParameter("n", utente.getId());		
+		listaAlbum = (List<Album>) q.getResultList();
+//		listaAlbum = utente.getPubblicati();
 	}
 	
 	
@@ -211,6 +211,7 @@ public class InputBean {
 		for (Foto iesima : albumVisualizzato.getFotos()) {
 			System.out.println("FOTO IESIM album.getfotod=="+iesima.getTitolo());
 			if (iesima.getTitolo().equals(getNuovaFoto().getTitolo())) {
+				contentBean.setMessaggio("Non è possibile caricare foto con lo stesso titolo nello stesso album.");
 				return;
 			}
 		}
@@ -234,8 +235,7 @@ public class InputBean {
 			while ((read = inputStream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
-			statusMessage = "Upload foto completato!";
-			
+			statusMessage = "Upload foto completato!";		
 		} catch (IOException e) {
 			e.printStackTrace();
 			statusMessage = "Upload foto fallito!";
@@ -258,20 +258,17 @@ public class InputBean {
 			}
 		}
 		
-		if (!fileName.equals("")) {
-				
+		if (!fileName.equals("")) {		
 			Foto newFoto = new Foto();
 			try {
 					SimpleImageInfo sii = new SimpleImageInfo(outputFilePath);
 					newFoto.setAltezzaFoto(sii.getHeight());
 					newFoto.setLarghezzaFoto(sii.getWidth());
-//					System.out.println("DIMENSIONI"+sii.getHeight()+sii.getWidth());
 					SimpleImageInfo imageInfo = new SimpleImageInfo((outputFilePath));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 			}			
-
 			System.out.println("inizio crazione nuovaFOTo");				
 				newFoto.setAlbum(albumVisualizzato);
 				newFoto.setPubblicatore(utenteBean.getUtente());
@@ -284,58 +281,60 @@ public class InputBean {
 				newFoto.setLuogoScatto(nuovaFoto.getLuogoScatto());
 				newFoto.setVietataMinori(nuovaFoto.isVietataMinori());
 				newFoto.setVisibileSoloMembri(nuovaFoto.isVisibileSoloMembri());
-//				System.out.println("CoLLabORATORI SIZE== "+nuovaFoto.getCollaboratori().size());
-				if(nuovaFoto.getCollaboratori()!=null)
-				{
+				if(nuovaFoto.getCollaboratori()!=null) {
 					for (Utente ut :nuovaFoto.getCollaboratori()) {
-						System.out.println("COLLABORATORI"+ut.getUsername());
 						newFoto.getCollaboratori().add(ut);
+						ut.getCollaboratori().add(utenteBean.getUtente());
+						utenteBean.getUtente().getCollaboratori().add(ut);
+						try {
+							System.out.println("merge - "+ut.getUsername());
+							serv.merge(ut);
+							serv.merge(utenteBean.getUtente());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-				}
-				
+				}			
 				if (nuovaFoto.getDataFoto()==null){
 					Date currentDate = new Date();
 					newFoto.setDataFoto(currentDate);	
 				}
 				else{
 					newFoto.setDataFoto(nuovaFoto.getDataFoto());
-				}
-				
+				}			
 				if (isFotoCopertinaAlbum()) {
 					albumVisualizzato.setCopertinaAlbum(newFoto);
 				}
-				albumVisualizzato.getFotos().add(newFoto);
-		
-			System.out.println("Fine creazione (merge) nuovaFOTo");
-		
+				albumVisualizzato.getFotos().add(newFoto);	
+			System.out.println("Fine creazione (merge) nuovaFOTo - getFOTOS.SIZE=="+albumVisualizzato.getFotos().size());
+			System.out.println("UploadNewfoto.getId=="+newFoto.getId());
 				try {
-					serv.merge(albumVisualizzato);
-//					serv.merge(utenteBean.getUtente());
-//					serv.refresh(utenteBean.getUtente());
+//					serv.persist(albumVisualizzato);
+					serv.persist(newFoto);
 				} catch (Exception e) {
 					e.printStackTrace();
 					String mm = e.getMessage()+" ERRORe UPLOAd FOTo nel merge!";
 					contentBean.setMessaggio(mm);
 				}
-				visualizzaFotos2(albumVisualizzato);
-				
-
+//				visualizzaFotos2(albumVisualizzato);
+				System.out.println("DOPO merge - Newfoto.getId=="+newFoto.getId());
 				System.out.println("FINE INPUT FOTO////titolo="+nuovaFoto.getTitolo());
 				nuovaFoto.setTitolo(null);
 				nuovaFoto.setDescrizione(null);
 				nuovaFoto.setSoggetto(null);
 				nuovaFoto.setFotografo(null);
-//				nuovaFoto.getCollaboratori().clear();
+				nuovaFoto.setCollaboratori(null);
 				nuovaFoto.setDataFoto(null);
 				nuovaFoto.setLuogoScatto(null);
 				nuovaFoto.setVietataMinori(false);
 				nuovaFoto.setVisibileSoloMembri(false);
 				setFotoCopertinaAlbum(false);
-				part=null;
-				
+				part=null;			
 			} else {
 				System.out.println("Errore nell'upload della foto!");
 			} 
+
 	}
 
 
@@ -345,13 +344,8 @@ public class InputBean {
 		String hql = "from Foto f where f.album.id=:n";
 		Query q = em.createQuery(hql, Foto.class);
 		q.setParameter("n", albumId);
-
 		risultatoFotos = (List<Foto>) q.getResultList();
-		System.out.println("RISULTATOFOToS SIZE=="+risultatoFotos.size());
-		System.out.println("albumVisualizzatoTITOLO=="+albumVisualizzato.getTitolo());
-		System.out.println("VisualizzaFotos-ALBUMID=="+albumId);
-
-		visualizzaAlbum(albumId);
+//		visualizzaAlbum(albumId);
 		pswp.clear();
 		for (Foto f : risultatoFotos) {
 			PerPhotoswipe pp = new PerPhotoswipe();
@@ -367,10 +361,12 @@ public class InputBean {
 		setIdAlbumVisualizzato(albumId);
 	}
 
-	
+
 	public void visualizzaFotos2(Album album){	
-		risultatoFotos.clear();
+		System.out.println("visFotos222 - album=="+album.getTitolo());
+//		risultatoFotos.clear();
 		risultatoFotos = album.getFotos();
+		System.out.println("risultatotoFotos.size=="+risultatoFotos.size());
 		albumVisualizzato = album; 
 		pswp.clear();
 		for (Foto f : risultatoFotos) {
@@ -442,7 +438,6 @@ public class InputBean {
 //		String hql = "from Foto f where f.id=:n";
 //		Query q = em.createQuery(hql, Foto.class);
 //		q.setParameter("n", idFoto);
-
 		try {
 //			Foto f = (Foto) q.getResultList().get(0);
 //			f.setTitolo(fotoDaModificare.getTitolo());
@@ -450,15 +445,13 @@ public class InputBean {
 //			f.setDataFoto(fotoDaModificare.getDataFoto());
 //			f.setLuogoScatto(fotoDaModificare.getLuogoScatto());
 //			f.setFotografo(fotoDaModificare.getFotografo());
-//			f.setSoggetto(fotoDaModificare.getSoggetto());
-//			
+//			f.setSoggetto(fotoDaModificare.getSoggetto());			
 //			for (Utente coll : fotoDaModificare.getCollaboratori()) {
 //				f.getCollaboratori().add(coll);
 //			}
 //			f.setVietataMinori(fotoDaModificare.isVietataMinori());
 //			f.setVisibileSoloMembri(fotoDaModificare.isVisibileSoloMembri());
 //			System.out.println("FOTO DA AGGIORNARE trovata::"+f.getTitolo()+"--IDFoto="+f.getId());
-
 			serv.merge(fotoDaModificare);
 			fotoDaModificare = new Foto();
 		} catch (Exception e) {
@@ -467,7 +460,6 @@ public class InputBean {
 		}
 		System.out.println("Foto AGGIORNATA111!");
 		visualizzaFotos2(albumVisualizzato);
-		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
 	
 	
@@ -480,33 +472,42 @@ public class InputBean {
 	}
 		
 	
-	public void cancellaFoto (int idFoto){
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Foto f where f.id=:n";
-		Query q = em.createQuery(hql, Foto.class);
-		q.setParameter("n", idFoto);
-		System.out.println("FOTO DA CANCELLARE trovata::"+q.getResultList().get(0).toString());
+	public void cancellaFoto (Foto foto){
+		System.out.println("cancellaFoto startttttt fOTO tit=="+foto.getTitolo()+"id="+foto.getId());
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Foto f where f.id=:n";
+//		Query q = em.createQuery(hql, Foto.class);
+//		q.setParameter("n", foto.getId());
+//		System.out.println("FOTO DA CANCELLARE trovata::"+q.getResultList().get(0).toString());
 		try {
 			// cancella file foto da server
 			String albumName = albumVisualizzato.getTitolo();
 			String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator + albumName + File.separator;
 			
-			if (q.getResultList().size()>0) {
-			Foto f = (Foto)q.getResultList().get(0);
-			String fileName = f.getNomeFileFoto();
-			File outputFilePath = new File(userAlbumFolderPath + fileName);	
-			outputFilePath.delete();
-			System.out.println("FILE FOTO CANCELLATO!");
+//			if (q.getResultList().size()>0) {
+//				Foto f = (Foto)q.getResultList().get(0);
+//				String fileName = f.getNomeFileFoto();
+			String fileName = foto.getNomeFileFoto();
+				File outputFilePath = new File(userAlbumFolderPath + fileName);	
+				outputFilePath.delete();
+				System.out.println("FILE FOTO CANCELLATO!");
+//			}
+//			serv.delete((Foto)q.getResultList().get(0));
+				serv.delete(foto);
+			Iterator<Foto> it = albumVisualizzato.getFotos().iterator();
+			while(it.hasNext()) {
+				Foto f = it.next();
+				if(f.getId()==foto.getId()) {
+					it.remove();
+				}
 			}
-			serv.delete((Foto)q.getResultList().get(0));
 			serv.refresh(utenteBean.getUtente());
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Foto CANCELLATA!");
-		visualizzaFotos2(albumVisualizzato);
+//		visualizzaFotos2(albumVisualizzato);
 	}
 	
 
@@ -635,6 +636,9 @@ public class InputBean {
 					votoFoto.setFoto(f);
 					f.getVoti().add(votoFoto);
 //					serv.merge(votoFoto);
+					if(f.getPubblicatore().isMailNuovoVoto()){
+						MailSender.sendNuovoVotoMail(f.getPubblicatore().getEmail(), utenteBean.getUtente().getUsername());
+					}
 					serv.merge(f);
 					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("my-gallery");
 				} catch (Exception e) {
@@ -663,23 +667,15 @@ public class InputBean {
 		public void aggiungiFotoPreferita (Foto foto) {
 			System.out.println("aggiungifotoPreferita start");
 			foto.getUtentiChePreferisconoFoto().add(utenteBean.getUtente());
-			if (foto.getUtentiChePreferisconoFoto()==null){
 				try {
-					serv.persist(foto);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else {
-				try {
+					if(foto.getPubblicatore().isMailNuovaFotoPreferita()){
+						MailSender.sendNuovaFotoPreferitaMail(foto.getPubblicatore().getEmail(), utenteBean.getUtente().getUsername());
+					}
 					serv.merge(foto);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-//			fotosUtenteTrovato(getIdAlbumVisualizzato());
-//			contentBean.setContent("fotosUtenteTrovato.xhtml");
 		}
 	
 		

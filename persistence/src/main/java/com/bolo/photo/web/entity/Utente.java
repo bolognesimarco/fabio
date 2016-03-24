@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -67,6 +68,9 @@ public class Utente implements Serializable{
 	private String password;
 	
 	@Column
+	private int visite;
+	
+	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataNascita;
 	
@@ -79,7 +83,15 @@ public class Utente implements Serializable{
 	
 	@OneToMany
 	@JoinColumn(name="UtenteId")
-	private List<Utente> collaboratori;
+	private List<Utente> collaboratori = new ArrayList<Utente>();;
+	
+	@ManyToMany
+	@JoinTable(name="Utenti_Visitatori")
+	private List<Utente> utentiVisitatori = new ArrayList<Utente>();
+	
+	@ManyToMany
+	@JoinTable(name="Utenti_Seguiti")
+	private List<Utente> utentiSeguiti = new ArrayList<Utente>();
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="utente")
 	private List<Membership> memberships;
@@ -171,14 +183,104 @@ public class Utente implements Serializable{
 	@ElementCollection
 	private List <RegioneItaliana> regioniitaliane;
 	
+	@Column
+	private boolean mailNuovoMessaggio = true;
 	
+	@Column
+	private boolean mailNuovoVoto = true;
 	
+	@Column
+	private boolean mailNuovoFollower = true;
+	
+	@Column
+	private boolean mailNuovaFotoPreferita = true;
+	
+	@Column
+	private boolean mailNuovoMessaggioPostTuo = true;
+	
+	@Column
+	private boolean mailNuovaRispostaAnnuncio = true;
 	
 	//************GETTERS&SETTERS**********
 	
 	
+	
+	
+	
 	public String getAvatar() {
 		return avatar;
+	}
+
+	public boolean isMailNuovoMessaggio() {
+		return mailNuovoMessaggio;
+	}
+
+	public void setMailNuovoMessaggio(boolean mailNuovoMessaggio) {
+		this.mailNuovoMessaggio = mailNuovoMessaggio;
+	}
+
+	public boolean isMailNuovoVoto() {
+		return mailNuovoVoto;
+	}
+
+	public void setMailNuovoVoto(boolean mailNuovoVoto) {
+		this.mailNuovoVoto = mailNuovoVoto;
+	}
+
+	public boolean isMailNuovoFollower() {
+		return mailNuovoFollower;
+	}
+
+	public void setMailNuovoFollower(boolean mailNuovoFollower) {
+		this.mailNuovoFollower = mailNuovoFollower;
+	}
+
+	public boolean isMailNuovaFotoPreferita() {
+		return mailNuovaFotoPreferita;
+	}
+
+	public void setMailNuovaFotoPreferita(boolean mailNuovaFotoPreferita) {
+		this.mailNuovaFotoPreferita = mailNuovaFotoPreferita;
+	}
+
+	public boolean isMailNuovoMessaggioPostTuo() {
+		return mailNuovoMessaggioPostTuo;
+	}
+
+	public void setMailNuovoMessaggioPostTuo(boolean mailNuovoMessaggioPostTuo) {
+		this.mailNuovoMessaggioPostTuo = mailNuovoMessaggioPostTuo;
+	}
+
+	public boolean isMailNuovaRispostaAnnuncio() {
+		return mailNuovaRispostaAnnuncio;
+	}
+
+	public void setMailNuovaRispostaAnnuncio(boolean mailNuovaRispostaAnnuncio) {
+		this.mailNuovaRispostaAnnuncio = mailNuovaRispostaAnnuncio;
+	}
+
+	public int getVisite() {
+		return visite;
+	}
+
+	public void setVisite(int visite) {
+		this.visite = visite;
+	}
+
+	public List<Utente> getUtentiVisitatori() {
+		return utentiVisitatori;
+	}
+
+	public void setUtentiVisitatori(List<Utente> utentiVisitatori) {
+		this.utentiVisitatori = utentiVisitatori;
+	}
+
+	public List<Utente> getUtentiSeguiti() {
+		return utentiSeguiti;
+	}
+
+	public void setUtentiSeguiti(List<Utente> utentiSeguiti) {
+		this.utentiSeguiti = utentiSeguiti;
 	}
 
 	public List<Foto> getFotoPreferite() {

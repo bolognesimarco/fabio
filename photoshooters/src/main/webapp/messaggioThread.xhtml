@@ -46,10 +46,10 @@
 			        			<h:outputLabel for="oggetto">OGGETTo</h:outputLabel>
 	
 								<h:outputText id="oggetto"  value="#{mess.oggetto}" styleClass="textareatonda"/>
-		    	   				<h:panelGroup rendered="#{threadBean.messaggioIsLetto(mess.destinatario.id, mess.id)==false and mess.destinatario.id==utenteBean.utente.id}">
+		    	   				<h:panelGroup rendered="#{threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.destinatario.id==utenteBean.utente.id}">
 		    	   					<sup style="color:red;font-size:8px;">new</sup>
 		    	   				</h:panelGroup>
-		    	   				<h:panelGroup rendered="#{threadBean.threadMessaggi.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess.id)==false and mess.mittente.id==utenteBean.utente.id}">
+		    	   				<h:panelGroup rendered="#{threadBean.threadMessaggi.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.mittente.id==utenteBean.utente.id}">
 		    	   					<sup style="color:red;font-size:8px;">unread</sup>
 		    	   				</h:panelGroup>
 		

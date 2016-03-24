@@ -15,7 +15,8 @@
 <h:body>
 
 	<h:panelGroup styleClass="pannello cerca">
-	<p:focus for="messaggioform:destinatari"/>
+	<p:focus for="messaggioform:destinatari" rendered="#{threadBean.messaggio.destinatario==null}"/>
+	<p:focus for="messaggioform:oggetto" rendered="#{threadBean.messaggio.destinatario!=null}"/>
 		<h:form id="messaggioform">
 		
 			<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna" >

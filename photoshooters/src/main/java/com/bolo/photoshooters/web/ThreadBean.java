@@ -21,6 +21,8 @@ import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
+import com.bolo.photoshooters.util.IndirectListSorter;
+import com.bolo.photoshooters.util.MessaggiComparator;
 
 
 @ManagedBean
@@ -66,6 +68,9 @@ public class ThreadBean {
 				thr.setNuovoMessaggio(true);
 				try {
 					serv.persist(thr);
+					if(mess.getDestinatario().isMailNuovoMessaggio()) {
+					MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace(); 
@@ -77,7 +82,6 @@ public class ThreadBean {
 					System.out.println("InviaMessaggio-ordine MESS: #"+i+"-data-"+m.getData());
 					i++;
 				}	
-			
 				contentBean.setContent("messaggi.xhtml");
 				contentBean.setMessaggio("Thread nuovo");
 			} else {
@@ -103,7 +107,10 @@ public class ThreadBean {
 				threadEsistente.getMessaggi().add(mess);
 				threadEsistente.setNuovoMessaggio(true);
 				try {
-					serv.merge(threadEsistente);
+					serv.merge(threadEsistente);;
+					if(mess.getDestinatario().isMailNuovoMessaggio()) {
+						MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -119,6 +126,7 @@ public class ThreadBean {
 			}
 		}
 	}
+	
 	
 	public void aggiungiMessaggio () {
 		System.out.println("AGGIUNGI MESSAGGIO function");
@@ -140,18 +148,19 @@ public class ThreadBean {
 		if(!threadMessaggi.isNuovoMessaggio()){
 			for (Messaggio m : threadMessaggi.getMessaggi()) {
 //				System.out.println("MESSAGGIO id="+m.getId()+" - UTENTE (Destinatario) id="+m.getDestinatario().getId());
-//				if (m.getMittente().getId()==utenteBean.getUtente().getId()){
-					if (!messaggioIsLetto(m.getDestinatario().getId(), m.getId())) {
-//						System.out.println("AGGIUNGO MESSAGGIO - UTENTE (Destinatario) id="+m.getDestinatario().getId()+" in m.letto messID="+m.getId());
-						m.getLetto().add(m.getDestinatario());
-					}
-//				}
+				if (!messaggioIsLetto(m.getDestinatario().getId(), m)) {
+//					System.out.println("AGGIUNGO MESSAGGIO - UTENTE (Destinatario) id="+m.getDestinatario().getId()+" in m.letto messID="+m.getId());
+					m.getLetto().add(m.getDestinatario());
+				}
 			}
 		}
 		threadMessaggi.getMessaggi().add(mess);
 		threadMessaggi.setNuovoMessaggio(true);
 		try {
 			serv.merge(threadMessaggi);
+			if(mess.getDestinatario().isMailNuovoMessaggio()) {
+				MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -173,8 +182,7 @@ public class ThreadBean {
 		.setParameter("mitt", mittId)
 		.setParameter("dest", destId)
 		.setParameter("ogg", oggThr)
-		.getResultList();
-		
+		.getResultList();		
 		if(threads!=null && threads.size()>0) {
 			setThreadEsistente(threads.get(0));
 			return true;		
@@ -195,8 +203,7 @@ public class ThreadBean {
 		ordinaThreadPerData(threadsInviatiUtente);
 		for (Thread t : threadsInviatiUtente) {
 			System.out.println("threadsINVIATI-oggetto-"+t.getOggettoThread()+"-data-"+t.getMessaggi().get(t.getMessaggi().size()-1).getData());
-		}
-		
+		}		
 	}
 	
 	
@@ -225,55 +232,39 @@ public class ThreadBean {
 		if(threads!=null && threads.size()>0) {	
 			threadMessaggi = null;
 			threadMessaggi = threads.get(0);
-			System.out.println("VISUALIZZA THREAD threadMessaggi.getMessaggi().size="+threadMessaggi.getMessaggi().size());
-//			mm = threadMessaggi.getMessaggi();		
+			System.out.println("VISUALIZZA THREAD threadMessaggi.getMessaggi().size="+threadMessaggi.getMessaggi().size());	
 //			se non è nuovo thread 				
 			if (!threadMessaggi.isNuovoMessaggio()) {
 				System.out.println("VISUALIZZA thread - thread isNuovoMess=false");
 				for (Messaggio m : threadMessaggi.getMessaggi()) {
 //						se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
-					if (!messaggioIsLetto(m.getDestinatario().getId(), m.getId()))
+					if (!messaggioIsLetto(m.getDestinatario().getId(), m))
 					{
 						System.out.println("messaggio non letto da destinatario (me)!");
 						m.getLetto().add(m.getDestinatario());
 					}		
 				}
-			}
-				
+			}				
 //				controllo se il thread che leggo è contenuto nella lista dei nuovi thread
 			for (Thread t : threadsConNuoviMessaggi) {
 				if (t.getId()==threadMessaggi.getId())	{
 					System.out.println("thread con nuovo mess contenuto in threadsConNuoviMessaggi");
 						threadMessaggi.setNuovoMessaggio(false);
-				}
-//				else {
-//					System.out.println("thread con nuovo mess NON contenuto in threadsConNuoviMessaggi");
-//					for (Messaggio m : threadMessaggi.getMessaggi()) {
-//						System.out.println("messaggio letto da utenteeeee:"+messaggioIsLetto(utenteBean.getUtente().getId(), m.getId()));
-////						se utente ha ricevuto il messaggio
-//						if(m.getDestinatario().getId()==utenteBean.getUtente().getId()){
-////							se utente non ha letto il messaggio (x non duplicare primary key)
-//							if (!messaggioIsLetto(utenteBean.getUtente().getId(), m.getId()))
-//							{
-//								System.out.println("messaggio letto da utenteeeee:"+messaggioIsLetto(utenteBean.getUtente().getId(), m.getId()));
-//								m.getLetto().add(utenteBean.getUtente());
-//							}
-//						}
-//					}
-//				}
-					
+				}				
 			}	
 			try {
 				serv.merge(threadMessaggi);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}		
+			ordinaMessaggiPerData(threadMessaggi.getMessaggi());			
 			nuoviMessaggiThread(utenteBean.getUtente().getId());
 		}
-//			FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("menuutenteform");
+//		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("menuutenteform");
 		contentBean.setContent("messaggioThread.xhtml");		
 	}
+	
 	
 	public boolean messaggioRicevutoOSpedito (Messaggio M) {
 		if (M.getDestinatario().getId()==utenteBean.getUtente().getId()) {
@@ -284,18 +275,25 @@ public class ThreadBean {
 		}
 	}
 	
-	public boolean messaggioIsLetto (int idUtente, int idMess) {
-//		System.out.println("messaggioIsLetto?");
-		EntityManager em = EMF.createEntityManager();
-		List<Messaggio> mess = em
-		.createQuery("from Messaggio m inner join m.letto ml where m.id=:idmess and ml.id=:idut")
-		.setParameter("idut", idUtente)
-		.setParameter("idmess", idMess)
-		.getResultList();	
-		if (mess!=null && mess.size()>0) {
-			return true;
+
+	public boolean messaggioIsLetto (int idUtente, Messaggio mess) {
+//		EntityManager em = EMF.createEntityManager();
+//		Messaggio m = em.find(Messaggio.class, idMess);
+		for (Utente uts : mess.getLetto()) {
+			if(uts.getId()==idUtente){
+				return true;
+			}
 		}
 		return false;
+//		List<Messaggio> mess = em
+//		.createQuery("from Messaggio m inner join m.letto ml where m.id=:idmess and ml.id=:idut")
+//		.setParameter("idut", idUtente)
+//		.setParameter("idmess", idMess)
+//		.getResultList();	
+//		if (mess!=null && mess.size()>0) {
+//			return true;
+//		}
+//		return false;
 	}
 
 	
@@ -304,17 +302,14 @@ public class ThreadBean {
 		System.out.println("nuoviMESSAGGIingresso");
 		EntityManager em = EMF.createEntityManager();
 		List<Thread> threadsConNuoviMessaggiToT = em
-//		.createQuery("from Thread t left join t.messaggi m left join m.letto ml where t.nuovoMessaggio = true and m.mittente.id !=:mitt and ml.id!=:mitt")
+//		.createQuery("from Thread t inner join t.messaggi m inner join m.letto ml where t.nuovoMessaggio = true and m.mittente.id !=:mitt and ml.id!=:mitt")
 		.createQuery("from Thread t where t.nuovoMessaggio = true")
 //		.setParameter("mitt", idUtente)
 		.getResultList();	
 		System.out.println("****Threads con isNuovoMessaggio=TRUE_trovati #"+threadsConNuoviMessaggiToT.size());
 
-		int numthr = 0;	
-		
+		int numthr = 0;			
 		for (Thread thr : threadsConNuoviMessaggiToT) {
-//			System.out.println("mitt:"+thr.getMittentePrimo().getId()+"cancellato? "+thr.isCancellatoMittentePrimo());
-//			System.out.println("dest:"+thr.getDestinatarioPrimo().getId()+"cancellato? "+thr.isCancellatoMittentePrimo());
 //			controllo se non ho cancellato il thread - in caso lo avessi cancellato, non lo conteggio anche se contiene mess nuovi x me
 			if ((thr.getMittentePrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadMittente()==false) || (thr.getDestinatarioPrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadDestinatario()==false)) {	
 				if (threadContieneMessaggiNonLetti(idUtente, thr)) {
@@ -401,61 +396,22 @@ public class ThreadBean {
 	}
 	
 	
-	
-//	public void ordinaMPerData(List<Messaggio> msgs){
-//		System.out.println("in ordinaMPerData");
-//		Collections.sort(msgs, new Comparator<Messaggio>() {
-//
-//			@Override
-//			public int compare(Messaggio o1, Messaggio o2) {
-//				System.out.println("in compare di ordinaMPerData");
-//				return o2.getData().compareTo(o1.getData());
-//			}
-//		});
-//	}
-	
-	
-	public static void main(String[] aa) throws Exception{
-		List<Messaggio>  msgs = new ArrayList<Messaggio>();
-		Messaggio m1 = new Messaggio();
-		m1.setData(new Date());
-		m1.setId(1);
-		msgs.add(m1);
-		
-		java.lang.Thread.sleep(5000L);
-		
-		Messaggio m2 = new Messaggio();
-		m2.setData(new Date());
-		m2.setId(2);
-		msgs.add(m2);
-		
-		ThreadBean tb = new ThreadBean();
-		tb.ordinaMessaggiPerData(msgs);
-		
-		System.out.println(msgs.get(0).getId());
-	}
-	
+	IndirectListSorter<Messaggio> messaggiSorter = new IndirectListSorter<Messaggio>();
 	
 	public void ordinaMessaggiPerData(List<Messaggio> listMess ) {	
 		System.out.println("ORDINA MESSAGGI:#"+listMess.size());
  		//ordina per ultimo invio/ricezione
-		Collections.sort(listMess,  new Comparator<Messaggio>() {
-			@Override
-			public int compare(Messaggio u1, Messaggio u2) {
-				System.out.println("in compare: ");
-					int c = u2.getData().compareTo(u1.getData());
-					System.out.println("comparing u2 "+u2.getData()+" and u1 "+u1.getData()+" : "+c);
-				return c;
-			}
-		});
-//		   return null;
+		System.out.println(listMess.getClass().getName());		
+		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator());
 	}
 	
+	
+	IndirectListSorter<Thread> threadsSorter = new IndirectListSorter<Thread>();	
 	
 	public void ordinaThreadPerData(List<Thread> listThr ) {	 
 		System.out.println("ORDINA THREADS:#"+listThr.size());
  		//ordina per ultimo invio/ricezione
-		Collections.sort(listThr, new Comparator<Thread>() {
+		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
 			@Override
 			public int compare(Thread u1, Thread u2) {
 				int c = u2.getMessaggi().get(u2.getMessaggi().size()-1).getData().compareTo(u1.getMessaggi().get(u1.getMessaggi().size()-1).getData());
@@ -463,7 +419,6 @@ public class ThreadBean {
 				return c;
 			}
 		});
-//	   return null;
 	}
 	
 	

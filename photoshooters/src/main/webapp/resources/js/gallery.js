@@ -1,5 +1,5 @@
 var initPhotoSwipeFromDOM = function(gallerySelector) {
-alert("chiamato")
+//alert("chiamato")
     // parse slide data (url, title, size ...) from DOM elements 
     // (children of gallerySelector)
     var parseThumbnailElements = function(el) {
@@ -81,8 +81,8 @@ alert("chiamato")
             numChildNodes = childNodes.length,
             nodeIndex = 0,
             index;
-        alert(clickedGallery);
-        	alert(childNodes);
+//        alert(clickedGallery);
+//        	alert(childNodes);
         for (var i = 0; i < numChildNodes; i++) {
             if(childNodes[i].nodeType !== 1) { 
                 continue; 
@@ -141,7 +141,7 @@ alert("chiamato")
         
 //        modifica per foto VM18 - e only P|S
         for (var int = 0; int < items.length; int++) {
-			alert(items[int].msrc)
+//			alert(items[int].msrc)
 		}
         
         

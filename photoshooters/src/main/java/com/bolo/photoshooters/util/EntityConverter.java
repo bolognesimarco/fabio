@@ -1,4 +1,4 @@
-package com.bolo.photoshooters.web;
+package com.bolo.photoshooters.util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -6,6 +6,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import com.bolo.photo.web.entity.Utente;
+import com.bolo.photoshooters.web.UtenteBean;
 
 
 @FacesConverter(value = "entityConverter")

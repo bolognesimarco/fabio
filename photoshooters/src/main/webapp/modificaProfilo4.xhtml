@@ -21,7 +21,7 @@
 
 	<h:form id="profiloform" enctype="multipart/form-data">
 	
-  	  <h:panelGrid border="1">      		
+  	  <h:panelGrid border="1" columns="2">      		
 		<h:panelGrid  columns="2" style="vertical-align: top" columnClasses="2right, 2left">						
 			
 				<f:facet name="header">
@@ -169,6 +169,48 @@
 				<f:selectItems value="#{parametersBean.rangePiercing}" /></h:selectOneMenu >	
 				
 		  </h:panelGrid>	
+		  <h:panelGrid  columns="1" style="vertical-align: top" >
+			
+				<f:facet name="header">
+            		<h:outputText value="ATTIVITà PHOTOSHOOTEr"/>
+        		</f:facet>	
+        		
+      			<h:panelGrid id="attivitàutente">
+				
+					<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaCollaborazioniUtenteFoto(utenteBean.utente)}"></h:commandButton>
+					<h:commandButton value="PREFERITe | SEGUITi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferitiUtenteFoto()}"></h:commandButton>
+					<h:commandButton value="ANNUNCi"></h:commandButton>
+					<h:commandButton value="POSTs"></h:commandButton>
+					
+				</h:panelGrid>	
+				
+				<h:panelGrid id="avvisimailpanel" styleClass="leftprofilo">
+					
+					<f:facet name="header">
+            			<h:outputText value="AVVISi MAIl PHOTOSHOOTEr"/>
+        			</f:facet>
+        				
+					<h:outputLabel for="mailavviso">NUOVo MESSAGGIo</h:outputLabel>
+						<h:selectBooleanCheckbox id="mailavviso" value="#{utenteBean.utente.mailNuovoMessaggio}">
+					</h:selectBooleanCheckbox>		
+					<h:outputLabel for="votoavviso">TUa FOTo VOTATa</h:outputLabel>
+						<h:selectBooleanCheckbox id="votoavviso" value="#{utenteBean.utente.mailNuovoVoto}">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="preferitaavviso">TUa FOTo E' PREFERITa</h:outputLabel>
+						<h:selectBooleanCheckbox id="preferitaavviso" value="#{utenteBean.utente.mailNuovaFotoPreferita}">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="seguitoavviso">NUOVo P|S Ti SEGUe</h:outputLabel>
+						<h:selectBooleanCheckbox id="seguitoavviso" value="#{utenteBean.utente.mailNuovoFollower}">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="postavviso">NUOVo MESSAGGIo In TUo POSt</h:outputLabel>
+						<h:selectBooleanCheckbox id="postavviso" value="#{utenteBean.utente.mailNuovoMessaggioPostTuo}">
+					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="annuncioavviso">NUOVa RISPOSTa TUo ANNUNCIo</h:outputLabel>
+						<h:selectBooleanCheckbox id="annuncioavviso" value="#{utenteBean.utente.mailNuovaRispostaAnnuncio}">
+					</h:selectBooleanCheckbox>	
+						
+				</h:panelGrid>
+        	</h:panelGrid>	
 		   		
 		   		<f:facet name="footer">
 		            <h:panelGroup>

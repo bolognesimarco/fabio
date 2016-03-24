@@ -8,7 +8,6 @@
     xmlns:p="http://primefaces.org/ui">
 
 <h:head>
- 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="photoswipe.css" library="css" />
 	<h:outputStylesheet name="dataGrid.css" library="css" />
 	<link rel="stylesheet" href="resources/css/default-skin/default-skin.css"/> 
@@ -22,13 +21,13 @@
 
 	<h:panelGrid>
 		<f:facet name="header">
-           	<h:outputText value="COLLABORAZIONi PHOTOSHOOTEr :&#160;"/>
-            <h:outputText id="username" value="#{utenteBean.cercaUtente.utente.username}&#160;-&#160;"/>
-            <h:outputText value="NUMERo :&#160;"/>
-            <h:outputText  value="#{utenteBean.collaborazioniFoto.size()}"/>
+           	<h:outputText value="FOTo Di&#160;"/>
+            <h:outputText id="username" value="#{utenteBean.cercaUtente.utente.username}&#160;PREFERITe  DAi PHOTOSHOOTERs&#160;-"/>
+            <h:outputText value="&#160;NUMERo :&#160;"/>
+            <h:outputText  value="#{utenteBean.fotosPreferite.size()}"/>
         </f:facet>
 	
-			<p:dataGrid id="my-gallery" styleClass="mygalleryclass" value="#{utenteBean.collaborazioniFoto}" var="risultato" 
+			<p:dataGrid id="my-gallery" styleClass="mygalleryclass" value="#{utenteBean.fotosPreferite}" var="risultato" 
 	     	columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 				<p:column>
 				
@@ -50,17 +49,16 @@
 						<figcaption itemprop="caption description"> 
 							<h:panelGrid columns="2" columnClasses="rightfoto,leftfoto">
 								<h:outputLabel>PUBBLICATa Da</h:outputLabel>
-								<h:outputText value="&#160;#{risultato.album.pubblicatore.username}" />
+								<h:outputText value="&#160;#{risultato.album.pubblicatore.username}" />								
 								<h:outputLabel>TITOLo</h:outputLabel>
 								<h:outputText value="#{risultato.titolo}" />
-								<h:outputLabel>DESCRIZIONe</h:outputLabel>
-								<h:outputText value="#{risultato.descrizione}" />
-								<h:outputLabel>DATa SCATTo</h:outputLabel>
-								<h:outputText value="#{risultato.dataFoto}">
-									<f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
-								</h:outputText>
-								<h:outputLabel>LUOGo SCATTo</h:outputLabel>
-								<h:outputText value="#{risultato.luogoScatto}"/>
+								<h:outputLabel>PREFERITa Da</h:outputLabel>
+								<h:form>
+								<ui:repeat value="#{risultato.utentiChePreferisconoFoto}" var="info">
+									<h:commandLink styleClass="leftprofilo" value="#{info.username}" action="#{utenteBean.utenteTrovatoId(info.id)}"></h:commandLink>
+									<h:outputText value=",&#160;"></h:outputText>
+								</ui:repeat>
+								</h:form>
 								<h:outputLabel>MEDIa VOTi</h:outputLabel>
 								<h:outputText value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)}/10"></h:outputText>
 							</h:panelGrid>
@@ -76,7 +74,7 @@
 					    </h:graphicImage>
 				    </h:panelGroup>					
 
-					<p:commandButton update="votafotoform:fotoDetail" oncomplete="PF('fotoOP').loadContents()" value="VOTa" rendered="#{utenteBean.tipoMembershipUtente()==2 and inputBean.fotoGiaVotata(risultato.id, utenteBean.utente.id)==false} and risultato.album.pubblicatore.id!=utenteBean.utente.id">
+					<p:commandButton update="votafotoform:fotoDetail" oncomplete="PF('fotoOP').loadContents()" value="VOTa" rendered="#{utenteBean.tipoMembershipUtente()==2 and inputBean.fotoGiaVotata(risultato.id, utenteBean.utente.id)==false and risultato.album.pubblicatore.id!=utenteBean.utente.id}">
              				  <f:setPropertyActionListener value="#{risultato}" target="#{inputBean.fotoDaVotare}" />
            			</p:commandButton>
             			
@@ -113,9 +111,34 @@
 			    </p:overlayPanel>
 
 	</h:panelGrid>
+	<h:panelGrid>
+		<f:facet name="header">
+           	<h:outputText value="PHOTOSHOOTERs CHe SEGUONo:&#160;"/>
+            <h:outputText value="#{utenteBean.cercaUtente.utente.username}&#160;-&#160;"/>
+            <h:outputText value="NUMERo :&#160;"/>
+            <h:outputText  value="#{utenteBean.seguitoDaUtenti.size()}"/>
+        </f:facet>
+        
+        <p:dataGrid var="seguiti" value="#{utenteBean.seguitoDaUtenti}" columns="3" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
+
+		    <h:panelGrid columns="1" >  
+		        <h:outputText value="#{seguiti.username}" />  
+		      	<h:graphicImage rendered="#{seguiti.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{seguiti.username}/#{seguiti.avatar}" height="50" width="50" style="cursor:pointer;" >
+					<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(seguiti.id)}" render=":content :profiloform" />
+				</h:graphicImage>
+				<h:graphicImage rendered="#{seguiti.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="50" width="50" style="cursor:pointer;">
+					<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(seguiti.id)}" render=":content :profiloform" />
+				</h:graphicImage>
+		    </h:panelGrid>  
+
+		</p:dataGrid>
+	</h:panelGrid>
+
 
 </h:panelGroup>
+
 <script type="text/javascript" src="resources/js/gallery.js"></script>	
+
 
 	
 	

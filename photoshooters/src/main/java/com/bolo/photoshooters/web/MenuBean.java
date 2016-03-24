@@ -8,7 +8,6 @@ import javax.faces.context.FacesContext;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
-import com.bolo.photoshooters.temp.InputBean;
 
 @ManagedBean
 @SessionScoped
@@ -49,7 +48,7 @@ public class MenuBean {
 			contentBean.setContent("profilo2.xhtml");
 			break;
 		case 9://ALBUMS
-			inputBean.visualizzaAlbums(utenteBean.getUtente());
+//			inputBean.visualizzaAlbums(utenteBean.getUtente());
 			inputBean.setStatusMessage(null);
 			contentBean.setMessaggio(null);
 			contentBean.setContent("albums3.xhtml");
@@ -97,6 +96,10 @@ public class MenuBean {
 			break;
 		case 18://NUOVO MESSAGGIO
 			contentBean.setMessaggio(null);
+			contentBean.setContent("nuovoMessaggio.xhtml");
+		case 19://NUOVO MESSAGGIO DESTINATARIO
+			contentBean.setMessaggio(null);
+			threadBean.getMessaggio().setDestinatario(utenteBean.getCercaUtente().getUtente());
 			contentBean.setContent("nuovoMessaggio.xhtml");
 		default:
 			break;
