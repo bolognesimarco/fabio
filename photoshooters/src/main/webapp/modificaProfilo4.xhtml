@@ -28,7 +28,7 @@
             		<h:outputText value="PROFILO PHOTOSHOOTEr - MODIFICa INFo"/>
         		</f:facet>
         		
-			<h:panelGrid columns="2" columnClasses="rightprofilo, leftprofilo">
+			<h:panelGrid columns="2" columnClasses="rightprofilo,leftprofilo">
 	
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
 				<h:outputText  id="username" value="#{utenteBean.utente.username}"/>
@@ -120,15 +120,11 @@
 						<f:selectItems value="#{utenteBean.utente.tipoUtente.tipiLavoro}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
 	            	</h:selectManyCheckbox >
 				</h:panelGroup>	
-				
-	
             
             </h:panelGrid>
-            							
-		</h:panelGrid>
-							
-		<h:panelGrid id="modellaGrid" columns="4" columnClasses="rightprofilo, leftprofilo, rightprofilo, leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
-				
+						
+			<h:panelGrid border="0" columns="2" columnClasses="rightprofilo,leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
+						
 				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="vita" value="#{utenteBean.utente.vita}" >
 				<f:selectItems value="#{parametersBean.rangeVita}" /></h:selectOneMenu >
@@ -137,20 +133,21 @@
 				<h:selectOneMenu  id="altezza" value="#{utenteBean.utente.altezza}" >
 				<f:selectItems value="#{parametersBean.rangeAltezza}" /></h:selectOneMenu >
 				
-				
 				<h:outputLabel for="seno">SENo [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="seno" value="#{utenteBean.utente.seno}" >
-				<f:selectItems value="#{parametersBean.rangeSeno}" /></h:selectOneMenu >
-				
-				<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
-				<h:selectOneMenu  id="peso" value="#{utenteBean.utente.peso}" >
-				<f:selectItems value="#{parametersBean.rangePeso}" /></h:selectOneMenu >				
-				
+				<f:selectItems value="#{parametersBean.rangeSeno}" /></h:selectOneMenu >			
 				
 				<h:outputLabel for="fianchi">FIANCHi [Cm]</h:outputLabel>
 				<h:selectOneMenu  id="fianchi" value="#{utenteBean.utente.fianchi}" >
 				<f:selectItems value="#{parametersBean.rangeFianchi}" /></h:selectOneMenu >
 			
+			</h:panelGrid>	
+			<h:panelGrid border="0" columns="2" columnClasses="rightprofilo,leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
+				
+				<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
+				<h:selectOneMenu  id="peso" value="#{utenteBean.utente.peso}" >
+				<f:selectItems value="#{parametersBean.rangePeso}" /></h:selectOneMenu >
+				
 				<h:outputLabel for="taglia">TAGLIa [Eu]</h:outputLabel>
 				<h:selectOneMenu  id="taglia" value="#{utenteBean.utente.taglia}" >
 				<f:selectItems value="#{parametersBean.rangeTaglia}" /></h:selectOneMenu >
@@ -158,7 +155,6 @@
 				<h:outputLabel for="scarpe">SCARPe [Eu]</h:outputLabel>
 				<h:selectOneMenu  id="scarpe" value="#{utenteBean.utente.scarpe}" >
 				<f:selectItems value="#{parametersBean.rangeScarpe}" /></h:selectOneMenu >
-				<h:outputLabel>*</h:outputLabel>
 									
 				<h:outputLabel for="tatuaggi">TATUAGGi [#]</h:outputLabel>
 				<h:selectOneMenu  id="tatuaggi" value="#{utenteBean.utente.tatuaggi}" >
@@ -168,7 +164,9 @@
 				<h:selectOneMenu  id="piercing" value="#{utenteBean.utente.piercing}" >
 				<f:selectItems value="#{parametersBean.rangePiercing}" /></h:selectOneMenu >	
 				
-		  </h:panelGrid>	
+		      </h:panelGrid>	
+		  </h:panelGrid>
+		  
 		  <h:panelGrid  columns="1" style="vertical-align: top" >
 			
 				<f:facet name="header">
@@ -184,7 +182,7 @@
 					
 				</h:panelGrid>	
 				
-				<h:panelGrid id="avvisimailpanel" styleClass="leftprofilo">
+				<h:panelGrid id="avvisimailpanel" columns="2" columnClasses="rightprofilo,leftprofilo">
 					
 					<f:facet name="header">
             			<h:outputText value="AVVISi MAIl PHOTOSHOOTEr"/>

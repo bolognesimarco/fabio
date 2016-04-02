@@ -19,13 +19,13 @@
 		<h:form id="profiloform">
 		<h:panelGrid border="1" columns="2" >
 
-		  <h:panelGrid  columns="2" style="vertical-align: top" columnClasses="2right, 2left">
+		  <h:panelGrid  columns="2" style="vertical-align: top" columnClasses="2right,2left">
 			
 				<f:facet name="header">
             		<h:outputText value="PROFILo PHOTOSHOOTEr"/>
         		</f:facet>
         		
-			<h:panelGrid  columns="2" columnClasses="rightprofilo, leftprofilo">
+			<h:panelGrid  columns="2" columnClasses="rightprofilo,leftprofilo">
 	
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
 				<h:outputText style="width: 120px;"  id="username" value="#{utenteBean.utente.username}"/>
@@ -56,7 +56,7 @@
 				
 			</h:panelGrid>
 				
-			<h:panelGrid  columns="2" columnClasses="rightprofilo, leftprofilo">
+			<h:panelGrid  columns="2" columnClasses="rightprofilo,leftprofilo">
 				
 				<h:outputLabel for="avatar">AVATAr</h:outputLabel>
 				<h:panelGroup>
@@ -98,10 +98,7 @@
 				<h:outputText id="tipoLavoro" value="#{utenteBean.utente.tipiLavoroDescrizione}" />	
 
 			</h:panelGrid>			
-	      </h:panelGrid>
-			
-		  <h:panelGrid id="modellaGrid" border="1" columns="2" columnClasses="2right, 2left" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
-			<h:panelGrid border="1" columns="2" columnClasses="rightprofilo, leftprofilo">
+			<h:panelGrid border="0" columns="2" columnClasses="rightprofilo,leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
 				
 				<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
 				<h:outputText id="vita" value="#{utenteBean.utente.vita}" />
@@ -116,7 +113,7 @@
 				<h:outputText  id="altezza" value="#{utenteBean.utente.altezza}" />
 			
 			</h:panelGrid>			
-			<h:panelGrid border="1" columns="2" columnClasses="rightprofilo, leftprofilo">
+			<h:panelGrid border="0" columns="2" columnClasses="rightprofilo,leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
 
 				<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
 				<h:outputText  id="peso" value="#{utenteBean.utente.peso}" />
@@ -135,18 +132,8 @@
 
 			</h:panelGrid>   
 		  </h:panelGrid>
-									
-				<f:facet name="footer">
-		            <h:panelGroup>
-		         	<h:commandButton value="MODIFICa PROFILo">
-	    			   <f:ajax event="click" listener="#{menuBean.menuClick(16)}" render=":content :avatarForm" />
-	    	   		</h:commandButton> 
-	    	   		<br></br>
-		            	<h:outputText value="#{contentBean.messaggio}"></h:outputText>
-	            	</h:panelGroup>
-        		</f:facet>
         		
-        	<h:panelGrid  columns="1" style="vertical-align: top" >
+          <h:panelGrid  columns="1" style="vertical-align: top" >
 			
 				<f:facet name="header">
             		<h:outputText value="ATTIVITà PHOTOSHOOTEr"/>
@@ -161,7 +148,7 @@
 					
 				</h:panelGrid>	
 				
-				<h:panelGrid id="avvisimailpanel" styleClass="leftprofilo">
+				<h:panelGrid id="avvisimailpanel" columns="2" columnClasses="rightprofilo,leftprofilo">
 					
 					<f:facet name="header">
             			<h:outputText value="AVVISi MAIl PHOTOSHOOTEr"/>
@@ -189,6 +176,15 @@
 				</h:panelGrid>
         	</h:panelGrid>	
         	
+        	<f:facet name="footer">
+	            <h:panelGroup>
+	         	<h:commandButton value="MODIFICa PROFILo">
+    			   <f:ajax event="click" listener="#{menuBean.menuClick(16)}" render=":content :avatarForm" />
+    	   		</h:commandButton> 
+    	   		<br></br>
+	            	<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+            	</h:panelGroup>
+        	</f:facet>
 		</h:panelGrid>			
 					
 		</h:form>

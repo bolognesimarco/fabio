@@ -129,14 +129,14 @@ public class InputBean {
 					it.remove();
 				}
 			}
-//			utenteBean.getUtente().getPubblicati().remove(daCancellare);
-			serv.refresh(utenteBean.getUtente());
+//			serv.refresh(utenteBean.getUtente());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Album CANCELLATO!");
 		contentBean.setMessaggio("Album CANCELLATO!");
+		contentBean.setContent("albums3.xhtml");
 //		visualizzaAlbums(utenteBean.getUtente());
 	}	
 
@@ -160,36 +160,34 @@ public class InputBean {
 				userAlbumFolder.renameTo(newUserAlbumFolder);
 			}				
 			serv.merge(a);
-//			albumDaModificare = new Album();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Album AGGIORNATOOOOOOOOO");
 		contentBean.setMessaggio("Album AGGIORNATo!");
-		visualizzaAlbums(utenteBean.getUtente());
-		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
+//		visualizzaAlbums(utenteBean.getUtente());
 	}
 
 	
-	public void visualizzaAlbums (Utente utente){	
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Album a where a.pubblicatore.id=:n";
-		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", utente.getId());		
-		listaAlbum = (List<Album>) q.getResultList();
-//		listaAlbum = utente.getPubblicati();
-	}
+//	public void visualizzaAlbums (Utente utente){	
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Album a where a.pubblicatore.id=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", utente.getId());		
+//		listaAlbum = (List<Album>) q.getResultList();
+////		listaAlbum = utente.getPubblicati();
+//	}
 	
 	
-	public void visualizzaAlbum(int albumId){		
-		EntityManager em = EMF.createEntityManager();
-		String hql = "from Album a where a.id=:n";
-		Query q = em.createQuery(hql, Album.class);
-		q.setParameter("n", albumId);		
-		albumVisualizzato = (Album) q.getResultList().get(0);
-//		contentBean.setContent("albums3.xhtml");
-	}
+//	public void visualizzaAlbum(int albumId){		
+//		EntityManager em = EMF.createEntityManager();
+//		String hql = "from Album a where a.id=:n";
+//		Query q = em.createQuery(hql, Album.class);
+//		q.setParameter("n", albumId);		
+//		albumVisualizzato = (Album) q.getResultList().get(0);
+////		contentBean.setContent("albums3.xhtml");
+//	}
 	
 	
 //	public List<Album> albumsUtenteTrovato (int idUtente){		
@@ -434,26 +432,8 @@ public class InputBean {
 	
 	public void aggiornaFoto (){	
 		System.out.println("AggiornaFoto1111-start----IDFOTODAMODIFICARE==="+fotoDaModificare.getDescrizione());
-//		EntityManager em = EMF.createEntityManager();
-//		String hql = "from Foto f where f.id=:n";
-//		Query q = em.createQuery(hql, Foto.class);
-//		q.setParameter("n", idFoto);
 		try {
-//			Foto f = (Foto) q.getResultList().get(0);
-//			f.setTitolo(fotoDaModificare.getTitolo());
-//			f.setDescrizione(fotoDaModificare.getDescrizione());
-//			f.setDataFoto(fotoDaModificare.getDataFoto());
-//			f.setLuogoScatto(fotoDaModificare.getLuogoScatto());
-//			f.setFotografo(fotoDaModificare.getFotografo());
-//			f.setSoggetto(fotoDaModificare.getSoggetto());			
-//			for (Utente coll : fotoDaModificare.getCollaboratori()) {
-//				f.getCollaboratori().add(coll);
-//			}
-//			f.setVietataMinori(fotoDaModificare.isVietataMinori());
-//			f.setVisibileSoloMembri(fotoDaModificare.isVisibileSoloMembri());
-//			System.out.println("FOTO DA AGGIORNARE trovata::"+f.getTitolo()+"--IDFoto="+f.getId());
 			serv.merge(fotoDaModificare);
-			fotoDaModificare = new Foto();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -482,18 +462,17 @@ public class InputBean {
 		try {
 			// cancella file foto da server
 			String albumName = albumVisualizzato.getTitolo();
-			String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator + albumName + File.separator;
-			
+			String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator + albumName + File.separator;		
 //			if (q.getResultList().size()>0) {
 //				Foto f = (Foto)q.getResultList().get(0);
 //				String fileName = f.getNomeFileFoto();
 			String fileName = foto.getNomeFileFoto();
-				File outputFilePath = new File(userAlbumFolderPath + fileName);	
-				outputFilePath.delete();
-				System.out.println("FILE FOTO CANCELLATO!");
+			File outputFilePath = new File(userAlbumFolderPath + fileName);	
+			outputFilePath.delete();
+			System.out.println("FILE FOTO CANCELLATO!");
 //			}
 //			serv.delete((Foto)q.getResultList().get(0));
-				serv.delete(foto);
+			serv.delete(foto);
 			Iterator<Foto> it = albumVisualizzato.getFotos().iterator();
 			while(it.hasNext()) {
 				Foto f = it.next();

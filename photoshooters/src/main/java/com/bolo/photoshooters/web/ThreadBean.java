@@ -40,7 +40,7 @@ public class ThreadBean {
 	private Thread threadEsistente = new Thread();
 	private int nuoviMessaggi = 0;
 	List<Messaggio> mm = new ArrayList<Messaggio>();
-	private String cssMessaggio = "";
+//	private String cssMessaggio = "";
 	
 	
 	public void inviaNuovoMessaggio () {
@@ -223,15 +223,57 @@ public class ThreadBean {
 	}
 	
 	
-	public void visualizzaThread (int idThread) {
-		EntityManager em = EMF.createEntityManager();
-		List<Thread> threads = em
-		.createQuery("from Thread t where t.id =:idThr")
-		.setParameter("idThr", idThread)
-		.getResultList();	
-		if(threads!=null && threads.size()>0) {	
-			threadMessaggi = null;
-			threadMessaggi = threads.get(0);
+//	public void visualizzaThread (int idThread) {
+//		EntityManager em = EMF.createEntityManager();
+//		List<Thread> threads = em
+//		.createQuery("from Thread t where t.id =:idThr")
+//		.setParameter("idThr", idThread)
+//		.getResultList();	
+//		if(threads!=null && threads.size()>0) {	
+//			threadMessaggi = null;
+//			threadMessaggi = threads.get(0);
+//			System.out.println("VISUALIZZA THREAD threadMessaggi.getMessaggi().size="+threadMessaggi.getMessaggi().size());	
+////			se non è nuovo thread 				
+//			if (!threadMessaggi.isNuovoMessaggio()) {
+//				System.out.println("VISUALIZZA thread - thread isNuovoMess=false");
+//				for (Messaggio m : threadMessaggi.getMessaggi()) {
+////						se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
+//					if (!messaggioIsLetto(m.getDestinatario().getId(), m))
+//					{
+//						System.out.println("messaggio non letto da destinatario (me)!");
+//						m.getLetto().add(m.getDestinatario());
+//					}		
+//				}
+//			}				
+////				controllo se il thread che leggo è contenuto nella lista dei nuovi thread
+//			for (Thread t : threadsConNuoviMessaggi) {
+//				if (t.getId()==threadMessaggi.getId())	{
+//					System.out.println("thread con nuovo mess contenuto in threadsConNuoviMessaggi");
+//						threadMessaggi.setNuovoMessaggio(false);
+//				}				
+//			}	
+//			try {
+//				serv.merge(threadMessaggi);
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}		
+//			ordinaMessaggiPerData(threadMessaggi.getMessaggi());			
+//			nuoviMessaggiThread(utenteBean.getUtente().getId());
+//		}
+////		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("menuutenteform");
+//		contentBean.setContent("messaggioThread.xhtml");		
+//	}
+	
+	public void visualizzaThread2 (Thread thread) {
+//		EntityManager em = EMF.createEntityManager();
+//		List<Thread> threads = em
+//		.createQuery("from Thread t where t.id =:idThr")
+//		.setParameter("idThr", idThread)
+//		.getResultList();	
+//		if(threads!=null && threads.size()>0) {	
+//			threadMessaggi = null;
+			threadMessaggi = thread;
 			System.out.println("VISUALIZZA THREAD threadMessaggi.getMessaggi().size="+threadMessaggi.getMessaggi().size());	
 //			se non è nuovo thread 				
 			if (!threadMessaggi.isNuovoMessaggio()) {
@@ -260,11 +302,10 @@ public class ThreadBean {
 			}		
 			ordinaMessaggiPerData(threadMessaggi.getMessaggi());			
 			nuoviMessaggiThread(utenteBean.getUtente().getId());
-		}
+//		}
 //		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("menuutenteform");
 		contentBean.setContent("messaggioThread.xhtml");		
 	}
-	
 	
 	public boolean messaggioRicevutoOSpedito (Messaggio M) {
 		if (M.getDestinatario().getId()==utenteBean.getUtente().getId()) {

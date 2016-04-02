@@ -1,18 +1,26 @@
 package com.bolo.photoshooters.web;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class MailSender {
 	public static void main(String[] aa) throws Exception{
@@ -55,6 +63,41 @@ public class MailSender {
         msg.setSubject(subject);
         msg.setSentDate(new Date());
         msg.setText(message);
+        
+//        aggiungi image to mail
+//        MimeMultipart multipart = new MimeMultipart();
+//        BodyPart messageBodyPart = new MimeBodyPart();
+//        // second part (the image)
+//        messageBodyPart = new MimeBodyPart();
+//        DataSource fds = new FileDataSource(
+//        		File.separator+"resources"+File.separator+"images"+File.separator+"avatarDefault.svg");
+//        messageBodyPart.setDataHandler(new DataHandler(fds));
+//        messageBodyPart.setHeader("Content-ID", "<image>");
+//        // add image to the multipart
+//        multipart.addBodyPart(messageBodyPart);
+//        
+//        String cid = ContentIdGenerator.getContentId();
+//        MimeBodyPart imagePart = new MimeBodyPart();
+//        imagePart.attachFile(File.separator+"resources"+File.separator+"images"+File.separator+"avatarDefault.svg");
+//        imagePart.setContentID("<" + cid + ">");
+//        imagePart.setDisposition(MimeBodyPart.INLINE);
+//        content.addBodyPart(imagePart);
+//        
+        String html = "<html><body><b>Test</b> email <img src='cid:my-image-id'></body></html>";
+        Multipart mp = new MimeMultipart();
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        htmlPart.setContent(html, "text/html");
+        mp.addBodyPart(htmlPart);
+        MimeBodyPart imagePart = new MimeBodyPart();
+        DataSource fds = new FileDataSource(File.separator+"resources"+File.separator+"images"+File.separator+"avatarDefault.svg");
+        imagePart.setDataHandler(new DataHandler(fds));
+        // assign a cid to the image
+        imagePart.setHeader("Content-ID", "my-image-id");
+        mp.addBodyPart(imagePart);
+        msg.setContent(mp);
+        
+        
+//        msg.setContent(multipart);
         // sends the e-mail
         Transport.send(msg);
     }
