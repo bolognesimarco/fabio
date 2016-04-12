@@ -52,7 +52,7 @@
 	        			<h:outputText id="mittente" value="#{thrs.mittentePrimo.username}" />
 					</h:panelGrid>
 					<h:panelGrid>
-			    		<h:commandButton value="#{thrs.oggettoThread}" >
+			    		<h:commandButton value="#{thrs.oggettoThread}" style="cursor:pointer;">
 			    			<h:panelGroup rendered="#{threadBean.threadContieneMessaggiNonLetti(utenteBean.utente.id,thrs)==true and thrs.nuovoMessaggio==true}">
 		    	   				<sup style="color:red;font-size:8px;">new</sup>
 		    	   			</h:panelGroup>
@@ -100,7 +100,7 @@
 	        			<h:outputText id="destinatario" value="#{thrs.destinatarioPrimo.username}" />
 					</h:panelGrid>
 					<h:panelGrid>
-			    		<h:commandButton value="#{thrs.oggettoThread}" >
+			    		<h:commandButton value="#{thrs.oggettoThread}" style="cursor:pointer;">
 			    			<h:panelGroup rendered="#{threadBean.threadContieneMessaggiNonLetti(utenteBean.utente.id,thrs)==true and thrs.nuovoMessaggio==true}">
 		    	   				<sup style="color:red;font-size:8px;">new</sup>
 		    	   			</h:panelGroup>

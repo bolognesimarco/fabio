@@ -37,7 +37,10 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
 		            if(figureEl.children.length > 1) {
 		                // <figcaption> content
-		                item.title = figureEl.children[1].innerHTML; 
+		            	// tolgo campi 'hidden' che vengono visualizzati sono quando la foto è a schermo intero
+		            	daaggiustare = figureEl.children[1].innerHTML;
+		            	aggiustata = daaggiustare.split("display:none").join("");
+		                item.title = aggiustata; 
 		            }
 		
 		            if(linkEl.children.length > 0) {

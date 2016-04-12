@@ -35,22 +35,38 @@
 			<p:dataGrid styleClass="mygalleryclass" id="my-gallery" value="#{inputBean.risultatoFotos}" var="risultato" columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 				<p:column>
 				
-					<figure itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
-						<a href="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
+					<figure class="figura" itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
+						<a href="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}" >
 							<h:graphicImage itemprop="thumbnail"
 								value="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{risultato.nomeFileFoto}"
-								 width="50">
+								 width="100">
 							</h:graphicImage>
 						</a> 
-						<figcaption itemprop="caption description"> 
-								<h:panelGrid columns="2" columnClasses="rightfoto,leftfoto">
-								
-									<h:outputLabel for="fotoTitolo" styleClass="menubuttonorange" >TITOLo</h:outputLabel>
-									<h:outputText id="fotoTitolo" value="#{risultato.titolo}"/>
-					
-									<h:outputLabel for="fotoDescrizione" styleClass="menubuttonorange">DESCRIZIONe</h:outputLabel>
-									<h:outputText id="fotoDescrizione" value="#{risultato.descrizione}"/>
-								
+						<figcaption itemprop="caption description">
+								<h:panelGrid columns="2" columnClasses="rightfoto,leftfoto">		
+								<h:outputLabel for="titolo" styleClass="menubuttonorange">TITOLo</h:outputLabel>
+								<h:outputText id="titolo" value="#{risultato.titolo}" />
+								<h:outputLabel for="mediavoti" styleClass="menubuttonorange">MEDIa VOTi</h:outputLabel>
+								<h:outputText id="mediavoti" value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)} | 10"></h:outputText>	
+
+								<h:outputLabel style="display:none" for="fotoDescrizione" styleClass="menubuttonorange">DESCRIZIONe</h:outputLabel>
+								<h:outputText id="fotoDescrizione" style="display:none" value="#{risultato.descrizione}"/>					
+								<h:outputLabel style="display:none"  for="fotografo" styleClass="menubuttonorange" >FOTOGRAFo</h:outputLabel>
+								<h:outputText id="fotografo" style="display:none" value="#{risultato.fotografo}"/>
+								<h:outputLabel style="display:none"  for="soggetto" styleClass="menubuttonorange" >SOGGETTo</h:outputLabel>
+								<h:outputText id="soggetto" style="display:none" value="#{risultato.soggetto}"/>
+								<h:outputLabel style="display:none"  for="collaboratori" styleClass="menubuttonorange" >COLLABORATORi</h:outputLabel>
+								<ui:repeat value="#{risultato.collaboratori}" var="info" >
+									<h:commandLink style="display:none" value="#{info.username}" action="#{utenteBean.utenteTrovatoId(info.id)}"></h:commandLink>
+									<h:outputText style="display:none" value=",&#160;"></h:outputText>
+								</ui:repeat>
+								<h:outputLabel style="display:none"  for="fotoData" styleClass="menubuttonorange" >DATa SCATTo</h:outputLabel>
+								<h:outputText id="fotoData" style="display:none" value="#{risultato.dataFoto}"/>
+								<h:outputLabel style="display:none"  for="luogo" styleClass="menubuttonorange" >LUOGo SCATTo</h:outputLabel>
+								<h:outputText id="luogo" style="display:none" value="#{risultato.luogoScatto}"/>								
+								<h:outputLabel style="display:none"  for="visite" styleClass="menubuttonorange" >VISITe #</h:outputLabel>
+								<h:outputText id="visite" style="display:none" value="#{risultato.visite}"/>	
+			
 							</h:panelGrid>
 						</figcaption> 
 					</figure>
@@ -65,7 +81,7 @@
 				        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
 			   		</p:confirmDialog>	
 					
-					<h:commandButton value="MODIFICa FOTo" styleClass="menubuttonwhite">
+					<h:commandButton value="MODIFICa" styleClass="menubuttonwhite">
 						<f:ajax event="click" listener="#{inputBean.modificaFoto(risultato)}" render=":content :modificafotoform" />		    	   
 		    	   	</h:commandButton>
 					

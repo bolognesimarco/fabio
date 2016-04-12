@@ -21,9 +21,9 @@
 
 	<h:panelGrid>
 		<f:facet name="header">
-           	<h:outputText value="FOTo PREFERITe  Da PHOTOSHOOTEr :&#160;"/>
-            <h:outputText value="#{utenteBean.utente.username}&#160;-&#160;"/>
-            <h:outputText value="NUMERo :&#160;"/>
+           	<h:outputText value="FOTo PREFERITe&#160;"/>
+            <h:outputText value="-&#160;"/>
+            <h:outputText value="#&#160;"/>
             <h:outputText  value="#{utenteBean.utente.fotoPreferite.size()}"/>
         </f:facet>
 	
@@ -31,37 +31,46 @@
 	     	columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 				<p:column>
 				
-					<figure itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
+					<figure class="figura" itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
 						<a href="/lil?path=#{risultato.album.pubblicatore.username}/#{risultato.album.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
 							<h:graphicImage itemprop="thumbnail"
 								value="/lil?path=#{risultato.album.pubblicatore.username}/#{risultato.album.titolo}/#{risultato.nomeFileFoto}"
-								height="51" rendered="#{(utenteBean.tipoMembershipUtente()==2) || (risultato.vietataMinori==false and risultato.visibileSoloMembri==false) || (utenteBean.tipoMembershipUtente()==1 and risultato.vietataMinori==false)}">
+								width="100" rendered="#{(utenteBean.tipoMembershipUtente()==2) || (risultato.vietataMinori==false and risultato.visibileSoloMembri==false) || (utenteBean.tipoMembershipUtente()==1 and risultato.vietataMinori==false)}">
 							</h:graphicImage>
 							<h:graphicImage itemprop="thumbnail"
 								value="/resources/images/LogoCerchioVM18.svg"
-								height="51" rendered="#{risultato.vietataMinori==true and utenteBean.tipoMembershipUtente()!=2}">
+								width="100" rendered="#{risultato.vietataMinori==true and utenteBean.tipoMembershipUtente()!=2}">
 							</h:graphicImage>
 							<h:graphicImage itemprop="thumbnail"
 								value="/resources/images/LogoCerchioOnlyPs.svg"
-								height="51" rendered="#{risultato.visibileSoloMembri==true and risultato.vietataMinori==false and utenteBean.tipoMembershipUtente()==0}">
+								width="100" rendered="#{risultato.visibileSoloMembri==true and risultato.vietataMinori==false and utenteBean.tipoMembershipUtente()==0}">
 							</h:graphicImage>
 						</a> 
 						<figcaption itemprop="caption description"> 
 							<h:panelGrid columns="2" columnClasses="rightfoto,leftfoto">
 								<h:outputLabel>PUBBLICATa Da</h:outputLabel>
 								<h:outputText value="&#160;#{risultato.album.pubblicatore.username}" />								
-								<h:outputLabel>TITOLo</h:outputLabel>
-								<h:outputText value="#{risultato.titolo}" />
-								<h:outputLabel>DESCRIZIONe</h:outputLabel>
-								<h:outputText value="#{risultato.descrizione}" />
-								<h:outputLabel>DATa SCATTo</h:outputLabel>
-								<h:outputText value="#{risultato.dataFoto}">
-									<f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
-								</h:outputText>
-								<h:outputLabel>LUOGo SCATTo</h:outputLabel>
-								<h:outputText value="#{risultato.luogoScatto}"/>
-								<h:outputLabel>MEDIa VOTi</h:outputLabel>
-								<h:outputText value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)}/10"></h:outputText>
+								<h:outputLabel for="titolo" styleClass="menubuttonorange">TITOLo</h:outputLabel>
+								<h:outputText id="titolo" value="#{risultato.titolo}" />
+								<h:outputLabel style="display:none" for="fotoDescrizione" styleClass="menubuttonorange">DESCRIZIONe</h:outputLabel>
+								<h:outputText id="fotoDescrizione" value="#{risultato.descrizione}"/>					
+								<h:outputLabel style="display:none"  for="fotografo" styleClass="menubuttonorange" >FOTOGRAFo</h:outputLabel>
+								<h:outputText id="fotografo" style="display:none" value="#{risultato.fotografo}"/>
+								<h:outputLabel style="display:none"  for="soggetto" styleClass="menubuttonorange" >SOGGETTo</h:outputLabel>
+								<h:outputText id="soggetto" style="display:none" value="#{risultato.soggetto}"/>
+								<h:outputLabel style="display:none"  for="collaboratori" styleClass="menubuttonorange" >COLLABORATORi</h:outputLabel>
+								<ui:repeat value="#{risultato.collaboratori}" var="info" >
+									<h:commandLink style="display:none" value="#{info.username}" action="#{utenteBean.utenteTrovatoId(info.id)}"></h:commandLink>
+									<h:outputText style="display:none" value=",&#160;"></h:outputText>
+								</ui:repeat>
+								<h:outputLabel style="display:none"  for="fotoData" styleClass="menubuttonorange" >DATa SCATTo</h:outputLabel>
+								<h:outputText id="fotoData" style="display:none" value="#{risultato.dataFoto}"/>
+								<h:outputLabel style="display:none"  for="luogo" styleClass="menubuttonorange" >LUOGo SCATTo</h:outputLabel>
+								<h:outputText id="luogo" style="display:none" value="#{risultato.luogoScatto}"/>								
+								<h:outputLabel style="display:none"  for="visite" styleClass="menubuttonorange" >VISITe #</h:outputLabel>
+								<h:outputText id="visite" style="display:none" value="#{risultato.visite}"/>	
+								<h:outputLabel for="mediavoti" styleClass="menubuttonorange">MEDIa VOTi</h:outputLabel>
+								<h:outputText id="mediavoti" value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)} | 10"></h:outputText>
 							</h:panelGrid>
 						</figcaption> 				
 					</figure>
@@ -87,10 +96,10 @@
 			        <p:outputPanel id="fotoDetail" style="text-align:center;">
 			            <p:panelGrid  columns="2" >
 			                <f:facet name="header">
-			                   	<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{inputBean.albumVisualizzato.copertinaAlbum.nomeFileFoto}"
-								height="51" width="50"></h:graphicImage>
-								<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
-								height="51" width="50"></h:graphicImage>
+								<h:graphicImage 
+									value="/lil?path=#{inputBean.fotoDaVotare.album.pubblicatore.username}/#{inputBean.fotoDaVotare.album.titolo}/#{inputBean.fotoDaVotare.nomeFileFoto}"
+									height="51">
+								</h:graphicImage>
 			                </f:facet>
 
 							<h:outputText value="TITOLo" />
@@ -114,9 +123,9 @@
 	</h:panelGrid>
 	<h:panelGrid>
 		<f:facet name="header">
-           	<h:outputText value="PHOTOSHOOTERs SEGUITi Da:&#160;"/>
-            <h:outputText value="#{utenteBean.utente.username}&#160;-&#160;"/>
-            <h:outputText value="NUMERo :&#160;"/>
+           	<h:outputText value="PHOTOSHOOTERs SEGUITi&#160;"/>
+            <h:outputText value="-&#160;"/>
+            <h:outputText value="#&#160;"/>
             <h:outputText  value="#{utenteBean.utente.utentiSeguiti.size()}"/>
         </f:facet>
         
@@ -134,7 +143,28 @@
 
 		</p:dataGrid>
 	</h:panelGrid>
+	<h:panelGrid>
+		<f:facet name="header">
+           	<h:outputText value="FOLLOWERs&#160;"/>
+            <h:outputText value="-&#160;"/>
+            <h:outputText value="#&#160;"/>
+            <h:outputText  value="#{utenteBean.followers.size()}"/>
+        </f:facet>
+        
+        <p:dataGrid var="followers" value="#{utenteBean.followers}" columns="3" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 
+		    <h:panelGrid columns="1" >  
+		        <h:outputText value="#{followers.username}" />  
+		      	<h:graphicImage rendered="#{followers.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{followers.username}/#{followers.avatar}" height="50" width="50" style="cursor:pointer;" >
+					<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(followers.id)}" render=":content :profiloform" />
+				</h:graphicImage>
+				<h:graphicImage rendered="#{followers.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="50" width="50" style="cursor:pointer;">
+					<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(followers.id)}" render=":content :profiloform" />
+				</h:graphicImage>
+		    </h:panelGrid>  
+
+		</p:dataGrid>
+	</h:panelGrid>
 
 </h:panelGroup>
 

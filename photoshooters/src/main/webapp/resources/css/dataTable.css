@@ -1,0 +1,66 @@
+.ui-datatable {
+background: transparent!important;
+border: 0px!important;
+/* font-size: x-small; */
+font-family: gisha!important;
+}
+
+.ui-datatable-tablewrapper {
+ background: transparent!important;	
+ border: 0px!important;
+	overflow-x: hidden !important;
+}
+
+/* celle datatable */
+.ui-datatable-data {
+ background: transparent!important;	
+ border: 0px!important;
+/*  color: white; */
+/*  text-shadow: 0.5px 0.5px 0.5px #414042; */
+/*  font-size: small; */
+}
+
+/* riga  */
+ .ui-datatable-even {
+ background: none!important;
+ border: 0px!important;
+ }
+ 
+ .ui-widget-content{
+ background: none!important;
+ border: 0px!important;
+ }
+ 
+/*  paginator */
+  .ui-paginator {
+  background: none!important;
+ border: 0px!important;
+ }
+  .ui-paginator-top {
+  background: none!important;
+ border: 0px!important;
+ }
+  .ui-widget-header {
+  background: none!important;
+ border: 0px!important;
+ }
+ 
+  .ui-state-default {
+  background: none!important;
+ border: 0px!important;
+ }
+
+.ui-datatable tbody td {
+	border: none!important;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+.ui-datatable table {
+/* 	border: none!important; */
+	border-bottom-color: white;
+	border-left-color: white;
+	border-right-color: white;
+	border-top-color: white;
+	
+}
+

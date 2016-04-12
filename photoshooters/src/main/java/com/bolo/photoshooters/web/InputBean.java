@@ -79,6 +79,11 @@ public class InputBean {
 				try {
 					System.out.println("PERSIST************");
 					serv.persist(newAlbum);
+					for (Utente ut : utenteBean.cercaFollowersUtente(utenteBean.getUtente())) {
+						if (ut.isMailNuovoAlbumDiUtenteSeguito()) {
+							MailSender.sendNuovoAlbumUtenteSeguitoMail(ut.getEmail(), utenteBean.getUtente().getUsername());
+						}
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					String mm = e.getMessage()+" ERRORe CREAZIONe NUOVo ALBUm!";

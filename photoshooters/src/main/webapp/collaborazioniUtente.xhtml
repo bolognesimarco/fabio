@@ -32,7 +32,7 @@
 	     	columns="4" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 				<p:column>
 				
-					<figure itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
+					<figure class="figura" itemprop="associatedMedia" itemscope="true" itemtype="http://schema.org/ImageObject" id="#{risultato.id}"> 
 						<a href="/lil?path=#{risultato.album.pubblicatore.username}/#{risultato.album.titolo}/#{risultato.nomeFileFoto}" itemprop="contentUrl" data-size="#{risultato.larghezzaFoto}x#{risultato.altezzaFoto}">
 							<h:graphicImage itemprop="thumbnail"
 								value="/lil?path=#{risultato.album.pubblicatore.username}/#{risultato.album.titolo}/#{risultato.nomeFileFoto}"
@@ -62,7 +62,7 @@
 								<h:outputLabel>LUOGo SCATTo</h:outputLabel>
 								<h:outputText value="#{risultato.luogoScatto}"/>
 								<h:outputLabel>MEDIa VOTi</h:outputLabel>
-								<h:outputText value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)}/10"></h:outputText>
+								<h:outputText value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)} | 10"></h:outputText>
 							</h:panelGrid>
 						</figcaption> 				
 					</figure>

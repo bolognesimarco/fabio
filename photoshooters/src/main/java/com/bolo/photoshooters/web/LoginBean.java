@@ -64,6 +64,8 @@ public class LoginBean {
 					parametersBean.fillSelectItems();
 					threadBean.nuoviMessaggiThread(u.getId());
 					contentBean.setMessaggio(mm2);
+					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("pannellohomepagepanel");
+					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 					contentBean.setContent("homePage.xhtml");
 					
 				}else{

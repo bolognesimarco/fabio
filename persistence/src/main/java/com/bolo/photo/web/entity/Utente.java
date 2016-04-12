@@ -201,14 +201,29 @@ public class Utente implements Serializable{
 	@Column
 	private boolean mailNuovaRispostaAnnuncio = true;
 	
+	@Column
+	private boolean mailNuovoAlbumDiUtenteSeguito = true;
+	
+	
+	
+	
+	
 	//************GETTERS&SETTERS**********
 	
-	
-	
+
 	
 	
 	public String getAvatar() {
 		return avatar;
+	}
+
+	public boolean isMailNuovoAlbumDiUtenteSeguito() {
+		return mailNuovoAlbumDiUtenteSeguito;
+	}
+
+	public void setMailNuovoAlbumDiUtenteSeguito(
+			boolean mailNuovoAlbumDiUtenteSeguito) {
+		this.mailNuovoAlbumDiUtenteSeguito = mailNuovoAlbumDiUtenteSeguito;
 	}
 
 	public boolean isMailNuovoMessaggio() {

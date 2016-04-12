@@ -142,7 +142,7 @@
       			<h:panelGrid id="attivitàutente">
 				
 					<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaCollaborazioniUtente(utenteBean.utente)}"></h:commandButton>
-					<h:commandButton value="PREFERITe | SEGUITi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferitiSeguitiDaUtente()}"></h:commandButton>
+					<h:commandButton value="PREFERITe | SEGUITi | FOLLOWERs" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferitiSeguitiDaUtente()}"></h:commandButton>
 					<h:commandButton value="ANNUNCi"></h:commandButton>
 					<h:commandButton value="POSTs"></h:commandButton>
 					
@@ -172,7 +172,9 @@
 					<h:outputLabel for="annuncioavviso">NUOVa RISPOSTa TUo ANNUNCIo</h:outputLabel>
 						<h:selectBooleanCheckbox id="annuncioavviso" value="#{utenteBean.utente.mailNuovaRispostaAnnuncio}" disabled="true">
 					</h:selectBooleanCheckbox>	
-						
+					<h:outputLabel for="albumavviso">NUOVa FOTo Di P|S SEGUITo</h:outputLabel>
+						<h:selectBooleanCheckbox id="albumavviso" value="#{utenteBean.utente.mailNuovoAlbumDiUtenteSeguito}" disabled="true">
+					</h:selectBooleanCheckbox>	
 				</h:panelGrid>
         	</h:panelGrid>	
         	

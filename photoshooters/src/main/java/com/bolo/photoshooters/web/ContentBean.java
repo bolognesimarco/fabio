@@ -6,10 +6,10 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ContentBean {
-	private String content;
+	private String content="defaultHome.xhtml";
 	private String contentPrecedente;
-	
 	private String messaggio;
+	
 	
 	public String getContent() {
 		System.out.println("gettingcontent:"+content);

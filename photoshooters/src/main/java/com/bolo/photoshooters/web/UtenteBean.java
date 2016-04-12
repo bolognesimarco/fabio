@@ -50,6 +50,7 @@ public class UtenteBean {
 	List<Utente> collaborazioniUtenti = new ArrayList<Utente>();
 	List<Foto> fotosPreferite = new ArrayList<Foto>();	
 	List<Utente> seguitoDaUtenti = new ArrayList<Utente>();
+	List<Utente> followers = new ArrayList<Utente>();
 
 	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();
@@ -619,6 +620,8 @@ public class UtenteBean {
 	
 	
 	public void cercaPreferitiSeguitiDaUtente () {
+		followers.clear();
+		cercaFollowersUtente(utente);
 		contentBean.setContent("preferitiUtente.xhtml");
 	}
 	
@@ -684,13 +687,34 @@ public class UtenteBean {
 	}
 	
 	
+	public List<Utente> cercaFollowersUtente (Utente ut) {
+		EntityManager em = EMF.createEntityManager();
+		List <Utente> followers = em
+		.createQuery("from Utente u inner join u.utentiSeguiti us on us.id=:idUt")
+		.setParameter("idUt", ut.getId())
+		.getResultList();		
+		return followers;
+	}
+	
 	//************GETTERS & SETTERS*******************
 
 
 
+	
+	
 	public List<Utente> getCollaborazioniUtenti() {
 		return collaborazioniUtenti;
 	}
+
+	public List<Utente> getFollowers() {
+		return followers;
+	}
+
+
+	public void setFollowers(List<Utente> followers) {
+		this.followers = followers;
+	}
+
 
 	public List<Utente> getSeguitoDaUtenti() {
 		return seguitoDaUtenti;
