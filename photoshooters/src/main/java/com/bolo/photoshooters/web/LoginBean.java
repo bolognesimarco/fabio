@@ -63,6 +63,9 @@ public class LoginBean {
 					utenteBean.setUtente(u);
 					parametersBean.fillSelectItems();
 					threadBean.nuoviMessaggiThread(u.getId());
+					threadBean.cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
+					threadBean.cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
+					inputBean.getVotoFoto().setScore(-1);
 					contentBean.setMessaggio(mm2);
 					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("pannellohomepagepanel");
 					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
@@ -153,6 +156,18 @@ public class LoginBean {
 	@ManagedProperty(value = "#{threadBean}")
 	private ThreadBean threadBean;
 	
+	@ManagedProperty(value = "#{inputBean}")
+	private InputBean inputBean;
+	
+		
+	public InputBean getInputBean() {
+		return inputBean;
+	}
+
+	public void setInputBean(InputBean inputBean) {
+		this.inputBean = inputBean;
+	}
+
 	public ThreadBean getThreadBean() {
 		return threadBean;
 	}

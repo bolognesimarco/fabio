@@ -31,7 +31,7 @@
 					
 					<p:column>
 						<h:graphicImage rendered="#{result.copertinaAlbum!=null}" value="/lil?path=#{utenteBean.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
-							 width="50" style="cursor: pointer;">
+							 styleClass="circularutente" style="cursor: pointer;">
 							<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
 						</h:graphicImage>
 						<h:graphicImage rendered="#{result.copertinaAlbum==null}" value="/resources/images/album-copertina.svg"
@@ -68,7 +68,7 @@
 			            <p:panelGrid  columns="2" >
 			                <f:facet name="header">
 			                   	<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{inputBean.albumVisualizzato.copertinaAlbum.nomeFileFoto}"
-								height="51" width="50"></h:graphicImage>
+								styleClass="circularutente"></h:graphicImage>
 								<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
 								height="51" width="50"></h:graphicImage>
 			                </f:facet>

@@ -74,7 +74,7 @@
 	text-align: center;
 }
 
-/* per l'avatar */
+/* per l'avatar su menù utente*/
 .circular {
 	width: 38px;
 	height: 38px;
@@ -84,6 +84,37 @@
 	display: inline-block;
 	margin-bottom: 0px;
 	margin-top: 2px;
+	position:relative;
+	z-index: 1;
+}
+/* per utente generico*/
+.circularutente {
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	display: inline-block;
+	margin-bottom: 0px;
+	margin-top: 2px;
+	position:relative;
+	z-index: 1;
+}
+/* icona online su menù utente*/
+.online {
+	position:relative;
+	z-index: 2;
+	top: -30px;
+	left: -10px;
+	height:10px; 
+}
+/* icona online su utente generico*/
+.onlineutente {
+	position:relative;
+	z-index: 2;
+	top: -50px;
+	left: -10px;
+	height:10px; 
 }
  
 /* logo, scritta PS, cerca  */

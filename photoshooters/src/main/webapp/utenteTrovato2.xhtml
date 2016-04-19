@@ -31,11 +31,11 @@
 						
 						<p:column>
 							<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
-								height="51" style="cursor: pointer;">
+								styleClass="circularutente" style="cursor: pointer;">
 								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
 							</h:graphicImage>
 							<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/album-copertina.svg"
-								height="51" style="cursor: pointer;">
+								height="50" style="cursor: pointer;">
 								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
 							</h:graphicImage>
 							<h:panelGrid columns="2">
@@ -60,7 +60,7 @@
 						
 							<f:facet name="header">
 			            		<h:outputText value="PROFILO PHOTOSHOOTEr - #{utenteBean.cercaUtente.utente.username}&#160;&#160;"/>
-			        		    <h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{utenteBean.cercaUtente.utente.avatar}" height="51" width="50"></h:graphicImage>
+			        		    <h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{utenteBean.cercaUtente.utente.avatar}" styleClass="circularutente"></h:graphicImage>
 			            		<h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>	
 			        		</f:facet>
 			        		
@@ -176,11 +176,21 @@
 					</h:panelGrid>
 					<h:panelGrid >
 						<f:facet name="header">
-		            		<h:outputText value="ATTIVITà PHOTOSHOOTEr"/>
+		            		<h:outputText value="ATTIVITà PHOTOSHOOTEr&#160;"/>
+		            		<h:graphicImage value="/resources/images/iconamessaggiscambiati.svg" title="Hai scambiato messaggi con #{utenteBean.cercaUtente.utente.username}" width="20" height="20" rendered="#{threadBean.esisteThreadConUtenteTrovato(utenteBean.cercaUtente.utente) and utenteBean.tipoMembershipUtente()!=0}"></h:graphicImage>
+		        			<h:graphicImage value="/resources/images/iconacollaborato.svg" title="Hai collaborato con #{utenteBean.cercaUtente.utente.username}" width="20" height="20" rendered="#{utenteBean.collaboratoUtente and utenteBean.tipoMembershipUtente()!=0}"></h:graphicImage>
 		        		</f:facet>
+		        		<h:panelGrid columns="2" columnClasses="rightprofilo,leftprofilo">
+		        			<h:outputLabel for="ultimoaccesso">ULTIMo ACCESSo</h:outputLabel>
+							<h:outputText rendered="#{utenteBean.tipoMembershipUtente()==2}" id="ultimoaccesso" value="#{utenteBean.cercaUtente.utente.dataUltimoAccesso}">
+								<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+							</h:outputText>
+							<h:outputText rendered="#{utenteBean.tipoMembershipUtente()!=2}" id="ultimoaccesso2" value="VISIBILe Ad UTENTi +PLUs">
+							</h:outputText>
+		        		</h:panelGrid>
 						<h:panelGrid id="attivitàutentetrovatopanel">
 						
-							<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaCollaborazioniUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" action="#{utenteBean.cercaCollaborazioniUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
 							<h:commandButton value="FOTo PREFERITe Da | SEGUITo Da" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferentiFollowerUtenteTrovato(utenteBean.cercaUtente.utente)}"></h:commandButton>
 							<h:commandButton value="ANNUNCi"></h:commandButton>
 							<h:commandButton value="POSTs"></h:commandButton>
@@ -190,9 +200,9 @@
 						<h:panelGrid id="interagisciutentetrovatopanel">
 						
 							<h:commandButton value="INVIa MESSAGGIo" disabled="#{utenteBean.tipoMembershipUtente()==0}" title="attivo per membri" action="#{menuBean.menuClick(19)}"></h:commandButton>
-							<h:commandButton value="CHAt" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" ></h:commandButton>
-							<h:commandButton value="SEGUi PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==false}" action="#{utenteBean.seguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
-							<h:commandButton value="NOn sEGUIRe PIù PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==true}" action="#{utenteBean.nonSeguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="CHAt" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" ></h:commandButton>
+							<h:commandButton value="SEGUi PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==false}" action="#{utenteBean.seguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="NOn sEGUIRe PIù PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==true}" action="#{utenteBean.nonSeguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
 						
 						</h:panelGrid>
 						<h:panelGrid id="visitepanel">

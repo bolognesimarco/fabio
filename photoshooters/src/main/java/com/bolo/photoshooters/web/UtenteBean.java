@@ -18,6 +18,8 @@ import javax.faces.bean.SessionScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.primefaces.event.SelectEvent;
+
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Messaggio;
@@ -51,6 +53,7 @@ public class UtenteBean {
 	List<Foto> fotosPreferite = new ArrayList<Foto>();	
 	List<Utente> seguitoDaUtenti = new ArrayList<Utente>();
 	List<Utente> followers = new ArrayList<Utente>();
+	private boolean collaboratoUtente = false;
 
 	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();
@@ -158,7 +161,7 @@ public class UtenteBean {
 			default:
 				break;
 			}
-			System.out.println("minETA'-maxETA'::::"+minEtà+"--"+maxEtà+"I:"+i);
+//			System.out.println("minETA'-maxETA'::::"+minEtà+"--"+maxEtà+"I:"+i);
 			nAnniFa = Calendar.getInstance();
 			nAnniFa.add(Calendar.YEAR, -minEtà);
 			
@@ -295,19 +298,37 @@ public class UtenteBean {
 		}
 
 
-//	public void utenteTrovato (String username){
-//		EntityManager em = EMF.createEntityManager();
-//		List<Utente> utenti = em
-//		.createQuery("from Utente u where u.username=:user")
-//		.setParameter("user", username)
-//		.getResultList();
-//		if(utenti!=null && utenti.size()>0){
-//			cercaUtente.setUtente(utenti.get(0));
-//			contentBean.setContent("utenteTrovato.xhtml");
-//		}else{
-//			System.out.println("errore utente non trovato!");
-//		}
-//	}
+	public List<Utente> ultimiUtentiIscritti () {
+		System.out.println("ultimiutentiiscritti");
+		EntityManager em = EMF.createEntityManager();
+		List<Utente> utenti = em
+		.createQuery("from Utente u order by u.dataIscrizione desc")
+		.setMaxResults(2)
+		.getResultList();
+		return utenti;
+	}
+	
+	
+	public List<Foto> ultimeFotoIserite () {
+		System.out.println("ultimeFotoIserite");
+		EntityManager em = EMF.createEntityManager();
+		List<Foto> fotos = em
+		.createQuery("from Foto f")
+		.setMaxResults(2)
+		.getResultList();
+		return fotos;
+	}
+	
+	
+	public List<Foto> classificaFoto () {
+		System.out.println("classificaFoto");
+		EntityManager em = EMF.createEntityManager();
+		List<Foto> fotos = em
+		.createQuery("from Foto f order by f.mediaVoti desc")
+		.setMaxResults(3)
+		.getResultList();
+		return fotos;
+	}
 	
 	
 	public void utenteTrovatoId (int id){
@@ -328,6 +349,12 @@ public class UtenteBean {
 					aggiungiVisitaUtente(utenti.get(0));
 					cercaUtente.setUtente(utenti.get(0));
 					contentBean.setContent("utenteTrovato2.xhtml");
+					collaboratoUtente = false;
+					for (Utente ut : cercaUtente.getUtente().getCollaboratori()) {
+						if(ut.getId()==utente.getId()) {
+							collaboratoUtente = true;
+						}
+					}
 				} 
 				else { //utente trovato sono io
 					contentBean.setContent("profilo2.xhtml");
@@ -497,8 +524,17 @@ public class UtenteBean {
 		.setParameter("user", username+"%")
 		.setParameter("idUt", utente.getId())
 		.getResultList();
+//		for (Utente ut : utenti) {
+//			if (ut.getId()==handleSelect(username))
+//		}
 		return utenti;
 	}
+	
+	
+	 public int handleSelect(SelectEvent event) {
+		    Utente p=(Utente)event.getObject();
+		    return p.getId();
+		}
 	
 	
 	public List<String> suggerisciCittà (String citta) throws Exception{
@@ -706,15 +742,21 @@ public class UtenteBean {
 		return collaborazioniUtenti;
 	}
 
+	public boolean isCollaboratoUtente() {
+		return collaboratoUtente;
+	}
+
+	public void setCollaboratoUtente(boolean collaboratoUtente) {
+		this.collaboratoUtente = collaboratoUtente;
+	}
+
 	public List<Utente> getFollowers() {
 		return followers;
 	}
 
-
 	public void setFollowers(List<Utente> followers) {
 		this.followers = followers;
 	}
-
 
 	public List<Utente> getSeguitoDaUtenti() {
 		return seguitoDaUtenti;
@@ -818,7 +860,6 @@ public class UtenteBean {
 		return darit;
 	}
 
-	
 	public Esperienza[] getEsperienze() {
         return Esperienza.values();
 	}
@@ -830,7 +871,6 @@ public class UtenteBean {
 	public RegioneItaliana[] getRegioni() {
 		return RegioneItaliana.values();
 	}
-	
 
 	public ContentBean getContentBean() {
 		return contentBean;
@@ -838,11 +878,10 @@ public class UtenteBean {
 
 	public void setContentBean(ContentBean contentBean) {
 		this.contentBean = contentBean;
-	}
+	}	
 
 	@ManagedProperty(value = "#{contentBean}")
 	private ContentBean contentBean;
-	
 	
 	
 }

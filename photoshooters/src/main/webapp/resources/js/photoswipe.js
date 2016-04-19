@@ -1059,9 +1059,11 @@ var publicMethods = {
 	},
 	next: function() {
 		self.goTo( _currentItemIndex + 1);
+		alert('NEXTTT');
 	},
 	prev: function() {
 		self.goTo( _currentItemIndex - 1);
+		alert('PREVVV');
 	},
 
 	// update current zoom/pan objects
@@ -2827,6 +2829,7 @@ var _getItemAt,
 		item.loaded = false;
 		var img = item.img = framework.createEl('pswp__img', 'img');
 		var onComplete = function() {
+//			alert('imgggg');
 			item.loading = false;
 			item.loaded = true;
 
@@ -3105,7 +3108,7 @@ _registerModule('Controller', {
 					if(item.msrc) {
 						placeholder.src = item.msrc;
 					}
-					
+
 					_setImageSize(item, placeholder);
 
 					baseDiv.appendChild(placeholder);

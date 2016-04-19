@@ -1,5 +1,7 @@
 package com.bolo.photo.web.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,7 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Annuncio {
+public class Annuncio implements Serializable{
+
+	private static final long serialVersionUID = 3862344985425719117L;
 
 	@Id
 	@GeneratedValue
@@ -22,8 +26,12 @@ public class Annuncio {
 	private Utente proponente;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="annuncio")
-	private List<Thread> risposte;
+	private List<Thread> risposte = new ArrayList<Thread>();
 
+	
+//	GETTERS & SETTERS
+	
+	
 	public int getId() {
 		return id;
 	}

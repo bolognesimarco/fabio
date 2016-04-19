@@ -15,36 +15,32 @@
 <h:body>
 
 	<h:panelGroup styleClass="pannello cerca">
-	<p:focus for="messaggioform:destinatari" rendered="#{threadBean.messaggio.destinatario==null}"/>
-	<p:focus for="messaggioform:oggetto" rendered="#{threadBean.messaggio.destinatario!=null}"/>
-		<h:form id="messaggioform">
+	<p:focus for="nuovoannuncioform:oggetto"/>
+		<h:form id="nuovoannuncioform">
 		
 			<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna" >
 			
 				<f:facet name="header">
-            		<h:outputText styleClass="common" value="&#160;&#160;NUOVo MESSAGGIo PHOTOSHOOTEr -&#160;"/>
+            		<h:outputText styleClass="common" value="&#160;&#160;NUOVo ANNUNCIo PHOTOSHOOTEr -&#160;"/>
             		<h:outputText id="nomePS" value="#{utenteBean.utente.username}"/>
             		<br></br>
         		</f:facet>
 
-				<h:outputLabel for="mittente">MITTENTe</h:outputLabel>
+				<h:outputLabel for="mittente">PROPONENTe</h:outputLabel>
 				<h:outputText id="mittente" value="#{utenteBean.utente.username}" />
 
-				<h:outputLabel for="destinatari">DESTINATARi</h:outputLabel>
-				<p:autoComplete id="destinatari" value="#{threadBean.messaggio.destinatario}" completeMethod="#{utenteBean.suggerisciUtenteTranneLoggato}" converter="entityConverter" var="dest" itemValue="#{dest}" itemLabel="#{dest.username}" required="true" requiredMessage="Manca il destinatario!"></p:autoComplete>
+				<h:outputLabel for="oggetto">TITOLo</h:outputLabel>
+				<h:inputText id="oggetto" required="true" requiredMessage="Il titolo non può essere vuoto!" value="#{threadBean.messaggioNuovoAnnuncio.oggetto}" styleClass="textareatonda"/>
 
-				<h:outputLabel for="oggetto">OGGETTo</h:outputLabel>
-				<h:inputText id="oggetto" required="true" requiredMessage="L'oggetto non può essere vuoto!" value="#{threadBean.messaggio.oggetto}" styleClass="textareatonda"/>
-
-				<h:outputLabel for="messaggio">MESSAGGIo</h:outputLabel>
-				<h:inputTextarea size="120" required="true" requiredMessage="Il messaggio non può essere vuoto!" rows="8" id="messaggio" value="#{threadBean.messaggio.messaggio}"/>
+				<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
+				<h:inputTextarea size="120" required="true" requiredMessage="L'annuncio non può essere vuoto!" rows="8" id="messaggio" value="#{threadBean.messaggioNuovoAnnuncio.messaggio}"/>
 				
 				<f:facet name="footer">
 		            <br></br>
 
 		            <h:panelGroup>
-		                <h:commandButton value="INVIa MESSAGGIo&#160;&#160;"
-						 	action="#{threadBean.inviaNuovoMessaggio()}" >
+		                <h:commandButton value="PUBBLICa ANNUNCIo&#160;&#160;"
+						 	action="#{threadBean.pubblicaNuovoAnnuncio()}" >
 		            	</h:commandButton>  
 	            	</h:panelGroup>
 	            		<br></br>

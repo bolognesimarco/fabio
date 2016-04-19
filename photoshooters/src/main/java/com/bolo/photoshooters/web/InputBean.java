@@ -31,6 +31,7 @@ import com.bolo.photo.web.entity.Voto;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.service.SimpleImageInfo;
+import com.bolo.photoshooters.web.EMF;
 
 
 @ManagedBean(name = "inputBean")
@@ -49,6 +50,7 @@ public class InputBean {
 	private Foto nuovaFoto = new Foto();
 	List<Foto> risultatoFotos = new ArrayList<Foto>();
 	private boolean FotoCopertinaAlbum = false;
+	private boolean FotoCopertinaAlbumDaModificare = false;
 	List<Foto> risultatoFotosUtenteTrovato = new ArrayList<Foto>();
 	private Foto fotoDaModificare = new Foto();
 	private int idFotoDaModificare;
@@ -105,7 +107,7 @@ public class InputBean {
 			System.out.println("Album già esistente!");
 		}
 	}
-
+    
 	
 	public void cancellaAlbum (Album daCancellare){
 		System.out.println("funzione cancellaAlbum start ////albumid=="+daCancellare.getId());
@@ -205,7 +207,7 @@ public class InputBean {
 	
 	
 	public void uploadFoto() {
-		System.out.println("uploadFoto=======================================================================================");
+		System.out.println("uploadFoto==========================================");
 		if (part==null){
 			System.out.println("PART==NULL");
 			return;
@@ -425,8 +427,8 @@ public class InputBean {
 				pp.setW(f.getLarghezzaFoto());
 				pswp.add(pp);
 			}
-			contentBean.setContent("fotosUtenteTrovato.xhtml");
-			contentBean.setMessaggio(null);
+		contentBean.setContent("fotosUtenteTrovato.xhtml");
+		contentBean.setMessaggio(null);
 	}
 	
 	
@@ -437,8 +439,27 @@ public class InputBean {
 	
 	public void aggiornaFoto (){	
 		System.out.println("AggiornaFoto1111-start----IDFOTODAMODIFICARE==="+fotoDaModificare.getDescrizione());
+		if(FotoCopertinaAlbumDaModificare){
+			albumVisualizzato.setCopertinaAlbum(fotoDaModificare);
+		} 
+		if(fotoDaModificare.getCollaboratori()!=null) {
+			for (Utente ut :fotoDaModificare.getCollaboratori()) {
+//				newFoto.getCollaboratori().add(ut);
+				ut.getCollaboratori().add(utenteBean.getUtente());
+				utenteBean.getUtente().getCollaboratori().add(ut);
+				try {
+					System.out.println("merge - "+ut.getUsername());
+					serv.merge(ut);
+					serv.merge(utenteBean.getUtente());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		try {
 			serv.merge(fotoDaModificare);
+			serv.merge(albumVisualizzato);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -452,6 +473,12 @@ public class InputBean {
 		System.out.println("MODIFICAFOTO-----------------start");	
 		setFotoDaModificare(foto);
 		setIdFotoDaModificare(foto.getId());
+		setFotoCopertinaAlbumDaModificare(false);
+		if(albumVisualizzato.getCopertinaAlbum()!=null){
+			if (albumVisualizzato.getCopertinaAlbum().getId()==foto.getId()) {
+				setFotoCopertinaAlbumDaModificare(true);
+			}			
+		}
 		contentBean.setContent("modificaFoto.xhtml");
 		//FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");	
 	}
@@ -619,7 +646,7 @@ public class InputBean {
 					votoFoto.setRilasciatoDa(utenteBean.getUtente());
 					votoFoto.setFoto(f);
 					f.getVoti().add(votoFoto);
-//					serv.merge(votoFoto);
+					f.setMediaVoti(utenteBean.calcolaMediaVotiFoto(f.getVoti()));
 					if(f.getPubblicatore().isMailNuovoVoto()){
 						MailSender.sendNuovoVotoMail(f.getPubblicatore().getEmail(), utenteBean.getUtente().getUsername());
 					}
@@ -628,7 +655,8 @@ public class InputBean {
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}				
+				}	
+				votoFoto.setScore(-1);
 			}		
 		}
 		
@@ -693,9 +721,43 @@ public class InputBean {
 			System.out.println("fotoPreferita=FALSE");
 			return false;
 		}	
+	
+	
+		public List<Utente> suggerisciUtenteTranneLoggato (String username) {			
+			System.out.println("suggerisci start");
+			
+			EntityManager em = EMF.createEntityManager();
+			List<Utente> utenti = em
+			.createQuery("from Utente u where u.username like :user and u.id<>:idUt")
+			.setParameter("user", username+"%")
+			.setParameter("idUt", utenteBean.getUtente().getId())
+			.getResultList();
+			for (Utente utente : utenti) {
+				System.out.println("utentiIniziali="+utente.getUsername());
+			}
+			for (Utente ut : nuovaFoto.getCollaboratori()) {
+				System.out.println("collaboratori="+ut.getUsername());
+				for (Utente u : utenti) {
+					System.out.println("utentiSuggeriti="+u.getUsername());
+					if (ut.getId()==u.getId()) {
+						System.out.println("utenterimosso="+u.getUsername());
+						utenti.remove(u);
+					}
+				}
+			}
+			System.out.println("utentiRimastisiZE="+utenti.size());
+			for (Utente utente : utenti) {
+				System.out.println("utentiRimasti="+utente.getUsername());
+			}
+			return utenti;
+		}
+		
+		
+		
 		
 	//*********GETTERS&SETTERS************
 	
+		
 	public String getPswpS() {
 		pswpS = "[";
 		for (PerPhotoswipe p : pswp) {
@@ -728,6 +790,15 @@ public class InputBean {
 	
 	
 	
+	public boolean isFotoCopertinaAlbumDaModificare() {
+		return FotoCopertinaAlbumDaModificare;
+	}
+
+	public void setFotoCopertinaAlbumDaModificare(
+			boolean fotoCopertinaAlbumDaModificare) {
+		FotoCopertinaAlbumDaModificare = fotoCopertinaAlbumDaModificare;
+	}
+
 	public Voto getVotoFoto() {
 		return votoFoto;
 	}

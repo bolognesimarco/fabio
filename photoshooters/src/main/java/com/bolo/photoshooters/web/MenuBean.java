@@ -57,14 +57,13 @@ public class MenuBean {
 			contentBean.setMessaggio(null);
 			contentBean.setContent("messaggi.xhtml");
 			threadBean.getIdThreadsSelezionati().clear();
-			threadBean.cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
-			threadBean.cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
 			break;
 		case 11://CHAT
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 12://ANNUNCI
-			contentBean.setContent("wip.xhtml");
+			contentBean.setMessaggio(null);
+			contentBean.setContent("annunci.xhtml");
 			break;
 		case 13://CREDITI
 			contentBean.setContent("wip.xhtml");
@@ -97,10 +96,13 @@ public class MenuBean {
 		case 18://NUOVO MESSAGGIO
 			contentBean.setMessaggio(null);
 			contentBean.setContent("nuovoMessaggio.xhtml");
-		case 19://NUOVO MESSAGGIO DESTINATARIO
+		case 19://NUOVO MESSAGGIO CON DESTINATARIO
 			contentBean.setMessaggio(null);
 			threadBean.getMessaggio().setDestinatario(utenteBean.getCercaUtente().getUtente());
 			contentBean.setContent("nuovoMessaggio.xhtml");
+		case 20://NUOVO ANNUNCIO
+			contentBean.setMessaggio(null);
+			contentBean.setContent("nuovoAnnuncio.xhtml");
 		default:
 			break;
 		}

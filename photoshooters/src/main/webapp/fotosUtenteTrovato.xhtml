@@ -71,7 +71,7 @@
 								<h:outputLabel style="display:none"  for="visite" styleClass="menubuttonorange" >VISITe #</h:outputLabel>
 								<h:outputText id="visite" style="display:none" value="#{risultato.visite}"/>	
 								<h:outputLabel for="mediavoti" styleClass="menubuttonorange">MEDIa VOTi</h:outputLabel>
-								<h:outputText id="mediavoti" value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)} | 10"></h:outputText>
+								<h:outputText id="mediavoti" value="#{risultato.mediaVoti} | 10"></h:outputText>
 							</h:panelGrid>
 						</figcaption> 				
 					</figure>
@@ -108,8 +108,9 @@
 			 
 			                <h:outputText value="VOTo Xx/10" />
 			                <h:selectOneMenu required="true"  id="voto" value="#{inputBean.votoFoto.score}" >
-			                <f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
-							<f:selectItems value="#{parametersBean.rangeVoto}" /></h:selectOneMenu >            
+			              		<f:selectItem itemValue="-1" itemLabel="" noSelectionOption="true" />
+								<f:selectItems value="#{parametersBean.rangeVoto}" />
+							</h:selectOneMenu >            
 			                
 			                <h:outputText value="MESSAGGIo" />
 			                <h:inputText value="#{inputBean.votoFoto.messaggio}" />

@@ -57,6 +57,9 @@ public class Foto implements Serializable{
 	@Column
 	private boolean inVotazione;
 	
+	@Column
+	private double mediaVoti;
+	
 	@ManyToOne
     @JoinColumn(name="soggetto", nullable=true)
 	private Utente soggetto;
@@ -98,8 +101,19 @@ public class Foto implements Serializable{
 	//************GETTERS&SETTERS**********
 	
 
+	
+	
+	
 	public boolean isInVotazione() {
 		return inVotazione;
+	}
+
+	public double getMediaVoti() {
+		return mediaVoti;
+	}
+
+	public void setMediaVoti(double mediaVoti) {
+		this.mediaVoti = mediaVoti;
 	}
 
 	public int getVisite() {

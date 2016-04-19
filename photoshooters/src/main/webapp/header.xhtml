@@ -18,7 +18,7 @@
 
 			  <h:graphicImage value="/resources/images/Loghetto_PS_naked_C.svg" height="57px" width="39px"></h:graphicImage>
 			  <h:graphicImage  value="/resources/images/Scritta_photoshooters_small_C.svg">
-			  <f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" /></h:graphicImage>
+			  		<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" /></h:graphicImage>
 			  <h:inputText id="cerca" maxlength="36" label="cerca"/>
 
 		  </h:panelGrid>
@@ -70,7 +70,7 @@
 						
 				<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" styleClass="circular"/>
 				<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" styleClass="circular"/>
-
+				<h:graphicImage rendered="#{utenteBean.utente.online==true}" value="/resources/images/online.svg" styleClass="online"/>
 				<h:commandButton value="PROFILo" styleClass="menubuttonred">
 					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform" />
 				</h:commandButton>

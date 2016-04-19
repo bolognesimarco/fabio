@@ -17,6 +17,13 @@
 				<f:facet name="header">
 					<h:outputText value="&#160;CLASSIFICHe"></h:outputText>
 				</f:facet>
+				
+				<h:dataTable value="#{utenteBean.classificaFoto()}" var="fotovotate">
+					<h:column>
+						<h:outputText value="#{fotovotate.titolo} -&#160;"></h:outputText>
+						<h:outputText value="#{fotovotate.mediaVoti} | 10"></h:outputText>
+					</h:column>
+				</h:dataTable>
 			</h:panelGrid>
 			<h:panelGrid styleClass="pannello annunci">
 				<f:facet name="header">
@@ -28,11 +35,22 @@
 					<f:facet name="header">
 						<h:outputText value="&#160;ULTIMi ISCRITTi"></h:outputText>
 					</f:facet>
+					<h:dataTable value="#{utenteBean.ultimiUtentiIscritti()}" var="uts">
+						<h:column>
+							<h:outputText value="#{uts.username}"></h:outputText>
+						</h:column>
+					</h:dataTable>
 				</h:panelGrid>
 				<h:panelGrid styleClass="pannello ultimefoto">
 					<f:facet name="header">
 						<h:outputText value="&#160;ULTIMe FOTo"></h:outputText>
 					</f:facet>
+					<h:dataTable value="#{utenteBean.ultimeFotoIserite()}" var="fots">
+						<h:column>
+							<h:outputText value="nome: #{fots.nomeFileFoto}"></h:outputText>
+							<h:outputText value="tITOLO: #{fots.titolo}"></h:outputText>
+						</h:column>
+					</h:dataTable>
 				</h:panelGrid>
 			</h:panelGrid>
 			<h:panelGrid styleClass="pannello banner">

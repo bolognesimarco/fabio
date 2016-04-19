@@ -47,7 +47,7 @@
 								<h:outputLabel for="titolo" styleClass="menubuttonorange">TITOLo</h:outputLabel>
 								<h:outputText id="titolo" value="#{risultato.titolo}" />
 								<h:outputLabel for="mediavoti" styleClass="menubuttonorange">MEDIa VOTi</h:outputLabel>
-								<h:outputText id="mediavoti" value="#{utenteBean.calcolaMediaVotiFoto(risultato.voti)} | 10"></h:outputText>	
+								<h:outputText id="mediavoti" value="#{risultato.mediaVoti} | 10"></h:outputText>	
 
 								<h:outputLabel style="display:none" for="fotoDescrizione" styleClass="menubuttonorange">DESCRIZIONe</h:outputLabel>
 								<h:outputText id="fotoDescrizione" style="display:none" value="#{risultato.descrizione}"/>					
@@ -114,7 +114,8 @@
 				<p:autoComplete id="newFotosoggetto" value="#{inputBean.nuovaFoto.soggetto}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="sogg" itemValue="#{sogg}" itemLabel="#{sogg.username}"></p:autoComplete>
 				
 				<h:outputLabel for="newFotocollaboratoriFoto">COLLABORATORi FOTo</h:outputLabel>
-				<p:autoComplete id="newFotocollaboratoriFoto" value="#{inputBean.nuovaFoto.collaboratori}" completeMethod="#{utenteBean.suggerisciUtenteTranneLoggato}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true">
+				<p:autoComplete id="newFotocollaboratoriFoto" value="#{inputBean.nuovaFoto.collaboratori}" completeMethod="#{inputBean.suggerisciUtenteTranneLoggato}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true">
+		            <p:ajax event="itemSelect" />
 		            <p:column>
 		                <h:outputText value="#{collab.username}" />
 		            </p:column>
@@ -226,6 +227,11 @@
 
 </div>
 
-
+<script>
+var x = document.getElementsByClassName("pswp__img");
+x.onload = function(){
+	alert('loaded');
+}
+</script>
 </h:body>
 </html>

@@ -16,6 +16,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
+import com.bolo.photo.web.entity.Annuncio;
 import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Utente;
@@ -40,7 +41,9 @@ public class ThreadBean {
 	private Thread threadEsistente = new Thread();
 	private int nuoviMessaggi = 0;
 	List<Messaggio> mm = new ArrayList<Messaggio>();
-//	private String cssMessaggio = "";
+	List<Annuncio> annunciUtente = new ArrayList<Annuncio>();
+	private Annuncio nuovoAnnuncio = new Annuncio();
+	private Messaggio messaggioNuovoAnnuncio = new Messaggio();
 	
 	
 	public void inviaNuovoMessaggio () {
@@ -463,6 +466,122 @@ public class ThreadBean {
 	}
 	
 	
+	IndirectListSorter<Annuncio> annunciSorter = new IndirectListSorter<Annuncio>();	
+	
+	public void ordinaAnnunciPerData(List<Annuncio> listAnn ) {	 
+		System.out.println("ORDINA Annunci:#"+listAnn.size());
+ 		//ordina per ultima pubblicazione
+		annunciSorter.sortIndirectList(listAnn, new Comparator<Annuncio>() {
+			@Override
+			public int compare(Annuncio u1, Annuncio u2) {
+				int c = u2.getRisposte().get(0).getMessaggi().get(u2.getRisposte().get(0).getMessaggi().size()-1).getData().compareTo(u1.getRisposte().get(0).getMessaggi().get(u1.getRisposte().get(0).getMessaggi().size()-1).getData());
+				System.out.println("comparing u2 "+u2.getRisposte().get(0).getMessaggi().get(u2.getRisposte().get(0).getMessaggi().size()-1).getData()+" and u1 "+u1.getRisposte().get(0).getMessaggi().get(u1.getRisposte().get(0).getMessaggi().size()-1).getData()+" : "+c);
+				return c;
+			}
+		});
+	}
+	
+	
+	public boolean esisteThreadConUtenteTrovato (Utente ut) {
+		for (Thread thread : threadsInviatiUtente) {
+			if(thread.getDestinatarioPrimo().getId()==ut.getId()) {
+				return true;
+			}
+		}
+		for (Thread thread : threadsRicevutiUtente) {
+			if(thread.getMittentePrimo().getId()==ut.getId()) {
+				return true;
+			}
+		}
+		System.out.println("FALSEEEE");
+		return false;
+	}
+	
+	
+	public void pubblicaNuovoAnnuncio () {
+		System.out.println("PUBBLICA NUOVO ANNUNCIO function");
+
+			if (!esisteAnnuncio(nuovoAnnuncio)){
+				System.out.println("nuovo annuncio");
+				Thread thr = new Thread();	
+				Messaggio mess = new Messaggio();
+				thr.setMittentePrimo(utenteBean.getUtente());
+				thr.setOggettoThread(messaggioNuovoAnnuncio.getOggetto());
+				mess.setMessaggio(messaggioNuovoAnnuncio.getMessaggio());
+				mess.setMittente(utenteBean.getUtente());
+				mess.setOggetto(messaggioNuovoAnnuncio.getOggetto());
+				mess.setThread(thr);
+				Date ora = new Date();
+				mess.setData(ora);
+				mess.getLetto().add(utenteBean.getUtente());
+				thr.getMessaggi().add(mess);
+				nuovoAnnuncio.setProponente(utenteBean.getUtente());
+				nuovoAnnuncio.getRisposte().add(thr);
+				try {
+					serv.persist(nuovoAnnuncio);
+//					serv.persist(thr);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace(); 
+				}
+				cercaAnnunciUtente(utenteBean.getUtente().getId());
+
+				contentBean.setContent("annunci.xhtml");
+				contentBean.setMessaggio("annuncio nuovo");
+			} else {
+				System.out.println("annuncio esistente");
+				if (threadEsistente.getMittentePrimo().getId()==utenteBean.getUtente().getId() && threadEsistente.isCancellatoThreadMittente()) {
+					getContentBean().setMessaggio("Thread spedito già esistente: messaggio aggiunto!");
+					threadEsistente.setCancellatoThreadMittente(false);
+				} else {
+					if (threadEsistente.isCancellatoThreadDestinatario()) {
+						getContentBean().setMessaggio("Thread ricevuto già esistente: messaggio aggiunto!");
+						threadEsistente.setCancellatoThreadDestinatario(false);
+					}
+				}
+				Messaggio mess = new Messaggio();
+				mess.setMessaggio(messaggio.getMessaggio());
+				mess.setMittente(utenteBean.getUtente());
+				mess.setDestinatario(messaggio.getDestinatario());
+				mess.setOggetto(messaggio.getOggetto());
+				mess.setThread(threadEsistente);
+				Date ora = new Date();
+				mess.setData(ora);
+				mess.getLetto().add(utenteBean.getUtente());
+				threadEsistente.getMessaggi().add(mess);
+				threadEsistente.setNuovoMessaggio(true);
+				try {
+					serv.merge(threadEsistente);;
+					if(mess.getDestinatario().isMailNuovoMessaggio()) {
+						MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
+				cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
+				int i=0;
+				for (Messaggio m : threadEsistente.getMessaggi()) {
+					System.out.println("InviaMessaggio2-ordine MESS: #"+i+"-data-"+m.getData());
+					i++;
+				}
+				contentBean.setContent("messaggi.xhtml");
+			}
+	}
+	
+	
+	public void cercaAnnunciUtente (int idUtente) {
+		EntityManager em = EMF.createEntityManager();
+		annunciUtente = em
+		.createQuery("from Annunci a where a.proponente.id =:prop")
+		.setParameter("prop", idUtente)
+		.getResultList();
+		ordinaAnnunciPerData(annunciUtente);	
+	}
+	
+	
+
 	
 	//************GETTERS & SETTERS*******************
 	

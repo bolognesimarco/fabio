@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+
+		<h:form id="annunciform">
+		
+			<h:panelGrid columns="2" columnClasses="right,left" >
+	            <h:panelGroup>
+	                <h:commandButton value="NUOVo ANNUNCIo&#160;&#160;"
+					 	action="#{menuBean.menuClick(20)}" >
+	            	</h:commandButton>  
+            	</h:panelGroup>
+            	<h:panelGroup>
+            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+            		<h:messages/>
+            	</h:panelGroup>
+			</h:panelGrid>
+		
+		<h:dataTable id="annunciiutente" var="ann" value="#{threadBean.annunciUtente}">
+			<f:facet name="header">
+           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCi -&#160;"/>
+           		<h:outputText id="nomePS" value="#{utenteBean.utente.username}"/>
+           		<br></br>
+       		</f:facet>
+			<h:column>
+			
+				<f:facet name="header">
+            		<h:panelGrid columns="4" border="0">
+	            		<h:outputText styleClass="common" value="&#160;&#160;PROPONENTe"/>
+						<h:outputText styleClass="common" value="&#160;&#160;TITOLo"/>
+						<h:outputText styleClass="common" value="&#160;&#160;DATa"/>
+						<h:outputText styleClass="common" value="&#160;&#160;SELEZIONa"/>
+					</h:panelGrid>
+        		</f:facet>
+        		
+				<h:panelGrid columns="4" columnClasses="leftprofilo,leftprofilo,leftprofilo,leftprofilo" border="1">
+					<h:panelGrid>
+	        			<h:outputText id="proponente" value="#{ann.proponente.username}" />
+					</h:panelGrid>
+					<h:panelGrid>
+			    		<h:commandButton value="#{ann.oggettoThread}" style="cursor:pointer;">
+			    			<h:panelGroup rendered="#{threadBean.threadContieneMessaggiNonLetti(utenteBean.utente.id,ann)==true and ann.nuovoMessaggio==true}">
+		    	   				<sup style="color:red;font-size:8px;">new</sup>
+		    	   			</h:panelGroup>
+		    				<f:ajax event="click" listener="#{threadBean.visualizzaThread2(ann)}" render=":content :menuutenteform:numeromessaggi :nuovoannuncioform" />
+		    	   		</h:commandButton>
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:outputText id="datamessaggiricevuti" value="#{ann.messaggi.get(ann.messaggi.size()-1).data}">
+							<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+						</h:outputText >
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:selectBooleanCheckbox id="selezionemessaggiricevuti" value="#{threadBean.idThreadsSelezionati[ann.id]}">
+						</h:selectBooleanCheckbox>
+					</h:panelGrid>
+				</h:panelGrid>		       		
+			</h:column>
+			
+			<f:facet name="footer">
+           		<h:panelGrid columns="2" border="0">
+					<h:commandButton value="ELIMINa MESSAGGi SELEZIONATi" action="#{threadBean.cancellaThreadsRicevutiSelezionati()}" ></h:commandButton>
+				</h:panelGrid>
+       		</f:facet>
+
+		</h:dataTable>
+
+		</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

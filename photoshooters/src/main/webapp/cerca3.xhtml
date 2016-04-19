@@ -115,12 +115,13 @@
 
 	    <h:panelGrid columns="1" >  
 	        <h:outputText value="#{utenti.username}" />  
-	      	<h:graphicImage rendered="#{utenti.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenti.username}/#{utenti.avatar}" height="50" width="50" style="cursor:pointer;" >
+	      	<h:graphicImage rendered="#{utenti.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenti.username}/#{utenti.avatar}" styleClass="circularutente" style="cursor:pointer;" >
 				<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(utenti.id)}" render=":content :profiloform" />
 			</h:graphicImage>
-			<h:graphicImage rendered="#{utenti.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="50" width="50" style="cursor:pointer;">
+			<h:graphicImage rendered="#{utenti.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" styleClass="circularutente" style="cursor:pointer;">
 				<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(utenti.id)}" render=":content :profiloform" />
 			</h:graphicImage>
+			<h:graphicImage rendered="#{risultato.online==true}" value="/resources/images/online.svg" styleClass="onlineutente"/>
 	    </h:panelGrid>  
 
 	</p:dataGrid>

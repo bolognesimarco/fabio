@@ -116,7 +116,7 @@
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
 				<h:panelGroup styleClass="selection">
 					<h:selectManyCheckbox layout="pageDirection" id="tipolavoro" value="#{utenteBean.tipiLavoroId}" 
-						required="true" requiredMessage="scegli almeno un lavoro">
+						required="true" requiredMessage="scegli almeno una tipologia lavoro">
 						<f:selectItems value="#{utenteBean.utente.tipoUtente.tipiLavoro}" var="tt" itemValue="#{tt.id}" itemLabel="#{tt.descrizione}" />
 	            	</h:selectManyCheckbox >
 				</h:panelGroup>	
