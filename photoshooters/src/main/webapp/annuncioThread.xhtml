@@ -15,42 +15,34 @@
 </h:head>
 <h:body>
 
-	<h:panelGroup id="messaggiothread" styleClass="pannello cerca">
+	<h:panelGroup id="annunciothread" styleClass="pannello cerca">
 		
-		<h:form id="nuovomessaggiothreadform">
+		<h:form id="rispostaannunciothreadform">
 
-				<h:panelGrid id="panelgridnuovomess" columns="2" columnClasses="leftprofilo,leftprofilo" border="0">
+				<h:panelGrid id="panelgridrispostaannuncio" columns="2" columnClasses="rightprofilo,leftprofilo" border="0">
 					<f:facet name="header">
-		           		<h:outputText styleClass="common" value="&#160;&#160;MESSAGGi&#160;"/>
-		           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.mittentePrimo.id}" styleClass="common" value="INVIATi [&#160;"/>
-		           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.destinatarioPrimo.id}" styleClass="common" value="RICEVUTi [&#160;"/>
-		           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.mittentePrimo.id}" id="MittDest" value="#{utenteBean.utente.username}&#160;-&#160;#{threadBean.threadMessaggi.destinatarioPrimo.username}&#160;]"/>
-		           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.destinatarioPrimo.id}" id="DestMitt" value="#{threadBean.threadMessaggi.mittentePrimo.username}&#160;-&#160;#{utenteBean.utente.username}&#160;]"/>
+		           		<h:outputText styleClass="common" value="&#160;&#160;RISPOSTa Di -&#160;"/>
+		           		<h:outputText value="#{threadBean.threadAnnuncioPubblicato.mittentePrimo.username}"/>
+		           		<h:outputText styleClass="common" value="&#160;&#160;- ANNUNCIo PUBBLICATo '"/>
+						<h:outputText id="oggettonew"  value="&#160;#{threadBean.threadAnnuncioPubblicato.oggettoThread}"/>
+						<h:outputText styleClass="common" value="'"/>
 		           		<br></br>
 		       		</f:facet>
 					<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
-		           		<h:outputText  value="Da:&#160;"/>
+		           		<h:outputText value="Da:&#160;"/>
 		         		<h:outputText value="#{utenteBean.utente.username}"></h:outputText>
 						<h:outputText value="A:&#160;"></h:outputText>
-		           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.mittentePrimo.id}" id="MittDest2" value="#{threadBean.threadMessaggi.destinatarioPrimo.username}"/>
-		           		<h:outputText rendered="#{utenteBean.utente.id==threadBean.threadMessaggi.destinatarioPrimo.id}" id="DestMitt2" value="#{threadBean.threadMessaggi.mittentePrimo.username}"/>
+		           		<h:outputText value="#{threadBean.threadAnnuncioPubblicato.mittentePrimo.username}"/>
 					</h:panelGrid>
-	        		<h:panelGrid columns="1">
-		        		<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
-		        			<h:outputLabel for="oggettonew">OGGETTo</h:outputLabel>
-							<h:outputText id="oggettonew"  value="&#160;#{threadBean.threadMessaggi.oggettoThread}" styleClass="textareatonda">
-		    	   			</h:outputText>
-		        		</h:panelGrid>
-					    <h:panelGrid columns="1">   
-					        <h:outputLabel for="messaggio">NUOVo MESSAGGIo</h:outputLabel>
-							<h:inputTextarea required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:230px!important;"  size="230" rows="5" id="messaggioaggiunto" value="#{threadBean.messaggioAggiunto.messaggio}"/>
-						</h:panelGrid>
+	        		<h:panelGrid columns="1">  
+				        <h:outputLabel for="messaggio">NUOVa RISPOSTa</h:outputLabel>
+						<h:inputTextarea value="#{threadBean.messaggioAggiunto.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:230px!important;"  size="230" rows="5" id="messaggioaggiunto" />
 	        		</h:panelGrid>
 	        	 
 		        	 <f:facet name="footer">
 			            <h:panelGroup>
-			                <h:commandButton value="INVIa MESSAGGIo&#160;&#160;"
-							 	action="#{threadBean.aggiungiMessaggio()}" >
+			                <h:commandButton value="INVIa RISPOSTa&#160;&#160;"
+							 	action="#{threadBean.aggiungiRispostaThreadAnnuncio()}" >
 			            	</h:commandButton>  
 		            	</h:panelGroup>
 		            		<br></br>
@@ -60,8 +52,8 @@
         		</h:panelGrid>		
 		</h:form>
 		
-		<h:form id="threadmessaggiform">	
-			<p:dataTable id="threadMessaggi" var="mess" value="#{threadBean.threadMessaggi.messaggi}" rows="5" paginator="true" scrollable="false" scrollWidth="0">
+		<h:form id="annunciothreadmessaggiform">	
+			<p:dataTable id="annunciothreadMessaggi" var="mess" value="#{threadBean.threadAnnuncioPubblicato.messaggi}" rows="5" paginator="true" scrollable="false" scrollWidth="0">
 				
 				<p:column>
 				

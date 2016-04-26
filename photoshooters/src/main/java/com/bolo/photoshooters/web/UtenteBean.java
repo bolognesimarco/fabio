@@ -20,6 +20,7 @@ import javax.persistence.Query;
 
 import org.primefaces.event.SelectEvent;
 
+import com.bolo.photo.web.entity.Annuncio;
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Messaggio;
@@ -54,6 +55,7 @@ public class UtenteBean {
 	List<Utente> seguitoDaUtenti = new ArrayList<Utente>();
 	List<Utente> followers = new ArrayList<Utente>();
 	private boolean collaboratoUtente = false;
+
 
 	public void cercaUtenti(){		
 		EntityManager em = EMF.createEntityManager();

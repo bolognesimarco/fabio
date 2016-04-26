@@ -39,7 +39,7 @@
 	    	   	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton value="LAVORo|EVENTi" styleClass="menubutton">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(5)}" render=":content" />
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(5)}" render=":content " />
 	    	   	</h:commandButton>
 
 	    	   	<h:commandButton value="FORUm" styleClass="menubutton">
@@ -93,8 +93,13 @@
 	    	   	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton value="ANNUNCi" styleClass="menubuttonred">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(12)}" render=":content" />
-	    	   	</h:commandButton>
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(12)}" render=":content :annunciform :annuncirispostiform" />
+    					<h:panelGroup id="numeroannunci">
+	    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+	    	   					<h:outputText rendered="#{threadBean.nuoviMessaggiAnnunci!=0}" value="#{threadBean.nuoviMessaggiAnnunci}"></h:outputText>
+	    	   				</sup>
+	    	   			</h:panelGroup> 
+	    	  	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton value="CREDITi" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(13)}" render=":content :registratiform" />

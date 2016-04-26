@@ -15,6 +15,9 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.primefaces.context.RequestContext;
 
 import com.bolo.photo.web.entity.Annuncio;
 import com.bolo.photo.web.entity.Messaggio;
@@ -22,6 +25,7 @@ import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
+import com.bolo.photoshooters.util.AnnunciComparator;
 import com.bolo.photoshooters.util.IndirectListSorter;
 import com.bolo.photoshooters.util.MessaggiComparator;
 
@@ -42,8 +46,18 @@ public class ThreadBean {
 	private int nuoviMessaggi = 0;
 	List<Messaggio> mm = new ArrayList<Messaggio>();
 	List<Annuncio> annunciUtente = new ArrayList<Annuncio>();
+	List<Annuncio> annunciSito = new ArrayList<Annuncio>();
+	List<Annuncio> annunciRispostiDaUtente = new ArrayList<Annuncio>();
 	private Annuncio nuovoAnnuncio = new Annuncio();
 	private Messaggio messaggioNuovoAnnuncio = new Messaggio();
+	private Annuncio annuncioEsistente = new Annuncio();
+	private Annuncio annuncioPubblicato = new Annuncio();
+	private Annuncio annuncioAltrui = new Annuncio();
+	private Messaggio messaggioRispostaAnnuncio = new Messaggio();
+	Thread threadAnnuncioPubblicato = new Thread();
+	Thread threadRispostaAnnuncio = new Thread();
+	List<Thread> threadsAnnunciConNuoviMessaggi = new ArrayList<Thread>();
+	private int nuoviMessaggiAnnunci = 0;
 	
 	
 	public void inviaNuovoMessaggio () {
@@ -197,7 +211,7 @@ public class ThreadBean {
 	public void cercaThreadsInviatiUtente (int idUtente) {
 		EntityManager em = EMF.createEntityManager();
 		threadsInviatiUtente = em
-		.createQuery("from Thread t where t.mittentePrimo.id =:mitt and t.cancellatoThreadMittente = false")
+		.createQuery("from Thread t where t.mittentePrimo.id =:mitt and t.cancellatoThreadMittente = false and t.annuncio is null")
 		.setParameter("mitt", idUtente)
 		.getResultList();
 		for (Thread t : threadsRicevutiUtente) {
@@ -213,7 +227,7 @@ public class ThreadBean {
 	public void cercaThreadsRicevutiUtente (int idUtente) {
 		EntityManager em = EMF.createEntityManager();
 		threadsRicevutiUtente = em
-		.createQuery("from Thread t where t.destinatarioPrimo.id =:mitt and t.cancellatoThreadDestinatario = false")
+		.createQuery("from Thread t where t.destinatarioPrimo.id =:mitt and t.cancellatoThreadDestinatario = false and t.annuncio is null")
 		.setParameter("mitt", idUtente)
 		.getResultList();	
 		for (Thread t : threadsRicevutiUtente) {
@@ -268,14 +282,8 @@ public class ThreadBean {
 //		contentBean.setContent("messaggioThread.xhtml");		
 //	}
 	
+	
 	public void visualizzaThread2 (Thread thread) {
-//		EntityManager em = EMF.createEntityManager();
-//		List<Thread> threads = em
-//		.createQuery("from Thread t where t.id =:idThr")
-//		.setParameter("idThr", idThread)
-//		.getResultList();	
-//		if(threads!=null && threads.size()>0) {	
-//			threadMessaggi = null;
 			threadMessaggi = thread;
 			System.out.println("VISUALIZZA THREAD threadMessaggi.getMessaggi().size="+threadMessaggi.getMessaggi().size());	
 //			se non Ë nuovo thread 				
@@ -305,9 +313,7 @@ public class ThreadBean {
 			}		
 			ordinaMessaggiPerData(threadMessaggi.getMessaggi());			
 			nuoviMessaggiThread(utenteBean.getUtente().getId());
-//		}
-//		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("menuutenteform");
-		contentBean.setContent("messaggioThread.xhtml");		
+			contentBean.setContent("messaggioThread.xhtml");		
 	}
 	
 	public boolean messaggioRicevutoOSpedito (Messaggio M) {
@@ -321,23 +327,12 @@ public class ThreadBean {
 	
 
 	public boolean messaggioIsLetto (int idUtente, Messaggio mess) {
-//		EntityManager em = EMF.createEntityManager();
-//		Messaggio m = em.find(Messaggio.class, idMess);
 		for (Utente uts : mess.getLetto()) {
 			if(uts.getId()==idUtente){
 				return true;
 			}
 		}
 		return false;
-//		List<Messaggio> mess = em
-//		.createQuery("from Messaggio m inner join m.letto ml where m.id=:idmess and ml.id=:idut")
-//		.setParameter("idut", idUtente)
-//		.setParameter("idmess", idMess)
-//		.getResultList();	
-//		if (mess!=null && mess.size()>0) {
-//			return true;
-//		}
-//		return false;
 	}
 
 	
@@ -347,7 +342,7 @@ public class ThreadBean {
 		EntityManager em = EMF.createEntityManager();
 		List<Thread> threadsConNuoviMessaggiToT = em
 //		.createQuery("from Thread t inner join t.messaggi m inner join m.letto ml where t.nuovoMessaggio = true and m.mittente.id !=:mitt and ml.id!=:mitt")
-		.createQuery("from Thread t where t.nuovoMessaggio = true")
+		.createQuery("from Thread t where t.nuovoMessaggio = true and t.annuncio is null")
 //		.setParameter("mitt", idUtente)
 		.getResultList();	
 		System.out.println("****Threads con isNuovoMessaggio=TRUE_trovati #"+threadsConNuoviMessaggiToT.size());
@@ -471,14 +466,7 @@ public class ThreadBean {
 	public void ordinaAnnunciPerData(List<Annuncio> listAnn ) {	 
 		System.out.println("ORDINA Annunci:#"+listAnn.size());
  		//ordina per ultima pubblicazione
-		annunciSorter.sortIndirectList(listAnn, new Comparator<Annuncio>() {
-			@Override
-			public int compare(Annuncio u1, Annuncio u2) {
-				int c = u2.getRisposte().get(0).getMessaggi().get(u2.getRisposte().get(0).getMessaggi().size()-1).getData().compareTo(u1.getRisposte().get(0).getMessaggi().get(u1.getRisposte().get(0).getMessaggi().size()-1).getData());
-				System.out.println("comparing u2 "+u2.getRisposte().get(0).getMessaggi().get(u2.getRisposte().get(0).getMessaggi().size()-1).getData()+" and u1 "+u1.getRisposte().get(0).getMessaggi().get(u1.getRisposte().get(0).getMessaggi().size()-1).getData()+" : "+c);
-				return c;
-			}
-		});
+		annunciSorter.sortIndirectList(listAnn, new AnnunciComparator());
 	}
 	
 	
@@ -500,88 +488,346 @@ public class ThreadBean {
 	
 	public void pubblicaNuovoAnnuncio () {
 		System.out.println("PUBBLICA NUOVO ANNUNCIO function");
+		Annuncio ann = new Annuncio();
+		Thread thr = new Thread();	
+		Messaggio mess = new Messaggio();
+		thr.setMittentePrimo(utenteBean.getUtente());
+		thr.setDestinatarioPrimo(utenteBean.getUtente());
+		thr.setOggettoThread(messaggioNuovoAnnuncio.getOggetto());
+		mess.setMessaggio(messaggioNuovoAnnuncio.getMessaggio());
+		mess.setMittente(utenteBean.getUtente());
+		mess.setDestinatario(utenteBean.getUtente());
+		mess.setOggetto(messaggioNuovoAnnuncio.getOggetto());
+		mess.setThread(thr);
+		mess.getLetto().add(utenteBean.getUtente());
+		Date ora = new Date();
+		mess.setData(ora);
+		thr.getMessaggi().add(mess);
+		thr.setAnnuncio(ann);
+		thr.setNuovoMessaggio(false);
+		ann.setCitt‡Annuncio(nuovoAnnuncio.getCitt‡Annuncio());
+		ann.setProponente(utenteBean.getUtente());
+		ann.getRisposte().add(thr);
+		try {
+			serv.persist(ann);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(); 
+		}
+		cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
+		contentBean.setContent("annunci.xhtml");
+		contentBean.setMessaggio("annuncio nuovo");
+	}
 
-			if (!esisteAnnuncio(nuovoAnnuncio)){
-				System.out.println("nuovo annuncio");
-				Thread thr = new Thread();	
-				Messaggio mess = new Messaggio();
-				thr.setMittentePrimo(utenteBean.getUtente());
-				thr.setOggettoThread(messaggioNuovoAnnuncio.getOggetto());
-				mess.setMessaggio(messaggioNuovoAnnuncio.getMessaggio());
-				mess.setMittente(utenteBean.getUtente());
-				mess.setOggetto(messaggioNuovoAnnuncio.getOggetto());
-				mess.setThread(thr);
-				Date ora = new Date();
-				mess.setData(ora);
-				mess.getLetto().add(utenteBean.getUtente());
-				thr.getMessaggi().add(mess);
-				nuovoAnnuncio.setProponente(utenteBean.getUtente());
-				nuovoAnnuncio.getRisposte().add(thr);
-				try {
-					serv.persist(nuovoAnnuncio);
-//					serv.persist(thr);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace(); 
-				}
-				cercaAnnunciUtente(utenteBean.getUtente().getId());
+	
+	public void ripubblicaAnnuncio(Annuncio ann) {
+		Date ora = new Date();
+		ann.getRisposte().get(0).getMessaggi().get(ann.getRisposte().get(0).getMessaggi().size()-1).setData(ora);
+		try {
+			serv.merge(ann);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-				contentBean.setContent("annunci.xhtml");
-				contentBean.setMessaggio("annuncio nuovo");
-			} else {
-				System.out.println("annuncio esistente");
-				if (threadEsistente.getMittentePrimo().getId()==utenteBean.getUtente().getId() && threadEsistente.isCancellatoThreadMittente()) {
-					getContentBean().setMessaggio("Thread spedito gi‡ esistente: messaggio aggiunto!");
-					threadEsistente.setCancellatoThreadMittente(false);
-				} else {
-					if (threadEsistente.isCancellatoThreadDestinatario()) {
-						getContentBean().setMessaggio("Thread ricevuto gi‡ esistente: messaggio aggiunto!");
-						threadEsistente.setCancellatoThreadDestinatario(false);
-					}
-				}
-				Messaggio mess = new Messaggio();
-				mess.setMessaggio(messaggio.getMessaggio());
-				mess.setMittente(utenteBean.getUtente());
-				mess.setDestinatario(messaggio.getDestinatario());
-				mess.setOggetto(messaggio.getOggetto());
-				mess.setThread(threadEsistente);
-				Date ora = new Date();
-				mess.setData(ora);
-				mess.getLetto().add(utenteBean.getUtente());
-				threadEsistente.getMessaggi().add(mess);
-				threadEsistente.setNuovoMessaggio(true);
-				try {
-					serv.merge(threadEsistente);;
-					if(mess.getDestinatario().isMailNuovoMessaggio()) {
-						MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
-					}
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
-				cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
-				int i=0;
-				for (Messaggio m : threadEsistente.getMessaggi()) {
-					System.out.println("InviaMessaggio2-ordine MESS: #"+i+"-data-"+m.getData());
-					i++;
-				}
-				contentBean.setContent("messaggi.xhtml");
-			}
+	
+	public void cercaAnnunciRispostiDaUtente (int idUtente) {
+		EntityManager em = EMF.createEntityManager();
+		annunciRispostiDaUtente = em
+		.createQuery("from Annuncio a inner join a.risposte ar where a.proponente.id <>:prop and ar.mittentePrimo.id =:prop")
+		.setParameter("prop", idUtente)
+		.getResultList();
+		ordinaAnnunciPerData(annunciRispostiDaUtente);	
 	}
 	
 	
-	public void cercaAnnunciUtente (int idUtente) {
+	public void cercaAnnunciPubblicatiDaUtente (int idUtente) {
 		EntityManager em = EMF.createEntityManager();
 		annunciUtente = em
-		.createQuery("from Annunci a where a.proponente.id =:prop")
+		.createQuery("from Annuncio a where a.proponente.id =:prop")
 		.setParameter("prop", idUtente)
 		.getResultList();
 		ordinaAnnunciPerData(annunciUtente);	
 	}
 	
-	
+//	public boolean esisteAnnuncio(String titolo, String citt‡ ) {
+//		for (Annuncio annuncio : annunciUtente) {
+//			if (annuncio.getRisposte().get(0).getOggettoThread()==titolo && annuncio.getCitt‡Annuncio().equals(citt‡)) {
+//				setAnnuncioEsistente(annuncio);
+//				System.out.println("annuncio esisteeeeee");
+//				return true;
+//			}
+//		}
+//		System.out.println("annuncio NON esisteeeee");
+//		return false;
+//	}
 
+	
+	private Map<Integer, Boolean> idAnnunciSelezionati = new HashMap<Integer, Boolean>();	
+	
+	public void cancellaAnnunciSelezionati () {
+		for (Annuncio a : annunciUtente)  {
+			if (idAnnunciSelezionati.get(a.getId()).booleanValue()) {
+				try {
+					serv.delete(a);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
+		cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
+	}
+	
+	
+	public boolean annuncioContieneRisposteNonLette (int idUtente, Annuncio ann) {
+		for (Thread thr : ann.getRisposte()) {
+			int j=0;
+	//		System.out.println("annuncioContieneRisposteNonLette size="+ann.getRisposte().get(0).getMessaggi().size());
+			for (Messaggio mess : thr.getMessaggi()) {
+//				escludo il primo messaggio che Ë quello dell'annuncio, dove mittente=destinatario
+				if(mess.getMittente().getId()!=mess.getDestinatario().getId()) {
+					int i=0;
+					System.out.println("id mess: "+mess.getId());
+					for (Utente ut : mess.getLetto()) {
+						if (ut.getId()==idUtente) {
+							i++;
+							System.out.println("ut.getId()==idUtente__i="+i);
+						}
+					}
+		//			i=0 -> ci sono mess non letti
+					if (i==0) {
+						j++;
+						System.out.println("mess non letto ID="+mess.getId());
+					}
+				}
+			}
+			if (j>0) {
+				System.out.println("annuncioContieneRisposteNonLette=TRUE_oggetto: "+ann.getRisposte().get(0).getOggettoThread());
+				return true;
+			}
+		}
+		System.out.println("annuncioContieneRisposteNonLette=FALSE_oggetto: "+ann.getRisposte().get(0).getOggettoThread());
+		return false;
+	}
+	
+	
+	public boolean annuncioContieneThreadNuovo (Annuncio ann) {
+			for (Thread thr : ann.getRisposte()) {
+				if(thr.isNuovoMessaggio())
+					return true;
+			}
+		return false;
+	}
+	
+	
+	public void visualizzaAnnuncioPubblicato (Annuncio ann) {
+		setAnnuncioPubblicato(ann);
+		System.out.println("annunciopubblicato id="+ann.getId());
+		contentBean.setContent("annuncioPubblicato.xhtml");		
+	}
+	
+	
+	public void visualizzaAnnuncioAltrui (Annuncio ann) {
+		setAnnuncioAltrui(ann);
+		esisteRispostaAnnuncio(utenteBean.getUtente(), ann);
+		ordinaThreadPerData(ann.getRisposte());
+		ordinaMessaggiPerData(threadRispostaAnnuncio.getMessaggi());
+		contentBean.setContent("annuncioAltrui.xhtml");		
+	}
+	
+	
+	public void visualizzaThreadAnnuncioPubblicato (Thread thread) {
+		System.out.println("visualizzaThreadAnnuncioPubblicato START");
+		threadAnnuncioPubblicato = thread;
+//		se non Ë nuovo thread 			
+		System.out.println("threadAnnuncioPubblicato nuovo????"+threadAnnuncioPubblicato.isNuovoMessaggio());
+		System.out.println("thread nuovo????"+thread.isNuovoMessaggio());
+		if (!threadAnnuncioPubblicato.isNuovoMessaggio()) {
+			System.out.println("thread non nuovo");
+			for (Messaggio m : threadAnnuncioPubblicato.getMessaggi()) {
+//					se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
+				if (!messaggioIsLetto(m.getDestinatario().getId(), m))
+				{
+					System.out.println("messaggio non letto da destinatario (me)!");
+					m.getLetto().add(m.getDestinatario());
+				}		
+			}
+		}				
+//			controllo se il thread che leggo Ë contenuto nella lista dei nuovi thread
+		System.out.println("threadsAnnunciConNuoviMessaggi size= "+threadsAnnunciConNuoviMessaggi.size());
+		for (Thread t : threadsAnnunciConNuoviMessaggi) {;
+			if (t.getId()==threadAnnuncioPubblicato.getId())	{
+				System.out.println("thread annuncio con nuovo mess contenuto in threadsAnnunciConNuoviMessaggi");
+				threadAnnuncioPubblicato.setNuovoMessaggio(false);
+			}				
+		}	
+		try {
+			serv.merge(threadAnnuncioPubblicato);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		ordinaMessaggiPerData(threadAnnuncioPubblicato.getMessaggi());			
+		nuoviMessaggiThreadsAnnuncio(utenteBean.getUtente().getId());
+		contentBean.setContent("annuncioThread.xhtml");		
+	}
+	
+	
+	public void nuoviMessaggiThreadsAnnuncio (int idUtente) {
+		threadsAnnunciConNuoviMessaggi.clear();
+		System.out.println("nuoviMESSAGGIANNUNCIIIIIingresso");
+
+		List<Annuncio> annunciConNuoviMessaggiInThreadsToT = new ArrayList<Annuncio>();
+		annunciConNuoviMessaggiInThreadsToT.addAll(annunciUtente);
+		annunciConNuoviMessaggiInThreadsToT.addAll(annunciRispostiDaUtente);
+		System.out.println("****ANNUNCIO Pubblicati+Risposti #"+annunciConNuoviMessaggiInThreadsToT.size());
+
+		int numthr = 0;		
+		for (Annuncio ann : annunciConNuoviMessaggiInThreadsToT) {	
+			for (Thread thr : ann.getRisposte()) {
+				System.out.println("THREAD ID="+thr.getId());
+	//			controllo se non ho cancellato il thread - in caso lo avessi cancellato, non lo conteggio anche se contiene mess nuovi x me
+				if ((thr.getMittentePrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadMittente()==false) || (thr.getDestinatarioPrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadDestinatario()==false)) {	
+					if (threadContieneMessaggiNonLetti(idUtente, thr)) {
+						System.out.println("TRUE=contiene"+threadContieneMessaggiNonLetti(idUtente, thr));
+						numthr++;
+						threadsAnnunciConNuoviMessaggi.add(thr);
+					}
+				}
+			}
+		}
+		System.out.println("threads annunci con messaggi non letti size"+threadsAnnunciConNuoviMessaggi.size());
+		nuoviMessaggiAnnunci = numthr;
+		System.out.println("nuoviMessaggiAnnunci==="+nuoviMessaggiAnnunci);
+	}
+	
+	
+	public void aggiungiRispostaThreadAnnuncio() {
+		System.out.println("AGGIUNGI RISPOSTA ANNUNCIO function");
+		Messaggio mess = new Messaggio();
+		mess.setOggetto(threadAnnuncioPubblicato.getOggettoThread());
+		mess.setMessaggio(messaggioAggiunto.getMessaggio());
+		mess.setMittente(utenteBean.getUtente());
+		mess.setDestinatario(threadAnnuncioPubblicato.getMittentePrimo());
+		mess.setThread(threadAnnuncioPubblicato);
+		Date ora = new Date();
+		mess.setData(ora);
+		mess.getLetto().add(utenteBean.getUtente());
+		threadAnnuncioPubblicato.getMessaggi().add(mess);
+		threadAnnuncioPubblicato.setNuovoMessaggio(true);
+		try {
+			serv.merge(threadAnnuncioPubblicato);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(); 
+		}
+		messaggioAggiunto.setMessaggio(null);
+		contentBean.setContent("annunci.xhtml");
+		contentBean.setMessaggio("risposta annuncio aggiunta");
+	}
+	
+	
+	public void rispondiAnnuncio(Annuncio a) {
+		System.out.println("RISPONDI ANNUNCIO function");
+//		se Ë la mia prima risposta all'annuncio - creo nuovo thread
+		if(!esisteRispostaAnnuncio(utenteBean.getUtente(), a)) {
+			Thread thr = new Thread();	
+			Messaggio mess = new Messaggio();
+			thr.setMittentePrimo(utenteBean.getUtente());
+			thr.setDestinatarioPrimo(a.getProponente());
+			thr.setOggettoThread(a.getRisposte().get(0).getOggettoThread());
+			mess.setMessaggio(messaggioRispostaAnnuncio.getMessaggio());
+			mess.setMittente(utenteBean.getUtente());
+			mess.setDestinatario(a.getProponente());
+			mess.setOggetto(a.getRisposte().get(0).getOggettoThread());
+			mess.setThread(thr);
+			mess.getLetto().add(utenteBean.getUtente());
+			Date ora = new Date();
+			mess.setData(ora);
+			thr.getMessaggi().add(mess);
+			thr.setAnnuncio(a);
+			thr.setNuovoMessaggio(true);
+			a.getRisposte().add(thr);
+			try {
+				serv.merge(a);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(); 
+			}
+			setMessaggioRispostaAnnuncio(null);
+		} else {
+//			gi‡ risposto all'annuncio, uso lo stesso thread
+			Messaggio mess = new Messaggio();
+			mess.setMessaggio(messaggioRispostaAnnuncio.getMessaggio());
+			mess.setMittente(utenteBean.getUtente());
+			mess.setDestinatario(a.getProponente());
+			mess.setOggetto(a.getRisposte().get(0).getOggettoThread());
+			mess.setThread(threadRispostaAnnuncio);
+			mess.getLetto().add(utenteBean.getUtente());
+			Date ora = new Date();
+			mess.setData(ora);
+//			threadRispostaAnnuncio.setMittentePrimo(utenteBean.getUtente());
+//			threadRispostaAnnuncio.setDestinatarioPrimo(a.getProponente());
+			threadRispostaAnnuncio.getMessaggi().add(mess);
+			threadRispostaAnnuncio.setNuovoMessaggio(true);
+			a.getRisposte().add(threadRispostaAnnuncio);
+			try {
+				serv.merge(a);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace(); 
+			}
+			setMessaggioRispostaAnnuncio(null);
+		}
+		cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
+		contentBean.setContent("annunci.xhtml");
+		contentBean.setMessaggio("risposto ad annuncio");
+	}
+	
+	
+	public boolean esisteRispostaAnnuncio (Utente ut, Annuncio a) {
+		if (ut!=null){
+			for (Thread thr : a.getRisposte()) {
+				if (thr.getMittentePrimo().getId()==ut.getId() && (thr.getId()!=a.getRisposte().get(a.getRisposte().size()-1).getId())) {
+					setThreadRispostaAnnuncio(thr);
+					System.out.println("esisteRispostaAnnuncio =TRUE");
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public void cercaAnnunciSito() {
+		EntityManager em = EMF.createEntityManager();
+		String hqlstart = "from Annuncio a ";
+		String hqlcerca = "";
+		String hql = "";
+		int i = 0;
+		Boolean utenteLoggato = false;
+		if(utenteBean.tipoMembershipUtente()!=0){
+			hqlcerca += " a.proponente.id<>:idUt ";
+			utenteLoggato = true;
+			i++;
+		}
+		if (i>0){
+			hql = hqlstart + "where" + hqlcerca; 
+		}
+		else {
+			hql = hqlstart; 
+		}
+		Query q = em.createQuery(hql, Annuncio.class);
+		if(utenteLoggato){
+			q.setParameter("idUt",utenteBean.getUtente().getId());
+		}
+		System.out.println("ANNUNCI SITO hql="+hql);
+		annunciSito = q.getResultList();
+	}
+	
+	
 	
 	//************GETTERS & SETTERS*******************
 	
@@ -594,6 +840,137 @@ public class ThreadBean {
 
 	
 
+	
+	
+
+	public Thread getThreadRispostaAnnuncio() {
+		return threadRispostaAnnuncio;
+	}
+
+	public void setThreadRispostaAnnuncio(Thread threadRispostaAnnuncio) {
+		this.threadRispostaAnnuncio = threadRispostaAnnuncio;
+	}
+
+	public List<Annuncio> getAnnunciRispostiDaUtente() {
+		return annunciRispostiDaUtente;
+	}
+
+	public void setAnnunciRispostiDaUtente(List<Annuncio> annunciRispostiDaUtente) {
+		this.annunciRispostiDaUtente = annunciRispostiDaUtente;
+	}
+
+	public Messaggio getMessaggioRispostaAnnuncio() {
+		return messaggioRispostaAnnuncio;
+	}
+
+	public void setMessaggioRispostaAnnuncio(Messaggio messaggioRispostaAnnuncio) {
+		this.messaggioRispostaAnnuncio = messaggioRispostaAnnuncio;
+	}
+
+	public List<Annuncio> getAnnunciSito() {
+		return annunciSito;
+	}
+
+	public void setAnnunciSito(List<Annuncio> annunciSito) {
+		this.annunciSito = annunciSito;
+	}
+
+	public Annuncio getAnnuncioAltrui() {
+		return annuncioAltrui;
+	}
+
+	public void setAnnuncioAltrui(Annuncio annuncioAltrui) {
+		this.annuncioAltrui = annuncioAltrui;
+	}
+
+	public Thread getThreadAnnuncioPubblicato() {
+		return threadAnnuncioPubblicato;
+	}
+
+	public void setThreadAnnuncioPubblicato(Thread threadAnnuncioPubblicato) {
+		this.threadAnnuncioPubblicato = threadAnnuncioPubblicato;
+	}
+
+	public int getNuoviMessaggiAnnunci() {
+		return nuoviMessaggiAnnunci;
+	}
+
+	public void setNuoviMessaggiAnnunci(int nuoviMessaggiAnnunci) {
+		this.nuoviMessaggiAnnunci = nuoviMessaggiAnnunci;
+	}
+
+	public List<Thread> getThreadsConNuoviMessaggi() {
+		return threadsConNuoviMessaggi;
+	}
+
+	public void setThreadsConNuoviMessaggi(List<Thread> threadsConNuoviMessaggi) {
+		this.threadsConNuoviMessaggi = threadsConNuoviMessaggi;
+	}
+
+	public List<Thread> getThreadsAnnunciConNuoviMessaggi() {
+		return threadsAnnunciConNuoviMessaggi;
+	}
+
+	public void setThreadsAnnunciConNuoviMessaggi(
+			List<Thread> threadsAnnunciConNuoviMessaggi) {
+		this.threadsAnnunciConNuoviMessaggi = threadsAnnunciConNuoviMessaggi;
+	}
+
+	public Thread getthreadAnnuncioPubblicato() {
+		return threadAnnuncioPubblicato;
+	}
+
+	public void setthreadAnnuncioPubblicato(Thread threadAnnuncioPubblicato) {
+		this.threadAnnuncioPubblicato = threadAnnuncioPubblicato;
+	}
+
+	public Annuncio getAnnuncioPubblicato() {
+		return annuncioPubblicato;
+	}
+
+	public void setAnnuncioPubblicato(Annuncio annuncioPubblicato) {
+		this.annuncioPubblicato = annuncioPubblicato;
+	}
+
+	public Map<Integer, Boolean> getIdAnnunciSelezionati() {
+		return idAnnunciSelezionati;
+	}
+
+	public void setIdAnnunciSelezionati(Map<Integer, Boolean> idAnnunciSelezionati) {
+		this.idAnnunciSelezionati = idAnnunciSelezionati;
+	}
+
+	public List<Annuncio> getAnnunciUtente() {
+		return annunciUtente;
+	}
+
+	public void setAnnunciUtente(List<Annuncio> annunciUtente) {
+		this.annunciUtente = annunciUtente;
+	}
+
+	public Annuncio getNuovoAnnuncio() {
+		return nuovoAnnuncio;
+	}
+
+	public void setNuovoAnnuncio(Annuncio nuovoAnnuncio) {
+		this.nuovoAnnuncio = nuovoAnnuncio;
+	}
+
+	public Messaggio getMessaggioNuovoAnnuncio() {
+		return messaggioNuovoAnnuncio;
+	}
+
+	public void setMessaggioNuovoAnnuncio(Messaggio messaggioNuovoAnnuncio) {
+		this.messaggioNuovoAnnuncio = messaggioNuovoAnnuncio;
+	}
+
+	public Annuncio getAnnuncioEsistente() {
+		return annuncioEsistente;
+	}
+
+	public void setAnnuncioEsistente(Annuncio annuncioEsistente) {
+		this.annuncioEsistente = annuncioEsistente;
+	}
 
 	public List<Messaggio> getMm() {
 		return mm;

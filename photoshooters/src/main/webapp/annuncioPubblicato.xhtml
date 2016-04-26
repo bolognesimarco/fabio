@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
+	<h:outputStylesheet name="dataTable.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup id="annuncio" styleClass="pannello cerca">
+		
+		<h:form id="annuncioform">
+
+				<h:panelGrid id="panelgridannuncio" columns="2" columnClasses="rightprofilo,leftprofilo" border="0">
+					
+					<f:facet name="header">
+		           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCIo PUBBLICATo Da&#160;"/>
+		           		<h:outputText value="#{threadBean.annuncioPubblicato.proponente.username}"/>
+		           		<br></br>
+		       		</f:facet>
+					
+					<h:outputLabel for="data">DATa PUBBLICAZIONe</h:outputLabel>
+					<h:outputText id="data" value="#{threadBean.annuncioPubblicato.risposte.get(0).messaggi.get(threadBean.annuncioPubblicato.risposte.get(0).messaggi.size()-1).data}" >
+						<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+					</h:outputText >
+	
+					<h:outputLabel for="oggetto">TITOLo</h:outputLabel>
+					<h:outputText id="oggetto" value="#{threadBean.annuncioPubblicato.risposte.get(0).oggettoThread}" styleClass="textareatonda"/>
+	
+					<h:outputLabel for="città">CITTà</h:outputLabel>
+					<h:outputText id="città" value="#{threadBean.annuncioPubblicato.cittàAnnuncio}" />
+	 				
+					<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
+					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{threadBean.annuncioPubblicato.risposte.get(0).messaggi.get(threadBean.annuncioPubblicato.risposte.get(0).messaggi.size()-1).messaggio}"/>
+	        	 
+		        	 <f:facet name="footer">
+			            <h:panelGroup>
+			                <p:commandButton value="RIPUBBLICa ANNUNCIo&#160;&#160;"
+							 	actionListener="#{threadBean.ripubblicaAnnuncio(threadBean.annuncioPubblicato)}" >
+						 	<p:confirm header="CONFERMa" message="Ripubblica annuncio con data aggiornata?" icon="ui-icon-alert" />
+		            	</p:commandButton>  
+		            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
+					        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+					        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+			   			 </p:confirmDialog>	
+		            	</h:panelGroup>
+		            		<br></br>
+		            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+		            	<h:panelGroup><h:messages/></h:panelGroup>
+	        		</f:facet>
+	        			
+        		</h:panelGrid>		
+		</h:form>
+		
+		
+		<h:form id="threadsannuncioform">
+		
+			<h:dataTable id="threadsannuncio" var="thrann" value="#{threadBean.annuncioPubblicato.risposte}">
+				
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;RISPOSTe ANNUNCIo -&#160;"/>
+	           		<h:outputText id="nomePS" value="#{utenteBean.utente.username}"/>
+	           		<br></br>
+	       		</f:facet>
+	       		
+				<h:column >
+				
+					<f:facet name="header">
+	            		<h:panelGrid columns="5" border="0">
+	            			<h:outputText styleClass="common" value="&#160;&#160;DATa"/>
+							<h:outputText styleClass="common" value="&#160;&#160;TITOLo"/>
+		            		<h:outputText styleClass="common" value="&#160;&#160;RISPOSTa Di"/>
+						</h:panelGrid>
+	        		</f:facet>
+	        		
+					<h:panelGrid columns="3" columnClasses="leftprofilo,leftprofilo,leftprofilo" border="1" rendered="#{thrann.destinatarioPrimo!=thrann.mittentePrimo}">
+						<h:panelGrid>
+							<h:outputText id="datapubblicazione" value="#{thrann.messaggi.get(thrann.messaggi.size()-1).data}">
+								<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+							</h:outputText >
+						</h:panelGrid>
+						<h:panelGrid>
+				    		<h:commandButton value="#{thrann.oggettoThread}" style="cursor:pointer;">
+				    			<h:panelGroup rendered="#{threadBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,threadBean.annuncioPubblicato)==true and thrann.nuovoMessaggio==true}">
+			    	   				<sup style="color:red;font-size:8px;">new</sup>
+			    	   			</h:panelGroup>
+			    				<f:ajax event="click" listener="#{threadBean.visualizzaThreadAnnuncioPubblicato(thrann)}" render=":content :rispostaannunciothreadform :annunciothreadmessaggiform :menuutenteform:numeroannunci" />
+			    	   		</h:commandButton>
+						</h:panelGrid>
+						<h:panelGrid>
+		        			<h:outputText id="risposta" value="#{thrann.mittentePrimo.username}" />
+						</h:panelGrid>
+					</h:panelGrid>		       		
+				</h:column>
+	
+			</h:dataTable>
+	
+		</h:form >
+
+	</h:panelGroup>
+
+</h:body>
+</html>

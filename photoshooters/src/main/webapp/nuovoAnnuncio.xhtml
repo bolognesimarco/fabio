@@ -21,7 +21,7 @@
 			<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna" >
 			
 				<f:facet name="header">
-            		<h:outputText styleClass="common" value="&#160;&#160;NUOVo ANNUNCIo PHOTOSHOOTEr -&#160;"/>
+            		<h:outputText styleClass="common" value="&#160;&#160;NUOVo ANNUNCIo -&#160;"/>
             		<h:outputText id="nomePS" value="#{utenteBean.utente.username}"/>
             		<br></br>
         		</f:facet>
@@ -32,6 +32,10 @@
 				<h:outputLabel for="oggetto">TITOLo</h:outputLabel>
 				<h:inputText id="oggetto" required="true" requiredMessage="Il titolo non può essere vuoto!" value="#{threadBean.messaggioNuovoAnnuncio.oggetto}" styleClass="textareatonda"/>
 
+				<h:outputLabel for="citta">CITTà</h:outputLabel>
+ 				<p:autoComplete maxlength="130" id="citta"  value="#{threadBean.nuovoAnnuncio.cittàAnnuncio}"  completeMethod="#{utenteBean.suggerisciCittà}" requiredMessage="Inserire luogo per annuncio!">
+ 				</p:autoComplete>
+ 				
 				<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
 				<h:inputTextarea size="120" required="true" requiredMessage="L'annuncio non può essere vuoto!" rows="8" id="messaggio" value="#{threadBean.messaggioNuovoAnnuncio.messaggio}"/>
 				
@@ -39,9 +43,14 @@
 		            <br></br>
 
 		            <h:panelGroup>
-		                <h:commandButton value="PUBBLICa ANNUNCIo&#160;&#160;"
-						 	action="#{threadBean.pubblicaNuovoAnnuncio()}" >
-		            	</h:commandButton>  
+		                <p:commandButton value="PUBBLICa ANNUNCIo&#160;&#160;"
+						 	actionListener="#{threadBean.pubblicaNuovoAnnuncio()}" update=":content">
+						 	<p:confirm header="CONFERMa" message="Confermi la pubblicazione dell'annuncio?" icon="ui-icon-alert" />
+		            	</p:commandButton>  
+		            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
+					        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+					        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+			   			 </p:confirmDialog>	
 	            	</h:panelGroup>
 	            		<br></br>
 	            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>

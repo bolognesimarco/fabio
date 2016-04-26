@@ -31,8 +31,9 @@ public class MenuBean {
 			contentBean.setContent("localizzazione.xhtml");
 			break;
 		case 5://LAVORI
+			threadBean.cercaAnnunciSito();
 			contentBean.setMessaggio(null);
-			contentBean.setContent("wip.xhtml");
+			contentBean.setContent("lavoriEventi.xhtml");
 			break;
 		case 6://PHOTOSHOOTERS
 			parametersBean.fillEtà();
@@ -48,7 +49,6 @@ public class MenuBean {
 			contentBean.setContent("profilo2.xhtml");
 			break;
 		case 9://ALBUMS
-//			inputBean.visualizzaAlbums(utenteBean.getUtente());
 			inputBean.setStatusMessage(null);
 			contentBean.setMessaggio(null);
 			contentBean.setContent("albums3.xhtml");
@@ -59,11 +59,14 @@ public class MenuBean {
 			threadBean.getIdThreadsSelezionati().clear();
 			break;
 		case 11://CHAT
+			contentBean.setMessaggio(null);
 			contentBean.setContent("wip.xhtml");
 			break;
 		case 12://ANNUNCI
 			contentBean.setMessaggio(null);
 			contentBean.setContent("annunci.xhtml");
+			threadBean.getIdAnnunciSelezionati().clear();
+			threadBean.cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId()); 
 			break;
 		case 13://CREDITI
 			contentBean.setContent("wip.xhtml");

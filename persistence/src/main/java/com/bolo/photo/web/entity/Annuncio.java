@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -28,12 +29,23 @@ public class Annuncio implements Serializable{
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="annuncio")
 	private List<Thread> risposte = new ArrayList<Thread>();
 
+	@Column
+	private String citt‡Annuncio;
 	
-//	GETTERS & SETTERS
+	
+//	GETTERS & SETTERS*****************
 	
 	
 	public int getId() {
 		return id;
+	}
+
+	public String getCitt‡Annuncio() {
+		return citt‡Annuncio;
+	}
+
+	public void setCitt‡Annuncio(String citt‡Annuncio) {
+		this.citt‡Annuncio = citt‡Annuncio;
 	}
 
 	public void setId(int id) {

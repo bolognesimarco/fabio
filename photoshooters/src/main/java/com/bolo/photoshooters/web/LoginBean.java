@@ -62,9 +62,12 @@ public class LoginBean {
 					serv.merge(u);
 					utenteBean.setUtente(u);
 					parametersBean.fillSelectItems();
-					threadBean.nuoviMessaggiThread(u.getId());
 					threadBean.cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
 					threadBean.cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
+					threadBean.nuoviMessaggiThread(u.getId());
+					threadBean.cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
+					threadBean.cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
+					threadBean.nuoviMessaggiThreadsAnnuncio(u.getId());
 					inputBean.getVotoFoto().setScore(-1);
 					contentBean.setMessaggio(mm2);
 					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("pannellohomepagepanel");

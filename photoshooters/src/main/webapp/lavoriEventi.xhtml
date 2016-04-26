@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="common.css" library="css" />
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataGrid.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+
+		
+			<h:dataTable id="annuncisito" var="annSito" value="#{threadBean.annunciSito}">
+				
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCi PHOTOSHOOTERs - #{threadBean.annunciSito.size()}"/>
+	           		<br></br>
+	       		</f:facet>
+				
+				<h:column>
+				
+					<f:facet name="header">
+	            		<h:panelGrid columns="4" border="0">
+		            		<h:outputText styleClass="common" value="&#160;&#160;PROPONENTe"/>
+							<h:outputText styleClass="common" value="&#160;&#160;TITOLo"/>
+							<h:outputText styleClass="common" value="&#160;&#160;DATa"/>
+							<h:outputText styleClass="common" value="&#160;&#160;CITTà"/>
+						</h:panelGrid>
+	        		</f:facet>
+	        		
+					<h:panelGrid columns="4" columnClasses="leftprofilo,leftprofilo,leftprofilo,leftprofilo" border="1">
+						<h:panelGrid>
+		        			<h:outputText id="proponente" value="#{annSito.proponente.username}" />
+						</h:panelGrid>
+						<h:panelGrid>
+				    		<h:commandButton value="#{annSito.risposte.get(0).oggettoThread}" style="cursor:pointer;">
+			    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioAltrui(annSito)}" render=":content :annuncioaltruiform :threadsannuncioaltruiform :nuovarispostathreadannuncioform" />
+			    	   		</h:commandButton>
+						</h:panelGrid>
+						<h:panelGrid>
+							<h:outputText id="datamessaggiricevuti" value="#{annSito.risposte.get(0).messaggi.get(annSito.risposte.get(0).messaggi.size()-1).data}">
+								<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+							</h:outputText >
+						</h:panelGrid>
+						<h:panelGrid>
+							<h:outputText id="città" value="#{annSito.cittàAnnuncio}"/>
+						</h:panelGrid>
+					</h:panelGrid>		 
+					      		
+				</h:column>
+				
+				<f:facet name="footer">
+	           		<h:panelGrid columns="2" border="0">
+	           			<h:outputText value="FINe ANNUNCi"></h:outputText>
+					</h:panelGrid>
+	       		</f:facet>
+	
+			</h:dataTable>
+
+	
+
+	</h:panelGroup>
+	
+</h:body>
+</html>
