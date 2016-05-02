@@ -47,7 +47,7 @@
 					<p:autoComplete id="soggettoFoto" value="#{inputBean.fotoDaModificare.soggetto}" completeMethod="#{utenteBean.suggerisciUtente}" converter="entityConverter" var="sogg" itemValue="#{sogg}" itemLabel="#{sogg.username}"></p:autoComplete>
 					
 					<h:outputLabel for="collaboratoriFoto">COLLABORATORi FOTo</h:outputLabel>
-					<p:autoComplete id="collaboratoriFoto" value="#{inputBean.fotoDaModificare.collaboratori}" completeMethod="#{utenteBean.suggerisciUtenteTranneLoggato}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true">
+					<p:autoComplete id="collaboratoriFoto" value="#{inputBean.fotoDaModificare.collaboratori}" completeMethod="#{inputBean.suggerisciUtenteTranneLoggatoNoDuplica}" converter="entityConverter" var="collab" itemValue="#{collab}" itemLabel="#{collab.username}" multiple="true">
 					</p:autoComplete>
 					
 					<h:outputLabel for="dataFoto">DATa SCATTo</h:outputLabel>

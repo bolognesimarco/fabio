@@ -72,7 +72,7 @@
 		    	   				<h:panelGroup rendered="#{threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.destinatario.id==utenteBean.utente.id}" style="height:15px">
 									<h:outputText styleClass="avvisomess" value="new"></h:outputText>
 		    	   				</h:panelGroup>
-		    	   				<h:panelGroup rendered="#{threadBean.threadMessaggi.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.mittente.id==utenteBean.utente.id}" style="height:15px">
+		    	   				<h:panelGroup rendered="#{threadBean.threadAnnuncioPubblicato.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.mittente.id==utenteBean.utente.id}" style="height:15px">
 		    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
 		    	   				</h:panelGroup>
 								<h:inputTextarea readonly="true" style="width:230px!important;" size="230" rows="5" id="messaggio" value="#{mess.messaggio}"/>

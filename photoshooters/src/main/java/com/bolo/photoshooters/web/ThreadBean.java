@@ -44,7 +44,6 @@ public class ThreadBean {
 	private Messaggio messaggioAggiunto = new Messaggio();
 	private Thread threadEsistente = new Thread();
 	private int nuoviMessaggi = 0;
-	List<Messaggio> mm = new ArrayList<Messaggio>();
 	List<Annuncio> annunciUtente = new ArrayList<Annuncio>();
 	List<Annuncio> annunciSito = new ArrayList<Annuncio>();
 	List<Annuncio> annunciRispostiDaUtente = new ArrayList<Annuncio>();
@@ -53,7 +52,7 @@ public class ThreadBean {
 	private Annuncio annuncioEsistente = new Annuncio();
 	private Annuncio annuncioPubblicato = new Annuncio();
 	private Annuncio annuncioAltrui = new Annuncio();
-	private Messaggio messaggioRispostaAnnuncio = new Messaggio();
+	Messaggio messaggioRispostaAnnuncio = new Messaggio();
 	Thread threadAnnuncioPubblicato = new Thread();
 	Thread threadRispostaAnnuncio = new Thread();
 	List<Thread> threadsAnnunciConNuoviMessaggi = new ArrayList<Thread>();
@@ -286,7 +285,9 @@ public class ThreadBean {
 	public void visualizzaThread2 (Thread thread) {
 			threadMessaggi = thread;
 			System.out.println("VISUALIZZA THREAD threadMessaggi.getMessaggi().size="+threadMessaggi.getMessaggi().size());	
-//			se non Ë nuovo thread 				
+			boolean nuovoMess = false;
+			boolean nuovoThread = false;
+			//			se non Ë nuovo thread 				
 			if (!threadMessaggi.isNuovoMessaggio()) {
 				System.out.println("VISUALIZZA thread - thread isNuovoMess=false");
 				for (Messaggio m : threadMessaggi.getMessaggi()) {
@@ -295,6 +296,7 @@ public class ThreadBean {
 					{
 						System.out.println("messaggio non letto da destinatario (me)!");
 						m.getLetto().add(m.getDestinatario());
+						nuovoThread = true;
 					}		
 				}
 			}				
@@ -303,14 +305,17 @@ public class ThreadBean {
 				if (t.getId()==threadMessaggi.getId())	{
 					System.out.println("thread con nuovo mess contenuto in threadsConNuoviMessaggi");
 						threadMessaggi.setNuovoMessaggio(false);
+						nuovoMess = true;
 				}				
-			}	
-			try {
-				serv.merge(threadMessaggi);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
+			}
+			if (nuovoMess || nuovoThread) {
+				try {
+					serv.merge(threadMessaggi);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}		
+			}
 			ordinaMessaggiPerData(threadMessaggi.getMessaggi());			
 			nuoviMessaggiThread(utenteBean.getUtente().getId());
 			contentBean.setContent("messaggioThread.xhtml");		
@@ -514,6 +519,7 @@ public class ThreadBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace(); 
 		}
+		setMessaggioNuovoAnnuncio(null);
 		cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
 		contentBean.setContent("annunci.xhtml");
 		contentBean.setMessaggio("annuncio nuovo");
@@ -551,18 +557,6 @@ public class ThreadBean {
 		ordinaAnnunciPerData(annunciUtente);	
 	}
 	
-//	public boolean esisteAnnuncio(String titolo, String citt‡ ) {
-//		for (Annuncio annuncio : annunciUtente) {
-//			if (annuncio.getRisposte().get(0).getOggettoThread()==titolo && annuncio.getCitt‡Annuncio().equals(citt‡)) {
-//				setAnnuncioEsistente(annuncio);
-//				System.out.println("annuncio esisteeeeee");
-//				return true;
-//			}
-//		}
-//		System.out.println("annuncio NON esisteeeee");
-//		return false;
-//	}
-
 	
 	private Map<Integer, Boolean> idAnnunciSelezionati = new HashMap<Integer, Boolean>();	
 	
@@ -625,7 +619,9 @@ public class ThreadBean {
 	
 	public void visualizzaAnnuncioPubblicato (Annuncio ann) {
 		setAnnuncioPubblicato(ann);
+		setThreadAnnuncioPubblicato(null);
 		System.out.println("annunciopubblicato id="+ann.getId());
+		contentBean.setMessaggio(null);
 		contentBean.setContent("annuncioPubblicato.xhtml");		
 	}
 	
@@ -633,8 +629,41 @@ public class ThreadBean {
 	public void visualizzaAnnuncioAltrui (Annuncio ann) {
 		setAnnuncioAltrui(ann);
 		esisteRispostaAnnuncio(utenteBean.getUtente(), ann);
+		boolean nuovoThread = false;
+		boolean nuovoMess = false;
+		if (!threadRispostaAnnuncio.isNuovoMessaggio()) {
+			System.out.println("thread non nuovo");
+			for (Messaggio m : threadRispostaAnnuncio.getMessaggi()) {
+//					se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
+				if (!messaggioIsLetto(m.getDestinatario().getId(), m))
+				{
+					System.out.println("messaggio annuncioAltrui non letto da destinatario (me)!");
+					m.getLetto().add(m.getDestinatario());
+					nuovoThread = true;
+				}		
+			}
+		}				
+//			controllo se il thread che leggo Ë contenuto nella lista dei nuovi thread
+		System.out.println("threadsAnnunciConNuoviMessaggi size= "+threadsAnnunciConNuoviMessaggi.size());
+		for (Thread t : threadsAnnunciConNuoviMessaggi) {;
+			if (t.getId()==threadRispostaAnnuncio.getId())	{
+				System.out.println("thread annuncioAltrui con nuovo mess contenuto in threadsAnnunciConNuoviMessaggi");
+				threadRispostaAnnuncio.setNuovoMessaggio(false);
+				nuovoMess = true;
+			}				
+		}
+		if (nuovoMess || nuovoThread) {
+			try {
+				serv.merge(threadRispostaAnnuncio);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
 		ordinaThreadPerData(ann.getRisposte());
 		ordinaMessaggiPerData(threadRispostaAnnuncio.getMessaggi());
+		nuoviMessaggiThreadsAnnuncio(utenteBean.getUtente().getId());
+		contentBean.setMessaggio(null);
 		contentBean.setContent("annuncioAltrui.xhtml");		
 	}
 	
@@ -642,9 +671,10 @@ public class ThreadBean {
 	public void visualizzaThreadAnnuncioPubblicato (Thread thread) {
 		System.out.println("visualizzaThreadAnnuncioPubblicato START");
 		threadAnnuncioPubblicato = thread;
+		boolean nuovoThread = false;
+		boolean nuovoMess = false;
 //		se non Ë nuovo thread 			
 		System.out.println("threadAnnuncioPubblicato nuovo????"+threadAnnuncioPubblicato.isNuovoMessaggio());
-		System.out.println("thread nuovo????"+thread.isNuovoMessaggio());
 		if (!threadAnnuncioPubblicato.isNuovoMessaggio()) {
 			System.out.println("thread non nuovo");
 			for (Messaggio m : threadAnnuncioPubblicato.getMessaggi()) {
@@ -653,6 +683,7 @@ public class ThreadBean {
 				{
 					System.out.println("messaggio non letto da destinatario (me)!");
 					m.getLetto().add(m.getDestinatario());
+					nuovoThread = true;
 				}		
 			}
 		}				
@@ -662,14 +693,17 @@ public class ThreadBean {
 			if (t.getId()==threadAnnuncioPubblicato.getId())	{
 				System.out.println("thread annuncio con nuovo mess contenuto in threadsAnnunciConNuoviMessaggi");
 				threadAnnuncioPubblicato.setNuovoMessaggio(false);
+				nuovoMess = true;
 			}				
 		}	
-		try {
-			serv.merge(threadAnnuncioPubblicato);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+		if (nuovoMess || nuovoThread) {
+			try {
+				serv.merge(threadAnnuncioPubblicato);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		ordinaMessaggiPerData(threadAnnuncioPubblicato.getMessaggi());			
 		nuoviMessaggiThreadsAnnuncio(utenteBean.getUtente().getId());
 		contentBean.setContent("annuncioThread.xhtml");		
@@ -679,10 +713,18 @@ public class ThreadBean {
 	public void nuoviMessaggiThreadsAnnuncio (int idUtente) {
 		threadsAnnunciConNuoviMessaggi.clear();
 		System.out.println("nuoviMESSAGGIANNUNCIIIIIingresso");
-
+		
 		List<Annuncio> annunciConNuoviMessaggiInThreadsToT = new ArrayList<Annuncio>();
-		annunciConNuoviMessaggiInThreadsToT.addAll(annunciUtente);
-		annunciConNuoviMessaggiInThreadsToT.addAll(annunciRispostiDaUtente);
+		List<Annuncio> annunciTotUtente = new ArrayList<Annuncio>();
+		annunciTotUtente.addAll(annunciUtente);
+		annunciTotUtente.addAll(annunciRispostiDaUtente);
+		for (Annuncio annuncio : annunciTotUtente) {
+			for (Thread thr : annuncio.getRisposte()) {
+				if (thr.isNuovoMessaggio()) {
+					annunciConNuoviMessaggiInThreadsToT.add(annuncio);
+				}
+			}
+		}
 		System.out.println("****ANNUNCIO Pubblicati+Risposti #"+annunciConNuoviMessaggiInThreadsToT.size());
 
 		int numthr = 0;		
@@ -725,6 +767,10 @@ public class ThreadBean {
 			e.printStackTrace(); 
 		}
 		messaggioAggiunto.setMessaggio(null);
+		mess = null;
+		setThreadAnnuncioPubblicato(null);
+		cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
+		cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
 		contentBean.setContent("annunci.xhtml");
 		contentBean.setMessaggio("risposta annuncio aggiunta");
 	}
@@ -757,9 +803,9 @@ public class ThreadBean {
 				// TODO Auto-generated catch block
 				e.printStackTrace(); 
 			}
-			setMessaggioRispostaAnnuncio(null);
 		} else {
 //			gi‡ risposto all'annuncio, uso lo stesso thread
+			System.out.println("gi‡ risposto all'annuncio, uso lo stesso thread");
 			Messaggio mess = new Messaggio();
 			mess.setMessaggio(messaggioRispostaAnnuncio.getMessaggio());
 			mess.setMittente(utenteBean.getUtente());
@@ -780,9 +826,10 @@ public class ThreadBean {
 				// TODO Auto-generated catch block
 				e.printStackTrace(); 
 			}
-			setMessaggioRispostaAnnuncio(null);
 		}
+		messaggioRispostaAnnuncio.setMessaggio(null);
 		cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
+		cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
 		contentBean.setContent("annunci.xhtml");
 		contentBean.setMessaggio("risposto ad annuncio");
 	}
@@ -916,14 +963,6 @@ public class ThreadBean {
 		this.threadsAnnunciConNuoviMessaggi = threadsAnnunciConNuoviMessaggi;
 	}
 
-	public Thread getthreadAnnuncioPubblicato() {
-		return threadAnnuncioPubblicato;
-	}
-
-	public void setthreadAnnuncioPubblicato(Thread threadAnnuncioPubblicato) {
-		this.threadAnnuncioPubblicato = threadAnnuncioPubblicato;
-	}
-
 	public Annuncio getAnnuncioPubblicato() {
 		return annuncioPubblicato;
 	}
@@ -970,14 +1009,6 @@ public class ThreadBean {
 
 	public void setAnnuncioEsistente(Annuncio annuncioEsistente) {
 		this.annuncioEsistente = annuncioEsistente;
-	}
-
-	public List<Messaggio> getMm() {
-		return mm;
-	}
-
-	public void setMm(List<Messaggio> mm) {
-		this.mm = mm;
 	}
 
 	public Messaggio getMessaggioAggiunto() {

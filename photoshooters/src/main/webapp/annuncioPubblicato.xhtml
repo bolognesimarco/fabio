@@ -28,7 +28,7 @@
 		       		</f:facet>
 					
 					<h:outputLabel for="data">DATa PUBBLICAZIONe</h:outputLabel>
-					<h:outputText id="data" value="#{threadBean.annuncioPubblicato.risposte.get(0).messaggi.get(threadBean.annuncioPubblicato.risposte.get(0).messaggi.size()-1).data}" >
+					<h:outputText id="data" value="#{threadBean.annuncioPubblicato.risposte.get(threadBean.annuncioPubblicato.risposte.size()-1).messaggi.get(threadBean.annuncioPubblicato.risposte.get(threadBean.annuncioPubblicato.risposte.size()-1).messaggi.size()-1).data}" >
 						<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
 					</h:outputText >
 	
@@ -39,18 +39,18 @@
 					<h:outputText id="città" value="#{threadBean.annuncioPubblicato.cittàAnnuncio}" />
 	 				
 					<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
-					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{threadBean.annuncioPubblicato.risposte.get(0).messaggi.get(threadBean.annuncioPubblicato.risposte.get(0).messaggi.size()-1).messaggio}"/>
+					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{threadBean.annuncioPubblicato.risposte.get(0).messaggi.get(0).messaggio}"/>
 	        	 
 		        	 <f:facet name="footer">
 			            <h:panelGroup>
 			                <p:commandButton value="RIPUBBLICa ANNUNCIo&#160;&#160;"
 							 	actionListener="#{threadBean.ripubblicaAnnuncio(threadBean.annuncioPubblicato)}" >
-						 	<p:confirm header="CONFERMa" message="Ripubblica annuncio con data aggiornata?" icon="ui-icon-alert" />
-		            	</p:commandButton>  
-		            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
-					        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-					        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-			   			 </p:confirmDialog>	
+						 		<p:confirm header="CONFERMa" message="Ripubblica annuncio con data aggiornata?" icon="ui-icon-alert" />
+			            	</p:commandButton>  
+			            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
+						        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+						        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+				   			 </p:confirmDialog>	
 		            	</h:panelGroup>
 		            		<br></br>
 		            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>

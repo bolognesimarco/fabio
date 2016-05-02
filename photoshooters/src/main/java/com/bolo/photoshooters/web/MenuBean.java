@@ -30,7 +30,7 @@ public class MenuBean {
 			contentBean.setMessaggio(null);
 			contentBean.setContent("localizzazione.xhtml");
 			break;
-		case 5://LAVORI
+		case 5://LAVORI & EVENTI
 			threadBean.cercaAnnunciSito();
 			contentBean.setMessaggio(null);
 			contentBean.setContent("lavoriEventi.xhtml");
@@ -99,13 +99,16 @@ public class MenuBean {
 		case 18://NUOVO MESSAGGIO
 			contentBean.setMessaggio(null);
 			contentBean.setContent("nuovoMessaggio.xhtml");
+			break;
 		case 19://NUOVO MESSAGGIO CON DESTINATARIO
 			contentBean.setMessaggio(null);
 			threadBean.getMessaggio().setDestinatario(utenteBean.getCercaUtente().getUtente());
 			contentBean.setContent("nuovoMessaggio.xhtml");
+			break;
 		case 20://NUOVO ANNUNCIO
 			contentBean.setMessaggio(null);
 			contentBean.setContent("nuovoAnnuncio.xhtml");
+			break;
 		default:
 			break;
 		}

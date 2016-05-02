@@ -4,16 +4,16 @@
     <welcome-file>home.xhtml</welcome-file>
   </welcome-file-list>
   <session-config>
-		<session-timeout>4</session-timeout>
+    <session-timeout>4</session-timeout>
   </session-config>
   <filter>
-        <filter-name>SessionFilter</filter-name>
-        <filter-class>com.bolo.photoshooters.web.SessionFilter</filter-class>
- </filter>
- <filter-mapping>
-  		<filter-name>SessionFilter</filter-name>
- 	    <url-pattern>/profilo.xhtml</url-pattern>
- </filter-mapping>
+    <filter-name>SessionFilter</filter-name>
+    <filter-class>com.bolo.photoshooters.web.SessionFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SessionFilter</filter-name>
+    <url-pattern>/profilo.xhtml</url-pattern>
+  </filter-mapping>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -56,6 +56,14 @@
   <context-param>
     <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
     <param-value>resources.application</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
+  	<param-value>6LeE5hkTAAAAAH-UTK79NJlQXGjGse_pp9ZEphXA</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
+  	<param-value>6LeE5hkTAAAAAJ-cK3nuNvBAP0MN1aAARXm-JuJg</param-value>
   </context-param>
   <listener>
     <listener-class>com.sun.faces.config.ConfigureListener</listener-class>

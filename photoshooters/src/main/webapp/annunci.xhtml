@@ -20,8 +20,7 @@
 		
 			<h:panelGrid columns="2" columnClasses="right,left" >
 	            <h:panelGroup>
-	                <h:commandButton value="NUOVo ANNUNCIo&#160;&#160;"
-					 	action="#{menuBean.menuClick(20)}" >
+	                <h:commandButton value="NUOVo ANNUNCIo&#160;&#160;"	action="#{menuBean.menuClick(20)}" >
 	            	</h:commandButton>  
             	</h:panelGroup>
             	<h:panelGroup>
@@ -58,7 +57,7 @@
 			    			<h:panelGroup rendered="#{threadBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,ann)==true and threadBean.annuncioContieneThreadNuovo(ann)==true}">
 		    	   				<sup style="color:red;font-size:8px;">new</sup>
 		    	   			</h:panelGroup>
-		    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioPubblicato(ann)}" render=":content :annuncioform :threadsannuncioform" />
+		    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioPubblicato(ann)}" render=":content :annuncioform :threadsannuncioform :menuutenteform:numeroannunci" />
 		    	   		</h:commandButton>
 					</h:panelGrid>
 					<h:panelGrid>
@@ -76,7 +75,13 @@
 			
 			<f:facet name="footer">
            		<h:panelGrid columns="2" border="0">
-					<h:commandButton value="ELIMINa ANNUNCi SELEZIONATi" action="#{threadBean.cancellaAnnunciSelezionati()}" ></h:commandButton>
+					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{threadBean.cancellaAnnunciSelezionati()}" >
+						<p:confirm header="CONFERMa" message="Elimina annunci selezionati?" icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:confirmDialog widgetVar="confermaElimina" global="true" showEffect="fade" hideEffect="fade">
+				        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+				        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+		   		 	</p:confirmDialog>	
 				</h:panelGrid>
        		</f:facet>
 
@@ -114,7 +119,7 @@
 			    			<h:panelGroup rendered="#{threadBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,ann)==true and threadBean.annuncioContieneThreadNuovo(ann)==true}">
 		    	   				<sup style="color:red;font-size:8px;">new</sup>
 		    	   			</h:panelGroup>
-		    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioAltrui(ann)}" render=":content :annuncioaltruiform :nuovarispostathreadannuncioform :messaggithreadannuncioform" />
+		    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioAltrui(ann)}" render=":content :annuncioaltruiform :nuovarispostathreadannuncioform :messaggithreadannuncioform :menuutenteform:numeroannunci" />
 		    	   		</h:commandButton>
 					</h:panelGrid>
 					<h:panelGrid>
@@ -132,8 +137,14 @@
 			
 			<f:facet name="footer">
            		<h:panelGrid columns="2" border="0">
-					<h:commandButton value="ELIMINa ANNUNCi SELEZIONATi" action="#{threadBean.cancellaAnnunciSelezionati()}" ></h:commandButton>
-				</h:panelGrid>
+					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{threadBean.cancellaAnnunciSelezionati()}" >
+						<p:confirm header="CONFERMa" message="Elimina risposte annunci selezionate?" icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:confirmDialog widgetVar="confermaElimina" global="true" showEffect="fade" hideEffect="fade">
+				        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+				        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+		   		 	</p:confirmDialog>	
+		   		 </h:panelGrid>
        		</f:facet>
 
 		</h:dataTable>

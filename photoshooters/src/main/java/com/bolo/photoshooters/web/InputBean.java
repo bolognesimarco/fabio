@@ -723,7 +723,7 @@ public class InputBean {
 		}	
 	
 	
-		public List<Utente> suggerisciUtenteTranneLoggato (String username) {			
+		public List<Utente> suggerisciUtenteTranneLoggatoNoDuplica (String username) {			
 			System.out.println("suggerisci start");
 			
 			EntityManager em = EMF.createEntityManager();
@@ -737,11 +737,14 @@ public class InputBean {
 			}
 			for (Utente ut : nuovaFoto.getCollaboratori()) {
 				System.out.println("collaboratori="+ut.getUsername());
-				for (Utente u : utenti) {
+				Iterator<Utente> utIter = utenti.iterator();
+				Utente u = null;
+				while(utIter.hasNext()){
+					u = utIter.next();
 					System.out.println("utentiSuggeriti="+u.getUsername());
 					if (ut.getId()==u.getId()) {
 						System.out.println("utenterimosso="+u.getUsername());
-						utenti.remove(u);
+						utIter.remove();
 					}
 				}
 			}
@@ -752,7 +755,9 @@ public class InputBean {
 			return utenti;
 		}
 		
-		
+		public void fotoVisualizzata(String nomeFile) {
+			System.out.println("visualizzata foto "+nomeFile+" da "+utenteBean.getUtente().getUsername());
+		}
 		
 		
 	//*********GETTERS&SETTERS************

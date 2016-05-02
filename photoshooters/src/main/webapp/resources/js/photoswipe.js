@@ -1059,11 +1059,11 @@ var publicMethods = {
 	},
 	next: function() {
 		self.goTo( _currentItemIndex + 1);
-		alert('NEXTTT');
+//		alert('NEXTTT');
 	},
 	prev: function() {
 		self.goTo( _currentItemIndex - 1);
-		alert('PREVVV');
+//		alert('PREVVV');
 	},
 
 	// update current zoom/pan objects
@@ -1120,6 +1120,7 @@ var publicMethods = {
 
 
 		self.currItem = _getItemAt( _currentItemIndex );
+		
 		_renderMaxResolution = false;
 		
 		_shout('beforeChange', _indexDiff);
@@ -1167,6 +1168,21 @@ var publicMethods = {
 		_prevItemIndex = _currentItemIndex;
 
 		_shout('afterChange');
+
+
+		//substring last slash in poi
+		var nomefoto = self.currItem.src.substr(
+				self.currItem.src.lastIndexOf('/')+1
+		);
+		var xhttp = new XMLHttpRequest();
+		  xhttp.onreadystatechange = function() {
+		    if (xhttp.readyState == 4 && xhttp.status == 200) {
+//		    	alert('fotoVisualizzata?nomeFile='+nomefoto);
+		    }
+		  };
+		  xhttp.open("GET", "/fotoVisualizzata?nomeFile="+nomefoto, true);
+		  xhttp.send();
+		//ajax call servlet passando nomefoto
 		
 	},
 

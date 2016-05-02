@@ -33,7 +33,7 @@
 				<h:inputText id="oggetto" required="true" requiredMessage="Il titolo non può essere vuoto!" value="#{threadBean.messaggioNuovoAnnuncio.oggetto}" styleClass="textareatonda"/>
 
 				<h:outputLabel for="citta">CITTà</h:outputLabel>
- 				<p:autoComplete maxlength="130" id="citta"  value="#{threadBean.nuovoAnnuncio.cittàAnnuncio}"  completeMethod="#{utenteBean.suggerisciCittà}" requiredMessage="Inserire luogo per annuncio!">
+ 				<p:autoComplete maxlength="130" id="citta" value="#{threadBean.nuovoAnnuncio.cittàAnnuncio}" required="true" completeMethod="#{utenteBean.suggerisciCittà}" requiredMessage="Inserire luogo per annuncio!">
  				</p:autoComplete>
  				
 				<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>

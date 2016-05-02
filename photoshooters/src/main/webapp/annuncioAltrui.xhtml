@@ -76,15 +76,15 @@
 			            <h:panelGroup>
 			                <p:commandButton value="RISPONDi ALl'ANNUNCIo&#160;&#160;"
 							 	actionListener="#{threadBean.rispondiAnnuncio(threadBean.annuncioAltrui)}" update=":content">
-						 	<p:confirm header="CONFERMa" message="Invia risposta all'annuncio?" icon="ui-icon-alert" />
-		            	</p:commandButton>  
-		            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
-					        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-					        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-			   			 </p:confirmDialog>	
-		            	</h:panelGroup>
+						 		<p:confirm header="CONFERMa" message="Invia risposta all'annuncio?" icon="ui-icon-alert" />
+			            	</p:commandButton>  
+			            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
+						        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+						        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+				   			 </p:confirmDialog>	
+			            </h:panelGroup>
 		            		<br></br>
-		            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
+		            	<h:outputText value="#{contentBean.messaggio}"></h:outputText>
 		            	<h:panelGroup><h:messages/></h:panelGroup>
 	        		</f:facet>
 	        		
@@ -110,13 +110,13 @@
 		            		</h:outputText>
 						</h:panelGrid>
 		        		<h:panelGrid columns="1">
-		    	   				<h:panelGroup rendered="#{threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.destinatario.id==utenteBean.utente.id}" style="height:15px">
-									<h:outputText styleClass="avvisomess" value="new"></h:outputText>
-		    	   				</h:panelGroup>
-		    	   				<h:panelGroup rendered="#{threadBean.threadRispostaAnnuncio.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.mittente.id==utenteBean.utente.id}" style="height:15px">
-		    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
-		    	   				</h:panelGroup>
-								<h:inputTextarea readonly="true" style="width:230px!important;" size="230" rows="5" id="messaggio" value="#{mess.messaggio}"/>
+	    	   				<h:panelGroup rendered="#{threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.destinatario.id==utenteBean.utente.id}" style="height:15px">
+								<h:outputText styleClass="avvisomess" value="new"></h:outputText>
+	    	   				</h:panelGroup>
+	    	   				<h:panelGroup rendered="#{threadBean.threadRispostaAnnuncio.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.mittente.id==utenteBean.utente.id}" style="height:15px">
+	    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
+	    	   				</h:panelGroup>
+							<h:inputTextarea readonly="true" style="width:230px!important;" size="230" rows="5" id="messaggio" value="#{mess.messaggio}"/>
 						</h:panelGrid>
 		        	</h:panelGrid>
 	   		        			
