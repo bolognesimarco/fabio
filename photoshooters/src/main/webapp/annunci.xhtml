@@ -20,7 +20,7 @@
 		
 			<h:panelGrid columns="2" columnClasses="right,left" >
 	            <h:panelGroup>
-	                <h:commandButton value="NUOVo ANNUNCIo&#160;&#160;"	action="#{menuBean.menuClick(20)}" >
+	                <h:commandButton value="NUOVo ANNUNCIo&#160;&#160;"	action="#{menuBean.menuClick(20)}">
 	            	</h:commandButton>  
             	</h:panelGroup>
             	<h:panelGroup>
@@ -29,7 +29,7 @@
             	</h:panelGroup>
 			</h:panelGrid>
 		
-		<h:dataTable id="annunciiutente" var="ann" value="#{threadBean.annunciUtente}">
+		<h:dataTable id="annunciiutente" var="ann" value="#{annuncioBean.annunciUtente}">
 		
 			<f:facet name="header">
            		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCi PUBBLICATi -&#160;"/>
@@ -54,10 +54,10 @@
 					</h:panelGrid>
 					<h:panelGrid>
 			    		<h:commandButton value="#{ann.risposte.get(ann.risposte.size()-1).oggettoThread}" style="cursor:pointer;">
-			    			<h:panelGroup rendered="#{threadBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,ann)==true and threadBean.annuncioContieneThreadNuovo(ann)==true}">
+			    			<h:panelGroup rendered="#{annuncioBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,ann)==true and annuncioBean.annuncioContieneThreadNuovo(ann)==true}">
 		    	   				<sup style="color:red;font-size:8px;">new</sup>
 		    	   			</h:panelGroup>
-		    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioPubblicato(ann)}" render=":content :annuncioform :threadsannuncioform :menuutenteform:numeroannunci" />
+		    				<f:ajax event="click" listener="#{annuncioBean.visualizzaAnnuncioPubblicato(ann)}" render=":content :annuncioform :threadsannuncioform :menuutenteform:numeroannunci" />
 		    	   		</h:commandButton>
 					</h:panelGrid>
 					<h:panelGrid>
@@ -66,7 +66,7 @@
 						</h:outputText >
 					</h:panelGrid>
 					<h:panelGrid>
-						<h:selectBooleanCheckbox id="selezioneannunci" value="#{threadBean.idAnnunciSelezionati[ann.id]}">
+						<h:selectBooleanCheckbox id="selezioneannunci" value="#{annuncioBean.idAnnunciSelezionati[ann.id]}">
 						</h:selectBooleanCheckbox>
 					</h:panelGrid>
 				</h:panelGrid>	
@@ -75,7 +75,7 @@
 			
 			<f:facet name="footer">
            		<h:panelGrid columns="2" border="0">
-					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{threadBean.cancellaAnnunciSelezionati()}" >
+					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{annuncioBean.cancellaAnnunciPubblicatiSelezionati()}" update=":menuutenteform">
 						<p:confirm header="CONFERMa" message="Elimina annunci selezionati?" icon="ui-icon-alert" />
 					</p:commandButton>
 					<p:confirmDialog widgetVar="confermaElimina" global="true" showEffect="fade" hideEffect="fade">
@@ -91,7 +91,7 @@
 
 	<h:form id="annuncirispostiform">
 		
-		<h:dataTable id="annuncirispostidaiutente" var="ann" value="#{threadBean.annunciRispostiDaUtente}">
+		<h:dataTable id="annuncirispostidaiutente" var="ann" value="#{annuncioBean.annunciRispostiDaUtente}">
 		
 			<f:facet name="header">
            		<h:outputText styleClass="common" value="&#160;&#160;RISPOSTe ANNUNCi -&#160;"/>
@@ -116,10 +116,10 @@
 					</h:panelGrid>
 					<h:panelGrid>
 			    		<h:commandButton value="#{ann.risposte.get(ann.risposte.size()-1).oggettoThread}" style="cursor:pointer;">
-			    			<h:panelGroup rendered="#{threadBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,ann)==true and threadBean.annuncioContieneThreadNuovo(ann)==true}">
+			    			<h:panelGroup rendered="#{annuncioBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,ann)==true and annuncioBean.annuncioContieneThreadNuovo(ann)==true}">
 		    	   				<sup style="color:red;font-size:8px;">new</sup>
 		    	   			</h:panelGroup>
-		    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioAltrui(ann)}" render=":content :annuncioaltruiform :nuovarispostathreadannuncioform :messaggithreadannuncioform :menuutenteform:numeroannunci" />
+		    				<f:ajax event="click" listener="#{annuncioBean.visualizzaAnnuncioAltrui(ann)}" render=":content :annuncioaltruiform :nuovarispostathreadannuncioform :messaggithreadannuncioform :menuutenteform:numeroannunci" />
 		    	   		</h:commandButton>
 					</h:panelGrid>
 					<h:panelGrid>
@@ -128,7 +128,7 @@
 						</h:outputText >
 					</h:panelGrid>
 					<h:panelGrid>
-						<h:selectBooleanCheckbox id="selezioneannunci" value="#{threadBean.idAnnunciSelezionati[ann.id]}">
+						<h:selectBooleanCheckbox id="selezioneannunci" value="#{annuncioBean.idAnnunciSelezionati[ann.id]}">
 						</h:selectBooleanCheckbox>
 					</h:panelGrid>
 				</h:panelGrid>	
@@ -137,7 +137,7 @@
 			
 			<f:facet name="footer">
            		<h:panelGrid columns="2" border="0">
-					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{threadBean.cancellaAnnunciSelezionati()}" >
+					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{annuncioBean.cancellaThreadsAnnunciRispostiSelezionati()}" >
 						<p:confirm header="CONFERMa" message="Elimina risposte annunci selezionate?" icon="ui-icon-alert" />
 					</p:commandButton>
 					<p:confirmDialog widgetVar="confermaElimina" global="true" showEffect="fade" hideEffect="fade">

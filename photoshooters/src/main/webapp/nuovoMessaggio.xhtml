@@ -11,6 +11,7 @@
 	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="cerca.css" library="css" />
 	<h:outputStylesheet name="dataGrid.css" library="css" />
+
 </h:head>
 <h:body>
 
@@ -41,13 +42,14 @@
 				
 				<f:facet name="footer">
 		            <br></br>
-
-		            <h:panelGroup>
-		            <p:captcha label="CaZPTCHA" validatorMessage="aho!!"></p:captcha>
-		                <h:commandButton value="INVIa MESSAGGIo&#160;&#160;"
+				    <form action="?" method="POST" >
+				      <div class="g-recaptcha" data-sitekey="6LeE5hkTAAAAAJ-cK3nuNvBAP0MN1aAARXm-JuJg"></div>
+				      <br/>
+				      	<h:commandButton value="INVIa MESSAGGIo&#160;&#160;"
 						 	action="#{threadBean.inviaNuovoMessaggio()}" >
 		            	</h:commandButton>  
-	            	</h:panelGroup>
+				    </form>
+
 	            		<br></br>
 	            		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
 	            	<h:panelGroup><h:messages/></h:panelGroup>

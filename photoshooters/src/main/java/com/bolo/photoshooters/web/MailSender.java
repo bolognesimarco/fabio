@@ -148,10 +148,17 @@ public class MailSender {
 	}
 	
 	private static String nuovaRispostaAnnuncioMessage = "Il photoshooter % ha risposto ad un tuo annuncio.\r\n"
-			+ "Se non vuoi più ricevere una mail quando c'è una nuova risposta ad un tuo annuncio, deseleziona l'opzione sul tuo profilo.";
+			+ "Se non vuoi più ricevere una mail quando c'è una nuova risposta ad un tuo annuncio o ad annunci a cui hai risposto, deseleziona l'opzione sul tuo profilo.";
 	
 	public static void sendNuovaRispostaAnnuncioMail(String address, String nomeUtente) throws Exception{
 		sendEmail("mail.photoshooters.net", "25", "info@photoshooters.net", "200AyAy=tera", address, "Annuncio update - Photoshooters.net", nuovaRispostaAnnuncioMessage.replace("%", nomeUtente));
+	}
+	
+	private static String nuovaRispostaAnnuncioAltruiMessage = "Il photoshooter % ha risposto al tuo messaggio relativo all'annuncio da lui pubblicato.\r\n"
+			+ "Se non vuoi più ricevere una mail quando c'è una nuova risposta ad un tuo annuncio o ad annunci a cui hai risposto, deseleziona l'opzione sul tuo profilo.";
+	
+	public static void sendNuovaRispostaAnnuncioAltruiMail(String address, String nomeUtente) throws Exception{
+		sendEmail("mail.photoshooters.net", "25", "info@photoshooters.net", "200AyAy=tera", address, "Annuncio update - Photoshooters.net", nuovaRispostaAnnuncioAltruiMessage.replace("%", nomeUtente));
 	}
 	
 	private static String nuovoAlbumUtenteSeguitoMessage = "Il photoshooter % ha pubblicato un nuovo album.\r\n"

@@ -7,9 +7,13 @@
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 
+<h:head>
 
+</h:head>
 <h:body>
 	<ui:composition>
+
+
 		<h:outputStylesheet library="css" name="common.css"  />
 		<h:outputStylesheet library="css" name="header.css"  />
 
@@ -24,8 +28,9 @@
 		  </h:panelGrid>
 		 </div>
 		  
-		 <div class="riga-menu">
+		 <div id="mainmenu" class="riga-menu">
 			<h:form  id="headerform">				
+		    	<h:panelGroup id="loginpanel">
 				<h:commandButton value="#{utenteBean.utente.username}" styleClass="menubuttonuser" rendered="#{utenteBean.utente!=null}">
 					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content" />
 				</h:commandButton>
@@ -53,11 +58,11 @@
 	    	   	<h:commandButton value="REGISTRATi" styleClass="menubutton"  rendered="#{utenteBean.utente==null}">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(1)}" render=":content :registratiform" />
 	    	   	</h:commandButton>
-	    	   	
+
 	    	   	<h:commandButton value="LOGIn" styleClass="menubutton" rendered="#{utenteBean.utente==null}">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(2)}" render=":content :loginform" />
 	    	   	</h:commandButton>
-
+				</h:panelGroup>
 			</h:form>
 		</div>
 		
@@ -88,15 +93,15 @@
 	    	   			</h:panelGroup>
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="CHAt" styleClass="menubuttonred">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(11)}" render=":content" />
-	    	   	</h:commandButton>
+	    	   	<p:commandButton value="CHAt" styleClass="menubuttonred" actionListener="#{menuBean.menuClick(11)}" update=":content">
+	    			<p:confirm header="CONFERMa" message="confermi il CHAT?" icon="ui-icon-alert" />
+	    	   	</p:commandButton>
 	    	   	
 	    	   	<h:commandButton value="ANNUNCi" styleClass="menubuttonred">
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(12)}" render=":content :annunciform :annuncirispostiform" />
     					<h:panelGroup id="numeroannunci">
 	    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
-	    	   					<h:outputText rendered="#{threadBean.nuoviMessaggiAnnunci!=0}" value="#{threadBean.nuoviMessaggiAnnunci}"></h:outputText>
+	    	   					<h:outputText rendered="#{annuncioBean.nuoviMessaggiAnnunci!=0}" value="#{annuncioBean.nuoviMessaggiAnnunci}"></h:outputText>
 	    	   				</sup>
 	    	   			</h:panelGroup> 
 	    	  	</h:commandButton>
@@ -105,8 +110,9 @@
 	    			<f:ajax event="click" listener="#{menuBean.menuClick(13)}" render=":content :registratiform" />
 	    	   	</h:commandButton>  	
 	    	   	
-	    	   	<p:commandButton value="LOGOUt" styleClass="menubuttonred" actionListener="#{menuBean.menuClick(14)}" update=":content :headerform :patternguestform :menuutenteform">
-        			<p:confirm header="CONFERMa" message="confermi il LOGOUt?" icon="ui-icon-alert" />
+	    	   	<p:commandButton value="LOGOUt" styleClass="menubuttonred" process="@all" >
+        			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render="content :headerform :patternguestform :menuutenteform" />
+        			<p:confirm header="CONFERMa" message="confermi il LOGOUT?" icon="ui-icon-alert" />
     			</p:commandButton>
  
 			    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

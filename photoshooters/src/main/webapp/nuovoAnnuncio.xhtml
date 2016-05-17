@@ -30,21 +30,21 @@
 				<h:outputText id="mittente" value="#{utenteBean.utente.username}" />
 
 				<h:outputLabel for="oggetto">TITOLo</h:outputLabel>
-				<h:inputText id="oggetto" required="true" requiredMessage="Il titolo non può essere vuoto!" value="#{threadBean.messaggioNuovoAnnuncio.oggetto}" styleClass="textareatonda"/>
+				<h:inputText id="oggetto" required="true" requiredMessage="Il titolo non può essere vuoto!" value="#{annuncioBean.messaggioNuovoAnnuncio.oggetto}" styleClass="textareatonda"/>
 
 				<h:outputLabel for="citta">CITTà</h:outputLabel>
- 				<p:autoComplete maxlength="130" id="citta" value="#{threadBean.nuovoAnnuncio.cittàAnnuncio}" required="true" completeMethod="#{utenteBean.suggerisciCittà}" requiredMessage="Inserire luogo per annuncio!">
+ 				<p:autoComplete maxlength="130" id="citta" value="#{annuncioBean.nuovoAnnuncio.cittàAnnuncio}" required="true" completeMethod="#{utenteBean.suggerisciCittà}" requiredMessage="Inserire luogo per annuncio!">
  				</p:autoComplete>
  				
 				<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
-				<h:inputTextarea size="120" required="true" requiredMessage="L'annuncio non può essere vuoto!" rows="8" id="messaggio" value="#{threadBean.messaggioNuovoAnnuncio.messaggio}"/>
+				<h:inputTextarea size="120" required="true" requiredMessage="L'annuncio non può essere vuoto!" rows="8" id="messaggio" value="#{annuncioBean.messaggioNuovoAnnuncio.messaggio}"/>
 				
 				<f:facet name="footer">
 		            <br></br>
 
 		            <h:panelGroup>
 		                <p:commandButton value="PUBBLICa ANNUNCIo&#160;&#160;"
-						 	actionListener="#{threadBean.pubblicaNuovoAnnuncio()}" update=":content">
+						 	actionListener="#{annuncioBean.pubblicaNuovoAnnuncio()}" update="content">
 						 	<p:confirm header="CONFERMa" message="Confermi la pubblicazione dell'annuncio?" icon="ui-icon-alert" />
 		            	</p:commandButton>  
 		            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">

@@ -23,28 +23,28 @@
 					
 					<f:facet name="header">
 		           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCIo PUBBLICATo Da&#160;"/>
-		           		<h:outputText value="#{threadBean.annuncioPubblicato.proponente.username}"/>
+		           		<h:outputText value="#{annuncioBean.annuncioPubblicato.proponente.username}"/>
 		           		<br></br>
 		       		</f:facet>
 					
 					<h:outputLabel for="data">DATa PUBBLICAZIONe</h:outputLabel>
-					<h:outputText id="data" value="#{threadBean.annuncioPubblicato.risposte.get(threadBean.annuncioPubblicato.risposte.size()-1).messaggi.get(threadBean.annuncioPubblicato.risposte.get(threadBean.annuncioPubblicato.risposte.size()-1).messaggi.size()-1).data}" >
+					<h:outputText id="data" value="#{annuncioBean.annuncioPubblicato.risposte.get(annuncioBean.annuncioPubblicato.risposte.size()-1).messaggi.get(annuncioBean.annuncioPubblicato.risposte.get(annuncioBean.annuncioPubblicato.risposte.size()-1).messaggi.size()-1).data}" >
 						<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
 					</h:outputText >
 	
 					<h:outputLabel for="oggetto">TITOLo</h:outputLabel>
-					<h:outputText id="oggetto" value="#{threadBean.annuncioPubblicato.risposte.get(0).oggettoThread}" styleClass="textareatonda"/>
+					<h:outputText id="oggetto" value="#{annuncioBean.annuncioPubblicato.risposte.get(0).oggettoThread}" styleClass="textareatonda"/>
 	
 					<h:outputLabel for="città">CITTà</h:outputLabel>
-					<h:outputText id="città" value="#{threadBean.annuncioPubblicato.cittàAnnuncio}" />
+					<h:outputText id="città" value="#{annuncioBean.annuncioPubblicato.cittàAnnuncio}" />
 	 				
 					<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
-					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{threadBean.annuncioPubblicato.risposte.get(0).messaggi.get(0).messaggio}"/>
+					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{annuncioBean.annuncioPubblicato.risposte.get(0).messaggi.get(0).messaggio}"/>
 	        	 
 		        	 <f:facet name="footer">
 			            <h:panelGroup>
 			                <p:commandButton value="RIPUBBLICa ANNUNCIo&#160;&#160;"
-							 	actionListener="#{threadBean.ripubblicaAnnuncio(threadBean.annuncioPubblicato)}" >
+							 	actionListener="#{annuncioBean.ripubblicaAnnuncio(annuncioBean.annuncioPubblicato)}" >
 						 		<p:confirm header="CONFERMa" message="Ripubblica annuncio con data aggiornata?" icon="ui-icon-alert" />
 			            	</p:commandButton>  
 			            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
@@ -63,7 +63,7 @@
 		
 		<h:form id="threadsannuncioform">
 		
-			<h:dataTable id="threadsannuncio" var="thrann" value="#{threadBean.annuncioPubblicato.risposte}">
+			<h:dataTable id="threadsannuncio" var="thrann" value="#{annuncioBean.annuncioPubblicato.risposte}">
 				
 				<f:facet name="header">
 	           		<h:outputText styleClass="common" value="&#160;&#160;RISPOSTe ANNUNCIo -&#160;"/>
@@ -89,10 +89,10 @@
 						</h:panelGrid>
 						<h:panelGrid>
 				    		<h:commandButton value="#{thrann.oggettoThread}" style="cursor:pointer;">
-				    			<h:panelGroup rendered="#{threadBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,threadBean.annuncioPubblicato)==true and thrann.nuovoMessaggio==true}">
+				    			<h:panelGroup rendered="#{annuncioBean.annuncioContieneRisposteNonLette(utenteBean.utente.id,annuncioBean.annuncioPubblicato)==true and thrann.nuovoMessaggio==true}">
 			    	   				<sup style="color:red;font-size:8px;">new</sup>
 			    	   			</h:panelGroup>
-			    				<f:ajax event="click" listener="#{threadBean.visualizzaThreadAnnuncioPubblicato(thrann)}" render=":content :rispostaannunciothreadform :annunciothreadmessaggiform :menuutenteform:numeroannunci" />
+			    				<f:ajax event="click" listener="#{annuncioBean.visualizzaThreadAnnuncioPubblicato(thrann)}" render=":content :rispostaannunciothreadform :annunciothreadmessaggiform :menuutenteform:numeroannunci" />
 			    	   		</h:commandButton>
 						</h:panelGrid>
 						<h:panelGrid>

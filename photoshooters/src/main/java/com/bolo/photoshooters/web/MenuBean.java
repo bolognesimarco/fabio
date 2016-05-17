@@ -31,7 +31,7 @@ public class MenuBean {
 			contentBean.setContent("localizzazione.xhtml");
 			break;
 		case 5://LAVORI & EVENTI
-			threadBean.cercaAnnunciSito();
+			annuncioBean.cercaAnnunciSito();
 			contentBean.setMessaggio(null);
 			contentBean.setContent("lavoriEventi.xhtml");
 			break;
@@ -65,8 +65,8 @@ public class MenuBean {
 		case 12://ANNUNCI
 			contentBean.setMessaggio(null);
 			contentBean.setContent("annunci.xhtml");
-			threadBean.getIdAnnunciSelezionati().clear();
-			threadBean.cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId()); 
+			annuncioBean.getIdAnnunciSelezionati().clear();
+			annuncioBean.cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId()); 
 			break;
 		case 13://CREDITI
 			contentBean.setContent("wip.xhtml");
@@ -82,6 +82,7 @@ public class MenuBean {
 			utenteBean.setUtente(null);
 			contentBean.setMessaggio(null);
 			contentBean.setContent("homePage.xhtml");
+			System.out.println("LOGOUTTTTT");
 			break;
 		case 15://HOMEPAGE
 			utenteBean.setUtente(null);
@@ -147,6 +148,20 @@ public class MenuBean {
 	@ManagedProperty(value="#{threadBean}")
 	private ThreadBean threadBean;
 			
+	@ManagedProperty(value="#{annuncioBean}")
+	private AnnuncioBean annuncioBean;
+	
+	
+	
+	
+	public AnnuncioBean getAnnunciBean() {
+		return annuncioBean;
+	}
+
+	public void setAnnuncioBean(AnnuncioBean annuncioBean) {
+		this.annuncioBean = annuncioBean;
+	}
+
 	public ThreadBean getThreadBean() {
 		return threadBean;
 	}

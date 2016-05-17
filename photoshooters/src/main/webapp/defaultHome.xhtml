@@ -38,6 +38,7 @@
 					<h:dataTable value="#{utenteBean.ultimiUtentiIscritti()}" var="uts">
 						<h:column>
 							<h:outputText value="#{uts.username}"></h:outputText>
+							<h:outputText value="#{uts.dataIscrizione}"></h:outputText>
 						</h:column>
 					</h:dataTable>
 				</h:panelGrid>
@@ -45,10 +46,11 @@
 					<f:facet name="header">
 						<h:outputText value="&#160;ULTIMe FOTo"></h:outputText>
 					</f:facet>
-					<h:dataTable value="#{utenteBean.ultimeFotoIserite()}" var="fots">
+					<h:dataTable value="#{utenteBean.ultimeFotoInserite()}" var="fots">
 						<h:column>
 							<h:outputText value="nome: #{fots.nomeFileFoto}"></h:outputText>
 							<h:outputText value="tITOLO: #{fots.titolo}"></h:outputText>
+							<h:outputText value="tITOLO: #{fots.dataFoto}"></h:outputText>
 						</h:column>
 					</h:dataTable>
 				</h:panelGrid>

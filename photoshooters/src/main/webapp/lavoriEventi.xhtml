@@ -17,10 +17,10 @@
 	<h:panelGroup styleClass="pannello cerca">
 
 		
-			<h:dataTable id="annuncisito" var="annSito" value="#{threadBean.annunciSito}">
+			<h:dataTable id="annuncisito" var="annSito" value="#{annuncioBean.annunciSito}">
 				
 				<f:facet name="header">
-	           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCi PHOTOSHOOTERs - #{threadBean.annunciSito.size()}"/>
+	           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCi PHOTOSHOOTERs - #{annuncioBean.annunciSito.size()}"/>
 	           		<br></br>
 	       		</f:facet>
 				
@@ -41,7 +41,7 @@
 						</h:panelGrid>
 						<h:panelGrid>
 				    		<h:commandButton value="#{annSito.risposte.get(0).oggettoThread}" style="cursor:pointer;">
-			    				<f:ajax event="click" listener="#{threadBean.visualizzaAnnuncioAltrui(annSito)}" render=":content :annuncioaltruiform :threadsannuncioaltruiform :nuovarispostathreadannuncioform" />
+			    				<f:ajax event="click" listener="#{annuncioBean.visualizzaAnnuncioAltrui(annSito)}" render=":content :annuncioaltruiform :threadsannuncioaltruiform :nuovarispostathreadannuncioform" />
 			    	   		</h:commandButton>
 						</h:panelGrid>
 						<h:panelGrid>

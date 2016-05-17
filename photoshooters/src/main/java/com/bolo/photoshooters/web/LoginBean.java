@@ -65,9 +65,10 @@ public class LoginBean {
 					threadBean.cercaThreadsInviatiUtente(utenteBean.getUtente().getId());
 					threadBean.cercaThreadsRicevutiUtente(utenteBean.getUtente().getId());
 					threadBean.nuoviMessaggiThread(u.getId());
-					threadBean.cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
-					threadBean.cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
-					threadBean.nuoviMessaggiThreadsAnnuncio(u.getId());
+					System.out.println("loginbean....start annunciiiiiiiiiii");
+					annuncioBean.cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
+					annuncioBean.cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
+					annuncioBean.nuoviMessaggiThreadsAnnuncio(u.getId());
 					inputBean.getVotoFoto().setScore(-1);
 					contentBean.setMessaggio(mm2);
 					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("pannellohomepagepanel");
@@ -162,6 +163,19 @@ public class LoginBean {
 	@ManagedProperty(value = "#{inputBean}")
 	private InputBean inputBean;
 	
+	@ManagedProperty(value="#{annuncioBean}")
+	private AnnuncioBean annuncioBean;
+	
+	
+	
+	
+	public AnnuncioBean getAnnunciBean() {
+		return annuncioBean;
+	}
+
+	public void setAnnuncioBean(AnnuncioBean annuncioBean) {
+		this.annuncioBean = annuncioBean;
+	}
 		
 	public InputBean getInputBean() {
 		return inputBean;

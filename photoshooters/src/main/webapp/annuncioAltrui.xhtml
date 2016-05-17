@@ -23,23 +23,23 @@
 					
 					<f:facet name="header">
 		           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCIo PUBBLICATo Da&#160;"/>
-		           		<h:outputText value="#{threadBean.annuncioAltrui.proponente.username}"/>
+		           		<h:outputText value="#{annuncioBean.annuncioAltrui.proponente.username}"/>
 		           		<br></br>
 		       		</f:facet>
 					
 					<h:outputLabel for="data">DATa PUBBLICAZIONe</h:outputLabel>
-					<h:outputText id="data" value="#{threadBean.annuncioAltrui.risposte.get(threadBean.annuncioAltrui.risposte.size()-1).messaggi.get(threadBean.annuncioAltrui.risposte.get(threadBean.annuncioAltrui.risposte.size()-1).messaggi.size()-1).data}" >
+					<h:outputText id="data" value="#{annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).messaggi.get(annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).messaggi.size()-1).data}" >
 						<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
 					</h:outputText >
 	
 					<h:outputLabel for="oggetto">TITOLo</h:outputLabel>
-					<h:outputText id="oggetto" value="#{threadBean.annuncioAltrui.risposte.get(threadBean.annuncioAltrui.risposte.size()-1).oggettoThread}" styleClass="textareatonda"/>
+					<h:outputText id="oggetto" value="#{annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).oggettoThread}" styleClass="textareatonda"/>
 	
 					<h:outputLabel for="città">CITTà</h:outputLabel>
-					<h:outputText id="città" value="#{threadBean.annuncioAltrui.cittàAnnuncio}" />
+					<h:outputText id="città" value="#{annuncioBean.annuncioAltrui.cittàAnnuncio}" />
 	 				
 					<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
-					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{threadBean.annuncioAltrui.risposte.get(threadBean.annuncioAltrui.risposte.size()-1).messaggi.get(threadBean.annuncioAltrui.risposte.get(threadBean.annuncioAltrui.risposte.size()-1).messaggi.size()-1).messaggio}"/>
+					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).messaggi.get(annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).messaggi.size()-1).messaggio}"/>
 	        			
         		</h:panelGrid>		
 			</h:form>
@@ -58,24 +58,24 @@
 		           		<h:outputText value="Da:&#160;"/>
 		         		<h:outputText value="#{utenteBean.utente.username}"></h:outputText>
 						<h:outputText value="A:&#160;"></h:outputText>
-		           		<h:outputText value="#{threadBean.annuncioAltrui.proponente.username}"/>
+		           		<h:outputText value="#{annuncioBean.annuncioAltrui.proponente.username}"/>
 					</h:panelGrid>
 	        		<h:panelGrid columns="1">
 		        		<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
 		        			<h:outputLabel for="titolonew">TITOLo</h:outputLabel>
-							<h:outputText id="titolonew"  value="&#160;#{threadBean.annuncioAltrui.risposte.get(threadBean.annuncioAltrui.risposte.size()-1).oggettoThread}" styleClass="textareatonda">
+							<h:outputText id="titolonew"  value="&#160;#{annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).oggettoThread}" styleClass="textareatonda">
 		    	   			</h:outputText>
 		        		</h:panelGrid>
 					    <h:panelGrid columns="1">   
 					        <h:outputLabel for="messaggio">MESSAGGIo Di RISPOSTa</h:outputLabel>
-							<h:inputTextarea required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:230px!important;"  size="230" rows="5" id="messaggiorisposta" value="#{threadBean.messaggioRispostaAnnuncio.messaggio}"/>
+							<h:inputTextarea value="#{annuncioBean.messaggioRispostaAnnuncio.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:230px!important;"  size="230" rows="5" id="messaggiorisposta" />
 						</h:panelGrid>
 	        		</h:panelGrid>
 	        	 
 		        	<f:facet name="footer">
 			            <h:panelGroup>
 			                <p:commandButton value="RISPONDi ALl'ANNUNCIo&#160;&#160;"
-							 	actionListener="#{threadBean.rispondiAnnuncio(threadBean.annuncioAltrui)}" update=":content">
+							 	actionListener="#{annuncioBean.rispondiAnnuncio(annuncioBean.annuncioAltrui)}" >
 						 		<p:confirm header="CONFERMa" message="Invia risposta all'annuncio?" icon="ui-icon-alert" />
 			            	</p:commandButton>  
 			            	<p:confirmDialog widgetVar="confermaAnnuncio" global="true" showEffect="fade" hideEffect="fade">
@@ -93,8 +93,8 @@
 		</h:form>
 		
 		
-		<h:form id="messaggithreadannuncioform" rendered="#{threadBean.esisteRispostaAnnuncio(utenteBean.utente, threadBean.annuncioAltrui)}">	
-			<p:dataTable id="messaggithreadannuncio" var="mess" value="#{threadBean.threadRispostaAnnuncio.messaggi}" rows="5" paginator="true" scrollable="false" scrollWidth="0">
+		<h:form id="messaggithreadannuncioform" rendered="#{annuncioBean.esisteRispostaAnnuncio(utenteBean.utente, annuncioBean.annuncioAltrui)}">	
+			<p:dataTable id="messaggithreadannuncio" var="mess" value="#{annuncioBean.threadRispostaAnnuncio.messaggi}" rows="5" paginator="true" scrollable="false" scrollWidth="0">
 				
 				<p:column rendered="#{mess.destinatario!=mess.mittente}">
 				
@@ -113,7 +113,7 @@
 	    	   				<h:panelGroup rendered="#{threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.destinatario.id==utenteBean.utente.id}" style="height:15px">
 								<h:outputText styleClass="avvisomess" value="new"></h:outputText>
 	    	   				</h:panelGroup>
-	    	   				<h:panelGroup rendered="#{threadBean.threadRispostaAnnuncio.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.mittente.id==utenteBean.utente.id}" style="height:15px">
+	    	   				<h:panelGroup rendered="#{annuncioBean.threadRispostaAnnuncio.nuovoMessaggio==true and threadBean.messaggioIsLetto(mess.destinatario.id, mess)==false and mess.mittente.id==utenteBean.utente.id}" style="height:15px">
 	    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
 	    	   				</h:panelGroup>
 							<h:inputTextarea readonly="true" style="width:230px!important;" size="230" rows="5" id="messaggio" value="#{mess.messaggio}"/>

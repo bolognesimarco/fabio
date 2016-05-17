@@ -755,8 +755,41 @@ public class InputBean {
 			return utenti;
 		}
 		
+		
+		public boolean fotoGiaVisualizzata (Foto f,Utente ut) {
+			Iterator<Utente> it = f.getVisualizzatori().iterator();
+			while(it.hasNext()) {
+				Utente al = it.next();
+				if(al.getId()==ut.getId()) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		
 		public void fotoVisualizzata(String nomeFile) {
 			System.out.println("visualizzata foto "+nomeFile+" da "+utenteBean.getUtente().getUsername());
+			System.out.println("foto visualizzata id="+nomeFile);
+			EntityManager em = EMF.createEntityManager();
+			List<Foto> f = em
+			.createQuery("from Foto f where f.nomeFileFoto =:nf")
+			.setParameter("nf", nomeFile)
+			.getResultList();
+			System.out.println("foto visualizzata id="+nomeFile);
+			if(!fotoGiaVisualizzata(f.get(0), utenteBean.getUtente())) {
+				f.get(0).getVisualizzatori().add(utenteBean.getUtente());
+				Integer visite = f.get(0).getVisite();
+				visite++;
+				f.get(0).setVisite(visite);
+				System.out.println("aggiunto visualizzazione foto id="+f.get(0).getId());
+				try {
+					serv.merge(f.get(0));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		

@@ -311,13 +311,14 @@ public class UtenteBean {
 	}
 	
 	
-	public List<Foto> ultimeFotoIserite () {
+	public List<Foto> ultimeFotoInserite () {
 		System.out.println("ultimeFotoIserite");
 		EntityManager em = EMF.createEntityManager();
 		List<Foto> fotos = em
-		.createQuery("from Foto f")
+		.createQuery("from Foto f order by f.dataFoto desc")
 		.setMaxResults(2)
 		.getResultList();
+		System.out.println("ultimeFotoIserite size"+fotos.size());
 		return fotos;
 	}
 	
@@ -549,77 +550,79 @@ public class UtenteBean {
 	
 			suggerimenti.add(geocodingResult.formattedAddress);
 			utente.setCittà(geocodingResult.formattedAddress);
-			
-			System.out.println("SUGGERISCIREGIONEEE=="+geocodingResult.addressComponents[3].longName);	
+			if(geocodingResult.addressComponents.length>=3){
+				System.out.println("SUGGERISCIREGIONEEE=="+geocodingResult.addressComponents[3].longName);	
+			}
 			System.out.println("SUGGERISCICITTAAAAA=="+results[0].formattedAddress);
-			
-			//le regioni le trova in inglese
-			switch (geocodingResult.addressComponents[3].longName) {
-			case "Abruzzo":
-				region = "ABRUZZo";
-				break;
-			case "Basilicata":
-				region = "BASILICATa";
-				break;
-			case "Calabria":
-				region = "CALABRIa";
-				break;
-			case "Campania":
-				region = "CAMPANIa";
-				break;
-			case "Emilia-Romagna":
-				region = "EMILIa_ROMAGNa";
-				break;
-			case "Friuli-Venezia Giulia":
-				region = "FRIULi_VENEZIa_GIULIa";
-				break;
-			case "Lazio":
-				region = "LAZIo";
-				break;
-			case "Liguria":
-				region = "LIGURIa";
-				break;
-			case "Lombardy":
-				region = "LOMBARDIa";
-				break;
-			case "Marche":
-				region = "MARCHe";
-				break;
-			case "Molise":
-				region = "MOLISe";
-				break;
-			case "Piedmont":
-				region = "PIEMONTe";
-				break;
-			case "Apulia":
-				region = "PUGLIa";
-				break;
-			case "Sardegna":
-				region = "SARDEGNa";
-				break;
-			case "Sicilia":
-				region = "SICILIa";
-				break;
-			case "Tuscany":
-				region = "TOSCANa";
-				break;
-			case "Trentino-Alto Adige":
-				region = "TRENTINo_ALTo_ADIGe";
-				break;
-			case "Umbria":
-				region = "UMBRIa";
-				break;
-			case "Valle d'Aosta":
-				region = "VAl_dAOSTa";
-				break;
-			case "Veneto":
-				region = "VENETo";
-				break;		
-			default: 
-				region = "ESTERo";
-				break;
-			}			
-			System.out.println("SUGGERISCIREGIONEEE22=="+region);
+			if(geocodingResult.addressComponents.length>=3){		
+				//le regioni le trova in inglese
+				switch (geocodingResult.addressComponents[3].longName) {
+				case "Abruzzo":
+					region = "ABRUZZo";
+					break;
+				case "Basilicata":
+					region = "BASILICATa";
+					break;
+				case "Calabria":
+					region = "CALABRIa";
+					break;
+				case "Campania":
+					region = "CAMPANIa";
+					break;
+				case "Emilia-Romagna":
+					region = "EMILIa_ROMAGNa";
+					break;
+				case "Friuli-Venezia Giulia":
+					region = "FRIULi_VENEZIa_GIULIa";
+					break;
+				case "Lazio":
+					region = "LAZIo";
+					break;
+				case "Liguria":
+					region = "LIGURIa";
+					break;
+				case "Lombardy":
+					region = "LOMBARDIa";
+					break;
+				case "Marche":
+					region = "MARCHe";
+					break;
+				case "Molise":
+					region = "MOLISe";
+					break;
+				case "Piedmont":
+					region = "PIEMONTe";
+					break;
+				case "Apulia":
+					region = "PUGLIa";
+					break;
+				case "Sardegna":
+					region = "SARDEGNa";
+					break;
+				case "Sicilia":
+					region = "SICILIa";
+					break;
+				case "Tuscany":
+					region = "TOSCANa";
+					break;
+				case "Trentino-Alto Adige":
+					region = "TRENTINo_ALTo_ADIGe";
+					break;
+				case "Umbria":
+					region = "UMBRIa";
+					break;
+				case "Valle d'Aosta":
+					region = "VAl_dAOSTa";
+					break;
+				case "Veneto":
+					region = "VENETo";
+					break;		
+				default: 
+					region = "ESTERo";
+					break;
+				}			
+				System.out.println("SUGGERISCIREGIONEEE22=="+region);
+			}
 		}	
 	return suggerimenti;
 	}
