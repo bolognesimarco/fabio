@@ -8,9 +8,7 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="cerca.css" library="css" />
-	<h:outputStylesheet name="dataGrid.css" library="css" />
 </h:head>
 <h:body>
 
@@ -20,7 +18,8 @@
 		
 			<h:panelGrid columns="2" columnClasses="right,left" >
 	            <h:panelGroup>
-	                <h:commandButton value="NUOVo ANNUNCIo&#160;&#160;"	action="#{menuBean.menuClick(20)}">
+	                <h:commandButton value="NUOVo ANNUNCIo&#160;&#160;"	>
+	                	<f:ajax event="click" listener="#{menuBean.menuClick(20)}" render=":content :nuovoannuncioform"></f:ajax>
 	            	</h:commandButton>  
             	</h:panelGroup>
             	<h:panelGroup>
@@ -66,7 +65,7 @@
 						</h:outputText >
 					</h:panelGrid>
 					<h:panelGrid>
-						<h:selectBooleanCheckbox id="selezioneannunci" value="#{annuncioBean.idAnnunciSelezionati[ann.id]}">
+						<h:selectBooleanCheckbox id="selezioneannuncipubblicati" value="#{annuncioBean.idAnnunciSelezionati[ann.id]}">
 						</h:selectBooleanCheckbox>
 					</h:panelGrid>
 				</h:panelGrid>	
@@ -75,7 +74,8 @@
 			
 			<f:facet name="footer">
            		<h:panelGrid columns="2" border="0">
-					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{annuncioBean.cancellaAnnunciPubblicatiSelezionati()}" update=":menuutenteform">
+					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" action="#{annuncioBean.cancellaAnnunciPubblicatiSelezionati()}" update=":content :menuutenteform:numeroannunci :annuncirispostiform :annunciform">
+
 						<p:confirm header="CONFERMa" message="Elimina annunci selezionati?" icon="ui-icon-alert" />
 					</p:commandButton>
 					<p:confirmDialog widgetVar="confermaElimina" global="true" showEffect="fade" hideEffect="fade">
@@ -128,7 +128,7 @@
 						</h:outputText >
 					</h:panelGrid>
 					<h:panelGrid>
-						<h:selectBooleanCheckbox id="selezioneannunci" value="#{annuncioBean.idAnnunciSelezionati[ann.id]}">
+						<h:selectBooleanCheckbox id="selezioneannuncirisposti" value="#{annuncioBean.idAnnunciSelezionati[ann.id]}">
 						</h:selectBooleanCheckbox>
 					</h:panelGrid>
 				</h:panelGrid>	
@@ -137,7 +137,8 @@
 			
 			<f:facet name="footer">
            		<h:panelGrid columns="2" border="0">
-					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" actionListener="#{annuncioBean.cancellaThreadsAnnunciRispostiSelezionati()}" >
+					<p:commandButton value="ELIMINa ANNUNCi SELEZIONATi" action="#{annuncioBean.cancellaThreadsAnnunciRispostiSelezionati()}" update=":content :annuncirispostiform :menuutenteform:numeroannunci :annunciform">
+	
 						<p:confirm header="CONFERMa" message="Elimina risposte annunci selezionate?" icon="ui-icon-alert" />
 					</p:commandButton>
 					<p:confirmDialog widgetVar="confermaElimina" global="true" showEffect="fade" hideEffect="fade">

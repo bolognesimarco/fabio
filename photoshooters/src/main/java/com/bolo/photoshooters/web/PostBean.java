@@ -3,7 +3,6 @@ package com.bolo.photoshooters.web;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,7 @@ import javax.persistence.Query;
 
 import com.bolo.photo.web.entity.Annuncio;
 import com.bolo.photo.web.entity.Messaggio;
-import com.bolo.photo.web.entity.RegioneItaliana;
+import com.bolo.photo.web.entity.Post;
 import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
@@ -28,7 +27,7 @@ import com.bolo.photoshooters.util.MessaggiComparator;
 
 @ManagedBean
 @SessionScoped
-public class AnnuncioBean {
+public class PostBean {
 
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private Messaggio messaggioAggiunto = new Messaggio();
@@ -45,9 +44,108 @@ public class AnnuncioBean {
 	Thread threadRispostaAnnuncio = new Thread();
 	List<Thread> threadsAnnunciConNuoviMessaggi = new ArrayList<Thread>();
 	private int nuoviMessaggiAnnunci = 0;
-	private boolean tutteRegioni = false;
 	
+	
+	private Post postUtente = new Post();
+	List<Thread> threadsRispostePost = new ArrayList<Thread>();
+	private Post rispostaPost = new Post();
+	private Messaggio messaggioRispostaPost = new Messaggio();
+	private Messaggio messaggioRispostaThread = new Messaggio();
 
+	
+	public void regolamentoForum() {
+		EntityManager em = EMF.createEntityManager();
+		List<Post> posts = em
+		.createQuery("from Post p where p.id = 1")
+		.getResultList();
+		postUtente = posts.get(0);
+		contentBean.setContent("forumRegolamento.xhtml");
+	}
+	
+	
+	public void utentiFreeForum() {
+		
+	}
+	
+	
+	public void utentiPlusForum() {
+		
+	}
+	
+	
+	public void visualizzaPost(Post p) {
+		postUtente = p;
+		contentBean.setContent("postUtente.xhtml");
+	}
+
+	
+	public void inviaRispostaPost (Post p) {
+//		EntityManager em = EMF.createEntityManager();
+//		threadsAnnunciConNuoviMessaggi = p.getRisposte();
+//		.createQuery("from Post p where p.id =:idpost")
+//		.setParameter("idpost", p.getId())
+//		.getResultList();
+//		postUtente = posts.get(0);
+		Messaggio mess = new Messaggio();
+		Thread thr = new Thread();
+		mess.setMittente(utenteBean.getUtente());
+		mess.setDestinatario(p.getRisposte().get(0).getMittentePrimo());
+		mess.setThread(thr);
+		mess.setOggetto(messaggioRispostaPost.getOggetto());
+		mess.setMessaggio(messaggioRispostaPost.getMessaggio());
+		Date ora = new Date();
+		mess.setData(ora);
+		thr.getMessaggi().add(mess);
+		thr.setDestinatarioPrimo(mess.getDestinatario());
+		thr.setMittentePrimo(utenteBean.getUtente());
+		thr.setOggettoThread("Re: "+p.getRisposte().get(0).getOggettoThread());
+		thr.setPost(p);
+		p.getRisposte().add(thr);
+		try {
+			serv.merge(p);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		contentBean.setMessaggio("risposta al post inviata!");
+		contentBean.setContent("forumRegolamento.xhtml");
+	}
+	
+	
+	public void inviaRispostaThread (Thread t) {
+
+		Messaggio mess = new Messaggio();
+//		Thread thr = new Thread();
+		mess.setMittente(utenteBean.getUtente());
+		mess.setDestinatario(t.getMittentePrimo());
+		mess.setThread(t);
+		mess.setOggetto(messaggioRispostaThread.getOggetto());
+		mess.setMessaggio(messaggioRispostaThread.getMessaggio());
+		Date ora = new Date();
+		mess.setData(ora);
+		t.getMessaggi().add(mess);
+//		thr.setDestinatarioPrimo(mess.getDestinatario());
+//		thr.setMittentePrimo(utenteBean.getUtente());
+//		thr.setOggettoThread("Re: "+p.getRisposte().get(0).getOggettoThread());
+//		thr.setPost(p);
+
+		try {
+			serv.merge(t);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		contentBean.setMessaggio("risposta secondaria inviata!");
+		contentBean.setContent("forumRegolamento.xhtml");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 	public boolean messaggioIsLetto (int idUtente, Messaggio mess) {
@@ -121,7 +219,7 @@ public class AnnuncioBean {
 	
 
 	public void pubblicaNuovoAnnuncio () {
-		System.out.println("PUBBLICA NUOVO ANNUNCIO function"+messaggioNuovoAnnuncio.getOggetto());
+		System.out.println("PUBBLICA NUOVO ANNUNCIO function");
 		Annuncio ann = new Annuncio();
 		Thread thr = new Thread();	
 		Messaggio mess = new Messaggio();
@@ -140,40 +238,16 @@ public class AnnuncioBean {
 		thr.setAnnuncio(ann);
 		thr.setNuovoMessaggio(false);
 		ann.setCitt‡Annuncio(nuovoAnnuncio.getCitt‡Annuncio());
-		for (RegioneItaliana reg : nuovoAnnuncio.getRegioniAnnuncio()) {
-			if(reg!=null) {
-				ann.getRegioniAnnuncio().add(reg);
-			}
-		}
-		if (utenteBean.getRegion()!="" && !controllaRegione(utenteBean.getRegion())) {
-			System.out.println("nuovo annuncio REGIONE===="+utenteBean.getRegion());
-			ann.getRegioniAnnuncio().add(RegioneItaliana.valueOf(utenteBean.getRegion()));
-		}
-		if (utenteBean.getRegion()=="") {
-			try {
-				utenteBean.suggerisciCitt‡(nuovoAnnuncio.getCitt‡Annuncio());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (!controllaRegione(utenteBean.getRegion())) {
-				System.out.println("nuovo annuncio REGIONE===="+utenteBean.getRegion());
-				ann.getRegioniAnnuncio().add(RegioneItaliana.valueOf(utenteBean.getRegion()));
-			}
-		}
 		ann.setProponente(utenteBean.getUtente());
 		ann.getRisposte().add(thr);
-		System.out.println("oggetto........."+thr.getOggettoThread());
-		System.out.println("oggetto mess........."+messaggioNuovoAnnuncio.getOggetto());
 		try {
 			serv.persist(ann);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace(); 
 		}
-		nuovoAnnuncio.getRegioniAnnuncio().clear();
 		nuovoAnnuncio.setCitt‡Annuncio(null);
-//		setMessaggioNuovoAnnuncio(null);
+		setMessaggioNuovoAnnuncio(null);
 		messaggioNuovoAnnuncio = new Messaggio();
 		cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("headerform");
@@ -620,50 +694,75 @@ public class AnnuncioBean {
 	}
 	
 	
-	public void selezionaTutteRegioniAnnuncio() {
-		if (isTutteRegioni()) {
-			nuovoAnnuncio.getRegioniAnnuncio().clear();
-			List<RegioneItaliana> List =
-	                new ArrayList<RegioneItaliana>(EnumSet.allOf(RegioneItaliana.class));
-			nuovoAnnuncio.setRegioniAnnuncio(List);
-		} else {
-			nuovoAnnuncio.getRegioniAnnuncio().clear();
-		}
-	}
-	
-	
-	public boolean controllaRegione (String reg) {
-		for (RegioneItaliana regUtente : nuovoAnnuncio.getRegioniAnnuncio()) {
-			if (regUtente.toString().equals(reg)) {
-				return true;
-			}
-		}
-		return false;
-	}
 	
 	
 	
 	//************GETTERS & SETTERS*******************
 	
-	
-	@ManagedProperty(value = "#{utenteBean}")
-	private UtenteBean utenteBean;	
 
-	@ManagedProperty(value = "#{contentBean}")
-	private ContentBean contentBean;
 
-	
-
-	
-	
-
-	public boolean isTutteRegioni() {
-		return tutteRegioni;
+	public Post getPostUtente() {
+		return postUtente;
 	}
 
-	public void setTutteRegioni(boolean tutteRegioni) {
-		this.tutteRegioni = tutteRegioni;
+	public void setPostUtente(Post postUtente) {
+		this.postUtente = postUtente;
 	}
+
+	public List<Thread> getThreadsRispostePost() {
+		return threadsRispostePost;
+	}
+
+	public void setThreadsRispostePost(List<Thread> threadsRispostePost) {
+		this.threadsRispostePost = threadsRispostePost;
+	}
+	
+	public Post getRispostaPost() {
+		return rispostaPost;
+	}
+
+	public void setRispostaPost(Post rispostaPost) {
+		this.rispostaPost = rispostaPost;
+	}
+	
+	public Messaggio getMessaggioRispostaPost() {
+		return messaggioRispostaPost;
+	}
+
+	public void setMessaggioRispostaPost(Messaggio messaggioRispostaPost) {
+		this.messaggioRispostaPost = messaggioRispostaPost;
+	}
+	
+	public Messaggio getMessaggioRispostaThread() {
+		return messaggioRispostaThread;
+	}
+
+	public void setMessaggioRispostaThread(Messaggio messaggioRispostaThread) {
+		this.messaggioRispostaThread = messaggioRispostaThread;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
 
 	public Thread getThreadRispostaAnnuncio() {
 		return threadRispostaAnnuncio;
@@ -786,6 +885,24 @@ public class AnnuncioBean {
 		this.messaggioAggiunto = messaggioAggiunto;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@ManagedProperty(value = "#{utenteBean}")
+	private UtenteBean utenteBean;	
+
+	@ManagedProperty(value = "#{contentBean}")
+	private ContentBean contentBean;
+	
+	
 	public UtenteBean getUtenteBean() {
 		return utenteBean;
 	}

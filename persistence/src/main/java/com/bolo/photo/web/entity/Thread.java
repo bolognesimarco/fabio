@@ -44,6 +44,10 @@ public class Thread implements Serializable{
 	@JoinColumn(name="annuncio", nullable=true, updatable=false)
 	private Annuncio annuncio;
 	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="post", nullable=true, updatable=false)
+	private Post post;
+	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="thread")
 	private List<Messaggio> messaggi = new ArrayList<Messaggio>();
 	
@@ -63,6 +67,14 @@ public class Thread implements Serializable{
 
 	public boolean isCancellatoThreadMittente() {
 		return cancellatoThreadMittente;
+	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
 	}
 
 	public void setCancellatoThreadMittente(boolean cancellatoThreadMittente) {

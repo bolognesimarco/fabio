@@ -8,10 +8,7 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="cerca.css" library="css" />
-	<h:outputStylesheet name="dataGrid.css" library="css" />
-	<h:outputStylesheet name="dataTable.css" library="css" />
 </h:head>
 <h:body>
 
@@ -37,6 +34,9 @@
 	
 					<h:outputLabel for="città">CITTà</h:outputLabel>
 					<h:outputText id="città" value="#{annuncioBean.annuncioAltrui.cittàAnnuncio}" />
+					
+	 				<h:outputLabel for="regione">REGIONi Di VALIDITà</h:outputLabel>
+					<h:outputText id="regione" value="#{annuncioBean.annuncioAltrui.regIta}" />	
 	 				
 					<h:outputLabel for="messaggio">ANNUNCIo</h:outputLabel>
 					<h:inputTextarea readonly="true" size="120" rows="8" id="messaggio" value="#{annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).messaggi.get(annuncioBean.annuncioAltrui.risposte.get(annuncioBean.annuncioAltrui.risposte.size()-1).messaggi.size()-1).messaggio}"/>

@@ -24,6 +24,7 @@ public class SessionListener implements HttpSessionListener {
 		utenteBean.getUtente().setOnline(false);
 		utenteBean.aggiornaProfilo();
 		//metodo su utenteBean che setta hopme e refresh menùù
+		utenteBean.sessioneDistrutta();
 	}
 
 }

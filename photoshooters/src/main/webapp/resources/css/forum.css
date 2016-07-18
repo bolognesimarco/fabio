@@ -1,0 +1,19 @@
+.colonnina {
+	text-align: right;
+	color: #EF4323;
+	margin-right: 3px;
+	width: 10%;
+	text-shadow: 0.5px 0.5px 0.5px #414042;
+/* 	margin-bottom: 0px!important; */
+	font-size: 12px;
+}
+
+.post {
+	text-align: left;
+	color: white;
+	margin-left: 8px;
+	width: 90%;
+/* 	text-shadow: 0.5px 0.5px 0.5px #414042; */
+	margin-bottom: 0px!important;
+	font-size: 10px;
+}

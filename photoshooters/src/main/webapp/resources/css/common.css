@@ -30,7 +30,7 @@ html, body{
 	color: #EF4323;
 	text-shadow: 2px 2px 3px #212020;
 	padding:0!important;
-	cursor: pointer;
+/* 	cursor: pointer; */
 	text-align: left;
 }
 
@@ -55,6 +55,30 @@ html, body{
 
 .pannello table{
 	width: 100%;
+}
+
+.headersecondario {
+	font-size:small;
+/* 	font-weight: normal!important; */
+/* 	text-decoration: none; */
+	margin-left: 18px;
+	border:none;
+	border-radius: 0px!important;
+	background:none!important;
+	color: #EF4323;
+	text-shadow: 2px 2px 3px #212020;
+	padding:0!important;
+/* 	cursor: pointer; */
+	text-align: left;
+}
+
+.tabellaForum {
+	border: none!important;
+	border-bottom-color: #212020!important;
+	border-left-color: #212020!important;
+	border-right-color: #212020!important;
+	border-top-color: #212020!important;
+	border-collapse: collapse;
 }
 
 

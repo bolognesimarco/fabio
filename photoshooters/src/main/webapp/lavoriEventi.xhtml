@@ -8,14 +8,11 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="cerca.css" library="css" />
-	<h:outputStylesheet name="dataGrid.css" library="css" />
 </h:head>
 <h:body>
 
 	<h:panelGroup styleClass="pannello cerca">
-
 		
 			<h:dataTable id="annuncisito" var="annSito" value="#{annuncioBean.annunciSito}">
 				
@@ -63,8 +60,6 @@
 	       		</f:facet>
 	
 			</h:dataTable>
-
-	
 
 	</h:panelGroup>
 	

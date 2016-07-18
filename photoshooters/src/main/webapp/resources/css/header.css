@@ -104,21 +104,29 @@
 .online {
 	position:relative;
 	z-index: 2;
-	top: -30px;
-	left: -10px;
-	height:10px; 
+	top: -27px;
+	left: -5px;
+	height:8px; 
 }
-/* icona online su utente generico*/
-.onlineutente {
+/* icona online su profilo utente*/
+.onlineprofiloutente {
 	position:relative;
 	z-index: 2;
-	top: -50px;
-	left: -10px;
-	height:10px; 
+	top: -36px;
+	left: -8px;
+	height:12px; 
+}
+/* icona online su cerca utente*/
+.onlineutentecercato {
+	position:relative;
+	z-index: 2;
+	top: -36px;
+	left: -8px;
+	height:12px; 
 }
  
 /* logo, scritta PS, cerca  */
- .rightheader {
+.rightheader {
  	text-align: center;
  	margin-left: auto;
 	margin-right: auto;
@@ -126,7 +134,7 @@
 	height: 50px!important;
  }
  
-  .leftheader {
+ .leftheader {
  	text-align: center;
  	margin-left: auto;
 	margin-right: auto;
@@ -134,7 +142,7 @@
 	height: 50px!important;
  }
  
-   .centerheader {
+.centerheader {
  	text-align: center;
  	margin-left: auto;
 	margin-right: auto;
@@ -144,7 +152,7 @@
  
  
  /* per confirm button - LOGOUt */ 
-   .ui-button-text {
+.ui-button-text {
   	background:transparent!important;
     border:none!important; 
     padding:0!important;
@@ -162,7 +170,7 @@
 	border-top-color: transparent!important;
   }
 
-  .confirmdialogbutt {
+.confirmdialogbutt {
   	background:none!important;
     border:none!important; 
     border-style:none!important; 

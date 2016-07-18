@@ -13,9 +13,9 @@
 <h:body>
 	<ui:composition>
 
-
-		<h:outputStylesheet library="css" name="common.css"  />
-		<h:outputStylesheet library="css" name="header.css"  />
+		<h:outputStylesheet name="autocomplete.css" library="css" />
+		<h:outputStylesheet name="common.css" library="css"   />
+		<h:outputStylesheet name="header.css" library="css"   />
 
 		<div class="riga-celeste-medio" >
 		  <h:panelGrid border="0" columns="3" styleClass="center" columnClasses="rightheader, centerheader, leftheader">
@@ -111,7 +111,7 @@
 	    	   	</h:commandButton>  	
 	    	   	
 	    	   	<p:commandButton value="LOGOUt" styleClass="menubuttonred" process="@all" >
-        			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render="content :headerform :patternguestform :menuutenteform" />
+        			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render="content :headerform :patternguestform :menuutenteform :defaulthomeform" />
         			<p:confirm header="CONFERMa" message="confermi il LOGOUT?" icon="ui-icon-alert" />
     			</p:commandButton>
  

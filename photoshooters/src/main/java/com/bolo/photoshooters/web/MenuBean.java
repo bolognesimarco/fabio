@@ -6,6 +6,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import com.bolo.photo.web.entity.Foto;
+import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 
@@ -28,7 +29,7 @@ public class MenuBean {
 			break;
 		case 4://FORUM
 			contentBean.setMessaggio(null);
-			contentBean.setContent("localizzazione.xhtml");
+			contentBean.setContent("forum.xhtml");
 			break;
 		case 5://LAVORI & EVENTI
 			annuncioBean.cercaAnnunciSito();
@@ -110,6 +111,10 @@ public class MenuBean {
 			contentBean.setMessaggio(null);
 			contentBean.setContent("nuovoAnnuncio.xhtml");
 			break;
+		case 21://RISPONDI AL POST
+			contentBean.setMessaggio(null);
+			contentBean.setContent("postRispondi.xhtml");
+			break;
 		default:
 			break;
 		}
@@ -125,13 +130,6 @@ public class MenuBean {
 	
 //	****GETTERS&SETTERS**********************
 	
-	public ContentBean getContentBean() {
-		return contentBean;
-	}
-
-	public void setContentBean(ContentBean contentBean) {
-		this.contentBean = contentBean;
-	}
 	
 	@ManagedProperty(value="#{contentBean}")
 	private ContentBean contentBean;
@@ -151,10 +149,22 @@ public class MenuBean {
 	@ManagedProperty(value="#{annuncioBean}")
 	private AnnuncioBean annuncioBean;
 	
+	@ManagedProperty(value="#{postBean}")
+	private PostBean postBean;
 	
 	
 	
-	public AnnuncioBean getAnnunciBean() {
+	
+	
+	public PostBean getPostBean() {
+		return postBean;
+	}
+
+	public void setPostBean(PostBean postBean) {
+		this.postBean = postBean;
+	}
+
+	public AnnuncioBean getAnnuncioBean() {
 		return annuncioBean;
 	}
 
@@ -193,5 +203,12 @@ public class MenuBean {
 	public void setUtenteBean(UtenteBean utenteBean) {
 		this.utenteBean = utenteBean;
 	}
-	
+
+	public ContentBean getContentBean() {
+		return contentBean;
+	}
+
+	public void setContentBean(ContentBean contentBean) {
+		this.contentBean = contentBean;
+	}
 }

@@ -71,8 +71,6 @@ public class LoginBean {
 					annuncioBean.nuoviMessaggiThreadsAnnuncio(u.getId());
 					inputBean.getVotoFoto().setScore(-1);
 					contentBean.setMessaggio(mm2);
-					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("pannellohomepagepanel");
-					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 					contentBean.setContent("homePage.xhtml");
 					
 				}else{

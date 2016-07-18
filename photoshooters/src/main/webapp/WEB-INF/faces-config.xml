@@ -19,5 +19,4 @@
             <source-class>javax.faces.component.html.HtmlSelectOneMenu</source-class>
         </system-event-listener>
     </application>
-        
 </faces-config>

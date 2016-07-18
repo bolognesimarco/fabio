@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,9 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Annuncio implements Serializable{
+public class Post implements Serializable{
 
-	private static final long serialVersionUID = 3862344985425719117L;
+	private static final long serialVersionUID = 7392892589549886583L;
 
 	@Id
 	@GeneratedValue
@@ -27,18 +26,21 @@ public class Annuncio implements Serializable{
     @JoinColumn(name="proponente", nullable=false)
 	private Utente proponente;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="annuncio")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="post")
 	private List<Thread> risposte = new ArrayList<Thread>();
 
 	@Column
-	private String citt‡Annuncio;
+	private String citt‡Post;
 	
-	@ElementCollection
-	private List <RegioneItaliana> regioniAnnuncio = new ArrayList<RegioneItaliana>();
+	@Column
+	private boolean inVerifica;
 	
+	@Column
+	private boolean postUtentiPlus;
 	
 	
 //	GETTERS & SETTERS*****************
+	
 	
 	
 	
@@ -46,20 +48,28 @@ public class Annuncio implements Serializable{
 		return id;
 	}
 
-	public List<RegioneItaliana> getRegioniAnnuncio() {
-		return regioniAnnuncio;
+	public boolean isPostUtentiPlus() {
+		return postUtentiPlus;
 	}
 
-	public void setRegioniAnnuncio(List<RegioneItaliana> regioniAnnuncio) {
-		this.regioniAnnuncio = regioniAnnuncio;
+	public void setPostUtentiPlus(boolean postUtentiPlus) {
+		this.postUtentiPlus = postUtentiPlus;
 	}
 
-	public String getCitt‡Annuncio() {
-		return citt‡Annuncio;
+	public boolean isInVerifica() {
+		return inVerifica;
 	}
 
-	public void setCitt‡Annuncio(String citt‡Annuncio) {
-		this.citt‡Annuncio = citt‡Annuncio;
+	public void setInVerifica(boolean inVerifica) {
+		this.inVerifica = inVerifica;
+	}
+
+	public String getCitt‡Post() {
+		return citt‡Post;
+	}
+
+	public void setCitt‡Post(String citt‡Post) {
+		this.citt‡Post = citt‡Post;
 	}
 
 	public void setId(int id) {
@@ -80,21 +90,6 @@ public class Annuncio implements Serializable{
 
 	public void setRisposte(List<Thread> risposte) {
 		this.risposte = risposte;
-	}
-	
-	public void setRegIta(List<String> regs){
-		getRegioniAnnuncio().clear();
-		for (String string : regs) {
-			getRegioniAnnuncio().add(RegioneItaliana.valueOf(string));
-		}
-	}
-	
-	public List<String> getRegIta(){
-		List<String> darit = new ArrayList<String>();
-		for (RegioneItaliana reg : getRegioniAnnuncio()) {
-			darit.add(reg.getRegioneitaliana());
-		}
-		return darit;
 	}
 	
 }

@@ -8,9 +8,7 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="cerca.css" library="css" />
-	<h:outputStylesheet name="dataGrid.css" library="css" />
 </h:head>
 <h:body>
 
@@ -71,12 +69,20 @@
 				<f:selectItems value="#{utenteBean.esperienze}" var="esperienza" itemValue="#{esperienza}" itemLabel="#{esperienza.esperienza}" />
             	</h:selectOneMenu>
 
-				
-				<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
+				<h:panelGroup>
+					<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
+					<br></br>
+					<h:outputLabel for="tutteregioni" style="color:white!important; text-shadow:none!important;">OVUNQUe</h:outputLabel>
+					<h:selectBooleanCheckbox id="tutteregioni"  value="#{utenteBean.cercaUtente.tutteRegioni}">
+						<f:ajax listener="#{utenteBean.selezionaTutteRegioni(utenteBean.cercaUtente.tutteRegioni,utenteBean.cercaUtente.regioniitaliane)}" render="regione" />
+					</h:selectBooleanCheckbox>
+				</h:panelGroup>
 				<h:panelGroup styleClass="selection">
+
 					<h:selectManyCheckbox layout="pageDirection" id="regione" value="#{utenteBean.cercaUtente.regIta}" >
-					<f:selectItems value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
+						<f:selectItems value="#{utenteBean.regioni}" var="regione" itemValue="#{regioneitaliana}" itemLabel="#{regioneitaliana.regioneitaliana}" />
 					</h:selectManyCheckbox>
+
 				</h:panelGroup>
 
 				
@@ -113,7 +119,7 @@
 	<p:dataGrid var="utenti" value="#{utenteBean.risultato}" 
       columns="3" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 
-	    <h:panelGrid columns="1" >  
+	    <p:column>  
 	        <h:outputText value="#{utenti.username}" />  
 	      	<h:graphicImage rendered="#{utenti.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenti.username}/#{utenti.avatar}" styleClass="circularutente" style="cursor:pointer;" >
 				<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(utenti.id)}" render=":content :profiloform" />
@@ -121,8 +127,8 @@
 			<h:graphicImage rendered="#{utenti.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" styleClass="circularutente" style="cursor:pointer;">
 				<f:ajax event="click" listener="#{utenteBean.utenteTrovatoId(utenti.id)}" render=":content :profiloform" />
 			</h:graphicImage>
-			<h:graphicImage rendered="#{risultato.online==true}" value="/resources/images/online.svg" styleClass="onlineutente"/>
-	    </h:panelGrid>  
+			<h:graphicImage rendered="#{utenti.online==true and utenteBean.tipoMembershipUtente()!=0}" value="/resources/images/online.svg" styleClass="onlineutentecercato"/>
+	    </p:column> 
 
 	</p:dataGrid>
 </h:body>

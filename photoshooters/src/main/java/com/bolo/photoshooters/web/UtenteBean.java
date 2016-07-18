@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -55,6 +56,7 @@ public class UtenteBean {
 	List<Utente> seguitoDaUtenti = new ArrayList<Utente>();
 	List<Utente> followers = new ArrayList<Utente>();
 	private boolean collaboratoUtente = false;
+	private boolean tutteRegioni = false;
 
 
 	public void cercaUtenti(){		
@@ -258,7 +260,7 @@ public class UtenteBean {
 				for (RegioneItaliana reg : cercaUtente.getRegioniitaliane()) {
 					System.out.println("=======AAA================"+reg.getRegioneitaliana());
 
-					if(u.getRegioniitaliane().contains(RegioneItaliana.valueOf(reg.getRegioneitaliana()))){
+					if(u.getRegioniitaliane().contains(RegioneItaliana.valueOf(reg.getRegioneitaliana())) || u.getRegioniitaliane().size()==0){
 						System.out.println("=================================LUI SI:"+u.getName());
 						trovato = true;
 						break;
@@ -422,15 +424,30 @@ public class UtenteBean {
 	
 	
 	public void aggiornaProfilo() {
+		
 		try {
-			if (region!="" && !controllaRegione(region)) {
-				System.out.println("AGGIUNGI REGIONEEEE=="+region);
-				utente.getRegioniitaliane().add(RegioneItaliana.valueOf(region));
-			}
+//			if (utente.getCittà()!=null) {
+//				region = "";
+//				suggerisciCittà(utente.getCittà());
+//				System.out.println("aggiorna CITTA'===="+utente.getCittà());
+				if (region!="" && !controllaRegione(region)) {
+					System.out.println("AAGIORNAPROFILO REGIONE===="+region);
+					utente.getRegioniitaliane().add(RegioneItaliana.valueOf(region));
+				}
+				if (region=="") {
+					suggerisciCittà(utente.getCittà());
+					if (!controllaRegione(region)) {
+						System.out.println("AAGIORNAPROFILO22222 REGIONE===="+region);
+						utente.getRegioniitaliane().add(RegioneItaliana.valueOf(region));
+
+					}
+				}
+//				}
 			serv.merge(utente);
 			String mm = "PROFILo AGGIORNATo";
 			contentBean.setMessaggio(mm);
-			contentBean.setContent("profilo2.xhtml");	
+			contentBean.setContent("profilo2.xhtml");
+			region = "";
 		} catch (Exception e) {
 			e.printStackTrace();
 			String mm = e.getMessage()+" ERRORe";
@@ -634,7 +651,7 @@ public class UtenteBean {
 				return true;
 			}
 		}
-	return false;
+		return false;
 	}
 	
 	
@@ -645,6 +662,42 @@ public class UtenteBean {
 		return utente.getMemberships().get(utente.getMemberships().size()-1).getTipoMembership().getId();
 	}
 
+	
+	public void selezionaTutteRegioniCercate() {
+		if (cercaUtente.isTutteRegioni()) {
+			cercaUtente.getRegioniitaliane().clear();
+			List<RegioneItaliana> List =
+	                new ArrayList<RegioneItaliana>(EnumSet.allOf(RegioneItaliana.class));
+			cercaUtente.setRegioniitaliane(List);
+		} else {
+			cercaUtente.getRegioniitaliane().clear();
+		}
+	}
+	
+	
+	public void selezionaTutteRegioniProfilo() {
+		if (isTutteRegioni()) {
+			utente.getRegioniitaliane().clear();
+			List<RegioneItaliana> List =
+	                new ArrayList<RegioneItaliana>(EnumSet.allOf(RegioneItaliana.class));
+			utente.setRegioniitaliane(List);
+		} else {
+			utente.getRegioniitaliane().clear();
+		}
+	}
+	
+	
+	public void selezionaTutteRegioni(boolean cerca, List<RegioneItaliana> regions) {
+		if (cerca) {
+			regions.clear();
+			List<RegioneItaliana> List =
+            new ArrayList<RegioneItaliana>(EnumSet.allOf(RegioneItaliana.class));
+//			regions = List;
+			cercaUtente.setRegioniitaliane(List);
+		} else {
+			regions.clear();
+		}
+	}
 	
 	public void cercaCollaborazioniUtente (Utente utente) {
 		System.out.println("cercaCollaborazioniUtenteFoto startttt----");
@@ -737,6 +790,17 @@ public class UtenteBean {
 		return followers;
 	}
 	
+	
+	public void sessioneDistrutta () {
+		contentBean.setContent("homePage.xhtml");
+		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("menuutenteform");
+		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("headerform");
+		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("patternguestform");
+		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
+	}
+	
+	
+	
 	//************GETTERS & SETTERS*******************
 
 
@@ -745,6 +809,22 @@ public class UtenteBean {
 	
 	public List<Utente> getCollaborazioniUtenti() {
 		return collaborazioniUtenti;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public boolean isTutteRegioni() {
+		return tutteRegioni;
+	}
+
+	public void setTutteRegioni(boolean tutteRegioni) {
+		this.tutteRegioni = tutteRegioni;
 	}
 
 	public boolean isCollaboratoUtente() {

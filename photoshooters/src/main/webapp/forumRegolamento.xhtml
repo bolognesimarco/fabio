@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="forum.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+
+	<h:form id="regolamentoforumform">
+		
+		<h:panelGrid>
+			<f:facet name="header">
+	       		<h:outputText styleClass="common" value="&#160;&#160;REGOLAMENTo FORUm"/>
+	       		<br></br>
+	      	</f:facet>
+	
+			
+			<h:panelGrid styleClass="tabellaForum" columns="2" columnClasses="colonnina,post">
+			
+				<f:facet name="header">
+	           		<h:outputText styleClass="headersecondario" value="REGOLAMENTo&#160;-&#160;"/>
+	           		<h:outputText styleClass="headersecondario" value="#{postBean.postUtente.proponente.username}"/>
+	           		<br></br>
+	       		</f:facet>
+	        		
+	        		<h:outputText value="#{postBean.postUtente.risposte.get(postBean.postUtente.risposte.size()-1).messaggi.get(postBean.postUtente.risposte.get(postBean.postUtente.risposte.size()-1).messaggi.size()-1).data}">
+	        			<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+	        		</h:outputText>
+	        		<h:outputText value="#{postBean.postUtente.risposte.get(postBean.postUtente.risposte.size()-1).oggettoThread}"></h:outputText>
+	        		
+	        		<h:outputText></h:outputText>
+	        		<iframe height="300px" width="95%" src="/files/Regolamento_18Ago2015.html"></iframe>
+					
+				<f:facet name="footer">
+
+					<p:commandButton update="rispondipostform:rispostaDetail" oncomplete="PF('rispondipostOP').loadContents()" value="RISPONDi" rendered="#{utenteBean.tipoMembershipUtente()!=0}">
+           			</p:commandButton>			
+
+	       		</f:facet>
+
+			</h:panelGrid>
+			
+		    <p:overlayPanel widgetVar="rispondipostOP" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+		        <h:form id="rispondipostform">
+		        <p:outputPanel id="rispostaDetail" style="text-align:center;">
+		            <h:panelGrid  columns="2" columnClasses="right,left">
+		                <f:facet name="header">
+							<h:outputText value="RISPONDi Al POSt"></h:outputText>
+		                </f:facet>
+
+						<h:outputText value="TITOLo POSt" />
+						<h:outputText value="#{postBean.postUtente.risposte.get(postBean.postUtente.risposte.size()-1).oggettoThread}" />          
+	
+						<h:outputText value="OGGETTo RISPOSTa" />
+						<h:inputText value="#{postBean.messaggioRispostaPost.oggetto}" />          
+		                	                
+		                <h:outputText value="RISPOSTa" />
+		                <h:inputTextarea value="#{postBean.messaggioRispostaPost.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:230px!important;"  size="230" rows="5"/>
+
+						<h:messages id="messages" layout="table"></h:messages>
+		 				<h:commandButton id="rispondipost" value="&#160;INVIa RISPOSTa" action="#{postBean.inviaRispostaPost(postBean.postUtente)}">
+						</h:commandButton>
+		            </h:panelGrid>
+		        </p:outputPanel>
+		        </h:form>
+		    </p:overlayPanel>
+
+
+
+			<h:dataTable id="postsregolamento" var="threadspost" value="#{postBean.postUtente.risposte}">
+				
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;RISPOSTa Al POSTs &#160;"/>
+	           		<br></br>
+	       		</f:facet>
+	       		
+				<h:column id="rispostadiretta" rendered="#{threadspost.mittentePrimo!=postBean.postUtente.proponente}">
+				
+					<h:panelGrid columns="2" border="1">
+						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
+							<h:outputText value="Da:&#160;"></h:outputText>
+							<h:outputText value="#{threadspost.mittentePrimo.username}"></h:outputText>
+							<h:outputText value="A:&#160;"></h:outputText>
+							<h:outputText value="#{threadspost.destinatarioPrimo.username}"></h:outputText>
+		            		<h:outputText styleClass="common" value="DATa:&#160;"/>
+							<h:outputText id="datapubblicazione" value="#{threadspost.messaggi.get(threadspost.messaggi.size()-1).data}">
+								<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+							</h:outputText >
+						</h:panelGrid>
+		        		<h:panelGrid columns="1">
+		        			<h:outputText value="#{threadspost.oggettoThread}"></h:outputText>
+		    	   				<h:panelGroup rendered="true" style="height:15px">
+									<h:outputText styleClass="avvisomess" value="new"></h:outputText>
+		    	   				</h:panelGroup>
+		    	   				<h:panelGroup rendered="false" style="height:15px">
+		    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
+		    	   				</h:panelGroup>
+							<h:inputTextarea value="#{threadspost.messaggi.get(threadspost.messaggi.size()-1).messaggio}" readonly="true" style="width:230px!important;" size="230" rows="5" id="messaggio" />
+						</h:panelGrid>
+						<p:commandButton update="rispondithreadform:rispostaDetail2" oncomplete="PF('rispondisecondariaOP').loadContents()" value="RISPONDi THREAd" rendered="#{utenteBean.tipoMembershipUtente()!=0}">
+	           			</p:commandButton>	
+		        	</h:panelGrid>
+		        	
+				    <p:overlayPanel widgetVar="rispondisecondariaOP" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+				        <h:form id="rispondithreadform">
+				        <p:outputPanel id="rispostaDetail2" style="text-align:center;">
+				            <h:panelGrid  columns="2" columnClasses="right,left">
+				                <f:facet name="header">
+									<h:outputText value="RISPONDi Al THREAd"></h:outputText>
+				                </f:facet>
+		
+								<h:outputText value="TITOLo THREAd" />
+								<h:outputText value="#{threadspost.oggettoThread}" />          
+			
+								<h:outputText value="OGGETTo RISPOSTa" />
+								<h:inputText value="#{postBean.messaggioRispostaThread.oggetto}" />          
+				                	                
+				                <h:outputText value="RISPOSTa" />
+				                <h:inputTextarea value="#{postBean.messaggioRispostaThread.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:230px!important;"  size="230" rows="5"/>
+		
+								<h:messages id="messages2" layout="table"></h:messages>
+								
+								<h:commandButton id="rispondisecondaria" value="&#160;RISPOSTa SECONDARIa" action="#{postBean.inviaRispostaThread(threadspost)}">
+								</h:commandButton>
+				            </h:panelGrid>
+				        </p:outputPanel>
+				        </h:form>
+				    </p:overlayPanel>
+		        	
+		        	
+					<h:dataTable id="postReply" var="messpostreply" value="#{threadspost.messaggi}">
+					
+						<h:column id="rispostesecondarie" rendered="#{messpostreply.id!=threadspost.messaggi.get(threadspost.messaggi.size()-1).id}">
+							<h:panelGrid columns="2" border="1">
+								<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
+									<h:outputText value="Da:&#160;"></h:outputText>
+									<h:outputText value="#{messpostreply.mittente.username}"></h:outputText>
+									<h:outputText value="A:&#160;"></h:outputText>
+									<h:outputText value="#{messpostreply.destinatario.username}"></h:outputText>
+				            		<h:outputText styleClass="common" value="DATa:&#160;"/>
+									<h:outputText id="datapubblicazione" value="#{messpostreply.data}">
+										<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+									</h:outputText >
+								</h:panelGrid>
+				        		<h:panelGrid columns="1">
+				        			<h:outputText value="#{messpostreply.oggetto}"></h:outputText>
+				    	   				<h:panelGroup rendered="true" style="height:15px">
+											<h:outputText styleClass="avvisomess" value="new"></h:outputText>
+				    	   				</h:panelGroup>
+				    	   				<h:panelGroup rendered="false" style="height:15px">
+				    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
+				    	   				</h:panelGroup>
+									<h:inputTextarea value="#{messpostreply.messaggio}" readonly="true" style="width:230px!important;" size="230" rows="5" id="messaggio" />
+								</h:panelGrid>
+				        	</h:panelGrid>
+						</h:column>
+						
+					</h:dataTable>		       		
+				
+				</h:column>
+	
+			</h:dataTable>
+		</h:panelGrid>
+	</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

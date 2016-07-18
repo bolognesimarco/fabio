@@ -13,6 +13,9 @@ import javax.persistence.EntityManager;
 import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Membership;
+import com.bolo.photo.web.entity.Messaggio;
+import com.bolo.photo.web.entity.Post;
+import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
 import com.bolo.photo.web.entity.TipoMembership;
@@ -327,9 +330,9 @@ public class DBInitializer {
 		fotomodella.getTipiUtente().add(hostess);
 		
 		
-//		utenti test
+//		utenti test-------------------------------------------
 		Utente test = new Utente();
-		test.setId(1);
+		test.setId(2);
 		test.setName("fabio");
 		test.setUsername("fb");
 		test.setPassword("fb");
@@ -382,7 +385,7 @@ public class DBInitializer {
 		
 		
 		Utente test2 = new Utente();
-		test2.setId(2);
+		test2.setId(3);
 		test2.setName("fabio2");
 		test2.setUsername("fb2");
 		test2.setPassword("fb2");
@@ -421,15 +424,15 @@ public class DBInitializer {
 		test2MShip.setUtente(test2);
 		List<Membership> listaMShip2 = new ArrayList<Membership>();
 		listaMShip2.add(test2MShip);
-		test.setMemberships(listaMShip2);
+		test2.setMemberships(listaMShip2);
 		
 		
 		Utente test3 = new Utente();
-		test3.setId(3);
+		test3.setId(4);
 		test3.setName("fabio3");
 		test3.setUsername("fb3");
 		test3.setPassword("fb3");
-		test3.setEmail("fbolo3@inwind.it");
+		test3.setEmail("fbolo3----@inwind.it");
 		test3.setTipoUtente(hostess);
 		test3.setActive(true);
 		test3.setAvatar("avatarDefault.svg");
@@ -456,15 +459,15 @@ public class DBInitializer {
 		test3MShip.setUtente(test3);
 		List<Membership> listaMShip3 = new ArrayList<Membership>();
 		listaMShip3.add(test3MShip);
-		test.setMemberships(listaMShip3);
+		test3.setMemberships(listaMShip3);
 		
 		
 		Utente test4 = new Utente();
-		test4.setId(4);
+		test4.setId(5);
 		test4.setName("fabio");
 		test4.setUsername("fb4");
 		test4.setPassword("fb4");
-		test4.setEmail("fbolo4@inwind.it");
+		test4.setEmail("fbolo4-----@inwind.it");
 		test4.setTipoUtente(mua);
 		test4.setActive(true);
 		test4.setAvatar("avatarDefault.svg");
@@ -477,6 +480,7 @@ public class DBInitializer {
 		dataIscr4 = dateformat.parse(strIscr4);
 		test4.setDataIscrizione(dataIscr4);
 		test4.setSesso(Sesso.Società);
+		test4.setOnline(true);
 		
 		Membership test4MShip = new Membership();
 		test4MShip.setTipoMembership(free);
@@ -491,7 +495,63 @@ public class DBInitializer {
 		test4MShip.setUtente(test4);
 		List<Membership> listaMShip4 = new ArrayList<Membership>();
 		listaMShip4.add(test4MShip);
-		test.setMemberships(listaMShip4);
+		test4.setMemberships(listaMShip4);
+		
+		
+		Utente admin = new Utente();
+		admin.setId(1);
+		admin.setName("admin");
+		admin.setUsername("ADMIn");
+		admin.setPassword("f");
+		admin.setEmail("photoshooters.net@gmail.com");
+		admin.setTipoUtente(agenzia);
+		admin.setActive(true);
+		admin.setAvatar("avatarDefault.svg");
+		String strdate5 = "01-06-1999 10:12:32";
+		java.util.Date dataAccesso5;
+		dataAccesso5 = dateformat.parse(strdate5);
+		admin.setDataUltimoAccesso(dataAccesso5);
+		String strIscr5 = "12-11-2011 21:35:42";
+		java.util.Date dataIscr5;
+		dataIscr5 = dateformat.parse(strIscr5);
+		admin.setDataIscrizione(dataIscr5);
+		admin.setSesso(Sesso.Società);
+		admin.setOnline(false);
+		
+		Membership adminMShip = new Membership();
+		adminMShip.setTipoMembership(plus);
+		Date dataInizio5 = new Date();
+		String strdataInizio5 = "04-04-2000 00:45:44";
+		dataInizio5 = dateformat.parse(strdataInizio5);
+		adminMShip.setDataInizio(dataInizio5);
+		Date dataFine5 = new Date();
+		String strdataFine5 = "04-04-2150 00:45:44";
+		dataFine = dateformat.parse(strdataFine5);
+		adminMShip.setDataFine(dataFine5);
+		adminMShip.setUtente(admin);
+		List<Membership> listaMShip5 = new ArrayList<Membership>();
+		listaMShip5.add(adminMShip);
+		admin.setMemberships(listaMShip5);
+		
+		Post regolamentoPost = new Post();
+		regolamentoPost.setId(1);
+		regolamentoPost.setProponente(admin);
+		Thread regolamentoThread = new Thread();
+		regolamentoPost.getRisposte().add(regolamentoThread);
+		regolamentoThread.setOggettoThread("REGOLAMENTo FORUm");
+		regolamentoThread.setMittentePrimo(admin);
+		regolamentoThread.setDestinatarioPrimo(admin);
+		regolamentoThread.setPost(regolamentoPost);
+		Messaggio messRegolamento = new Messaggio();
+		regolamentoThread.getMessaggi().add(messRegolamento);
+		messRegolamento.setThread(regolamentoThread);
+		Date dataRegolamento = new Date();
+		String strdataRegolamento = "04-04-2000 00:45:44";
+		dataFine = dateformat.parse(strdataRegolamento);
+		messRegolamento.setData(dataRegolamento);
+		messRegolamento.setOggetto(regolamentoThread.getOggettoThread());
+		messRegolamento.setMittente(admin);
+		messRegolamento.setDestinatario(admin);
 		
 		
 		serv.deleteAll(Album.class, em);
@@ -501,13 +561,14 @@ public class DBInitializer {
 		serv.deleteAll(TipoUtente.class, em);		
 		serv.deleteAll(Membership.class, em);
 		serv.deleteAll(TipoMembership.class, em);
+		serv.deleteAll(Post.class, em);
 		
+		serv.persist(admin, em);
 		serv.persist(test, em);	
 		serv.persist(test2, em);
 		serv.persist(test3, em);
 		serv.persist(test4, em);
-//		serv.persist(album1, em);
-//		serv.persist(foto1, em);
+		serv.persist(regolamentoPost, em);
 		
 		serv.persist(free, em);
 		serv.persist(plus, em);
@@ -515,6 +576,7 @@ public class DBInitializer {
 		serv.persist(test2MShip, em);
 		serv.persist(test3MShip, em);
 		serv.persist(test4MShip, em);
+		serv.persist(adminMShip, em);
 		
 		serv.persist(hairmodel, em);
 		serv.persist(ritratto, em);

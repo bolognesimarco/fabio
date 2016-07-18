@@ -11,11 +11,13 @@
 </h:head>
 
 <h:body>
-	<h:panelGroup styleClass="homepage" id="pannellohomepagepanel">
+<h:form id="defaulthomeform">
+	<h:panelGroup styleClass="homepage" id="pannellodefaulthomepanel">
 		<h:panelGrid columns="4">
 			<h:panelGrid styleClass="pannello classifiche">
 				<f:facet name="header">
 					<h:outputText value="&#160;CLASSIFICHe"></h:outputText>
+	
 				</f:facet>
 				
 				<h:dataTable value="#{utenteBean.classificaFoto()}" var="fotovotate">
@@ -59,9 +61,11 @@
 				<f:facet name="header">
 					<h:outputText value="&#160;BANNEr"></h:outputText>
 				</f:facet>
+				<h:commandButton></h:commandButton>
 			</h:panelGrid>
 		</h:panelGrid>
 		
 	</h:panelGroup>
+</h:form>
 </h:body>
 </html>

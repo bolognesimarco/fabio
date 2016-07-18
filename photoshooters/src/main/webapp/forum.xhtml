@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="cerca.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+	<h:panelGrid>
+		<f:facet name="header">
+       		<h:outputText styleClass="common" value="&#160;&#160;FORUm"/>
+       		<br></br>
+      	</f:facet>
+
+		<h:form id="forumform">
+		
+		<h:panelGrid >
+		
+			<f:facet name="header">
+           		<h:outputText styleClass="headersecondario" value="REGOLAMENTo"/>
+           		<br></br>
+       		</f:facet>
+        		
+				<h:panelGrid styleClass="tabellaForum" border="1" >
+					<h:panelGroup>
+		        		<h:commandButton value="REGOLAMENTo FORUm" action="#{postBean.regolamentoForum()}" />
+		        			<br style="height:20px"></br>
+		        		<h:commandButton value="REGOLAMENTo SITo" action="#{postBean.regolamentoForum()}" />
+							<br style="height:20px"></br>
+					</h:panelGroup>
+				</h:panelGrid>	
+				
+			<f:facet name="footer">
+
+       		</f:facet>
+
+		</h:panelGrid>
+
+		<h:panelGrid >
+		
+			<f:facet name="header">
+           		<h:outputText styleClass="headersecondario" value="UTENTi"/>
+           		<br></br>
+       		</f:facet>
+        		
+				<h:panelGrid   styleClass="tabellaForum" border="1">
+					<h:panelGroup>
+		        		<h:commandButton value="UTENTi FREe" action="#{postBean.utentiFreeForum()}" />
+		        			<br style="height:20px"></br>
+		        		<h:commandButton value="UTENTi PLUs" action="#{postBean.utentiPlusForum()}" />
+	        				<br style="height:20px"></br>
+	        		</h:panelGroup>
+				</h:panelGrid>					  			
+			
+			<f:facet name="footer">
+
+       		</f:facet>
+
+		</h:panelGrid>
+
+		<h:panelGrid >
+		
+			<f:facet name="header">
+           		<h:outputText styleClass="headersecondario" value="FEEDBACk"/>
+           		<br></br>
+       		</f:facet>
+        		
+				<h:panelGrid   styleClass="tabellaForum" border="1">
+	        		<h:panelGroup>
+		        		<h:commandButton value="FEEDBACk UTENTi FREe" action="#{postBean.utentiFreeForum()}"/>
+		        			<br style="height:20px"></br>
+		        		<h:commandButton  value="FEEDBACk UTENTi PLUs" action="#{postBean.utentiPlusForum()}"/>
+	        				<br style="height:20px"></br>
+	        		</h:panelGroup>
+				</h:panelGrid>					  			
+			
+			<f:facet name="footer">
+
+       		</f:facet>
+
+		</h:panelGrid>
+
+		<h:panelGrid >
+		
+			<f:facet name="header">
+           		<h:outputText styleClass="headersecondario" value="LAVORo"/>
+           		<br></br>
+       		</f:facet>
+        		
+				<h:panelGrid   styleClass="tabellaForum" border="1">
+	        		<h:panelGroup>
+		        		<h:commandButton value="RICHIESTa &amp; OFFERTa" action="#{postBean.utentiFreeForum()}"/>
+		        			<br></br>
+		          		<h:commandButton value="CASTINg &amp; AGENZIe" action="#{postBean.utentiPlusForum()}"/>
+	          				<br style="height:20px"></br>
+	          		</h:panelGroup>
+				</h:panelGrid>					  			
+			
+			<f:facet name="footer">
+
+       		</f:facet>
+
+		</h:panelGrid>
+
+		<h:panelGrid  >
+		
+			<f:facet name="header">
+           		<h:outputText styleClass="headersecondario" value="FOTOGRAFIa"/>
+           		<br></br>
+       		</f:facet>
+        		
+				<h:panelGrid  styleClass="tabellaForum" border="1">
+	        		<h:panelGroup>
+		        		<h:commandButton value="ATTREZZATURe &amp; TECNICHe" action="#{postBean.utentiFreeForum()}" />
+		        			 <br style="line-height:20px"></br>
+		        		<h:commandButton value="CONSIGLi &amp; TRUCCHi" action="#{postBean.utentiPlusForum()}"/>
+		        			 <br style="height:20px"></br>
+	        		</h:panelGroup>
+				</h:panelGrid>					  			
+			
+			<f:facet name="footer">
+
+       		</f:facet>
+
+		</h:panelGrid>
+
+		<h:panelGrid  >
+		
+			<f:facet name="header">
+           		<h:outputText styleClass="headersecondario" value="MODa"/>
+           		<br></br>
+       		</f:facet>
+        		
+				<h:panelGrid styleClass="tabellaForum" border="1">
+	        		<h:panelGroup>
+		        		<h:commandButton value="ULTIMi TRENd" action="#{postBean.utentiFreeForum()}" />
+		        			<br style="height:20px"></br>
+		        		<h:commandButton value="STILISTi &amp; SFILATe" action="#{postBean.utentiPlusForum()}" />
+	        				<br style="height:20px"></br>
+	        		</h:panelGroup>
+				</h:panelGrid>					  			
+			
+			<f:facet name="footer">
+
+       		</f:facet>
+
+		</h:panelGrid>
+
+
+		</h:form>
+	</h:panelGrid>
+	</h:panelGroup>
+	
+</h:body>
+</html>

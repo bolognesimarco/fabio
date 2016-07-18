@@ -25,7 +25,8 @@ public class CercaUtenteVO {
 	private Sesso sesso;
 	private Utente utente;
 	private boolean online;
-	private int lastOnlineIscritto = 1; 
+	private int lastOnlineIscritto = 1;
+	private boolean tutteRegioni = false;
 	
 	public int getEtà() {
 		return età;
@@ -133,5 +134,12 @@ public class CercaUtenteVO {
 	public void setDataNascita(Date dataNascita) {
 		this.dataNascita = dataNascita;
 	}
+	public boolean isTutteRegioni() {
+		return tutteRegioni;
+	}
+	public void setTutteRegioni(boolean tutteRegioni) {
+		this.tutteRegioni = tutteRegioni;
+	}
+	
 	
 }

@@ -8,9 +8,7 @@
     xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<h:outputStylesheet name="common.css" library="css" />
 	<h:outputStylesheet name="buttons.css" library="css" />
-	<h:outputStylesheet name="datagrid.css" library="css" />
 </h:head>
 
 <h:body>
@@ -61,7 +59,8 @@
 							<f:facet name="header">
 			            		<h:outputText value="PROFILO PHOTOSHOOTEr - #{utenteBean.cercaUtente.utente.username}&#160;&#160;"/>
 			        		    <h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{utenteBean.cercaUtente.utente.avatar}" styleClass="circularutente"></h:graphicImage>
-			            		<h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>	
+			            		<h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>
+			            		<h:graphicImage rendered="#{utenteBean.cercaUtente.utente.online==true and utenteBean.tipoMembershipUtente()!=0}" value="/resources/images/online.svg" styleClass="onlineprofiloutente"/>	
 			        		</f:facet>
 			        		
 						<h:panelGrid  columns="2" columnClasses="rightprofilo,leftprofilo">
