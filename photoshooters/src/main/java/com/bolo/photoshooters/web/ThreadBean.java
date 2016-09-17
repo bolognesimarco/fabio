@@ -198,7 +198,7 @@ public class ThreadBean {
 	public void cercaThreadsInviatiUtente (int idUtente) {
 		EntityManager em = EMF.createEntityManager();
 		threadsInviatiUtente = em
-		.createQuery("from Thread t where t.mittentePrimo.id =:mitt and t.cancellatoThreadMittente = false and t.annuncio is null")
+		.createQuery("from Thread t where t.mittentePrimo.id =:mitt and t.cancellatoThreadMittente = false and t.annuncio is null and t.post is null")
 		.setParameter("mitt", idUtente)
 		.getResultList();
 		for (Thread t : threadsRicevutiUtente) {
@@ -214,7 +214,7 @@ public class ThreadBean {
 	public void cercaThreadsRicevutiUtente (int idUtente) {
 		EntityManager em = EMF.createEntityManager();
 		threadsRicevutiUtente = em
-		.createQuery("from Thread t where t.destinatarioPrimo.id =:mitt and t.cancellatoThreadDestinatario = false and t.annuncio is null")
+		.createQuery("from Thread t where t.destinatarioPrimo.id =:mitt and t.cancellatoThreadDestinatario = false and t.annuncio is null and t.post is null")
 		.setParameter("mitt", idUtente)
 		.getResultList();	
 		for (Thread t : threadsRicevutiUtente) {

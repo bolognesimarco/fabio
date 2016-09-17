@@ -150,6 +150,7 @@ public class InputBean {
 //	mi serve il vecchio titolo per rinominare la cartella con il nuovo titolo
 	public void titoloAlbumDaModificareSet (String tit){
 	setTitoloAlbumDaModificare(tit);
+	System.out.println("albumvisualizzato ID="+albumVisualizzato.getId());
 	}
 	
 	

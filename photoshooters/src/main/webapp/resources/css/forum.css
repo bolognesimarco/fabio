@@ -17,3 +17,19 @@
 	margin-bottom: 0px!important;
 	font-size: 10px;
 }
+
+.overlaypanel {
+	width: 600px!important;
+	border: 1 px;
+	border-color: #414042;
+	background-color: rgba(204, 204, 204, 0.9)!important; 
+/* 	background-color: #ff8000!important; */
+}
+
+
+/* thead overlaypanel risposta secondaria */
+.outputpanel th{
+	border: none!important;
+	border-width: 0px!important;
+	text-align: left!important;
+}

@@ -22,7 +22,6 @@
             		<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>	
         	</f:facet>
         	
-<!-- 			<h:form id="albumsform" enctype="multipart/form-data"> -->
 						
 				<p:dataGrid  value="#{utenteBean.utente.pubblicati}" var="result" columns="4" rows="3" paginator="true"  rowsPerPageTemplate="3,6,9">
 					
@@ -66,7 +65,7 @@
 			                <f:facet name="header">
 			                   	<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.utente.username}/#{inputBean.albumVisualizzato.titolo}/#{inputBean.albumVisualizzato.copertinaAlbum.nomeFileFoto}"
 								styleClass="circularutente"></h:graphicImage>
-								<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum==null}"	value="/resources/images/avatarDefault.svg"
+								<h:graphicImage rendered="#{inputBean.albumVisualizzato.copertinaAlbum==null}"	value="/resources/images/album-copertina.svg"
 								height="51" width="50"></h:graphicImage>
 			                </f:facet>
 			 
@@ -108,6 +107,7 @@
 				</h:panelGrid>
 			</h:form>
 		</h:panelGrid>
+		
 	</h:panelGroup>
 
 </h:body>

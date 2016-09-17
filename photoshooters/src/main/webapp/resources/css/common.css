@@ -90,6 +90,7 @@ html, body{
 	width: 33%;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 /* 	border: 1px; */
+	border: none!important;
 	margin-bottom: 0px!important;
 	font-size: 12px;
 }
@@ -100,15 +101,17 @@ html, body{
 	width: 33%;
 	font-size: 12px;
 /* 	border: 1px solid black; */
+	border: none!important;
 /* 	text-shadow: 0.5px 0.5px 0.5px #414042; */
 }
 
 .centercol{
 	text-align: left;
 	color: white;
-	width: 33%;
+	width: 34%;
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 	font-size: 12px;
+	border: none!important;
 /* 	border: 1px; */
 	/* 	margin-top: 0px; */
 }
@@ -181,6 +184,7 @@ html, body{
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 	margin-top: 0px!important;
 	font-size: 12px;
+	border: none!important;
 }
 
 .leftcolonna{
@@ -191,6 +195,7 @@ html, body{
 	text-shadow: 0.5px 0.5px 0.5px #414042;
 	margin-top: 0px!important;
 	font-size: 12px;
+	border: none!important;
 }
 
 /* sigola colonna */

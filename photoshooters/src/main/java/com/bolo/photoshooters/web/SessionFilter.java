@@ -27,7 +27,7 @@ public class SessionFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-		System.out.println("SESSION FILTER-SESSIONE ATTIVA:"+(request.getSession(false)==null?"NO":"SI"));
+//		System.out.println("SESSION FILTER-SESSIONE ATTIVA:"+(request.getSession(false)==null?"NO":"SI"));
         if(request.getSession(false)==null){
         	HttpSession sess = request.getSession();
 //        	

@@ -388,7 +388,7 @@ public class DBInitializer {
 		test2.setId(3);
 		test2.setName("fabio2");
 		test2.setUsername("fb2");
-		test2.setPassword("fb2");
+		test2.setPassword("fb");
 		test2.setEmail("fbolo@inwind.it");
 		test2.setTipoUtente(modello);
 		test2.setActive(true);
@@ -431,7 +431,7 @@ public class DBInitializer {
 		test3.setId(4);
 		test3.setName("fabio3");
 		test3.setUsername("fb3");
-		test3.setPassword("fb3");
+		test3.setPassword("fb");
 		test3.setEmail("fbolo3----@inwind.it");
 		test3.setTipoUtente(hostess);
 		test3.setActive(true);
@@ -466,7 +466,7 @@ public class DBInitializer {
 		test4.setId(5);
 		test4.setName("fabio");
 		test4.setUsername("fb4");
-		test4.setPassword("fb4");
+		test4.setPassword("fb");
 		test4.setEmail("fbolo4-----@inwind.it");
 		test4.setTipoUtente(mua);
 		test4.setActive(true);
@@ -502,7 +502,7 @@ public class DBInitializer {
 		admin.setId(1);
 		admin.setName("admin");
 		admin.setUsername("ADMIn");
-		admin.setPassword("f");
+		admin.setPassword("fb");
 		admin.setEmail("photoshooters.net@gmail.com");
 		admin.setTipoUtente(agenzia);
 		admin.setActive(true);
