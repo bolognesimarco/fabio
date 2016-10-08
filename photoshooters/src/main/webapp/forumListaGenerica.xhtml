@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="forum.css" library="css" />
+	<h:outputStylesheet name="dataTable.css" library="css" />
+</h:head>
+<h:body>
+
+
+	<h:panelGroup styleClass="pannello cerca">
+
+	<h:form id="forumlistagenericaform">
+		
+		<h:panelGrid>
+			<f:facet name="header">
+	       		<h:outputText styleClass="common" value="&#160;&#160;#{postBean.titoloListaPostsGenerica}"/>
+	       		<br></br>
+	      	</f:facet>
+	
+			<p:dataTable id="listapostsgenerici" var="posts" value="#{postBean.listaPostsGenerica}" rendered="true">
+				<p:column>
+					<h:panelGrid columns="1" border="1" style="background-color: rgb(120, 120, 120)!important;">
+						<f:facet name="header">
+				       		<h:commandButton styleClass="common" value="#{posts.risposte.get(posts.risposte.size()-1).oggettoThread}" action="#{postBean.visualizzaPost(posts)}"/>
+				       		<br></br>
+				      	</f:facet>
+						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
+							<h:outputText value="ULTIMo THREAd AGGIORNATo"></h:outputText>
+		        			<h:commandButton value="#{posts.risposte.get(0).oggettoThread}" action="#{postBean.rispostePost(posts)}" />
+		            		
+		            		<h:outputText value="ULTIMo AGGIORNAMENTo THREAd Di:"></h:outputText>
+		        			<h:outputText value="#{posts.risposte.get(0).messaggi.get(0).mittente.username}"></h:outputText>
+	            		
+		            		<h:outputText styleClass="common" value="DATa:&#160;"/>
+							<h:outputText value="#{posts.risposte.get(0).messaggi.get(0).data}">
+			        			<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+			        		</h:outputText>
+						</h:panelGrid>
+						<f:facet name="footer">
+		        			<h:outputText value="NUMERo THREAds: #{posts.risposte.size()}"></h:outputText>
+	           			</f:facet>
+		        	</h:panelGrid>	        			        		        	
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+			
+	</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

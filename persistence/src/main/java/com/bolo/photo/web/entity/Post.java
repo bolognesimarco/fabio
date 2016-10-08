@@ -38,6 +38,15 @@ public class Post implements Serializable{
 	@Column
 	private boolean postUtentiPlus;
 	
+	@Column
+	private boolean postUtentiFree;
+	
+	@Column
+	private boolean presentazioneUtentiFree;
+	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="superpost", nullable=true, updatable=false)
+	private SuperPost superpost;
 	
 //	GETTERS & SETTERS*****************
 	
@@ -91,5 +100,31 @@ public class Post implements Serializable{
 	public void setRisposte(List<Thread> risposte) {
 		this.risposte = risposte;
 	}
+
+	public boolean isPostUtentiFree() {
+		return postUtentiFree;
+	}
+
+	public void setPostUtentiFree(boolean postUtentiFree) {
+		this.postUtentiFree = postUtentiFree;
+	}
+
+	public boolean isPresentazioneUtentiFree() {
+		return presentazioneUtentiFree;
+	}
+
+	public void setPresentazioneUtentiFree(boolean presentazioneUtentiFree) {
+		this.presentazioneUtentiFree = presentazioneUtentiFree;
+	}
+
+	public SuperPost getSuperpost() {
+		return superpost;
+	}
+
+	public void setSuperpost(SuperPost superpost) {
+		this.superpost = superpost;
+	}
+	
+	
 	
 }

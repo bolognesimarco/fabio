@@ -32,35 +32,35 @@
 			<h:form  id="headerform">				
 		    	<h:panelGroup id="loginpanel">
 				<h:commandButton value="#{utenteBean.utente.username}" styleClass="menubuttonuser" rendered="#{utenteBean.utente!=null}">
-					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content" />
+					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :headerform" />
 				</h:commandButton>
 				
-				<h:commandButton value="HOMe" styleClass="menubutton">
-					<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" />
+				<h:commandButton value="HOMe" style="#{menuBean.menuStyle7}" styleClass="menubutton">
+					<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content :headerform :menuutenteform" />
 				</h:commandButton>
 				
-	    	   	<h:commandButton value="PHOTOSHOOTERs" styleClass="menubutton">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(6)}" render=":content :cercaform" />
+	    	   	<h:commandButton value="PHOTOSHOOTERs" style="#{menuBean.menuStyle6}" styleClass="menubutton">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(6)}" render=":content :cercaform :headerform :menuutenteform" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="LAVORo|EVENTi" styleClass="menubutton">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(5)}" render=":content" />
+	    	   	<h:commandButton value="LAVORo|EVENTi" style="#{menuBean.menuStyle5}" styleClass="menubutton">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(5)}" render=":content :headerform :menuutenteform" />
 	    	   	</h:commandButton>
 
-	    	   	<h:commandButton value="FORUm" styleClass="menubutton">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(4)}" render=":content :mapsform" />
+	    	   	<h:commandButton value="FORUm" style="#{menuBean.menuStyle4}" styleClass="menubutton">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(4)}" render=":content :headerform :menuutenteform" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="SITe" styleClass="menubutton">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(3)}" render=":content" />
+	    	   	<h:commandButton value="SITe" style="#{menuBean.menuStyle3}" styleClass="menubutton">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(3)}" render=":content :headerform :menuutenteform" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="REGISTRATi" styleClass="menubutton"  rendered="#{utenteBean.utente==null}">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(1)}" render=":content :registratiform" />
+	    	   	<h:commandButton value="REGISTRATi" style="#{menuBean.menuStyle1}" styleClass="menubutton"  rendered="#{utenteBean.utente==null}">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(1)}" render=":content :registratiform :headerform" />
 	    	   	</h:commandButton>
 
-	    	   	<h:commandButton value="LOGIn" styleClass="menubutton" rendered="#{utenteBean.utente==null}">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(2)}" render=":content :loginform" />
+	    	   	<h:commandButton value="LOGIn" style="#{menuBean.menuStyle2}" styleClass="menubutton" rendered="#{utenteBean.utente==null}">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(2)}" render=":content :loginform :headerform" />
 	    	   	</h:commandButton>
 				</h:panelGroup>
 			</h:form>
@@ -76,16 +76,16 @@
 				<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" styleClass="circular"/>
 				<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" styleClass="circular"/>
 				<h:graphicImage rendered="#{utenteBean.utente.online==true}" value="/resources/images/online.svg" styleClass="online"/>
-				<h:commandButton value="PROFILo" styleClass="menubuttonred">
-					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform" />
+				<h:commandButton value="PROFILo" style="#{menuBean.menuStyle8}" styleClass="menubuttonred">
+					<f:ajax event="click" listener="#{menuBean.menuClick(8)}" render=":content :profiloform :headerform :menuutenteform" />
 				</h:commandButton>
 
-	    	   	<h:commandButton value="ALBUMs" styleClass="menubuttonred">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(9)}" render=":content :nuovoalbumform :albumsform :modalbumform" />
+	    	   	<h:commandButton value="ALBUMs" style="#{menuBean.menuStyle9}" styleClass="menubuttonred">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(9)}" render=":content :nuovoalbumform :albumsform :modalbumform :headerform :menuutenteform" />
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="MESSAGGi" styleClass="menubuttonred">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(10)}" render=":content :threadsmessaggiform" />
+	    	   	<h:commandButton value="MESSAGGi" style="#{menuBean.menuStyle10}" styleClass="menubuttonred">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(10)}" render=":content :threadsmessaggiform :headerform :menuutenteform" />
     					<h:panelGroup id="numeromessaggi">
 	    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
 	    	   					<h:outputText rendered="#{threadBean.nuoviMessaggi!=0}" value="#{threadBean.nuoviMessaggi}"></h:outputText>
@@ -93,12 +93,12 @@
 	    	   			</h:panelGroup>
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<p:commandButton value="CHAt" styleClass="menubuttonred" actionListener="#{menuBean.menuClick(11)}" update=":content">
+	    	   	<p:commandButton value="CHAt" style="#{menuBean.menuStyle11}" styleClass="menubuttonred" actionListener="#{menuBean.menuClick(11)}" update=":content :headerform :menuutenteform">
 	    			<p:confirm header="CONFERMa" message="confermi il CHAT?" icon="ui-icon-alert" />
 	    	   	</p:commandButton>
 	    	   	
-	    	   	<h:commandButton value="ANNUNCi" styleClass="menubuttonred">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(12)}" render=":content :annunciform :annuncirispostiform" />
+	    	   	<h:commandButton value="ANNUNCi" style="#{menuBean.menuStyle12}" styleClass="menubuttonred">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(12)}" render=":content :annunciform :annuncirispostiform :headerform :menuutenteform" />
     					<h:panelGroup id="numeroannunci">
 	    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
 	    	   					<h:outputText rendered="#{annuncioBean.nuoviMessaggiAnnunci!=0}" value="#{annuncioBean.nuoviMessaggiAnnunci}"></h:outputText>
@@ -106,11 +106,11 @@
 	    	   			</h:panelGroup> 
 	    	  	</h:commandButton>
 	    	   	
-	    	   	<h:commandButton value="CREDITi" styleClass="menubuttonred">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(13)}" render=":content :registratiform" />
+	    	   	<h:commandButton value="CREDITi" style="#{menuBean.menuStyle13}" styleClass="menubuttonred">
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(13)}" render=":content :registratiform :headerform :menuutenteform" />
 	    	   	</h:commandButton>  	
 	    	   	
-	    	   	<p:commandButton value="LOGOUt" styleClass="menubuttonred" process="@all" >
+	    	   	<p:commandButton value="LOGOUt" style="#{menuBean.menuStyle14}" styleClass="menubuttonred" process="@all" >
         			<f:ajax event="click" listener="#{menuBean.menuClick(14)}" render="content :headerform :patternguestform :menuutenteform :defaulthomeform" />
         			<p:confirm header="CONFERMa" message="confermi il LOGOUT?" icon="ui-icon-alert" />
     			</p:commandButton>

@@ -7,16 +7,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.bolo.photo.web.entity.Annuncio;
 import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.Post;
+import com.bolo.photo.web.entity.SuperPost;
 import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
@@ -24,6 +29,7 @@ import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.util.AnnunciComparator;
 import com.bolo.photoshooters.util.IndirectListSorter;
 import com.bolo.photoshooters.util.MessaggiComparator;
+import com.bolo.photoshooters.util.PostsComparator;
 
 @ManagedBean
 @SessionScoped
@@ -45,18 +51,282 @@ public class PostBean {
 //	List<Thread> threadsAnnunciConNuoviMessaggi = new ArrayList<Thread>();
 //	private int nuoviMessaggiAnnunci = 0;
 	
+	
 	private ServiziComuni serv = new ServiziComuniImpl();	
 	private Post postUtente = new Post();
 	List<Thread> threadsRispostePost = new ArrayList<Thread>();
-	private Post rispostaPost = new Post();
-	private Messaggio messaggioRispostaPost = new Messaggio();
-	private Messaggio messaggioRispostaThread = new Messaggio();
-	private Messaggio messaggioRispostaThr = new Messaggio();
+
+
 	Thread threadInRisposta = new Thread();
+//	int firstRow = 0;
+	private List<Post> listaPostsGenerica = new ArrayList<Post>();
+	private String titoloListaPostsGenerica = new String();
+
+	private Thread threadGenerico = new Thread();
+	private Messaggio messaggioInRisposta = new Messaggio();
 
 
 	
+	///
+	private List<SuperPost> listaSuperPostsGenerica = new ArrayList<SuperPost>();
+	private String titoloListaSuperPostsGenerica = new String();
+	private SuperPost superPostGenerico = new SuperPost();
+	private Messaggio messaggioNuovoPost = new Messaggio();
+	private Post postGenerico = new Post();
+	private Messaggio messaggioNuovoThread = new Messaggio();
+	private Messaggio messaggioRispostaThread = new Messaggio();	
+	private Messaggio messaggioRispostaPost = new Messaggio();
+	private Messaggio messaggioRispostaThr = new Messaggio();
 	
+	
+	//ListaSuperPost
+	public void caricaListaSuperPost (int tipoLista) {
+		int idIniz = 0;
+		int idFinal = 0;
+		titoloListaSuperPostsGenerica ="";
+		switch (tipoLista) {
+		case 1://FORUM UTENTI FREE
+			idIniz = 1;
+			idFinal = 20;
+			titoloListaSuperPostsGenerica ="UTENTi FREe";
+			break;
+		case 2://FORUM UTENTI PLUS
+			idIniz = 21;
+			idFinal = 40;
+			titoloListaSuperPostsGenerica ="UTENTi PLUs";
+			break;
+		case 3://FEEDBACK UTENTI FREE
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		case 4://FEEDBACK UTENTI PLUS
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		case 5://LAVORI - RICHIESTA & OFFERTA	
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		case 6://LAVORI - CASTING & AGENZIE
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		case 7://FOTOGRAFIA - ATTREZZATURE & TECNICHE
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		case 8://FOTOGRAFIA - CONSIGLI & TRUCCHI
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		case 9://MODA - ULTIMI TREND
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		case 10://MODA - STILISTI & SFILATE
+			idIniz = 0;
+			idFinal = 0;
+			titoloListaSuperPostsGenerica ="";
+			break;
+		default:
+			break;
+		}
+		String query = "from SuperPost p where p.id between "+idIniz+" and "+idFinal;
+		EntityManager em = EMF.createEntityManager();
+		List<SuperPost> superposts = em
+		.createQuery(query)
+		.getResultList();
+		if(superposts!=null && superposts.size()>0){
+			listaSuperPostsGenerica = superposts;
+			
+			for (SuperPost sp : listaSuperPostsGenerica) {		
+//				System.out.println("inizio ordinamentoooo - SP id= "+sp.getId());
+				for (Post p : sp.getPosts()) {
+//					System.out.println("inizio ordinamentoooo - P id= "+p.getId());
+					for (Thread t : p.getRisposte()) {
+//						System.out.println("inizio ordinamentoooo - TD id= "+t.getId());
+						ordinaMessaggiPerData(t.getMessaggi());
+					}
+					ordinaThreadPerData(p.getRisposte());
+				}
+				ordinaPostPerData(sp.getPosts());
+			}
+			System.out.println("dopo ordinamentoooo");
+			contentBean.setContent("forumListaGenerica2.xhtml");
+		}
+	}
+
+	
+	
+	//SuperPost=Lista Posts
+	public void visualizzaSuperPost(SuperPost sp) {
+		superPostGenerico = sp;
+		for (Post p : superPostGenerico.getPosts()) {
+//			System.out.println("inizio ordinamentoooo - P id= "+p.getId());
+			for (Thread t : p.getRisposte()) {
+//				System.out.println("inizio ordinamentoooo - TD id= "+t.getId());
+				ordinaMessaggiPerData(t.getMessaggi());
+			}
+			ordinaThreadPerData(p.getRisposte());
+		}
+		ordinaPostPerData(superPostGenerico.getPosts());
+		contentBean.setContent("forumSuperPostGenerico.xhtml");
+		System.out.println("sp.posts(0).id=== "+superPostGenerico.getPosts().get(0).getId());
+	}
+	
+	
+	public void nuovoPost (SuperPost sp) {
+		Post p = new Post();
+		Thread t = new Thread();
+		Messaggio m = new Messaggio();
+		m.setMittente(utenteBean.getUtente());
+		m.setDestinatario(utenteBean.getUtente());
+		m.setOggetto(messaggioNuovoPost.getOggetto());
+		m.setMessaggio(messaggioNuovoPost.getMessaggio());
+		Date d = new Date();
+		m.setData(d);
+		m.setThread(t);
+		t.getMessaggi().add(m);
+		t.setOggettoThread(messaggioNuovoPost.getOggetto());
+		t.setMittentePrimo(utenteBean.getUtente());
+		t.setDestinatarioPrimo(utenteBean.getUtente());
+		t.setPost(p);
+		p.getRisposte().add(t);
+		p.setProponente(utenteBean.getUtente());
+		p.setSuperpost(sp);
+		sp.getPosts().add(p);
+		try {
+			serv.merge(sp);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		visualizzaSuperPost(sp);
+	}
+	
+	
+	public void visualizzaPost (Post p) {
+		System.out.println("visualizzaPost START");
+		for (Thread t : p.getRisposte()) {
+			ordinaIversamenteMessaggiPerData(t.getMessaggi());
+		}
+		ordinaInversamenteThreadPerData(p.getRisposte());
+		postGenerico = p;
+		contentBean.setContent("forumPostGenerico2.xhtml");
+	}
+	
+
+	public void inviaRispostaPost (Post p) {
+		Messaggio mess = new Messaggio();
+		Thread thr = new Thread();
+		mess.setMittente(utenteBean.getUtente());
+		mess.setDestinatario(p.getProponente());
+		mess.setThread(thr);
+		mess.setOggetto("Re: "+p.getRisposte().get(p.getRisposte().size()-1).getOggettoThread());
+		mess.setMessaggio(messaggioRispostaPost.getMessaggio());
+		Date ora = new Date();
+		mess.setData(ora);
+		thr.getMessaggi().add(mess);
+		thr.setDestinatarioPrimo(p.getProponente());
+		thr.setMittentePrimo(utenteBean.getUtente());
+		thr.setOggettoThread("Re: "+p.getRisposte().get(p.getRisposte().size()-1).getOggettoThread());
+		thr.setPost(p);
+		p.getRisposte().add(thr);
+		try {
+			serv.merge(p);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		messaggioRispostaPost = new Messaggio();
+		contentBean.setMessaggio("risposta al post inviata!");
+		visualizzaPost(p);
+	}
+	
+	
+	public void inviaRispostaThread (Thread t) {
+		System.out.println("risposta thread inviata START");
+		Messaggio mess = new Messaggio();
+		mess.setMittente(utenteBean.getUtente());
+		mess.setDestinatario(t.getMittentePrimo());
+		mess.setThread(t);
+		mess.setOggetto("Re: "+t.getMessaggi().get(t.getMessaggi().size()-1).getOggetto());
+		mess.setMessaggio(messaggioRispostaThr.getMessaggio());
+		Date ora = new Date();
+		mess.setData(ora);
+		t.getMessaggi().add(mess);
+		try {
+			serv.merge(t);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		contentBean.setMessaggio("risposta secondaria inviata!");
+		contentBean.setContent("forumPostGenerico2.xhtml");
+	}
+	
+	private List<Thread> listThr;
+	@PostConstruct
+	public void init() {
+		System.out.println("postConstruct"+postGenerico.getRisposte().size());
+		listThr = new ArrayList<Thread>();
+		listThr = postGenerico.getRisposte();
+		}
+	
+	public void threadInRispostaSet(Thread thr) {
+
+//		Thread thr = null;
+//
+//	    UIComponent tmpComponent = ev.getComponent();
+//
+//	    while (null != tmpComponent && !(tmpComponent instanceof UIData)) {
+//	      tmpComponent = tmpComponent.getParent();
+//	    }
+//
+//	    if (tmpComponent != null && (tmpComponent instanceof UIData)) {
+//	      Object tmpRowData = ((UIData) tmpComponent).getRowData();
+//	      if (tmpRowData instanceof Thread) {
+//	    	  thr = (Thread) tmpRowData;
+//
+//	    //TODO Implementation of your method
+//
+//	      }
+//	    }
+//	    
+//	    
+////		Thread thr = null
+		System.out.println("GETID: " + thr.getId());
+		threadInRisposta = thr;
+		messaggioRispostaThr.setMessaggio("CITANDo P|S: "+thr.getMessaggi().get(0).getMittente().getUsername()+" - MESSAGGIo: "+thr.getMessaggi().get(0).getMessaggio()+"\n");
+	}
+	
+	
+	public void threadInRispostaSet2(Messaggio mess) {
+		messaggioRispostaThread = mess;
+		messaggioRispostaThr.setMessaggio("CITANDo P|S: "+mess.getMittente().getUsername()+" - MESSAGGIo: "+mess.getMessaggio()+"\n");
+	}	
+	
+	
+	public int numeroMessaggiPost(Post p) {
+		int numeroMessaggi = 0;
+		for (Thread t : p.getRisposte()) {
+			numeroMessaggi += t.getMessaggi().size();
+		}
+		return numeroMessaggi;
+	}
+	
+	
+	
+	
+	/////////////////sistemare x regolamento e affini...con ordinamento
+
 	public void regolamentoForum() {
 		EntityManager em = EMF.createEntityManager();
 		List<Post> posts = em
@@ -67,38 +337,20 @@ public class PostBean {
 	}
 	
 	
-	public void utentiFreeForum() {
-		
-	}
-	
-	
-	public void utentiPlusForum() {
-		
-	}
-	
-	
-	public void visualizzaPost(Post p) {
-		postUtente = p;
-		contentBean.setContent("postUtente.xhtml");
-	}
-
-	
-	public void inviaRispostaPost (Post p) {
-
+	public void inviaRispostaPostRegolamento (Post p) {
 		Messaggio mess = new Messaggio();
 		Thread thr = new Thread();
 		mess.setMittente(utenteBean.getUtente());
-//		mess.setDestinatario(p.getRisposte().get(0).getMittentePrimo());
 		mess.setDestinatario(p.getProponente());
 		mess.setThread(thr);
-		mess.setOggetto("Re: "+p.getRisposte().get(0).getOggettoThread());
+		mess.setOggetto("Re: "+p.getRisposte().get(p.getRisposte().size()-1).getOggettoThread());
 		mess.setMessaggio(messaggioRispostaPost.getMessaggio());
 		Date ora = new Date();
 		mess.setData(ora);
 		thr.getMessaggi().add(mess);
 		thr.setDestinatarioPrimo(p.getProponente());
 		thr.setMittentePrimo(utenteBean.getUtente());
-		thr.setOggettoThread("Re: "+p.getRisposte().get(0).getOggettoThread());
+		thr.setOggettoThread("Re: "+p.getRisposte().get(p.getRisposte().size()-1).getOggettoThread());
 		thr.setPost(p);
 		p.getRisposte().add(thr);
 		try {
@@ -113,58 +365,231 @@ public class PostBean {
 	}
 	
 	
-	public void inviaRispostaThread (Thread t) {
+	public void inviaRispostaThreadRegolamento (Thread t) {
 		System.out.println("risposta thread inviata START");
 		Messaggio mess = new Messaggio();
 		mess.setMittente(utenteBean.getUtente());
 		mess.setDestinatario(t.getMittentePrimo());
 		mess.setThread(t);
-		mess.setOggetto("Re: "+t.getMessaggi().get(0).getOggetto());
-		System.out.println("messaggioRispostaThread=="+messaggioRispostaThr.getMessaggio());
+		mess.setOggetto("Re: "+t.getMessaggi().get(t.getMessaggi().size()-1).getOggetto());
 		mess.setMessaggio(messaggioRispostaThr.getMessaggio());
 		Date ora = new Date();
 		mess.setData(ora);
 		t.getMessaggi().add(mess);
-
 		try {
 			serv.merge(t);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("risposta thread inviata");
 		contentBean.setMessaggio("risposta secondaria inviata!");
 		contentBean.setContent("forumRegolamento.xhtml");
 	}
+//	
+//	public void forumListaGenerica(int tipoLista) {
+//		String tipo = "";
+//		switch (tipoLista) {
+//		case 1://FORUM UTENTI FREE
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 2://FORUM UTENTI PLUS
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 3://FEEDBACK UTENTI FREE
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 4://FEEDBACK UTENTI PLUS
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 5://LAVORI - RICHIESTA & OFFERTA	
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 6://LAVORI - CASTING & AGENZIE
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 7://FOTOGRAFIA - ATTREZZATURE & TECNICHE
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 8://FOTOGRAFIA - CONSIGLI & TRUCCHI
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 9://MODA - ULTIMI TREND
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		case 10://MODA - STILISTI & SFILATE
+//			tipo = "p.postUtentiFree";
+//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
+//			break;
+//		default:
+//			break;
+//		}
+//		String query = "from Post p where "+tipo+" = true";
+//		EntityManager em = EMF.createEntityManager();
+//		List<Post> posts = em
+//		.createQuery(query)
+//		.getResultList();
+//		if(posts!=null && posts.size()>0){
+//			listaPostsGenerica = posts;
+//			
+//			for (Post p : listaPostsGenerica) {
+////				System.out.println("dopo ordinamentoooo messaggi");
+//				for (Thread t : p.getRisposte()) {
+//					ordinaMessaggiPerData(t.getMessaggi());
+////					int i;
+////					System.out.println("threadSize="+t.getMessaggi().size());
+////					for (i=0;i<t.getMessaggi().size();i++) {
+////						System.out.println("m("+i+")"+t.getMessaggi().get(i).getData());
+////					}
+//				}
+//				ordinaThreadPerData(p.getRisposte());
+////				System.out.println("p(0)"+p.getRisposte().get(0).getOggettoThread()+"data"+p.getRisposte().get(0).getMessaggi().get(0).getData());
+////				System.out.println("p(1)"+p.getRisposte().get(1).getOggettoThread()+"data"+p.getRisposte().get(1).getMessaggi().get(0).getData());
+////				System.out.println("p(2)"+p.getRisposte().get(2).getOggettoThread()+"data"+p.getRisposte().get(2).getMessaggi().get(0).getData());
+//			}
+//			
+//			contentBean.setContent("forumListaGenerica.xhtml");
+//		}
+//	}
+//	
+//	
+//	public void rispondiPost(Post p) {
+//		Thread thr = new Thread();
+//		thr.setOggettoThread(messaggioNuovoThread.getOggetto());
+//		thr.setMittentePrimo(utenteBean.getUtente());
+//		thr.setDestinatarioPrimo(postGenerico.getProponente());
+//		Messaggio mess = new Messaggio();
+//		mess.setMittente(utenteBean.getUtente());
+//		mess.setDestinatario(p.getProponente());
+//		mess.setOggetto(messaggioNuovoThread.getOggetto());
+//		mess.setMessaggio(messaggioNuovoThread.getMessaggio());
+//		Date ora = new Date();
+//		mess.setData(ora);
+//		mess.setThread(thr);
+//		thr.getMessaggi().add(mess);
+//		thr.setPost(p);
+//		p.getRisposte().add(thr);
+//		try {
+//			serv.merge(p);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		ordinaThreadPerData(postGenerico.getRisposte());
+//		messaggioNuovoThread = new Messaggio();
+//		contentBean.setMessaggio("risposta al post inviata!");
+//		contentBean.setContent("forumPostGenerico.xhtml");
+//	}
 	
 	
-	public void threadInRispostaSet(Thread thr) {
-		threadInRisposta = thr;
-		messaggioRispostaThr.setMessaggio("CITANDo P|S: "+thr.getMessaggi().get(0).getMittente().getUsername()+" - MESSAGGIo: "+thr.getMessaggi().get(0).getMessaggio()+"\n");
+//	public void rispondiThread(Thread t) {
+//		Messaggio mess = new Messaggio();
+//		mess.setMittente(utenteBean.getUtente());
+//		mess.setDestinatario(t.getMittentePrimo());
+//		mess.setOggetto(messaggioThreadGenerico.getOggetto());
+//		mess.setMessaggio(messaggioThreadGenerico.getMessaggio());
+//		Date ora = new Date();
+//		mess.setData(ora);
+//		mess.setThread(t);
+//		t.getMessaggi().add(mess);
+//		try {
+//			serv.merge(t);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		ordinaMessaggiPerData(t.getMessaggi());
+//		messaggioThreadGenerico = new Messaggio();
+//		contentBean.setMessaggio("risposta al thread inviata!");
+//		contentBean.setContent("forumThread.xhtml");
+//	}
+//	
+	
+//	public void messaggioInRispostaSet (Messaggio m) {
+//		messaggioInRisposta = m;
+//		messaggioInRisposta.setMessaggio("CITANDo P|S: "+m.getMittente().getUsername()+" - MESSAGGIo: "+m.getMessaggio()+"\n");
+//	}
+//	
+//	
+//	public void inviaMessaggioRispostaThread (Messaggio m) {
+//		
+//	}
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	IndirectListSorter<Messaggio> messaggiSorter = new IndirectListSorter<Messaggio>();
+	
+	public void ordinaMessaggiPerData(List<Messaggio> listMess ) {	
+		System.out.println("ORDINA MESSAGGI:#"+listMess.size());
+		//ordina per ultimo invio/ricezione	
+		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator());
+	}
+	
+	public void ordinaIversamenteMessaggiPerData(List<Messaggio> listMess ) {	
+		System.out.println("ORDINA INVERSA MESSAGGI:#"+listMess.size());
+		//ordina per ultimo invio/ricezione	
+		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator() {
+			@Override
+			public int compare(Messaggio u1, Messaggio u2) {
+				int c = u1.getData().compareTo(u2.getData());
+//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
+				return c;
+			}
+		});
 	}
 	
 	
-	public void threadInRispostaSet2(Messaggio mess) {
-		
-		messaggioRispostaThread = mess;
-		messaggioRispostaThr.setMessaggio("CITANDo P|S: "+mess.getMittente().getUsername()+" - MESSAGGIo: "+mess.getMessaggio()+"\n");
+	IndirectListSorter<Thread> threadsSorter = new IndirectListSorter<Thread>();	
+	
+	public void ordinaThreadPerData(List<Thread> listThr ) {	 
+		System.out.println("ORDINA THREADS:#"+listThr.size());
+		//ordina per ultimo invio/ricezione
+		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
+			@Override
+			public int compare(Thread u1, Thread u2) {
+				int c = u2.getMessaggi().get(0).getData().compareTo(u1.getMessaggi().get(0).getData());
+//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
+				return c;
+			}
+		});
+	}	
+	
+	public void ordinaInversamenteThreadPerData(List<Thread> listThr ) {	 
+		System.out.println("ORDINA INVERSA THREADS:#"+listThr.size());
+		//ordina per ultimo invio/ricezione
+		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
+			@Override
+			public int compare(Thread u1, Thread u2) {
+				int c = u1.getMessaggi().get(0).getData().compareTo(u2.getMessaggi().get(0).getData());
+//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
+				return c;
+			}
+		});
 	}	
 	
 	
-	public int righeTabellaPost (int righeSottoTab) {
-		if (righeSottoTab>3) {
-			return 1;
-		}
-		return 3;
+	IndirectListSorter<Post> postsSorter = new IndirectListSorter<Post>();
+	
+	public void ordinaPostPerData(List<Post> listPosts ) {	 
+		System.out.println("ORDINA POSTS:#"+listPosts.size());
+		//ordina per ultimo invio/ricezione
+		postsSorter.sortIndirectList(listPosts, new PostsComparator());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
@@ -206,30 +631,7 @@ public class PostBean {
 //	}
 //	
 //	
-//	IndirectListSorter<Messaggio> messaggiSorter = new IndirectListSorter<Messaggio>();
-//	
-//	public void ordinaMessaggiPerData(List<Messaggio> listMess ) {	
-//		System.out.println("ORDINA MESSAGGI:#"+listMess.size());
-//		//ordina per ultimo invio/ricezione
-//		System.out.println(listMess.getClass().getName());		
-//		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator());
-//	}
-//	
-//	
-//	IndirectListSorter<Thread> threadsSorter = new IndirectListSorter<Thread>();	
-//	
-//	public void ordinaThreadPerData(List<Thread> listThr ) {	 
-//		System.out.println("ORDINA THREADS:#"+listThr.size());
-//		//ordina per ultimo invio/ricezione
-//		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
-//			@Override
-//			public int compare(Thread u1, Thread u2) {
-//				int c = u2.getMessaggi().get(u2.getMessaggi().size()-1).getData().compareTo(u1.getMessaggi().get(u1.getMessaggi().size()-1).getData());
-//				System.out.println("comparing u2 "+u2.getMessaggi().get(u2.getMessaggi().size()-1).getData()+" and u1 "+u1.getMessaggi().get(u1.getMessaggi().size()-1).getData()+" : "+c);
-//				return c;
-//			}
-//		});
-//	}
+
 //	
 //	
 //	IndirectListSorter<Annuncio> annunciSorter = new IndirectListSorter<Annuncio>();	
@@ -726,7 +1128,6 @@ public class PostBean {
 	//************GETTERS & SETTERS*******************
 	
 
-
 	public Post getPostUtente() {
 		return postUtente;
 	}
@@ -742,15 +1143,7 @@ public class PostBean {
 	public void setThreadsRispostePost(List<Thread> threadsRispostePost) {
 		this.threadsRispostePost = threadsRispostePost;
 	}
-	
-	public Post getRispostaPost() {
-		return rispostaPost;
-	}
 
-	public void setRispostaPost(Post rispostaPost) {
-		this.rispostaPost = rispostaPost;
-	}
-	
 	public Messaggio getMessaggioRispostaPost() {
 		return messaggioRispostaPost;
 	}
@@ -783,153 +1176,94 @@ public class PostBean {
 		this.messaggioRispostaThr = messaggioRispostaThr;
 	}	
 	
+	public List<Post> getListaPostsGenerica() {
+		return listaPostsGenerica;
+	}
+
+	public void setListaPostsGenerica(List<Post> listaPostsGenerica) {
+		this.listaPostsGenerica = listaPostsGenerica;
+	}
+
+	public String getTitoloListaPostsGenerica() {
+		return titoloListaPostsGenerica;
+	}
+
+	public void setTitoloListaPostsGenerica(String titoloListaPostsGenerica) {
+		this.titoloListaPostsGenerica = titoloListaPostsGenerica;
+	}
+
+	public Post getPostGenerico() {
+		return postGenerico;
+	}
+
+	public void setPostGenerico(Post postGenerico) {
+		this.postGenerico = postGenerico;
+	}
 	
+	public Messaggio getMessaggioNuovoThread() {
+		return messaggioNuovoThread;
+	}
+
+	public void setMessaggioNuovoThread(Messaggio messaggioNuovoThread) {
+		this.messaggioNuovoThread = messaggioNuovoThread;
+	}
+
+	public Thread getThreadGenerico() {
+		return threadGenerico;
+	}
+
+	public void setThreadGenerico(Thread threadGenerico) {
+		this.threadGenerico = threadGenerico;
+	}
+
+	public List<SuperPost> getListaSuperPostsGenerica() {
+		return listaSuperPostsGenerica;
+	}
+
+	public void setListaSuperPostsGenerica(List<SuperPost> listaSuperPostsGenerica) {
+		this.listaSuperPostsGenerica = listaSuperPostsGenerica;
+	}
+
+	public String getTitoloListaSuperPostsGenerica() {
+		return titoloListaSuperPostsGenerica;
+	}
+
+	public void setTitoloListaSuperPostsGenerica(
+			String titoloListaSuperPostsGenerica) {
+		this.titoloListaSuperPostsGenerica = titoloListaSuperPostsGenerica;
+	}
+
+	public SuperPost getSuperPostGenerico() {
+		return superPostGenerico;
+	}
+
+	public void setSuperPostGenerico(SuperPost superPostGenerico) {
+		this.superPostGenerico = superPostGenerico;
+	}
+
+	public Messaggio getMessaggioNuovoPost() {
+		return messaggioNuovoPost;
+	}
+
+	public void setMessaggioNuovoPost(Messaggio messaggioNuovoPost) {
+		this.messaggioNuovoPost = messaggioNuovoPost;
+	}
+
+
+
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//
-//	public Thread getThreadRispostaAnnuncio() {
-//		return threadRispostaAnnuncio;
-//	}
-//
-//	public void setThreadRispostaAnnuncio(Thread threadRispostaAnnuncio) {
-//		this.threadRispostaAnnuncio = threadRispostaAnnuncio;
-//	}
-//
-//	public List<Annuncio> getAnnunciRispostiDaUtente() {
-//		return annunciRispostiDaUtente;
-//	}
-//
-//	public void setAnnunciRispostiDaUtente(List<Annuncio> annunciRispostiDaUtente) {
-//		this.annunciRispostiDaUtente = annunciRispostiDaUtente;
-//	}
-//
-//	public Messaggio getMessaggioRispostaAnnuncio() {
-//		return messaggioRispostaAnnuncio;
-//	}
-//
-//	public void setMessaggioRispostaAnnuncio(Messaggio messaggioRispostaAnnuncio) {
-//		this.messaggioRispostaAnnuncio = messaggioRispostaAnnuncio;
-//	}
-//
-//	public List<Annuncio> getAnnunciSito() {
-//		return annunciSito;
-//	}
-//
-//	public void setAnnunciSito(List<Annuncio> annunciSito) {
-//		this.annunciSito = annunciSito;
-//	}
-//
-//	public Annuncio getAnnuncioAltrui() {
-//		return annuncioAltrui;
-//	}
-//
-//	public void setAnnuncioAltrui(Annuncio annuncioAltrui) {
-//		this.annuncioAltrui = annuncioAltrui;
-//	}
-//
-//	public Thread getThreadAnnuncioPubblicato() {
-//		return threadAnnuncioPubblicato;
-//	}
-//
-//	public void setThreadAnnuncioPubblicato(Thread threadAnnuncioPubblicato) {
-//		this.threadAnnuncioPubblicato = threadAnnuncioPubblicato;
-//	}
-//
-//	public int getNuoviMessaggiAnnunci() {
-//		return nuoviMessaggiAnnunci;
-//	}
-//
-//	public void setNuoviMessaggiAnnunci(int nuoviMessaggiAnnunci) {
-//		this.nuoviMessaggiAnnunci = nuoviMessaggiAnnunci;
-//	}
-//
-//	public List<Thread> getThreadsAnnunciConNuoviMessaggi() {
-//		return threadsAnnunciConNuoviMessaggi;
-//	}
-//
-//	public void setThreadsAnnunciConNuoviMessaggi(
-//			List<Thread> threadsAnnunciConNuoviMessaggi) {
-//		this.threadsAnnunciConNuoviMessaggi = threadsAnnunciConNuoviMessaggi;
-//	}
-//
-//	public Annuncio getAnnuncioPubblicato() {
-//		return annuncioPubblicato;
-//	}
-//
-//	public void setAnnuncioPubblicato(Annuncio annuncioPubblicato) {
-//		this.annuncioPubblicato = annuncioPubblicato;
-//	}
-//
-//	public Map<Integer, Boolean> getIdAnnunciSelezionati() {
-//		return idAnnunciSelezionati;
-//	}
-//
-//	public void setIdAnnunciSelezionati(Map<Integer, Boolean> idAnnunciSelezionati) {
-//		this.idAnnunciSelezionati = idAnnunciSelezionati;
-//	}
-//
-//	public List<Annuncio> getAnnunciUtente() {
-//		return annunciUtente;
-//	}
-//
-//	public void setAnnunciUtente(List<Annuncio> annunciUtente) {
-//		this.annunciUtente = annunciUtente;
-//	}
-//
-//	public Annuncio getNuovoAnnuncio() {
-//		return nuovoAnnuncio;
-//	}
-//
-//	public void setNuovoAnnuncio(Annuncio nuovoAnnuncio) {
-//		this.nuovoAnnuncio = nuovoAnnuncio;
-//	}
-//
-//	public Messaggio getMessaggioNuovoAnnuncio() {
-//		return messaggioNuovoAnnuncio;
-//	}
-//
-//	public void setMessaggioNuovoAnnuncio(Messaggio messaggioNuovoAnnuncio) {
-//		this.messaggioNuovoAnnuncio = messaggioNuovoAnnuncio;
-//	}
-//
-//	public Annuncio getAnnuncioEsistente() {
-//		return annuncioEsistente;
-//	}
-//
-//	public void setAnnuncioEsistente(Annuncio annuncioEsistente) {
-//		this.annuncioEsistente = annuncioEsistente;
-//	}
-//
-//	public Messaggio getMessaggioAggiunto() {
-//		return messaggioAggiunto;
-//	}
-//
-//	public void setMessaggioAggiunto(Messaggio messaggioAggiunto) {
-//		this.messaggioAggiunto = messaggioAggiunto;
-//	}
-//
-//	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+	public List<Thread> getListThr() {
+		return listThr;
+	}
+
+	public void setListThr(List<Thread> listThr) {
+		this.listThr = listThr;
+	}
+
 	
 	
 	

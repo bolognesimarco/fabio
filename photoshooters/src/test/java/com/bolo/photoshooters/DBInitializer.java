@@ -15,6 +15,7 @@ import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Membership;
 import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.Post;
+import com.bolo.photo.web.entity.SuperPost;
 import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoLavoro;
@@ -419,7 +420,7 @@ public class DBInitializer {
 		test2MShip.setDataInizio(dataInizio2);
 		Date dataFine2 = new Date();
 		String strdataFine2 = "02-04-2017 00:35:42";
-		dataFine = dateformat.parse(strdataFine2);
+		dataFine2 = dateformat.parse(strdataFine2);
 		test2MShip.setDataFine(dataFine2);
 		test2MShip.setUtente(test2);
 		List<Membership> listaMShip2 = new ArrayList<Membership>();
@@ -454,7 +455,7 @@ public class DBInitializer {
 		test3MShip.setDataInizio(dataInizio3);
 		Date dataFine3 = new Date();
 		String strdataFine3 = "03-04-2017 00:35:43";
-		dataFine = dateformat.parse(strdataFine3);
+		dataFine3 = dateformat.parse(strdataFine3);
 		test3MShip.setDataFine(dataFine3);
 		test3MShip.setUtente(test3);
 		List<Membership> listaMShip3 = new ArrayList<Membership>();
@@ -490,7 +491,7 @@ public class DBInitializer {
 		test4MShip.setDataInizio(dataInizio4);
 		Date dataFine4 = new Date();
 		String strdataFine4 = "04-04-2017 00:45:44";
-		dataFine = dateformat.parse(strdataFine4);
+		dataFine4 = dateformat.parse(strdataFine4);
 		test4MShip.setDataFine(dataFine4);
 		test4MShip.setUtente(test4);
 		List<Membership> listaMShip4 = new ArrayList<Membership>();
@@ -526,12 +527,16 @@ public class DBInitializer {
 		adminMShip.setDataInizio(dataInizio5);
 		Date dataFine5 = new Date();
 		String strdataFine5 = "04-04-2150 00:45:44";
-		dataFine = dateformat.parse(strdataFine5);
+		dataFine5 = dateformat.parse(strdataFine5);
 		adminMShip.setDataFine(dataFine5);
 		adminMShip.setUtente(admin);
 		List<Membership> listaMShip5 = new ArrayList<Membership>();
 		listaMShip5.add(adminMShip);
 		admin.setMemberships(listaMShip5);
+		
+		
+		
+		
 		
 		Post regolamentoPost = new Post();
 		regolamentoPost.setId(1);
@@ -546,12 +551,206 @@ public class DBInitializer {
 		regolamentoThread.getMessaggi().add(messRegolamento);
 		messRegolamento.setThread(regolamentoThread);
 		Date dataRegolamento = new Date();
-		String strdataRegolamento = "04-04-2000 00:45:44";
-		dataFine = dateformat.parse(strdataRegolamento);
+		String strdataRegolamento = "01-01-1999 00:00:00";
+		dataRegolamento = dateformat.parse(strdataRegolamento);
 		messRegolamento.setData(dataRegolamento);
 		messRegolamento.setOggetto(regolamentoThread.getOggettoThread());
 		messRegolamento.setMittente(admin);
 		messRegolamento.setDestinatario(admin);
+		
+		
+		
+		SuperPost presentazioneUtentiFreeSP = new SuperPost();
+		presentazioneUtentiFreeSP.setNomeSuperPost("PRESENTAZIONe - UTENTi FREe");
+		presentazioneUtentiFreeSP.setId(1);
+		
+		Post presentazioneUtentiFreePost0 = new Post();
+		presentazioneUtentiFreePost0.setSuperpost(presentazioneUtentiFreeSP);
+		presentazioneUtentiFreeSP.getPosts().add(presentazioneUtentiFreePost0);
+		presentazioneUtentiFreePost0.setId(2);
+		presentazioneUtentiFreePost0.setProponente(admin);
+		presentazioneUtentiFreePost0.setPostUtentiFree(true);
+		Thread presentatiThread0 = new Thread();
+		presentazioneUtentiFreePost0.getRisposte().add(presentatiThread0);
+		presentatiThread0.setOggettoThread("PRESENTAZIONe - UTENTi FREe");
+		presentatiThread0.setMittentePrimo(admin);
+		presentatiThread0.setDestinatarioPrimo(admin);
+		presentatiThread0.setPost(presentazioneUtentiFreePost0);
+		Messaggio messPresentati0 = new Messaggio();
+		presentatiThread0.getMessaggi().add(messPresentati0);
+		messPresentati0.setThread(presentatiThread0);
+		messPresentati0.setMessaggio("Sezione dedicata alla presentazione degli utenti free.");
+		Date dataPresentati0 = new Date();
+		String strdataPresentati0 = "01-01-1999 00:00:00";
+		dataPresentati0 = dateformat.parse(strdataPresentati0);
+		messPresentati0.setData(dataPresentati0);
+		messPresentati0.setOggetto(presentatiThread0.getOggettoThread());
+		messPresentati0.setMittente(admin);
+		messPresentati0.setDestinatario(admin);
+		
+		Post presentazioneUtentiFreePost1 = new Post();
+		presentazioneUtentiFreePost1.setSuperpost(presentazioneUtentiFreeSP);
+		presentazioneUtentiFreeSP.getPosts().add(presentazioneUtentiFreePost1);
+		presentazioneUtentiFreePost1.setId(3);	
+		presentazioneUtentiFreePost1.setProponente(test);
+		Thread presentatiThread1 = new Thread();
+		presentazioneUtentiFreePost1.getRisposte().add(presentatiThread1);
+		presentatiThread1.setOggettoThread("Buongiorno");
+		presentatiThread1.setMittentePrimo(test);
+		presentatiThread1.setDestinatarioPrimo(test);
+		presentatiThread1.setPost(presentazioneUtentiFreePost1);
+		Messaggio messPresentati1 = new Messaggio();
+		presentatiThread1.getMessaggi().add(messPresentati1);
+		messPresentati1.setThread(presentatiThread1);
+		messPresentati1.setMessaggio("ciao sono fb!!!");
+		Date dataPresentati1 = new Date();
+		String strdataPresentati1 = "04-04-2016 10:45:44";
+		dataPresentati1 = dateformat.parse(strdataPresentati1);
+		messPresentati1.setData(dataPresentati1);
+		messPresentati1.setOggetto(presentatiThread1.getOggettoThread());
+		messPresentati1.setMittente(test2);
+		messPresentati1.setDestinatario(test2);
+		
+		
+		Post presentazioneUtentiFreePost2 = new Post();
+		presentazioneUtentiFreePost2.setSuperpost(presentazioneUtentiFreeSP);
+		presentazioneUtentiFreeSP.getPosts().add(presentazioneUtentiFreePost2);
+		presentazioneUtentiFreePost2.setId(4);	
+		presentazioneUtentiFreePost2.setProponente(test2);
+		Thread presentatiThread2 = new Thread();
+		presentazioneUtentiFreePost2.getRisposte().add(presentatiThread2);
+		presentatiThread2.setOggettoThread("CIAOOOOo 2");
+		presentatiThread2.setMittentePrimo(test2);
+		presentatiThread2.setDestinatarioPrimo(test2);
+		presentatiThread2.setPost(presentazioneUtentiFreePost2);
+		Messaggio messPresentati2 = new Messaggio();
+		presentatiThread2.getMessaggi().add(messPresentati2);
+		messPresentati2.setThread(presentatiThread2);
+		messPresentati2.setMessaggio("buongiorno sono fb2!!!");
+		Date dataPresentati2 = new Date();
+		String strdataPresentati2 = "14-05-2016 11:35:22";
+		dataPresentati2 = dateformat.parse(strdataPresentati2);
+		messPresentati2.setData(dataPresentati2);
+		messPresentati2.setOggetto(presentatiThread2.getOggettoThread());
+		messPresentati2.setMittente(test2);
+		messPresentati2.setDestinatario(test2);
+		
+		
+		SuperPost generaleUtentiFreeSP = new SuperPost();
+		generaleUtentiFreeSP.setNomeSuperPost("GENERALe - UTENTi FREe");
+		generaleUtentiFreeSP.setId(2);
+		
+		Post genericoUtentiFreePost0 = new Post();
+		generaleUtentiFreeSP.getPosts().add(genericoUtentiFreePost0);
+		genericoUtentiFreePost0.setSuperpost(generaleUtentiFreeSP);
+		genericoUtentiFreePost0.setId(5);
+		genericoUtentiFreePost0.setProponente(admin);
+		genericoUtentiFreePost0.setPostUtentiFree(true);
+		Thread genericoUtentiFreeThread0 = new Thread();
+		genericoUtentiFreePost0.getRisposte().add(genericoUtentiFreeThread0);
+		genericoUtentiFreeThread0.setOggettoThread("GENERALe - UTENTi FREe");
+		genericoUtentiFreeThread0.setMittentePrimo(admin);
+		genericoUtentiFreeThread0.setDestinatarioPrimo(admin);
+		genericoUtentiFreeThread0.setPost(genericoUtentiFreePost0);
+		Messaggio messGenericoUtentiFree0 = new Messaggio();
+		genericoUtentiFreeThread0.getMessaggi().add(messGenericoUtentiFree0);
+		messGenericoUtentiFree0.setThread(genericoUtentiFreeThread0);
+		messGenericoUtentiFree0.setMessaggio("Sezione generica per gli utenti free.");
+		Date dataGenericoUtentiFree0 = new Date();
+		String strdataGenericoUtentiFree0 = "01-01-1999 00:00:00";
+		dataGenericoUtentiFree0 = dateformat.parse(strdataGenericoUtentiFree0);
+		messGenericoUtentiFree0.setData(dataGenericoUtentiFree0);
+		messGenericoUtentiFree0.setOggetto(genericoUtentiFreeThread0.getOggettoThread());
+		messGenericoUtentiFree0.setMittente(admin);
+		messGenericoUtentiFree0.setDestinatario(admin);
+		
+		Post genericoUtentiFreePost1 = new Post();
+		generaleUtentiFreeSP.getPosts().add(genericoUtentiFreePost1);
+		genericoUtentiFreePost1.setSuperpost(generaleUtentiFreeSP);
+		genericoUtentiFreePost1.setId(6);
+		genericoUtentiFreePost1.setProponente(test3);
+		Thread genericoUtentiFreeThread1 = new Thread();
+		genericoUtentiFreePost1.getRisposte().add(genericoUtentiFreeThread1);
+		genericoUtentiFreeThread1.setOggettoThread("Buongiorno mondo-post generico fb3");
+		genericoUtentiFreeThread1.setMittentePrimo(test3);
+		genericoUtentiFreeThread1.setDestinatarioPrimo(test3);
+		genericoUtentiFreeThread1.setPost(genericoUtentiFreePost1);
+		Messaggio messGenericoUtentiFree1 = new Messaggio();
+		genericoUtentiFreeThread1.getMessaggi().add(messGenericoUtentiFree1);
+		messGenericoUtentiFree1.setThread(genericoUtentiFreeThread1);
+		messGenericoUtentiFree1.setMessaggio("Salut fb3 post generico(old)!!!");
+		Date dataGenericoUtentiFree1 = new Date();
+		String strdataGenericoUtentiFree1 = "11-04-2014 10:00:44";
+		dataGenericoUtentiFree1 = dateformat.parse(strdataGenericoUtentiFree1);
+		messGenericoUtentiFree1.setData(dataGenericoUtentiFree1);
+		messGenericoUtentiFree1.setOggetto(genericoUtentiFreeThread1.getOggettoThread());
+		messGenericoUtentiFree1.setMittente(test3);
+		messGenericoUtentiFree1.setDestinatario(test3);
+		
+		Post genericoUtentiFreePost2 = new Post();
+		generaleUtentiFreeSP.getPosts().add(genericoUtentiFreePost2);
+		genericoUtentiFreePost2.setSuperpost(generaleUtentiFreeSP);
+		genericoUtentiFreePost2.setId(7);
+		genericoUtentiFreePost2.setProponente(test2);
+		Thread genericoUtentiFreeThread2 = new Thread();
+		genericoUtentiFreePost2.getRisposte().add(genericoUtentiFreeThread2);
+		genericoUtentiFreeThread2.setOggettoThread("Buongiorno mondo-post generico fb3");
+		genericoUtentiFreeThread2.setMittentePrimo(test3);
+		genericoUtentiFreeThread2.setDestinatarioPrimo(test3);
+		genericoUtentiFreeThread2.setPost(genericoUtentiFreePost2);
+		Messaggio messGenericoUtentiFree3 = new Messaggio();
+		genericoUtentiFreeThread2.getMessaggi().add(messGenericoUtentiFree3);
+		messGenericoUtentiFree3.setThread(genericoUtentiFreeThread2);
+		messGenericoUtentiFree3.setMessaggio("Salut fb3 post generico(mid)!!!");
+		Date dataGenericoUtentiFree3 = new Date();
+		String strdataGenericoUtentiFree3 = "11-04-2015 10:00:44";
+		dataGenericoUtentiFree3 = dateformat.parse(strdataGenericoUtentiFree3);
+		messGenericoUtentiFree3.setData(dataGenericoUtentiFree3);
+		messGenericoUtentiFree3.setOggetto(genericoUtentiFreeThread2.getOggettoThread());
+		messGenericoUtentiFree3.setMittente(test2);
+		messGenericoUtentiFree3.setDestinatario(test2);	
+		Messaggio messGenericoUtentiFree4 = new Messaggio();
+		genericoUtentiFreeThread2.getMessaggi().add(messGenericoUtentiFree4);
+		messGenericoUtentiFree4.setThread(genericoUtentiFreeThread2);
+		messGenericoUtentiFree4.setMessaggio("Salut fb3 post generico(new)!!!");
+		Date dataGenericoUtentiFree4 = new Date();
+		String strdataGenericoUtentiFree4 = "11-04-2016 10:00:44";
+		dataGenericoUtentiFree4 = dateformat.parse(strdataGenericoUtentiFree4);
+		messGenericoUtentiFree4.setData(dataGenericoUtentiFree4);
+		messGenericoUtentiFree4.setOggetto(genericoUtentiFreeThread2.getOggettoThread());
+		messGenericoUtentiFree4.setMittente(test4);
+		messGenericoUtentiFree4.setDestinatario(test4);
+		
+		Post genericoUtentiFreePost3 = new Post();
+		generaleUtentiFreeSP.getPosts().add(genericoUtentiFreePost3);
+		genericoUtentiFreePost3.setSuperpost(generaleUtentiFreeSP);
+		genericoUtentiFreePost3.setId(8);
+		genericoUtentiFreePost3.setProponente(test4);
+		Thread genericoUtentiFreeThread3 = new Thread();
+		genericoUtentiFreePost3.getRisposte().add(genericoUtentiFreeThread3);
+		genericoUtentiFreeThread3.setOggettoThread("Hey....... post generico di fb4");
+		genericoUtentiFreeThread3.setMittentePrimo(test4);
+		genericoUtentiFreeThread3.setDestinatarioPrimo(test4);
+		genericoUtentiFreeThread3.setPost(genericoUtentiFreePost3);
+		Messaggio messGenericoUtentiFree2 = new Messaggio();
+		genericoUtentiFreeThread3.getMessaggi().add(messGenericoUtentiFree2);
+		messGenericoUtentiFree2.setThread(genericoUtentiFreeThread3);
+		messGenericoUtentiFree2.setMessaggio("buongiorno sono fb4!!!");
+		Date dataGenericoUtentiFree2 = new Date();
+		String strdataGenericoUtentiFree2 = "14-08-2015 22:30:21";
+		dataGenericoUtentiFree2 = dateformat.parse(strdataGenericoUtentiFree2);
+		messGenericoUtentiFree2.setData(dataGenericoUtentiFree2);
+		messGenericoUtentiFree2.setOggetto(genericoUtentiFreeThread3.getOggettoThread());
+		messGenericoUtentiFree2.setMittente(test4);
+		messGenericoUtentiFree2.setDestinatario(test4);
+		
+		
+//		SuperPost utentiFreeSuperPost = new SuperPost();
+//		utentiFreeSuperPost.getPosts().add(genericoUtentiFreePost);
+//		utentiFreeSuperPost.getPosts().add(presentatiUtentiFreePost);
+//		presentatiUtentiFreePost.setSuperpost(utentiFreeSuperPost);
+//		genericoUtentiFreePost.setSuperpost(utentiFreeSuperPost);
+//		utentiFreeSuperPost.setNomeSuperPost("UTENTi FREe");
 		
 		
 		serv.deleteAll(Album.class, em);
@@ -562,6 +761,9 @@ public class DBInitializer {
 		serv.deleteAll(Membership.class, em);
 		serv.deleteAll(TipoMembership.class, em);
 		serv.deleteAll(Post.class, em);
+		serv.deleteAll(Messaggio.class, em);
+		serv.deleteAll(Thread.class, em);
+		serv.deleteAll(SuperPost.class, em);
 		
 		serv.persist(admin, em);
 		serv.persist(test, em);	
@@ -569,6 +771,9 @@ public class DBInitializer {
 		serv.persist(test3, em);
 		serv.persist(test4, em);
 		serv.persist(regolamentoPost, em);
+		serv.persist(presentazioneUtentiFreeSP, em);
+		serv.persist(generaleUtentiFreeSP, em);
+		
 		
 		serv.persist(free, em);
 		serv.persist(plus, em);

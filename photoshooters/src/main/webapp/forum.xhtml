@@ -30,7 +30,7 @@
         		
 				<h:panelGrid styleClass="tabellaForum" border="1" >
 					<h:panelGroup>
-		        		<h:commandButton value="REGOLAMENTo FORUm" action="#{postBean.regolamentoForum()}" />
+		        		<h:commandButton value="REGOLAMENTo FORUm" action="#{postBean.regolamentoForum()}" ></h:commandButton>
 		        			<br style="height:20px"></br>
 		        		<h:commandButton value="REGOLAMENTo SITo" action="#{postBean.regolamentoForum()}" />
 							<br style="height:20px"></br>
@@ -52,9 +52,9 @@
         		
 				<h:panelGrid   styleClass="tabellaForum" border="1">
 					<h:panelGroup>
-		        		<h:commandButton value="UTENTi FREe" action="#{postBean.utentiFreeForum()}" />
+		        		<h:commandButton value="UTENTi FREe" action="#{postBean.caricaListaSuperPost(1)}" />
 		        			<br style="height:20px"></br>
-		        		<h:commandButton value="UTENTi PLUs" action="#{postBean.utentiPlusForum()}" />
+		        		<h:commandButton value="UTENTi PLUs" action="#{postBean.caricaListaSuperPost(2)}" />
 	        				<br style="height:20px"></br>
 	        		</h:panelGroup>
 				</h:panelGrid>					  			

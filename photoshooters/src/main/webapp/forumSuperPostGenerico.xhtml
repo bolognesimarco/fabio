@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="forum.css" library="css" />
+	<h:outputStylesheet name="dataTable.css" library="css" />
+</h:head>
+<h:body>
+
+
+	<h:panelGroup styleClass="pannello cerca">
+
+	<h:form id="superpostgenericoform">
+
+		<h:panelGrid>
+			<f:facet name="header">
+	        	<h:outputText value="SUPERPOST &#160;&#160;#{postBean.superPostGenerico.nomeSuperPost}"></h:outputText>
+	       		<br></br>
+	      	</f:facet>
+			
+			<h:panelGrid styleClass="tabellaForum" columns="2" columnClasses="rightcolonna,leftcolonna"> 
+			
+				<f:facet name="header">
+
+	       		</f:facet>
+	       		
+			        <h:outputText value="POSTATo Da&#160;"/>
+	           		<h:outputText value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).proponente.username}"/>
+	        		<h:outputText value="MESSAGGIo&#160;"></h:outputText>
+	        		<h:outputText value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.size()-1).messaggio}"></h:outputText>
+					
+				<f:facet name="footer">
+					<p:commandButton update="rispondipostform:rispostaDetail" oncomplete="PF('rispondipostOP').loadContents()" value="CREa NUOVo POSt" rendered="#{utenteBean.tipoMembershipUtente()!=0}">
+           			</p:commandButton>	
+	       		</f:facet>
+
+			</h:panelGrid>
+			
+			<p:overlayPanel widgetVar="rispondipostOP" styleClass="overlaypanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+		        <h:form id="rispondipostform">
+		        <p:outputPanel id="rispostaDetail" styleClass="outputpanel">
+		            <h:panelGrid  columns="2" columnClasses="right,left">
+		                <f:facet name="header">
+							<h:outputText value="NUOVo POSt"></h:outputText>
+		                </f:facet>
+
+						<h:outputText value="TITOLo POSt" />
+						<h:inputText  value="#{postBean.messaggioNuovoPost.oggetto}" />                
+		                	                
+		                <h:outputText value="MESSAGGIo" />
+		                <h:inputTextarea value="#{postBean.messaggioNuovoPost.messaggio}" tyle="width:350px!important;"  size="350" rows="5"/>
+
+						<h:messages id="messages" layout="table"></h:messages>
+		 				<p:commandButton id="rispondipost" value="&#160;CREa NUOVo POSt" process="@form" update="superpostgenericoform" action="#{postBean.nuovoPost(postBean.superPostGenerico)}"></p:commandButton>
+		            </h:panelGrid>
+		        </p:outputPanel>
+		        </h:form>
+		    </p:overlayPanel>
+
+
+			<p:dataTable id="superpostgenerico" var="PostsSP" value="#{postBean.superPostGenerico.posts}" rendered="#{postBean.superPostGenerico.posts.size()>1}" first="0" rows="5" paginator="true" scrollable="false" scrollWidth="0">
+				
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;POSTs &#160;#{postBean.superPostGenerico.posts.size()}" />
+	           		<br></br>
+	       		</f:facet>
+	       		
+				<p:column id="postssuperpost" rendered="#{PostsSP.id!=postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).id}">
+				
+					<h:panelGrid columns="1" border="1" style="background-color: rgb(120, 120, 120)!important;">
+						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
+							<h:outputText value="POSt&#160;(id:#{PostsSP.id}):&#160;"></h:outputText>
+							<h:panelGroup>
+			        			<h:commandButton value="#{PostsSP.risposte.get(PostsSP.risposte.size()-1).oggettoThread}" action="#{postBean.visualizzaPost(PostsSP)}"></h:commandButton>
+			        			<h:outputText value="&#160;P|S:&#160;#{PostsSP.proponente.username}"></h:outputText>
+		        			</h:panelGroup>
+							
+		            		<h:outputText value="DATa:&#160;"/>
+							<h:outputText id="datapubblicazione" value="#{PostsSP.risposte.get(PostsSP.risposte.size()-1).messaggi.get(PostsSP.risposte.get(PostsSP.risposte.size()-1).messaggi.size()-1).data}">
+								<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+							</h:outputText >
+							
+							<h:outputText value="ULTIMa RISPOSTa:&#160;"></h:outputText>
+							<h:panelGroup>							
+								<h:outputText id="dataultima" value="#{PostsSP.risposte.get(0).messaggi.get(0).data}">
+									<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+								</h:outputText >
+								<h:outputText value="&#160;P|S:&#160;#{PostsSP.risposte.get(0).messaggi.get(0).mittente.username}"></h:outputText>
+							</h:panelGroup>
+							
+		        			<h:outputText value="NUMERo RISPOSTe:&#160;"/>
+							<h:outputText  value="#{postBean.numeroMessaggiPost(PostsSP)}"/>
+	
+		    	   				<h:panelGroup rendered="true" style="height:15px">
+									<h:outputText styleClass="avvisomess" value="new"></h:outputText>
+		    	   				</h:panelGroup>
+		    	   				<h:panelGroup rendered="false" style="height:15px">
+		    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
+		    	   				</h:panelGroup>
+						</h:panelGrid>
+						<f:facet name="footer">
+	           			</f:facet>
+		        	</h:panelGrid>
+		       					
+				</p:column>
+	
+			</p:dataTable>
+			
+		</h:panelGrid>
+	
+	</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

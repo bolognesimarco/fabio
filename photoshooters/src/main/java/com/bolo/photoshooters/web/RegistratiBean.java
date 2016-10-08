@@ -203,6 +203,8 @@ public class RegistratiBean {
 	
 	
 
+	
+	
 	public boolean isAccettoRegolamento() {
 		return accettoRegolamento;
 	}

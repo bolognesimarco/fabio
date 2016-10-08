@@ -58,7 +58,7 @@ html, body{
 }
 
 .headersecondario {
-	font-size:small;
+	font-size:small!important;
 /* 	font-weight: normal!important; */
 /* 	text-decoration: none; */
 	margin-left: 18px;
@@ -70,6 +70,7 @@ html, body{
 	padding:0!important;
 /* 	cursor: pointer; */
 	text-align: left;
+	border: none!important;
 }
 
 .tabellaForum {
@@ -328,7 +329,7 @@ select {
      }
 
 .invalid-input {
-    border: 1px solid #EF4323;;
+    border: 1px solid #EF4323;
 }
 .valid-input {
     background-color: white;

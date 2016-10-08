@@ -33,3 +33,7 @@
 	border-width: 0px!important;
 	text-align: left!important;
 }
+
+.ui.overlaypanel-content {
+	background-color: rgba(204, 204, 204)!important; 
+}

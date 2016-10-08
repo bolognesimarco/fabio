@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="forum.css" library="css" />
+</h:head>
+<h:body>
+
+
+	<h:panelGroup styleClass="pannello cerca">
+
+	<h:form id="superpostgenericoform">
+		<h:commandButton value="BOTTONE2" action="#{postBean.visualizzaPost2(postBean.superPostGenerico.posts.get(0))}"></h:commandButton>
+		<h:panelGrid>
+			<f:facet name="header">
+	        		<h:outputText value="SUPERPOST &#160;&#160;#{postBean.superPostGenerico.nomeSuperPost}"></h:outputText>
+	        		<p:commandButton value="posts(0).id= #{postBean.superPostGenerico.posts.get(0).id}" action="#{postBean.visualizzaPost(postBean.superPostGenerico.posts.get(0))}" update="content"/>
+	        		
+	       		<br></br>
+	      	</f:facet>
+			
+			<h:panelGrid styleClass="tabellaForum" columns="2" columnClasses="rightcolonna,leftcolonna"> 
+			
+				<f:facet name="header">
+
+	       		</f:facet>
+	       		
+			        <h:outputText value="POSTATo Da&#160;"/>
+	           		<h:outputText value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).proponente.username}"/>
+	        		<h:outputText value="MESSAGGIo"></h:outputText>
+	        		<h:outputText value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.size()-1).messaggio}"></h:outputText>
+					
+				<f:facet name="footer">
+					<p:commandButton update="rispondipostform:rispostaDetail" oncomplete="PF('rispondipostOP').loadContents()" value="CREa NUOVo POSt" rendered="#{utenteBean.tipoMembershipUtente()!=0}">
+           			</p:commandButton>	
+	       		</f:facet>
+
+			</h:panelGrid>
+			
+			<p:overlayPanel widgetVar="rispondipostOP" styleClass="overlaypanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+		        <h:form id="rispondipostform">
+		        <p:outputPanel id="rispostaDetail" styleClass="outputpanel">
+		            <h:panelGrid  columns="2" columnClasses="right,left">
+						<h:outputText value="TITOLo POSt" />
+						<h:inputText  value="#{postBean.messaggioNuovoPost.oggetto}" />   
+						
+						<h:outputText value="MESSAGGIo" />
+						<h:inputTextarea value="#{postBean.messaggioNuovoPost.messaggio}"  required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:350px!important;"  size="350" rows="5"></h:inputTextarea>
+		            </h:panelGrid>
+		        </p:outputPanel>
+		        </h:form>
+		    </p:overlayPanel>
+
+			
+		</h:panelGrid>
+	
+	</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

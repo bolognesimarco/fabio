@@ -83,6 +83,7 @@ public class ServiziComuniImpl implements ServiziComuni {
 		em.close();
 		return lista;
 	}
+	
 	public <T extends Serializable> List<T> getAll(Class<T> c, EntityManager em) throws Exception{
 		return em.createQuery(" FROM "+c.getSimpleName()+" c").getResultList();
 	}

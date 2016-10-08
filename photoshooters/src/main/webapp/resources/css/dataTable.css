@@ -26,8 +26,9 @@ font-family: gisha!important;
  border: 0px!important;
  }
  
+/*  controlla anche sfondo di overlaypanel */
  .ui-widget-content{
- background: none!important;
+/*  background: none!important; */
  border: 0px!important;
  }
  
@@ -50,7 +51,7 @@ font-family: gisha!important;
  border: 0px!important;
  }
 
-.ui-datatable tbody td {
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td, .ui-datatable tfoot th {
 	border: none!important;
 	padding-bottom: 2px;
 	padding-top: 2px;
@@ -61,6 +62,6 @@ font-family: gisha!important;
 	border-left-color: white;
 	border-right-color: white;
 	border-top-color: white;
-	
 }
+
 
