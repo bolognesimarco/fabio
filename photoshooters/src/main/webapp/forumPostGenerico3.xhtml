@@ -31,7 +31,10 @@ function moveCursorToEnd(obj) {
 		
 		<h:panelGrid>
 			<f:facet name="header">
-	       		<h:outputText styleClass="common" value="POST GENERICO - &#160;&#160;#{postBean.superPostGenerico.nomeSuperPost}"/>
+	       		<h:outputText styleClass="common" value="POST GENERICO - &#160;&#160;"/>
+	       		<h:commandButton value="#{postBean.superPostGenerico.nomeSuperPost}" >
+	       			<f:ajax event="click" listener="#{postBean.visualizzaSuperPost(postBean.superPostGenerico)}" render=":content"></f:ajax>	
+	       		</h:commandButton>
 	       		<br></br>
 	      	</f:facet>
 			
@@ -43,9 +46,9 @@ function moveCursorToEnd(obj) {
 	       		</f:facet>
 	       		
 	        		<h:outputText value="POSTATo Da&#160;"/>
-	        		<h:panelGroup>
-	        			<h:commandLink value="#{postBean.postGenerico.proponente.username}" action="#{utenteBean.utenteTrovatoId(postBean.postGenerico.proponente.id)}"/>
-	        		</h:panelGroup>
+	        		<p:commandButton value="#{postBean.postGenerico.proponente.username}">
+							<p:ajax event="click" listener="#{utenteBean.utenteTrovatoId(postBean.postGenerico.proponente.id)}" update="content" />
+					</p:commandButton>
 	        		
 	        		<h:outputText value="DATa&#160;"/>
 	        		<h:outputText value="#{postBean.postGenerico.risposte.get(0).messaggi.get(0).data}">
@@ -62,7 +65,7 @@ function moveCursorToEnd(obj) {
 
 			</h:panelGrid>
 			
-		    <p:overlayPanel widgetVar="rispondipostOP" styleClass="overlaypanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true">
+		    <p:overlayPanel widgetVar="rispondipostOP" styleClass="overlaypanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" >
 		        <h:form id="rispondipostform">
 		        <p:outputPanel id="rispostaDetail" style="text-align:center;">
 		            <h:panelGrid  columns="2" columnClasses="right,left">
@@ -77,8 +80,8 @@ function moveCursorToEnd(obj) {
 		                <h:inputTextarea value="#{postBean.messaggioRispostaPost.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:350px!important;"  size="350" rows="5"/>
 
 						<h:messages id="messages" layout="table"></h:messages>
-		 				<h:commandButton id="rispondipost" value="&#160;INVIa RISPOSTa" action="#{postBean.inviaRispostaPost(postBean.postGenerico)}">
-						</h:commandButton>
+		 				<p:commandButton id="rispondipost" value="&#160;INVIa RISPOSTa" action="#{postBean.inviaRispostaPost(postBean.postGenerico)}" process="@form" update="postgenericoforumform">
+						</p:commandButton>
 		            </h:panelGrid>
 		        </p:outputPanel>
 		        </h:form>
@@ -99,22 +102,32 @@ function moveCursorToEnd(obj) {
 							<h:outputText value="ID thread:&#160;#{threadspost.id}"></h:outputText>
 							<h:outputText value="ID post0:&#160;#{postBean.postGenerico.risposte.get(0).id}"></h:outputText>
 							<h:outputText value="Da:&#160;"></h:outputText>
-							<h:commandLink value="#{threadspost.mittentePrimo.username}" action="#{utenteBean.utenteTrovatoId(threadspost.mittentePrimo.id)}"/>
+							<p:commandButton value="#{threadspost.mittentePrimo.username}">
+								<p:ajax event="click" listener="#{utenteBean.utenteTrovatoId(threadspost.mittentePrimo.id)}" update="content" />
+							</p:commandButton>
 							<h:outputText value="A:&#160;"></h:outputText>
-							<h:commandLink value="#{threadspost.destinatarioPrimo.username}" action="#{utenteBean.utenteTrovatoId(threadspost.destinatarioPrimo.id)}"/>
+							<p:commandButton value="#{threadspost.destinatarioPrimo.username}">
+								<p:ajax event="click" listener="#{utenteBean.utenteTrovatoId(threadspost.destinatarioPrimo.id)}" update="content" />
+							</p:commandButton>
 		            		<h:outputText value="DATa:&#160;"/>
 							<h:outputText id="datapubblicazione" value="#{threadspost.messaggi.get(0).data}">
 								<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
 							</h:outputText >
 						</h:panelGrid>
 		        		<h:panelGrid columns="1">
-		        			<h:outputText value="#{threadspost.oggettoThread}"></h:outputText>
-		    	   				<h:panelGroup rendered="true" style="height:15px">
-									<h:outputText styleClass="avvisomess" value="new"></h:outputText>
+		        			<h:panelGroup>
+		        				<h:outputText value="#{threadspost.oggettoThread}"></h:outputText>
+		    	   				<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and ((threadspost.messaggi.get(0).lettoDaDestinatario==false and utenteBean.utente.id==threadspost.destinatarioPrimo.id) or (postBean.messaggioIsLetto(utenteBean.utente.id,threadspost.messaggi.get(0))==false) )}" style="height:15px">
+			    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+										<h:outputText value="new"></h:outputText>
+			    	   				</sup>
 		    	   				</h:panelGroup>
-		    	   				<h:panelGroup rendered="false" style="height:15px">
-		    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
+		    	   				<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.messaggioIsLetto(threadspost.destinatarioPrimo.id,threadspost.messaggi.get(0))==false and threadspost.mittentePrimo.id==utenteBean.utente.id}" style="height:15px">
+			    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+										<h:outputText value="unread"></h:outputText>
+			    	   				</sup>
 		    	   				</h:panelGroup>
+		    	   			</h:panelGroup>
 							<h:inputTextarea value="#{threadspost.messaggi.get(0).messaggio}" readonly="true" style="width:230px!important;" size="350" rows="5" id="messaggio" />
 						</h:panelGrid>
 						<f:facet name="footer">
@@ -124,7 +137,7 @@ function moveCursorToEnd(obj) {
 		           			</p:commandButton>	
 	           			</f:facet>
 		        	</h:panelGrid>
-		       		</h:form>
+					</h:form>
 
 		        	
 					<p:dataTable id="postReply" var="messpostreply" value="#{threadspost.messaggi}" rendered="#{threadspost.messaggi.size()!=1}">
@@ -138,10 +151,17 @@ function moveCursorToEnd(obj) {
 								<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
 									<h:outputText value="ID mess:&#160;#{messpostreply.id}"></h:outputText>
 									<h:outputText value="ID thread0:&#160;#{threadspost.messaggi.get(0).id}"></h:outputText>
+									
 									<h:outputText value="Da:&#160;"></h:outputText>
-									<h:commandLink value="#{messpostreply.mittente.username}" action="#{utenteBean.utenteTrovatoId(messpostreply.mittente.id)}"/>
+									<p:commandButton value="#{messpostreply.mittente.username}">
+										<p:ajax event="click" listener="#{utenteBean.utenteTrovatoId(messpostreply.mittente.id)}" update="content" />
+									</p:commandButton>
+									
 									<h:outputText value="A:&#160;"></h:outputText>
-									<h:commandLink value="#{messpostreply.destinatario.username}" action="#{utenteBean.utenteTrovatoId(messpostreply.destinatario.id)}"/>
+									<p:commandButton value="#{messpostreply.destinatario.username}">
+										<p:ajax event="click" listener="#{utenteBean.utenteTrovatoId(messpostreply.destinatario.id)}" update="content" />
+									</p:commandButton>			
+				            		
 				            		<h:outputText styleClass="common" value="DATa:&#160;"/>
 									<h:outputText id="datapubblicazione" value="#{messpostreply.data}">
 										<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
@@ -149,12 +169,27 @@ function moveCursorToEnd(obj) {
 								</h:panelGrid>
 				        		<h:panelGrid columns="1">
 				        			<h:outputText value="#{messpostreply.oggetto}"></h:outputText>
-				    	   				<h:panelGroup rendered="true" style="height:15px">
-											<h:outputText styleClass="avvisomess" value="new"></h:outputText>
+				  	   			
+
+		    	   				<h:panelGroup rendered="#{postBean.messaggioIsLetto(threadspost.destinatarioPrimo.id,threadspost.messaggi.get(0))==false and threadspost.nuovoMessaggio==true and threadspost.mittentePrimo.id==utenteBean.utente.id}" style="height:15px">
+			    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+										<h:outputText value="unread"></h:outputText>
+			    	   				</sup>
+		    	   				</h:panelGroup>
+				    	   				
+				    	   				
+				    	   				
+						    	   		<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.messaggioIsLetto(utenteBean.utente.id,messpostreply)==false}" style="height:15px">
+					    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+												<h:outputText value="new"></h:outputText>
+					    	   				</sup>
 				    	   				</h:panelGroup>
-				    	   				<h:panelGroup rendered="false" style="height:15px">
-				    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
+				    	   				<h:panelGroup rendered="#{postBean.messaggioIsLetto(messpostreply.destinatario.id,messpostreply)==false and threadspost.nuovoMessaggio==true and messpostreply.mittente.id==utenteBean.utente.id}" style="height:15px">
+					    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+												<h:outputText value="unread"></h:outputText>
+					    	   				</sup>
 				    	   				</h:panelGroup>
+				    	   				
 									<h:inputTextarea value="#{messpostreply.messaggio}" readonly="true" style="width:230px!important;color:black!important;" size="350" rows="5" id="messaggio2" />
 								</h:panelGrid>
 								<f:facet name="footer">

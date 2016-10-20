@@ -22,30 +22,58 @@
 			 	<h:panelGrid id="albumsutentetrovatopanel">
 			   		
 			   		<f:facet name="header">
-	            		<h:outputText value="ALBUMs PHOTOSHOOTEr"/>
+	            		<h:outputText value="ALBUMs PHOTOSHOOTEr - size()=#{utenteBean.cercaUtente.utente.pubblicati.size()}"/>
 		       		</f:facet>
-			   		
-			   		<p:dataGrid  value="#{utenteBean.cercaUtente.utente.pubblicati}" var="result" columns="6" rows="1" paginator="true"  rowsPerPageTemplate="1,2,3">
-						
+				  
+				    <p:carousel value="#{utenteBean.cercaUtente.utente.pubblicati}" numVisible="5" headerText="ALBUMs" var="result" itemStyle="text-align:center" responsive="true">
+							<p:panel>
+								<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
+									styleClass="circularutente" style="cursor: pointer;">
+									<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+								</h:graphicImage>
+								<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/album-copertina.svg"
+									height="50" style="cursor: pointer;">
+									<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+								</h:graphicImage>
+								<h:panelGrid columns="2" styleClass="rightcolonna,leftcolonna">
+									<h:outputLabel for="idAlbum">ID</h:outputLabel>
+									<h:outputText id="idAlbum" value="#{result.id}"></h:outputText>
+									<h:outputLabel for="titAlbum">TITOLo</h:outputLabel>
+									<h:commandButton id="titAlbum" value="#{result.titolo}" styleClass="menubuttonwhite">
+					    				<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+					    	   		</h:commandButton>	<br></br>
+									<h:outputLabel for="descrAlbum">DESCRIZIONe</h:outputLabel>
+									<h:outputText id="descrAlbum" value="#{result.descrizione}"></h:outputText>	
+								</h:panelGrid>
+							</p:panel>
+				    </p:carousel>
+
+
+			   		<p:dataGrid id="albumsdatagrid" value="#{utenteBean.cercaUtente.utente.pubblicati}" var="result" paginator="true" rows="4" columns="4" layout="grid">
+	
 						<p:column>
-							<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
-								styleClass="circularutente" style="cursor: pointer;">
-								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
-							</h:graphicImage>
-							<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/album-copertina.svg"
-								height="50" style="cursor: pointer;">
-								<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
-							</h:graphicImage>
-							<h:panelGrid columns="2">
-								<h:outputLabel for="titAlbum">TITOLo</h:outputLabel>
-								<h:commandButton id="titAlbum" value="#{result.titolo}" styleClass="menubuttonwhite">
-				    				<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content :modificafotoform" />
-				    	   		</h:commandButton>	<br></br>
-								<h:outputLabel for="descrAlbum">DESCRIZIONe</h:outputLabel>
-								<h:outputText id="descrAlbum" value="#{result.descrizione}"></h:outputText>	
-							</h:panelGrid>
+							<p:panel>
+								<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
+									styleClass="circularutente" style="cursor: pointer;">
+									<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+								</h:graphicImage>
+								<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/album-copertina.svg"
+									height="50" style="cursor: pointer;">
+									<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+								</h:graphicImage>
+								<h:panelGrid columns="2">
+									<h:outputLabel for="idAlbum">ID</h:outputLabel>
+									<h:outputText id="idAlbum" value="#{result.id}"></h:outputText>
+									<h:outputLabel for="titAlbum">TITOLo</h:outputLabel>
+									<h:commandButton id="titAlbum" value="#{result.titolo}" styleClass="menubuttonwhite">
+					    				<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+					    	   		</h:commandButton>	<br></br>
+									<h:outputLabel for="descrAlbum">DESCRIZIONe</h:outputLabel>
+									<h:outputText id="descrAlbum" value="#{result.descrizione}"></h:outputText>	
+								</h:panelGrid>
+							</p:panel>
 						</p:column>
-						
+
 					</p:dataGrid>
 			   
 			    </h:panelGrid>
@@ -127,7 +155,7 @@
 							<h:outputText id="regione" value="#{utenteBean.cercaUtente.utente.regIta}" />
 			
 							<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
-							<h:outputText id="tipoLavoro" value="#{utenteBean.cercaUtente.utente.tipiLavoroDescrizione}" />	
+							<h:outputText id="tipolavoro" value="#{utenteBean.cercaUtente.utente.tipiLavoroDescrizione}" />	
 			
 						</h:panelGrid>	
 						

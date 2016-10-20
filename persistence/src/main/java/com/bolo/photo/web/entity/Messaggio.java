@@ -36,6 +36,9 @@ public class Messaggio implements Serializable{
 	private List<Utente> letto = new ArrayList<Utente>();
 	
 	@Column
+	private boolean lettoDaDestinatario = false;
+	
+	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date data;
 	
@@ -52,12 +55,12 @@ public class Messaggio implements Serializable{
 	private Utente destinatario;
 	
 	
-	@OneToOne(optional=true)
-	@JoinColumn(name="precedente", nullable=true)
-	private Messaggio precedente;
-	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="precedente")
-	private List<Messaggio> risposte;
+//	@OneToOne(optional=true)
+//	@JoinColumn(name="precedente", nullable=true)
+//	private Messaggio precedente;
+//	
+//	@OneToMany(cascade=CascadeType.ALL, mappedBy="precedente")
+//	private List<Messaggio> risposte;
 
 	
 	
@@ -130,20 +133,30 @@ public class Messaggio implements Serializable{
 		this.destinatario = destinatario;
 	}
 
-	public Messaggio getPrecedente() {
-		return precedente;
+	public boolean isLettoDaDestinatario() {
+		return lettoDaDestinatario;
 	}
 
-	public void setPrecedente(Messaggio precedente) {
-		this.precedente = precedente;
+	public void setLettoDaDestinatario(boolean lettoDaDestinatario) {
+		this.lettoDaDestinatario = lettoDaDestinatario;
 	}
 
-	public List<Messaggio> getRisposte() {
-		return risposte;
-	}
-
-	public void setRisposte(List<Messaggio> risposte) {
-		this.risposte = risposte;
-	}
+	
+	
+//	public Messaggio getPrecedente() {
+//		return precedente;
+//	}
+//
+//	public void setPrecedente(Messaggio precedente) {
+//		this.precedente = precedente;
+//	}
+//
+//	public List<Messaggio> getRisposte() {
+//		return risposte;
+//	}
+//
+//	public void setRisposte(List<Messaggio> risposte) {
+//		this.risposte = risposte;
+//	}
 
 }

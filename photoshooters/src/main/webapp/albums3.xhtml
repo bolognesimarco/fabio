@@ -28,15 +28,15 @@
 					<p:column>
 						<h:graphicImage rendered="#{result.copertinaAlbum!=null}" value="/lil?path=#{utenteBean.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
 							 styleClass="circularutente" style="cursor: pointer;">
-							<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+							<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform" />
 						</h:graphicImage>
 						<h:graphicImage rendered="#{result.copertinaAlbum==null}" value="/resources/images/album-copertina.svg"
 							 width="50" style="cursor: pointer;">
-							 <f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+							 <f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform" />
 						</h:graphicImage>
 						
 						<h:commandButton value="#{result.titolo}" styleClass="menubuttonwhite">
-		    				<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform :modificafotoform" />
+		    				<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform" />
 		    	   		</h:commandButton>	<br></br>
 		    	   		
 		    	   		<p:commandButton value="ELIMINa" styleClass="menubuttonorange; color: #EF4323;"  >

@@ -62,8 +62,9 @@ public class InputBean {
 	private int idAlbumVisualizzato = 0;
 	private Album albumDaModificare = new Album();
 	private String titoloAlbumDaModificare = ""; 
-	
-	
+
+
+
 	public void nuovoAlbum () {
 		System.out.println("funzione nuovoAlbum() start!!!");
 		String userAlbumFolderPath = "C:" + File.separator + "temp" + File.separator + utenteBean.getUtente().getUsername() + File.separator;
@@ -416,6 +417,7 @@ public class InputBean {
 
 	
 	public void fotosUtenteTrovato2 (Album album) {
+		System.out.println("fotosUtenteTrovato2 start iD== "+album.getId());
 		risultatoFotosUtenteTrovato.clear();
 		risultatoFotosUtenteTrovato = album.getFotos();
 		albumVisualizzato = album; 

@@ -21,7 +21,9 @@
 
 		<h:panelGrid>
 			<f:facet name="header">
-	        	<h:outputText value="SUPERPOST &#160;&#160;#{postBean.superPostGenerico.nomeSuperPost}"></h:outputText>
+	        	<h:commandButton value="SUPERPOST &#160;&#160;#{postBean.superPostGenerico.nomeSuperPost}" >
+	       			<f:ajax event="click" listener="#{postBean.caricaListaSuperPost(1)}" render=":content"></f:ajax>	
+	       		</h:commandButton>
 	       		<br></br>
 	      	</f:facet>
 			
@@ -32,7 +34,7 @@
 	       		</f:facet>
 	       		
 			        <h:outputText value="POSTATo Da&#160;"/>
-	           		<h:outputText value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).proponente.username}"/>
+	           		<h:commandLink  value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).proponente.username}" action="#{utenteBean.utenteTrovatoId(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).proponente.id)}"/>
 	        		<h:outputText value="MESSAGGIo&#160;"></h:outputText>
 	        		<h:outputText value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.size()-1).messaggio}"></h:outputText>
 					
@@ -55,7 +57,7 @@
 						<h:inputText  value="#{postBean.messaggioNuovoPost.oggetto}" />                
 		                	                
 		                <h:outputText value="MESSAGGIo" />
-		                <h:inputTextarea value="#{postBean.messaggioNuovoPost.messaggio}" tyle="width:350px!important;"  size="350" rows="5"/>
+		                <h:inputTextarea value="#{postBean.messaggioNuovoPost.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." tyle="width:350px!important;"  size="350" rows="5"/>
 
 						<h:messages id="messages" layout="table"></h:messages>
 		 				<p:commandButton id="rispondipost" value="&#160;CREa NUOVo POSt" process="@form" update="superpostgenericoform" action="#{postBean.nuovoPost(postBean.superPostGenerico)}"></p:commandButton>
@@ -78,9 +80,21 @@
 						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
 							<h:outputText value="POSt&#160;(id:#{PostsSP.id}):&#160;"></h:outputText>
 							<h:panelGroup>
-			        			<h:commandButton value="#{PostsSP.risposte.get(PostsSP.risposte.size()-1).oggettoThread}" action="#{postBean.visualizzaPost(PostsSP)}"></h:commandButton>
-			        			<h:outputText value="&#160;P|S:&#160;#{PostsSP.proponente.username}"></h:outputText>
+								<h:commandButton styleClass="ui-bottone" value="#{PostsSP.risposte.get(PostsSP.risposte.size()-1).oggettoThread}">
+									<f:ajax event="click" listener="#{postBean.visualizzaPost(PostsSP)}" render=":content :postgenericoforumform" />
+								</h:commandButton>
+								<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiNonLetti(utenteBean.utente.id, PostsSP)==true}" style="height:15px">
+			    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+										<h:outputText value="new"></h:outputText>
+			    	   				</sup>
+		    	   				</h:panelGroup>
+			        			<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+			        			<h:commandLink value="#{PostsSP.proponente.username}" action="#{utenteBean.utenteTrovatoId(PostsSP.proponente.id)}" />
 		        			</h:panelGroup>
+							
+
+
+							
 							
 		            		<h:outputText value="DATa:&#160;"/>
 							<h:outputText id="datapubblicazione" value="#{PostsSP.risposte.get(PostsSP.risposte.size()-1).messaggi.get(PostsSP.risposte.get(PostsSP.risposte.size()-1).messaggi.size()-1).data}">
@@ -92,18 +106,14 @@
 								<h:outputText id="dataultima" value="#{PostsSP.risposte.get(0).messaggi.get(0).data}">
 									<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
 								</h:outputText >
-								<h:outputText value="&#160;P|S:&#160;#{PostsSP.risposte.get(0).messaggi.get(0).mittente.username}"></h:outputText>
+								<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+								<h:commandLink value="#{PostsSP.risposte.get(0).messaggi.get(0).mittente.username}" action="#{utenteBean.utenteTrovatoId(PostsSP.risposte.get(0).messaggi.get(0).mittente.id)}" />
 							</h:panelGroup>
 							
 		        			<h:outputText value="NUMERo RISPOSTe:&#160;"/>
 							<h:outputText  value="#{postBean.numeroMessaggiPost(PostsSP)}"/>
 	
-		    	   				<h:panelGroup rendered="true" style="height:15px">
-									<h:outputText styleClass="avvisomess" value="new"></h:outputText>
-		    	   				</h:panelGroup>
-		    	   				<h:panelGroup rendered="false" style="height:15px">
-		    	   					<h:outputText styleClass="avvisomess" value="unread"></h:outputText>
-		    	   				</h:panelGroup>
+
 						</h:panelGrid>
 						<f:facet name="footer">
 	           			</f:facet>

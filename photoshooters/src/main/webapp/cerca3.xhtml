@@ -92,7 +92,7 @@
 
 								
 				<h:outputLabel for="lastonline">ORDINa PHOTOSHOOTERs</h:outputLabel>
-				<h:selectOneRadio value="#{utenteBean.cercaUtente.lastOnlineIscritto}">
+				<h:selectOneRadio id="lastonline" value="#{utenteBean.cercaUtente.lastOnlineIscritto}">
    					<f:selectItem itemValue="1" itemLabel="ULTIMo ACCESSo" />
   				 	<f:selectItem itemValue="2" itemLabel="ULTIMo ISCRITTo" />	   			
 				</h:selectOneRadio>	
@@ -116,8 +116,7 @@
 
 	</h:panelGroup>
 	
-	<p:dataGrid var="utenti" value="#{utenteBean.risultato}" 
-      columns="3" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
+	<p:dataGrid var="utenti" value="#{utenteBean.risultato}" columns="3" rows="5" paginator="true"  rowsPerPageTemplate="5,10,15">  
 
 	    <p:column>  
 	        <h:outputText value="#{utenti.username}" />  

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="buttons.css" library="css" />
+</h:head>
+
+<h:body>
+	
+	<h:panelGroup styleClass="pannello homepage">
+
+		<h:form id="profiloform">
+			
+			<h:panelGrid id="utentetrovatopanel">
+		
+			 	<h:panelGrid id="albumsutentetrovatopanel">
+			   		
+			   		<f:facet name="header">
+	            		<h:outputText value="ALBUMs PHOTOSHOOTEr - size()=#{utenteBean.cercaUtente.utente.pubblicati.size()}"/>
+		       		</f:facet>
+				  
+				    <p:carousel value="#{utenteBean.cercaUtente.utente.pubblicati}" numVisible="5" headerText="ALBUMs" var="result" itemStyle="text-align:center" responsive="true">
+							<p:panel>
+								<h:graphicImage rendered="#{result.copertinaAlbum!=null}"	value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{result.titolo}/#{result.copertinaAlbum.nomeFileFoto}"
+									styleClass="circularutente" style="cursor: pointer;">
+									<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+								</h:graphicImage>
+								<h:graphicImage rendered="#{result.copertinaAlbum==null}"	value="/resources/images/album-copertina.svg"
+									height="50" style="cursor: pointer;">
+									<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+								</h:graphicImage>
+								<h:panelGrid columns="2" styleClass="rightcolonna,leftcolonna">
+									<h:outputLabel for="idAlbum">ID</h:outputLabel>
+									<h:outputText id="idAlbum" value="#{result.id}"></h:outputText>
+									<h:outputLabel for="titAlbum">TITOLo</h:outputLabel>
+									<h:commandButton id="titAlbum" value="#{result.titolo}" styleClass="menubuttonwhite">
+					    				<f:ajax event="click" listener="#{inputBean.fotosUtenteTrovato2(result)}" render=":content" />
+					    	   		</h:commandButton>	<br></br>
+									<h:outputLabel for="descrAlbum">DESCRIZIONe</h:outputLabel>
+									<h:outputText id="descrAlbum" value="#{result.descrizione}"></h:outputText>	
+								</h:panelGrid>
+							</p:panel>
+				    </p:carousel>
+
+			   
+			    </h:panelGrid>
+				
+				<h:panelGrid id="datiutentetrovatopanel" border="1" columns="2" columnClasses="width: 75%;,width: 25%; ">
+				
+					<h:panelGrid id="datigeneralipanel"  columns="1" >
+					
+					  <h:panelGrid  columns="2" styleClass="vertical-align: top" columnClasses="2right,2left">
+						
+							<f:facet name="header">
+			            		<h:outputText value="PROFILO PHOTOSHOOTEr - #{utenteBean.cercaUtente.utente.username}&#160;&#160;"/>
+			        		    <h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.cercaUtente.utente.username}/#{utenteBean.cercaUtente.utente.avatar}" styleClass="circularutente"></h:graphicImage>
+			            		<h:graphicImage rendered="#{utenteBean.cercaUtente.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>
+			            		<h:graphicImage rendered="#{utenteBean.cercaUtente.utente.online==true and utenteBean.tipoMembershipUtente()!=0}" value="/resources/images/online.svg" styleClass="onlineprofiloutente"/>	
+			        		</f:facet>
+			        		
+						<h:panelGrid  columns="2" columnClasses="rightprofilo,leftprofilo">
+				
+							<h:outputLabel for="username">USERNAMe</h:outputLabel>
+							<h:outputText style="width: 120px;"  id="username" value="#{utenteBean.cercaUtente.utente.username}"/>
+							
+							<h:outputLabel for="password">PASSWORd</h:outputLabel>
+							<h:outputText  id="password" value="#{utenteBean.cercaUtente.utente.password}"/>
+											
+							<h:outputLabel for="email">EMAIl</h:outputLabel>
+							<h:outputText  id="email" value="#{utenteBean.cercaUtente.utente.email}"/>
+							
+							<h:outputLabel for="nome">NOMe</h:outputLabel>
+							<h:outputText  id="nome" value="#{utenteBean.cercaUtente.utente.name}"/>
+							
+							<h:outputLabel for="cognome">COGNOMe</h:outputLabel>
+							<h:outputText id="cognome" value="#{utenteBean.cercaUtente.utente.cognome}"/>
+							
+							<h:outputLabel for="sesso">SESSo</h:outputLabel>
+							<h:outputText id="sesso" value="#{utenteBean.cercaUtente.utente.sesso}" />
+							
+							<h:outputLabel for="dataNascita">ETà</h:outputLabel>
+			        	    <h:outputText id="dataNascita" value="#{utenteBean.calcolaEtà(cercaUtente.utente.dataNascita)}" />
+							
+							<h:outputLabel for="città">CITTà</h:outputLabel>
+							<h:outputText id="città" value="#{utenteBean.cercaUtente.utente.città}"/>
+							
+							<h:outputLabel for="descrizione">DESCRIZIONe - CURRICULUm</h:outputLabel>
+							<h:inputTextarea readonly="true" size="50" rows="12" id="descrizione" value="#{utenteBean.cercaUtente.utente.descrizione}"/>
+							
+						</h:panelGrid>
+							
+						<h:panelGrid  columns="2" columnClasses="rightprofilo,leftprofilo">
+							
+							<h:outputLabel for="sitoweb">SITo WEb</h:outputLabel>
+							<h:outputText  style="width: 120px;" id="sitoweb" value="#{utenteBean.cercaUtente.utente.sitoweb}"/>
+							
+							<h:outputLabel for="facebook">FACEBOOk</h:outputLabel>
+							<h:outputText id="facebook" value="#{utenteBean.cercaUtente.utente.facebook}"/>
+							
+							<h:outputLabel for="instagram">INSTAGRAm</h:outputLabel>
+							<h:outputText id="instagram" value="#{utenteBean.cercaUtente.utente.instagram}"/>	
+							
+							<h:outputLabel for="tumblr">TUMBLr</h:outputLabel>
+							<h:outputText id="tumblr" value="#{utenteBean.cercaUtente.utente.tumblr}"/>
+							
+							<h:outputLabel for="twitter">TWITTEr</h:outputLabel>
+							<h:outputText id="twitter" value="#{utenteBean.cercaUtente.utente.twitter}"/>
+							
+							<h:outputLabel for="googleplus">GOOGLe+</h:outputLabel>
+							<h:outputText id="googleplus" value="#{utenteBean.cercaUtente.utente.googleplus}"/>
+								
+							<h:outputLabel for="linkedin">LINKEDIn</h:outputLabel>
+							<h:outputText id="linkedin" value="#{utenteBean.cercaUtente.utente.linkedin}"/>	
+			
+							<h:outputLabel for="tipoutente">PROFILo PROFESSIONALe</h:outputLabel>
+							<h:outputText id="tipoutente" value="#{utenteBean.cercaUtente.utente.tipoUtente.descrizione}"/>
+							
+							<h:outputLabel for="esperienza">LIVELLo ESPERIENZa</h:outputLabel>
+							<h:outputText id="esperienza" value="#{utenteBean.cercaUtente.utente.esperienza}" />
+								
+							<h:outputLabel for="regione">REGIONi Di COLLABORAZIONe</h:outputLabel>
+							<h:outputText id="regione" value="#{utenteBean.cercaUtente.utente.regIta}" />
+			
+							<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
+							<h:outputText id="tipolavoro" value="#{utenteBean.cercaUtente.utente.tipiLavoroDescrizione}" />	
+			
+						</h:panelGrid>	
+						
+				      </h:panelGrid>
+						
+					  <h:panelGrid id="modellaGrid" border="0" columns="2" columnClasses="right,left" rendered="#{utenteBean.cercaUtente.utente.tipoUtente.id==2 || cercaUtenteVO.utente.tipoUtente.id==9}">
+						
+						<h:panelGrid columns="2" columnClasses="rightprofilo,leftprofilo">
+							
+							<h:outputLabel for="vita">VITa [Cm]</h:outputLabel>
+							<h:outputText id="vita" value="#{utenteBean.cercaUtente.utente.vita}" />
+							
+							<h:outputLabel for="seno">SENo [Cm]</h:outputLabel>
+							<h:outputText  id="seno" value="#{utenteBean.cercaUtente.utente.seno}" />
+							
+							<h:outputLabel for="fianchi">FIANCHi [Cm]</h:outputLabel>
+							<h:outputText  id="fianchi" value="#{utenteBean.cercaUtente.utente.fianchi}" />
+						
+							<h:outputLabel for="altezza">ALTEZZa [Cm]</h:outputLabel>
+							<h:outputText  id="altezza" value="#{utenteBean.cercaUtente.utente.altezza}" />		
+								
+						</h:panelGrid>
+									
+						<h:panelGrid columns="2" columnClasses="rightprofilo,leftprofilo">
+			
+							<h:outputLabel for="peso">PESo [Kg]</h:outputLabel>
+							<h:outputText  id="peso" value="#{utenteBean.cercaUtente.utente.peso}" />
+							
+							<h:outputLabel for="taglia">TAGLIa [Eu]</h:outputLabel>
+							<h:outputText  id="taglia" value="#{utenteBean.cercaUtente.utente.taglia}" />
+												
+							<h:outputLabel for="scarpe">SCARPe [Eu]</h:outputLabel>
+							<h:outputText  id="scarpe" value="#{utenteBean.cercaUtente.utente.scarpe}" />
+												
+							<h:outputLabel for="tatuaggi">TATUAGGi [#]</h:outputLabel>
+							<h:outputText  id="tatuaggi" value="#{utenteBean.cercaUtente.utente.tatuaggi}" />
+							
+							<h:outputLabel for="piercing">PIERCINg [#]</h:outputLabel>
+							<h:outputText  id="piercing" value="#{utenteBean.cercaUtente.utente.piercing}" />
+			
+						</h:panelGrid>
+					   
+					  </h:panelGrid>
+							
+					</h:panelGrid>
+					<h:panelGrid >
+						<f:facet name="header">
+		            		<h:outputText value="ATTIVITà PHOTOSHOOTEr&#160;"/>
+		            		<h:graphicImage value="/resources/images/iconamessaggiscambiati.svg" title="Hai scambiato messaggi con #{utenteBean.cercaUtente.utente.username}" width="20" height="20" rendered="#{threadBean.esisteThreadConUtenteTrovato(utenteBean.cercaUtente.utente) and utenteBean.tipoMembershipUtente()!=0}"></h:graphicImage>
+		        			<h:graphicImage value="/resources/images/iconacollaborato.svg" title="Hai collaborato con #{utenteBean.cercaUtente.utente.username}" width="20" height="20" rendered="#{utenteBean.collaboratoUtente and utenteBean.tipoMembershipUtente()!=0}"></h:graphicImage>
+		        		</f:facet>
+		        		<h:panelGrid columns="2" columnClasses="rightprofilo,leftprofilo">
+		        			<h:outputLabel for="ultimoaccesso">ULTIMo ACCESSo</h:outputLabel>
+							<h:outputText rendered="#{utenteBean.tipoMembershipUtente()==2}" id="ultimoaccesso" value="#{utenteBean.cercaUtente.utente.dataUltimoAccesso}">
+								<f:convertDateTime pattern="HH:mm:ss EEEE dd.MM.yyyy" />
+							</h:outputText>
+							<h:outputText rendered="#{utenteBean.tipoMembershipUtente()!=2}" id="ultimoaccesso2" value="VISIBILe Ad UTENTi +PLUs">
+							</h:outputText>
+		        		</h:panelGrid>
+						<h:panelGrid id="attivitàutentetrovatopanel">
+						
+							<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" action="#{utenteBean.cercaCollaborazioniUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="FOTo PREFERITe Da | SEGUITo Da" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferentiFollowerUtenteTrovato(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="ANNUNCi"></h:commandButton>
+							<h:commandButton value="POSTs"></h:commandButton>
+							
+						</h:panelGrid>	
+						
+						<h:panelGrid id="interagisciutentetrovatopanel">
+						
+							<h:commandButton value="INVIa MESSAGGIo" disabled="#{utenteBean.tipoMembershipUtente()==0}" title="attivo per membri" action="#{menuBean.menuClick(19)}"></h:commandButton>
+							<h:commandButton value="CHAt" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" ></h:commandButton>
+							<h:commandButton value="SEGUi PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==false}" action="#{utenteBean.seguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+							<h:commandButton value="NOn sEGUIRe PIù PHOTOSHOOTEr" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti +PLUs" rendered="#{utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)==true}" action="#{utenteBean.nonSeguiUtente(utenteBean.cercaUtente.utente)}"></h:commandButton>
+						
+						</h:panelGrid>
+						<h:panelGrid id="visitepanel">
+							<f:facet name="header">
+            					<h:outputText styleClass="common" value="VISITe P|S (#{utenteBean.cercaUtente.utente.visite})"/>
+       						</f:facet>
+							<ui:repeat value="#{utenteBean.cercaUtente.utente.utentiVisitatori}" var="info">
+								<h:commandLink styleClass="leftprofilo" value="#{info.username}" action="#{utenteBean.utenteTrovatoId(info.id)}"></h:commandLink>
+								<h:outputText value=",&#160;"></h:outputText>
+							</ui:repeat>
+						</h:panelGrid>
+					</h:panelGrid>
+
+											
+					<f:facet name="footer">
+			            <h:panelGroup>
+			         	<h:commandButton value="MODIFICa RICERCa" styleClass="menubutton">
+		    			   <f:ajax event="click" listener="#{menuBean.menuClick(6)}" render=":content :cercaform" />
+		    	   		</h:commandButton>  <br/>
+			            	<h:outputText value="#{contentBean.messaggio}"></h:outputText><br/><br/>
+		            	</h:panelGroup>
+	        		</f:facet>
+		        		
+				</h:panelGrid>
+			
+			</h:panelGrid>			
+					
+		</h:form>
+
+	</h:panelGroup>
+
+</h:body>
+</html>

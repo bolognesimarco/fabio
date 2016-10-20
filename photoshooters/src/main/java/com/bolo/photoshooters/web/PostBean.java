@@ -58,7 +58,6 @@ public class PostBean {
 
 
 	Thread threadInRisposta = new Thread();
-//	int firstRow = 0;
 	private List<Post> listaPostsGenerica = new ArrayList<Post>();
 	private String titoloListaPostsGenerica = new String();
 
@@ -167,8 +166,15 @@ public class PostBean {
 	
 	//SuperPost=Lista Posts
 	public void visualizzaSuperPost(SuperPost sp) {
-		superPostGenerico = sp;
-		for (Post p : superPostGenerico.getPosts()) {
+//		EntityManager em = EMF.createEntityManager();
+//		List<SuperPost> superposts = em
+//		.createQuery("from SuperPost p where p.id=:idsp")
+//		.setParameter("idsp", sp.getId())
+//		.getResultList();
+//		if(superposts!=null && superposts.size()>0) {
+//			superPostGenerico = superposts.get(0);
+//		}	
+		for (Post p : sp.getPosts()) {
 //			System.out.println("inizio ordinamentoooo - P id= "+p.getId());
 			for (Thread t : p.getRisposte()) {
 //				System.out.println("inizio ordinamentoooo - TD id= "+t.getId());
@@ -176,9 +182,10 @@ public class PostBean {
 			}
 			ordinaThreadPerData(p.getRisposte());
 		}
-		ordinaPostPerData(superPostGenerico.getPosts());
+		ordinaPostPerData(sp.getPosts());
+		superPostGenerico = sp;
 		contentBean.setContent("forumSuperPostGenerico.xhtml");
-		System.out.println("sp.posts(0).id=== "+superPostGenerico.getPosts().get(0).getId());
+//		System.out.println("sp.posts(0).id=== "+superPostGenerico.getPosts().get(0).getId());
 	}
 	
 	
@@ -193,10 +200,12 @@ public class PostBean {
 		Date d = new Date();
 		m.setData(d);
 		m.setThread(t);
+		m.getLetto().add(utenteBean.getUtente());
 		t.getMessaggi().add(m);
 		t.setOggettoThread(messaggioNuovoPost.getOggetto());
 		t.setMittentePrimo(utenteBean.getUtente());
 		t.setDestinatarioPrimo(utenteBean.getUtente());
+		t.setNuovoMessaggio(true);
 		t.setPost(p);
 		p.getRisposte().add(t);
 		p.setProponente(utenteBean.getUtente());
@@ -214,13 +223,154 @@ public class PostBean {
 	
 	public void visualizzaPost (Post p) {
 		System.out.println("visualizzaPost START");
-		for (Thread t : p.getRisposte()) {
-			ordinaIversamenteMessaggiPerData(t.getMessaggi());
-		}
+//		EntityManager em = EMF.createEntityManager();
+//		List<Post> posts = em
+//		.createQuery("from Post p where p.id=:idsp")
+//		.setParameter("idsp", p.getId())
+//		.getResultList();
+//		if(posts!=null && posts.size()>0) {
+//			postGenerico = posts.get(0);
+//		}	
+	
+
+			for (Thread t : p.getRisposte()) {	
+				if (utenteBean.tipoMembershipUtente()!=0) {	
+					boolean nuovoPost = false;
+					boolean nuovoMess = false;					
+	
+					for (Messaggio mess : t.getMessaggi()) {
+						int i=0;
+					//		System.out.println("id mess: "+mess.getId());
+						for (Utente ut : mess.getLetto()) {
+							if (ut.getId()==utenteBean.getUtente().getId()) {
+								i++;
+					//			System.out.println("ut.getId()==idUtente__i="+i);
+							}
+						}
+						if (i==0) {// non ha letto il messaggio
+								nuovoPost = true;
+								mess.getLetto().add(utenteBean.getUtente());
+								System.out.println(" utente=destinatario non ha letto il messaggio id="+mess.getId());
+							} else { //ha letto il messaggio
+								if(utenteBean.getUtente().getId()==mess.getDestinatario().getId() && utenteBean.getUtente().getId()!=mess.getMittente().getId()) {
+									mess.setLettoDaDestinatario(true);	
+									nuovoPost = true;
+								}
+							}
+						} 
+					if (nuovoPost) {
+						try {
+							serv.merge(t);
+							System.out.println("merging....");
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				ordinaIversamenteMessaggiPerData(t.getMessaggi());
+			}
+
+
+				
+				
+//				if (threadContieneMessaggiPerUtenteNonLetti(utenteBean.getUtente().getId(), t)) {
+//					// per qui messaggi aggiungi me a mess.letto e mess.islettodadest = true
+//				} else {
+//					for (Messaggio m : t.getMessaggi()) {
+//						//	se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
+//						if (!messaggioIsLetto(utenteBean.getUtente().getId(), m)) {
+//							System.out.println("messaggio non letto da destinatario (me)!");
+//							m.getLetto().add(utenteBean.getUtente());
+//							nuovoPost = true;
+//						}		
+//					}
+//				}		
+//			
+				
+//				
+//				
+//				if (threadContieneMessaggiNonLetti(utenteBean.getUtente().getId(), t)) {
+//					if (threadContieneMessaggiPerUtenteNonLetti(utenteBean.getUtente().getId(), t)) {
+//						if (!t.isNuovoMessaggio())  {
+//							System.out.println("t.isNuovoMessaggio()=="+t.isNuovoMessaggio());
+//							for (Messaggio m : t.getMessaggi()) {
+//			//					se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
+//								if (!messaggioIsLetto(utenteBean.getUtente().getId(), m)) {
+//									System.out.println("messaggio non letto da destinatario (me)!");
+//									m.getLetto().add(utenteBean.getUtente());
+//									nuovoPost = true;
+//								}		
+//							}
+//						} else {
+//							t.setNuovoMessaggio(false);
+//							nuovoMess = true;
+//						}	
+//					} else {
+//						for (Messaggio m : t.getMessaggi()) {
+//		//					se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
+//							if (!messaggioIsLetto(utenteBean.getUtente().getId(), m)) {
+//								System.out.println("messaggio non letto da destinatario (me)!");
+//								m.getLetto().add(utenteBean.getUtente());
+//								nuovoPost = true;
+//							}		
+//						}
+//					}
+//				}
+//					
+//				if (nuovoMess || nuovoPost) {
+//					try {
+//						serv.merge(t);
+//						System.out.println("merging....");
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//			}	
+//			ordinaIversamenteMessaggiPerData(t.getMessaggi());
+//		}
+
 		ordinaInversamenteThreadPerData(p.getRisposte());
 		postGenerico = p;
-		contentBean.setContent("forumPostGenerico2.xhtml");
+		contentBean.setContent("forumPostGenerico3.xhtml");
+		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("postgenericoforumform");	
 	}
+		
+		
+//		if(threadContieneMessaggiNonLetti(utenteBean.getUtente().getId(), t)) {
+////				se non è la prima volta che visualizzo il post, devo aggiungere me stesso alla lista messaggio.getLetto() per tutti i messaggi			
+//			if (!t.isNuovoMessaggio())  {
+//				System.out.println("t.isNuovoMessaggio()=="+t.isNuovoMessaggio());
+//				for (Messaggio m : t.getMessaggi()) {
+////					se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
+//					if (!messaggioIsLetto(utenteBean.getUtente().getId(), m)) {
+//						System.out.println("messaggio non letto da destinatario (me)!");
+//						m.getLetto().add(utenteBean.getUtente());
+//						nuovoPost = true;
+//					}		
+//				}
+//			} else {
+//				System.out.println("t.isNuovoMessaggio()=="+t.isNuovoMessaggio());
+//				if (threadContieneMessaggiPerUtenteNonLetti(utenteBean.getUtente().getId(), t)) {
+////					la prima volta che visualizzo un thread, se ci sono messaggi new per me (non letti da me) devo settare nuovoMessaggio = false
+//					t.setNuovoMessaggio(false);
+//					nuovoMess = true;
+//				} else {
+//					for (Messaggio m : t.getMessaggi()) {
+//						if (!messaggioIsLetto(utenteBean.getUtente().getId(), m)) {
+//							System.out.println("messaggio non letto da destinatario (me)!");
+//							m.getLetto().add(utenteBean.getUtente());
+//							nuovoPost = true;
+//						}	
+//					}
+//				}
+//			}
+//		}
+//	}
+	
+	
+	
 	
 
 	public void inviaRispostaPost (Post p) {
@@ -231,8 +381,10 @@ public class PostBean {
 		mess.setThread(thr);
 		mess.setOggetto("Re: "+p.getRisposte().get(p.getRisposte().size()-1).getOggettoThread());
 		mess.setMessaggio(messaggioRispostaPost.getMessaggio());
+		mess.getLetto().add(utenteBean.getUtente());
 		Date ora = new Date();
 		mess.setData(ora);
+		thr.setNuovoMessaggio(true);
 		thr.getMessaggi().add(mess);
 		thr.setDestinatarioPrimo(p.getProponente());
 		thr.setMittentePrimo(utenteBean.getUtente());
@@ -245,6 +397,7 @@ public class PostBean {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("POSTrisposte.sizeDopoInvioPost=="+p.getRisposte().size());
 		messaggioRispostaPost = new Messaggio();
 		contentBean.setMessaggio("risposta al post inviata!");
 		visualizzaPost(p);
@@ -261,7 +414,9 @@ public class PostBean {
 		mess.setMessaggio(messaggioRispostaThr.getMessaggio());
 		Date ora = new Date();
 		mess.setData(ora);
+		mess.getLetto().add(utenteBean.getUtente());
 		t.getMessaggi().add(mess);
+		t.setNuovoMessaggio(true);
 		try {
 			serv.merge(t);
 		} catch (Exception e) {
@@ -269,39 +424,11 @@ public class PostBean {
 			e.printStackTrace();
 		}
 		contentBean.setMessaggio("risposta secondaria inviata!");
-		contentBean.setContent("forumPostGenerico2.xhtml");
+		contentBean.setContent("forumPostGenerico3.xhtml");
 	}
 	
-	private List<Thread> listThr;
-	@PostConstruct
-	public void init() {
-		System.out.println("postConstruct"+postGenerico.getRisposte().size());
-		listThr = new ArrayList<Thread>();
-		listThr = postGenerico.getRisposte();
-		}
 	
 	public void threadInRispostaSet(Thread thr) {
-
-//		Thread thr = null;
-//
-//	    UIComponent tmpComponent = ev.getComponent();
-//
-//	    while (null != tmpComponent && !(tmpComponent instanceof UIData)) {
-//	      tmpComponent = tmpComponent.getParent();
-//	    }
-//
-//	    if (tmpComponent != null && (tmpComponent instanceof UIData)) {
-//	      Object tmpRowData = ((UIData) tmpComponent).getRowData();
-//	      if (tmpRowData instanceof Thread) {
-//	    	  thr = (Thread) tmpRowData;
-//
-//	    //TODO Implementation of your method
-//
-//	      }
-//	    }
-//	    
-//	    
-////		Thread thr = null
 		System.out.println("GETID: " + thr.getId());
 		threadInRisposta = thr;
 		messaggioRispostaThr.setMessaggio("CITANDo P|S: "+thr.getMessaggi().get(0).getMittente().getUsername()+" - MESSAGGIo: "+thr.getMessaggi().get(0).getMessaggio()+"\n");
@@ -319,8 +446,208 @@ public class PostBean {
 		for (Thread t : p.getRisposte()) {
 			numeroMessaggi += t.getMessaggi().size();
 		}
-		return numeroMessaggi;
+		return (numeroMessaggi-1);
 	}
+	
+	
+//	Post new e unread
+		
+	public boolean messaggioIsLetto (int idUtente, Messaggio mess) {
+		for (Utente uts : mess.getLetto()) {
+			if(uts.getId()==idUtente){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+//	public boolean postContieneMessaggiNonLetti (int idUtente, Post post) {
+//		System.out.println("START postContieneMessaggiNonLetti - post id="+post.getId());
+//		for (Thread thr : post.getRisposte()) {
+//			int j=0;
+//			System.out.println("thread in analisi id="+thr.getId());
+////			se faccio parte del thread
+//			if(thr.getMittentePrimo().getId()==idUtente || thr.getDestinatarioPrimo().getId()==idUtente) {
+//				System.out.println("faccio parte del thread");
+//				System.out.println("ultimo mess id="+thr.getMessaggi().get(0).getId());
+//
+//				if(!thr.isNuovoMessaggio()) {
+//					j++;
+//					System.out.println("thread NON NUOVO!");
+//				} 
+//				else {
+//					if(!threadContieneMessaggiPerUtenteNonLetti(idUtente, thr)){
+//						j++;
+//						System.out.println("thread NUOVO ma non contiene messaggi per me non letti");					
+//					}
+//				}
+//			} else { // non faccio parte del thread 
+//				System.out.println("NON faccio parte del thread");
+//				for (Messaggio mess : thr.getMessaggi()) {
+//					if(messaggioIsLetto(idUtente, mess)) {
+//						j++;
+//						System.out.println("messIseLetto=TRUE id mess="+mess.getId());
+//					}
+//				}
+//			}
+//			if(j==0) { //ci sono mess non letti dall'utente
+//				System.out.println("postContieneRisposteNonLette=TRUE_oggetto: "+post.getRisposte().get(0).getOggettoThread());
+//				return true;	
+//			}
+//		}
+//
+//		System.out.println("postContieneRisposteNonLette=FALSE_oggetto: "+post.getRisposte().get(0).getOggettoThread());
+//		return false;
+//}
+
+	
+	public boolean postContieneMessaggiNonLetti (int idUtente, Post post) {
+		System.out.println("id ut"+ idUtente+" id post"+post.getId());
+		for (Thread thr : post.getRisposte()) {
+
+			for (Messaggio mess : thr.getMessaggi()) {
+	//			escludo il primo messaggio che è quello dell'annuncio, dove mittente=destinatario
+	//			if(mess.getMittente().getId()!=mess.getDestinatario().getId()) {
+				int i=0;
+				System.out.println("id mess: "+mess.getId());
+				for (Utente ut : mess.getLetto()) {
+					if (ut.getId()==idUtente) {
+						i++;
+						System.out.println("ut.getId()==idUtente__i="+i);
+					}
+				}
+	//			i=0 -> ci sono mess non letti - se (non sono destPrimo o mittPrimo del thread OR thread non è nuovo)
+				if (i==0) {
+					System.out.println("mess non letto ID="+mess.getId());
+					return true;
+				}
+			}
+
+		}
+		System.out.println("postContieneRisposteNonLette=FALSE_oggetto: "+post.getRisposte().get(0).getOggettoThread());
+		return false;
+}
+	
+	
+	
+	
+	public boolean threadContieneMessaggiPerUtenteNonLetti (int idUtente, Thread thread) {
+	int j=0;
+	for (Messaggio mess : thread.getMessaggi()) {
+		if(idUtente==mess.getDestinatario().getId() && idUtente!=mess.getMittente().getId()) {
+			int i=0;
+	//		System.out.println("id mess: "+mess.getId());
+			for (Utente ut : mess.getLetto()) {
+				if (ut.getId()==idUtente) {
+					i++;
+	//				System.out.println("ut.getId()==idUtente__i="+i);
+				}
+			}
+			if (i==0) {
+	//			j++;
+				System.out.println("threadContieneMessaggiPerUtenteNonLetti=TRUE_oggetto: "+thread.getOggettoThread());
+				return true;
+	//			System.out.println("i==0__j="+j);
+			}
+		}
+	}
+//	if (j>0) {
+//		System.out.println("threadContieneMessaggiNonLetti=TRUE_oggetto: "+thread.getOggettoThread());
+//		return true;
+//	}
+	System.out.println("threadContieneMessaggiPerUtenteNonLetti=FALSE_oggetto: "+thread.getOggettoThread());
+	return false;
+}
+	
+	
+	
+	public boolean threadContieneMessaggiNonLetti (int idUtente, Thread thread) {
+	int j=0;
+	for (Messaggio mess : thread.getMessaggi()) {
+		int i=0;
+//		System.out.println("id mess: "+mess.getId());
+		for (Utente ut : mess.getLetto()) {
+			if (ut.getId()==idUtente) {
+				i++;
+//				System.out.println("ut.getId()==idUtente__i="+i);
+			}
+		}
+		if (i==0) {
+//			j++;
+			System.out.println("threadContieneMessaggiNonLetti=TRUE_oggetto: "+thread.getOggettoThread());
+			return true;
+		}
+	}
+//	if (j>0) {
+//		System.out.println("threadContieneMessaggiNonLetti=TRUE_oggetto: "+thread.getOggettoThread());
+//		return true;
+//	}
+	System.out.println("threadContieneMessaggiNonLetti=FALSE_oggetto: "+thread.getOggettoThread());
+	return false;
+}
+	
+	
+	
+//	public void nuoviMessaggiThreadsAnnuncio (int idUtente) {
+//	threadsAnnunciConNuoviMessaggi.clear();
+//	System.out.println("nuoviMESSAGGIANNUNCIIIIIingresso");
+//	
+//	List<Annuncio> annunciConNuoviMessaggiInThreadsToT = new ArrayList<Annuncio>();
+//	List<Annuncio> annunciTotUtente = new ArrayList<Annuncio>();
+//	annunciTotUtente.addAll(annunciUtente);
+//	annunciTotUtente.addAll(annunciRispostiDaUtente);
+//	if(annunciUtente.size()>0){
+//		System.out.println("annunciUtente.risposte() size="+annunciTotUtente.get(0).getRisposte().size());
+//	}
+//
+//	if (annunciRispostiDaUtente.size()>0) {
+//		System.out.println("annunciRispostiDaUtente.risposte() size="+annunciRispostiDaUtente.get(0).getRisposte().size());
+//	}
+//	System.out.println("annunciTotUtente size="+annunciTotUtente.size());
+//	for (Annuncio annuncio : annunciTotUtente) {
+//		System.out.println("annunciTotUtente id="+annuncio.getId());
+//		System.out.println("annunciTotUtente thread.size===="+annuncio.getRisposte().size());
+//		for (Thread thr : annuncio.getRisposte()) {
+//			System.out.println("thread annuncio id="+thr.getId());
+//			if (thr.isNuovoMessaggio()) {
+//				System.out.println("isNuovoMessaggio== TRUEEE id="+thr.getId());
+//				annunciConNuoviMessaggiInThreadsToT.add(annuncio);
+//			}
+//		}
+//	}
+//	System.out.println("****ANNUNCIO Pubblicati+Risposti #"+annunciConNuoviMessaggiInThreadsToT.size());
+//
+//	int numthr = 0;		
+//	for (Annuncio ann : annunciConNuoviMessaggiInThreadsToT) {	
+//		for (Thread thr : ann.getRisposte()) {
+//			System.out.println("THREAD ID="+thr.getId());
+////			controllo se non ho cancellato il thread - in caso lo avessi cancellato, non lo conteggio anche se contiene mess nuovi x me
+//			if ((thr.getMittentePrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadMittente()==false) || (thr.getDestinatarioPrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadDestinatario()==false)) {	
+//				if (threadContieneMessaggiNonLetti(idUtente, thr)) {
+//					System.out.println("TRUE=contiene"+threadContieneMessaggiNonLetti(idUtente, thr));
+//					numthr++;
+//					threadsAnnunciConNuoviMessaggi.add(thr);
+//				}
+//			}
+//		}
+//	}
+//	System.out.println("threads annunci con messaggi non letti size"+threadsAnnunciConNuoviMessaggi.size());
+//	nuoviMessaggiAnnunci = numthr;
+//	System.out.println("nuoviMessaggiAnnunci==="+nuoviMessaggiAnnunci);
+//}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -385,81 +712,7 @@ public class PostBean {
 		contentBean.setMessaggio("risposta secondaria inviata!");
 		contentBean.setContent("forumRegolamento.xhtml");
 	}
-//	
-//	public void forumListaGenerica(int tipoLista) {
-//		String tipo = "";
-//		switch (tipoLista) {
-//		case 1://FORUM UTENTI FREE
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 2://FORUM UTENTI PLUS
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 3://FEEDBACK UTENTI FREE
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 4://FEEDBACK UTENTI PLUS
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 5://LAVORI - RICHIESTA & OFFERTA	
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 6://LAVORI - CASTING & AGENZIE
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 7://FOTOGRAFIA - ATTREZZATURE & TECNICHE
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 8://FOTOGRAFIA - CONSIGLI & TRUCCHI
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 9://MODA - ULTIMI TREND
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		case 10://MODA - STILISTI & SFILATE
-//			tipo = "p.postUtentiFree";
-//			titoloListaPostsGenerica = "POSTs UTENTi FREe";
-//			break;
-//		default:
-//			break;
-//		}
-//		String query = "from Post p where "+tipo+" = true";
-//		EntityManager em = EMF.createEntityManager();
-//		List<Post> posts = em
-//		.createQuery(query)
-//		.getResultList();
-//		if(posts!=null && posts.size()>0){
-//			listaPostsGenerica = posts;
-//			
-//			for (Post p : listaPostsGenerica) {
-////				System.out.println("dopo ordinamentoooo messaggi");
-//				for (Thread t : p.getRisposte()) {
-//					ordinaMessaggiPerData(t.getMessaggi());
-////					int i;
-////					System.out.println("threadSize="+t.getMessaggi().size());
-////					for (i=0;i<t.getMessaggi().size();i++) {
-////						System.out.println("m("+i+")"+t.getMessaggi().get(i).getData());
-////					}
-//				}
-//				ordinaThreadPerData(p.getRisposte());
-////				System.out.println("p(0)"+p.getRisposte().get(0).getOggettoThread()+"data"+p.getRisposte().get(0).getMessaggi().get(0).getData());
-////				System.out.println("p(1)"+p.getRisposte().get(1).getOggettoThread()+"data"+p.getRisposte().get(1).getMessaggi().get(0).getData());
-////				System.out.println("p(2)"+p.getRisposte().get(2).getOggettoThread()+"data"+p.getRisposte().get(2).getMessaggi().get(0).getData());
-//			}
-//			
-//			contentBean.setContent("forumListaGenerica.xhtml");
-//		}
-//	}
-//	
+
 //	
 //	public void rispondiPost(Post p) {
 //		Thread thr = new Thread();
@@ -513,15 +766,6 @@ public class PostBean {
 //	}
 //	
 	
-//	public void messaggioInRispostaSet (Messaggio m) {
-//		messaggioInRisposta = m;
-//		messaggioInRisposta.setMessaggio("CITANDo P|S: "+m.getMittente().getUsername()+" - MESSAGGIo: "+m.getMessaggio()+"\n");
-//	}
-//	
-//	
-//	public void inviaMessaggioRispostaThread (Messaggio m) {
-//		
-//	}
 	
 	
 	
@@ -530,117 +774,11 @@ public class PostBean {
 
 	
 	
-	
-	
-	IndirectListSorter<Messaggio> messaggiSorter = new IndirectListSorter<Messaggio>();
-	
-	public void ordinaMessaggiPerData(List<Messaggio> listMess ) {	
-		System.out.println("ORDINA MESSAGGI:#"+listMess.size());
-		//ordina per ultimo invio/ricezione	
-		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator());
-	}
-	
-	public void ordinaIversamenteMessaggiPerData(List<Messaggio> listMess ) {	
-		System.out.println("ORDINA INVERSA MESSAGGI:#"+listMess.size());
-		//ordina per ultimo invio/ricezione	
-		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator() {
-			@Override
-			public int compare(Messaggio u1, Messaggio u2) {
-				int c = u1.getData().compareTo(u2.getData());
-//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
-				return c;
-			}
-		});
-	}
-	
-	
-	IndirectListSorter<Thread> threadsSorter = new IndirectListSorter<Thread>();	
-	
-	public void ordinaThreadPerData(List<Thread> listThr ) {	 
-		System.out.println("ORDINA THREADS:#"+listThr.size());
-		//ordina per ultimo invio/ricezione
-		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
-			@Override
-			public int compare(Thread u1, Thread u2) {
-				int c = u2.getMessaggi().get(0).getData().compareTo(u1.getMessaggi().get(0).getData());
-//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
-				return c;
-			}
-		});
-	}	
-	
-	public void ordinaInversamenteThreadPerData(List<Thread> listThr ) {	 
-		System.out.println("ORDINA INVERSA THREADS:#"+listThr.size());
-		//ordina per ultimo invio/ricezione
-		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
-			@Override
-			public int compare(Thread u1, Thread u2) {
-				int c = u1.getMessaggi().get(0).getData().compareTo(u2.getMessaggi().get(0).getData());
-//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
-				return c;
-			}
-		});
-	}	
-	
-	
-	IndirectListSorter<Post> postsSorter = new IndirectListSorter<Post>();
-	
-	public void ordinaPostPerData(List<Post> listPosts ) {	 
-		System.out.println("ORDINA POSTS:#"+listPosts.size());
-		//ordina per ultimo invio/ricezione
-		postsSorter.sortIndirectList(listPosts, new PostsComparator());
-	}
-	
-	
-	
-	
-	
 
-//	public boolean messaggioIsLetto (int idUtente, Messaggio mess) {
-//		for (Utente uts : mess.getLetto()) {
-//			if(uts.getId()==idUtente){
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-//	
-//	
-//	public boolean threadContieneMessaggiNonLetti (int idUtente, Thread thread) {
-//		int j=0;
-//		for (Messaggio mess : thread.getMessaggi()) {
-//			int i=0;
-////			System.out.println("id mess: "+mess.getId());
-//			for (Utente ut : mess.getLetto()) {
-//				if (ut.getId()==idUtente) {
-//					i++;
-////					System.out.println("ut.getId()==idUtente__i="+i);
-//				}
-//			}
-//			if (i==0) {
-//				j++;
-////				System.out.println("i==0__j="+j);
-//			}
-//		}
-//		if (j>0) {
-//			System.out.println("threadContieneMessaggiNonLetti=TRUE_oggetto: "+thread.getOggettoThread());
-//			return true;
-//		}
-//		System.out.println("threadContieneMessaggiNonLetti=FALSE_oggetto: "+thread.getOggettoThread());
-//		return false;
-//	}
-//	
-//	
+	
+// annunciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii	
 
-//	
-//	
-//	IndirectListSorter<Annuncio> annunciSorter = new IndirectListSorter<Annuncio>();	
-//	
-//	public void ordinaAnnunciPerData(List<Annuncio> listAnn ) {	 
-//		System.out.println("ORDINA Annunci:#"+listAnn.size());
-//		//ordina per ultima pubblicazione
-//		annunciSorter.sortIndirectList(listAnn, new AnnunciComparator());
-//	}
+
 //	
 //
 //	public void pubblicaNuovoAnnuncio () {
@@ -693,26 +831,6 @@ public class PostBean {
 //	}
 //
 //	
-//	public void cercaAnnunciRispostiDaUtente (int idUtente) {
-//		EntityManager em = EMF.createEntityManager();
-//		annunciRispostiDaUtente = em
-//		.createQuery("from Annuncio a inner join a.risposte ar where a.proponente.id <>:prop and ar.mittentePrimo.id =:prop and ar.cancellatoThreadMittente = false")
-//		.setParameter("prop", idUtente)
-//		.getResultList();
-//		ordinaAnnunciPerData(annunciRispostiDaUtente);
-//		System.out.println("annunciRispostiDaUtente size="+annunciRispostiDaUtente.size());
-//	}
-//	
-//	
-//	public void cercaAnnunciPubblicatiDaUtente (int idUtente) {
-//		EntityManager em = EMF.createEntityManager();
-//		annunciUtente = em
-//		.createQuery("from Annuncio a where a.proponente.id =:prop")
-//		.setParameter("prop", idUtente)
-//		.getResultList();
-//		ordinaAnnunciPerData(annunciUtente);	
-//		System.out.println("annunciUtente size="+annunciUtente.size());
-//	}
 //	
 //	
 //	private Map<Integer, Boolean> idAnnunciSelezionati = new HashMap<Integer, Boolean>();	
@@ -768,37 +886,7 @@ public class PostBean {
 //		cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
 //	}
 //	
-//	
-//	public boolean annuncioContieneRisposteNonLette (int idUtente, Annuncio ann) {
-//		for (Thread thr : ann.getRisposte()) {
-//			int j=0;
-//	//		System.out.println("annuncioContieneRisposteNonLette size="+ann.getRisposte().get(0).getMessaggi().size());
-//			for (Messaggio mess : thr.getMessaggi()) {
-////				escludo il primo messaggio che è quello dell'annuncio, dove mittente=destinatario
-//				if(mess.getMittente().getId()!=mess.getDestinatario().getId()) {
-//					int i=0;
-//					System.out.println("id mess: "+mess.getId());
-//					for (Utente ut : mess.getLetto()) {
-//						if (ut.getId()==idUtente) {
-//							i++;
-//							System.out.println("ut.getId()==idUtente__i="+i);
-//						}
-//					}
-//		//			i=0 -> ci sono mess non letti
-//					if (i==0) {
-//						j++;
-//						System.out.println("mess non letto ID="+mess.getId());
-//					}
-//				}
-//			}
-//			if (j>0) {
-//				System.out.println("annuncioContieneRisposteNonLette=TRUE_oggetto: "+ann.getRisposte().get(0).getOggettoThread());
-//				return true;
-//			}
-//		}
-//		System.out.println("annuncioContieneRisposteNonLette=FALSE_oggetto: "+ann.getRisposte().get(0).getOggettoThread());
-//		return false;
-//	}
+
 //	
 //	
 //	public boolean annuncioContieneThreadNuovo (Annuncio ann) {
@@ -866,98 +954,13 @@ public class PostBean {
 //		contentBean.setMessaggio(null);
 //		contentBean.setContent("annuncioAltrui.xhtml");		
 //	}
+
+
+//	---------------------------------------------------------------------------------------------------------------------------------
+
 //	
 //	
-//	public void visualizzaThreadAnnuncioPubblicato (Thread thread) {
-//		System.out.println("visualizzaThreadAnnuncioPubblicato START");
-//		threadAnnuncioPubblicato = thread;
-//		boolean nuovoThread = false;
-//		boolean nuovoMess = false;
-////		se non è nuovo thread 			
-//		System.out.println("threadAnnuncioPubblicato nuovo????"+threadAnnuncioPubblicato.isNuovoMessaggio());
-//		if (!threadAnnuncioPubblicato.isNuovoMessaggio()) {
-//			System.out.println("thread non ha nuovimessaggi");
-//			for (Messaggio m : threadAnnuncioPubblicato.getMessaggi()) {
-////					se l'utente (destinatario) non ha letto il messaggio (x non duplicare primary key)
-//				if (!messaggioIsLetto(m.getDestinatario().getId(), m))
-//				{
-//					System.out.println("messaggio non letto da destinatario (me)!");
-//					m.getLetto().add(m.getDestinatario());
-//					nuovoThread = true;
-//				}		
-//			}
-//		}				
-////			controllo se il thread che leggo è contenuto nella lista dei nuovi thread
-//		System.out.println("threadsAnnunciConNuoviMessaggi size= "+threadsAnnunciConNuoviMessaggi.size());
-//		for (Thread t : threadsAnnunciConNuoviMessaggi) {;
-//			if (t.getId()==threadAnnuncioPubblicato.getId())	{
-//				System.out.println("thread annuncio con nuovo mess contenuto in threadsAnnunciConNuoviMessaggi");
-//				threadAnnuncioPubblicato.setNuovoMessaggio(false);
-//				nuovoMess = true;
-//			}				
-//		}	
-//		if (nuovoMess || nuovoThread) {
-//			try {
-//				serv.merge(threadAnnuncioPubblicato);
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		ordinaMessaggiPerData(threadAnnuncioPubblicato.getMessaggi());			
-//		nuoviMessaggiThreadsAnnuncio(utenteBean.getUtente().getId());
-//		contentBean.setContent("annuncioThread.xhtml");		
-//	}
-//	
-//	
-//	public void nuoviMessaggiThreadsAnnuncio (int idUtente) {
-//		threadsAnnunciConNuoviMessaggi.clear();
-//		System.out.println("nuoviMESSAGGIANNUNCIIIIIingresso");
-//		
-//		List<Annuncio> annunciConNuoviMessaggiInThreadsToT = new ArrayList<Annuncio>();
-//		List<Annuncio> annunciTotUtente = new ArrayList<Annuncio>();
-//		annunciTotUtente.addAll(annunciUtente);
-//		annunciTotUtente.addAll(annunciRispostiDaUtente);
-//		if(annunciUtente.size()>0){
-//			System.out.println("annunciUtente.risposte() size="+annunciTotUtente.get(0).getRisposte().size());
-//		}
-//
-//		if (annunciRispostiDaUtente.size()>0) {
-//			System.out.println("annunciRispostiDaUtente.risposte() size="+annunciRispostiDaUtente.get(0).getRisposte().size());
-//		}
-//		System.out.println("annunciTotUtente size="+annunciTotUtente.size());
-//		for (Annuncio annuncio : annunciTotUtente) {
-//			System.out.println("annunciTotUtente id="+annuncio.getId());
-//			System.out.println("annunciTotUtente thread.size===="+annuncio.getRisposte().size());
-//			for (Thread thr : annuncio.getRisposte()) {
-//				System.out.println("thread annuncio id="+thr.getId());
-//				if (thr.isNuovoMessaggio()) {
-//					System.out.println("isNuovoMessaggio== TRUEEE id="+thr.getId());
-//					annunciConNuoviMessaggiInThreadsToT.add(annuncio);
-//				}
-//			}
-//		}
-//		System.out.println("****ANNUNCIO Pubblicati+Risposti #"+annunciConNuoviMessaggiInThreadsToT.size());
-//
-//		int numthr = 0;		
-//		for (Annuncio ann : annunciConNuoviMessaggiInThreadsToT) {	
-//			for (Thread thr : ann.getRisposte()) {
-//				System.out.println("THREAD ID="+thr.getId());
-//	//			controllo se non ho cancellato il thread - in caso lo avessi cancellato, non lo conteggio anche se contiene mess nuovi x me
-//				if ((thr.getMittentePrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadMittente()==false) || (thr.getDestinatarioPrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadDestinatario()==false)) {	
-//					if (threadContieneMessaggiNonLetti(idUtente, thr)) {
-//						System.out.println("TRUE=contiene"+threadContieneMessaggiNonLetti(idUtente, thr));
-//						numthr++;
-//						threadsAnnunciConNuoviMessaggi.add(thr);
-//					}
-//				}
-//			}
-//		}
-//		System.out.println("threads annunci con messaggi non letti size"+threadsAnnunciConNuoviMessaggi.size());
-//		nuoviMessaggiAnnunci = numthr;
-//		System.out.println("nuoviMessaggiAnnunci==="+nuoviMessaggiAnnunci);
-//	}
-//	
+
 //	
 //	public void aggiungiRispostaThreadAnnuncio() {
 //		System.out.println("AGGIUNGI RISPOSTA ANNUNCIO function");
@@ -1125,6 +1128,72 @@ public class PostBean {
 	
 	
 	
+	
+	IndirectListSorter<Messaggio> messaggiSorter = new IndirectListSorter<Messaggio>();
+	
+	public void ordinaMessaggiPerData(List<Messaggio> listMess ) {	
+		System.out.println("ORDINA MESSAGGI:#"+listMess.size());
+		//ordina per ultimo invio/ricezione	
+		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator());
+	}
+	
+	public void ordinaIversamenteMessaggiPerData(List<Messaggio> listMess ) {	
+		System.out.println("ORDINA INVERSA MESSAGGI:#"+listMess.size());
+		//ordina per ultimo invio/ricezione	
+		messaggiSorter.sortIndirectList(listMess, new MessaggiComparator() {
+			@Override
+			public int compare(Messaggio u1, Messaggio u2) {
+				int c = u1.getData().compareTo(u2.getData());
+//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
+				return c;
+			}
+		});
+	}
+	
+	
+	IndirectListSorter<Thread> threadsSorter = new IndirectListSorter<Thread>();	
+	
+	public void ordinaThreadPerData(List<Thread> listThr ) {	 
+		System.out.println("ORDINA THREADS:#"+listThr.size());
+		//ordina per ultimo invio/ricezione
+		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
+			@Override
+			public int compare(Thread u1, Thread u2) {
+				int c = u2.getMessaggi().get(0).getData().compareTo(u1.getMessaggi().get(0).getData());
+//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
+				return c;
+			}
+		});
+	}	
+	
+	public void ordinaInversamenteThreadPerData(List<Thread> listThr ) {	 
+		System.out.println("ORDINA INVERSA THREADS:#"+listThr.size());
+		//ordina per ultimo invio/ricezione
+		threadsSorter.sortIndirectList(listThr, new Comparator<Thread>() {
+			@Override
+			public int compare(Thread u1, Thread u2) {
+				int c = u1.getMessaggi().get(0).getData().compareTo(u2.getMessaggi().get(0).getData());
+//				System.out.println("comparing u2 "+u2.getMessaggi().get(0).getData()+" and u1 "+u1.getMessaggi().get(0).getData()+" : "+c);
+				return c;
+			}
+		});
+	}	
+	
+	
+	IndirectListSorter<Post> postsSorter = new IndirectListSorter<Post>();
+	
+	public void ordinaPostPerData(List<Post> listPosts ) {	 
+		System.out.println("ORDINA POSTS:#"+listPosts.size());
+		//ordina per ultimo invio/ricezione
+		postsSorter.sortIndirectList(listPosts, new PostsComparator());
+	}
+	
+	
+	
+	
+	
+	
+	
 	//************GETTERS & SETTERS*******************
 	
 
@@ -1254,17 +1323,6 @@ public class PostBean {
 
 	
 
-
-
-	public List<Thread> getListThr() {
-		return listThr;
-	}
-
-	public void setListThr(List<Thread> listThr) {
-		this.listThr = listThr;
-	}
-
-	
 	
 	
 	@ManagedProperty(value = "#{utenteBean}")

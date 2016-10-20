@@ -54,7 +54,7 @@
 								<h:outputText id="fotografo" style="display:none" value="#{risultato.fotografo}"/>
 								<h:outputLabel style="display:none"  for="soggetto" styleClass="menubuttonorange" >SOGGETTo</h:outputLabel>
 								<h:outputText id="soggetto" style="display:none" value="#{risultato.soggetto}"/>
-								<h:outputLabel style="display:none"  for="collaboratori" styleClass="menubuttonorange" >COLLABORATORi</h:outputLabel>
+								<h:outputLabel id="collaboratori" style="display:none"  for="collaboratori" styleClass="menubuttonorange" >COLLABORATORi</h:outputLabel>
 								<ui:repeat value="#{risultato.collaboratori}" var="info" >
 									<h:commandLink style="display:none" value="#{info.username}" action="#{utenteBean.utenteTrovatoId(info.id)}"></h:commandLink>
 									<h:outputText style="display:none" value=",&#160;"></h:outputText>

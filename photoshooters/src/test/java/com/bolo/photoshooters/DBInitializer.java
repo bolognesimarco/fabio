@@ -548,6 +548,7 @@ public class DBInitializer {
 		regolamentoThread.setDestinatarioPrimo(admin);
 		regolamentoThread.setPost(regolamentoPost);
 		Messaggio messRegolamento = new Messaggio();
+		messRegolamento.getLetto().add(admin);
 		regolamentoThread.getMessaggi().add(messRegolamento);
 		messRegolamento.setThread(regolamentoThread);
 		Date dataRegolamento = new Date();
@@ -571,12 +572,14 @@ public class DBInitializer {
 		presentazioneUtentiFreePost0.setProponente(admin);
 		presentazioneUtentiFreePost0.setPostUtentiFree(true);
 		Thread presentatiThread0 = new Thread();
+//		presentatiThread0.setNuovoMessaggio(true);
 		presentazioneUtentiFreePost0.getRisposte().add(presentatiThread0);
 		presentatiThread0.setOggettoThread("PRESENTAZIONe - UTENTi FREe");
 		presentatiThread0.setMittentePrimo(admin);
 		presentatiThread0.setDestinatarioPrimo(admin);
 		presentatiThread0.setPost(presentazioneUtentiFreePost0);
 		Messaggio messPresentati0 = new Messaggio();
+		messPresentati0.getLetto().add(admin);
 		presentatiThread0.getMessaggi().add(messPresentati0);
 		messPresentati0.setThread(presentatiThread0);
 		messPresentati0.setMessaggio("Sezione dedicata alla presentazione degli utenti free.");
@@ -600,6 +603,7 @@ public class DBInitializer {
 		presentatiThread1.setDestinatarioPrimo(test);
 		presentatiThread1.setPost(presentazioneUtentiFreePost1);
 		Messaggio messPresentati1 = new Messaggio();
+		messPresentati1.getLetto().add(test);
 		presentatiThread1.getMessaggi().add(messPresentati1);
 		messPresentati1.setThread(presentatiThread1);
 		messPresentati1.setMessaggio("ciao sono fb!!!");
@@ -608,8 +612,8 @@ public class DBInitializer {
 		dataPresentati1 = dateformat.parse(strdataPresentati1);
 		messPresentati1.setData(dataPresentati1);
 		messPresentati1.setOggetto(presentatiThread1.getOggettoThread());
-		messPresentati1.setMittente(test2);
-		messPresentati1.setDestinatario(test2);
+		messPresentati1.setMittente(test);
+		messPresentati1.setDestinatario(test);
 		
 		
 		Post presentazioneUtentiFreePost2 = new Post();
@@ -624,6 +628,7 @@ public class DBInitializer {
 		presentatiThread2.setDestinatarioPrimo(test2);
 		presentatiThread2.setPost(presentazioneUtentiFreePost2);
 		Messaggio messPresentati2 = new Messaggio();
+		messPresentati2.getLetto().add(test2);
 		presentatiThread2.getMessaggi().add(messPresentati2);
 		messPresentati2.setThread(presentatiThread2);
 		messPresentati2.setMessaggio("buongiorno sono fb2!!!");
@@ -653,6 +658,7 @@ public class DBInitializer {
 		genericoUtentiFreeThread0.setDestinatarioPrimo(admin);
 		genericoUtentiFreeThread0.setPost(genericoUtentiFreePost0);
 		Messaggio messGenericoUtentiFree0 = new Messaggio();
+		messGenericoUtentiFree0.getLetto().add(admin);
 		genericoUtentiFreeThread0.getMessaggi().add(messGenericoUtentiFree0);
 		messGenericoUtentiFree0.setThread(genericoUtentiFreeThread0);
 		messGenericoUtentiFree0.setMessaggio("Sezione generica per gli utenti free.");
@@ -676,6 +682,7 @@ public class DBInitializer {
 		genericoUtentiFreeThread1.setDestinatarioPrimo(test3);
 		genericoUtentiFreeThread1.setPost(genericoUtentiFreePost1);
 		Messaggio messGenericoUtentiFree1 = new Messaggio();
+		messGenericoUtentiFree1.getLetto().add(test3);
 		genericoUtentiFreeThread1.getMessaggi().add(messGenericoUtentiFree1);
 		messGenericoUtentiFree1.setThread(genericoUtentiFreeThread1);
 		messGenericoUtentiFree1.setMessaggio("Salut fb3 post generico(old)!!!");
@@ -694,14 +701,15 @@ public class DBInitializer {
 		genericoUtentiFreePost2.setProponente(test2);
 		Thread genericoUtentiFreeThread2 = new Thread();
 		genericoUtentiFreePost2.getRisposte().add(genericoUtentiFreeThread2);
-		genericoUtentiFreeThread2.setOggettoThread("Buongiorno mondo-post generico fb3");
-		genericoUtentiFreeThread2.setMittentePrimo(test3);
-		genericoUtentiFreeThread2.setDestinatarioPrimo(test3);
+		genericoUtentiFreeThread2.setOggettoThread("Post generico fb2");
+		genericoUtentiFreeThread2.setMittentePrimo(test2);
+		genericoUtentiFreeThread2.setDestinatarioPrimo(test2);
 		genericoUtentiFreeThread2.setPost(genericoUtentiFreePost2);
 		Messaggio messGenericoUtentiFree3 = new Messaggio();
+		messGenericoUtentiFree3.getLetto().add(test2);
 		genericoUtentiFreeThread2.getMessaggi().add(messGenericoUtentiFree3);
 		messGenericoUtentiFree3.setThread(genericoUtentiFreeThread2);
-		messGenericoUtentiFree3.setMessaggio("Salut fb3 post generico(mid)!!!");
+		messGenericoUtentiFree3.setMessaggio("Salut fb2 post generico!!!");
 		Date dataGenericoUtentiFree3 = new Date();
 		String strdataGenericoUtentiFree3 = "11-04-2015 10:00:44";
 		dataGenericoUtentiFree3 = dateformat.parse(strdataGenericoUtentiFree3);
@@ -709,17 +717,18 @@ public class DBInitializer {
 		messGenericoUtentiFree3.setOggetto(genericoUtentiFreeThread2.getOggettoThread());
 		messGenericoUtentiFree3.setMittente(test2);
 		messGenericoUtentiFree3.setDestinatario(test2);	
-		Messaggio messGenericoUtentiFree4 = new Messaggio();
-		genericoUtentiFreeThread2.getMessaggi().add(messGenericoUtentiFree4);
-		messGenericoUtentiFree4.setThread(genericoUtentiFreeThread2);
-		messGenericoUtentiFree4.setMessaggio("Salut fb3 post generico(new)!!!");
-		Date dataGenericoUtentiFree4 = new Date();
-		String strdataGenericoUtentiFree4 = "11-04-2016 10:00:44";
-		dataGenericoUtentiFree4 = dateformat.parse(strdataGenericoUtentiFree4);
-		messGenericoUtentiFree4.setData(dataGenericoUtentiFree4);
-		messGenericoUtentiFree4.setOggetto(genericoUtentiFreeThread2.getOggettoThread());
-		messGenericoUtentiFree4.setMittente(test4);
-		messGenericoUtentiFree4.setDestinatario(test4);
+//		Messaggio messGenericoUtentiFree4 = new Messaggio();
+//		messGenericoUtentiFree4.getLetto().add(test4);
+//		genericoUtentiFreeThread2.getMessaggi().add(messGenericoUtentiFree4);
+//		messGenericoUtentiFree4.setThread(genericoUtentiFreeThread2);
+//		messGenericoUtentiFree4.setMessaggio("Salut post generico(new) - by fb4!!!");
+//		Date dataGenericoUtentiFree4 = new Date();
+//		String strdataGenericoUtentiFree4 = "11-04-2016 10:00:44";
+//		dataGenericoUtentiFree4 = dateformat.parse(strdataGenericoUtentiFree4);
+//		messGenericoUtentiFree4.setData(dataGenericoUtentiFree4);
+//		messGenericoUtentiFree4.setOggetto("Re: "+genericoUtentiFreeThread2.getOggettoThread());
+//		messGenericoUtentiFree4.setMittente(test4);
+//		messGenericoUtentiFree4.setDestinatario(test2);
 		
 		Post genericoUtentiFreePost3 = new Post();
 		generaleUtentiFreeSP.getPosts().add(genericoUtentiFreePost3);
@@ -733,6 +742,7 @@ public class DBInitializer {
 		genericoUtentiFreeThread3.setDestinatarioPrimo(test4);
 		genericoUtentiFreeThread3.setPost(genericoUtentiFreePost3);
 		Messaggio messGenericoUtentiFree2 = new Messaggio();
+		messGenericoUtentiFree2.getLetto().add(test4);
 		genericoUtentiFreeThread3.getMessaggi().add(messGenericoUtentiFree2);
 		messGenericoUtentiFree2.setThread(genericoUtentiFreeThread3);
 		messGenericoUtentiFree2.setMessaggio("buongiorno sono fb4!!!");

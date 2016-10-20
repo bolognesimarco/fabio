@@ -21,6 +21,7 @@ import javax.persistence.Query;
 
 import org.primefaces.event.SelectEvent;
 
+import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Annuncio;
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.Foto;
@@ -57,6 +58,7 @@ public class UtenteBean {
 	List<Utente> followers = new ArrayList<Utente>();
 	private boolean collaboratoUtente = false;
 	private boolean tutteRegioni = false;
+	
 
 
 	public void cercaUtenti(){		
@@ -347,13 +349,13 @@ public class UtenteBean {
 			if (utente==null){
 				System.out.println("utente==null - username trovato= "+utenti.get(0).getUsername());
 				cercaUtente.setUtente(utenti.get(0));
-				contentBean.setContent("utenteTrovato2.xhtml");
+				contentBean.setContent("utenteTrovato3.xhtml");
 			}  
 			else { //utente trovato non sono io - aggiungo visita
 				if(utenti.get(0).getId()!=utente.getId()) {
 					aggiungiVisitaUtente(utenti.get(0));
 					cercaUtente.setUtente(utenti.get(0));
-					contentBean.setContent("utenteTrovato2.xhtml");
+					contentBean.setContent("utenteTrovato3.xhtml");
 					collaboratoUtente = false;
 					for (Utente ut : cercaUtente.getUtente().getCollaboratori()) {
 						if(ut.getId()==utente.getId()) {

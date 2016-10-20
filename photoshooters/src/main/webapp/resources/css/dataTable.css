@@ -64,4 +64,18 @@ font-family: gisha!important;
 	border-top-color: white;
 }
 
+.ui-bottone {
+	background-color: rgb(221, 221, 221)!important;
+	border-top-left-radius: 10px!important;
+    border-top-right-radius: 10px!important;
+    border-bottom-right-radius: 10px!important;
+    border-bottom-left-radius: 10px!important;
 
+}
+.ui-button-text.ui-c {
+	color: rgb (65, 64, 66)!important;
+    padding-left: 8px!important;
+    padding-right: 7px!important;
+    padding-bottom: 2px!important;
+    padding-top: 2px!important;
+}
