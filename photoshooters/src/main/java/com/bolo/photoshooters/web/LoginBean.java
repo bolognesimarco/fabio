@@ -69,6 +69,7 @@ public class LoginBean {
 					annuncioBean.cercaAnnunciPubblicatiDaUtente(utenteBean.getUtente().getId());
 					annuncioBean.cercaAnnunciRispostiDaUtente(utenteBean.getUtente().getId());
 					annuncioBean.nuoviMessaggiThreadsAnnuncio(u.getId());
+					postBean.nuoveRisposteForum(u);
 					inputBean.getVotoFoto().setScore(-1);
 					contentBean.setMessaggio(mm2);
 					contentBean.setContent("homePage.xhtml");
@@ -164,17 +165,22 @@ public class LoginBean {
 	@ManagedProperty(value="#{annuncioBean}")
 	private AnnuncioBean annuncioBean;
 	
+	@ManagedProperty(value="#{postBean}")
+	private PostBean postBean;
 	
 	
-	
-	public AnnuncioBean getAnnunciBean() {
+
+		
+	public AnnuncioBean getAnnuncioBean() {
 		return annuncioBean;
 	}
+
 
 	public void setAnnuncioBean(AnnuncioBean annuncioBean) {
 		this.annuncioBean = annuncioBean;
 	}
-		
+
+
 	public InputBean getInputBean() {
 		return inputBean;
 	}
@@ -206,6 +212,19 @@ public class LoginBean {
 	public void setUtenteBean(UtenteBean utenteBean) {
 		this.utenteBean = utenteBean;
 	}
+
+
+	public PostBean getPostBean() {
+		return postBean;
+	}
+
+
+	public void setPostBean(PostBean postBean) {
+		this.postBean = postBean;
+	}
+
+
+
 
 
 }

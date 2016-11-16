@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -47,6 +48,9 @@ public class Post implements Serializable{
 	@ManyToOne(optional=false)
 	@JoinColumn(name="superpost", nullable=true, updatable=false)
 	private SuperPost superpost;
+	
+	@ManyToMany
+	private List<Utente> partecipanti = new ArrayList<Utente>(); 
 	
 //	GETTERS & SETTERS*****************
 	
@@ -123,6 +127,14 @@ public class Post implements Serializable{
 
 	public void setSuperpost(SuperPost superpost) {
 		this.superpost = superpost;
+	}
+
+	public List<Utente> getPartecipanti() {
+		return partecipanti;
+	}
+
+	public void setPartecipanti(List<Utente> partecipanti) {
+		this.partecipanti = partecipanti;
 	}
 	
 	

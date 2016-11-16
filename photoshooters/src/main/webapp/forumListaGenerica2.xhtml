@@ -29,13 +29,15 @@
 				<p:column>
 					<h:panelGrid columns="1" border="1" style="background-color: rgb(120, 120, 120)!important;">
 						<f:facet name="header">
-				       		<h:commandButton styleClass="common" value="#{superposts.nomeSuperPost}" action="#{postBean.visualizzaSuperPost(superposts)}"/>
+			       			<h:commandButton styleClass="common" value="#{superposts.nomeSuperPost}" action="#{postBean.visualizzaSuperPost(superposts)}"/>
 				       		<br></br>
 				      	</f:facet>
 						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
 							<h:outputText value="ULTIMo POSt AGGIORNATo"></h:outputText>
 		        			<h:panelGroup>
-		        				<h:commandButton value="#{superposts.posts.get(0).risposte.get(0).oggettoThread}" action="#{postBean.visualizzaPost(superposts.posts.get(0))}" ></h:commandButton>
+			        			<h:commandButton styleClass="ui-bottone" value="#{superposts.posts.get(0).risposte.get(0).oggettoThread}">
+									<f:ajax event="click" listener="#{postBean.visualizzaPost(superposts.posts.get(0))}" render=":content :postgenericoforumform" />
+								</h:commandButton>
 		        				<h:outputText value="&#160;P|S:&#160;"></h:outputText>
 		        				<h:commandLink value="#{superposts.posts.get(0).risposte.get(superposts.posts.get(0).risposte.size()-1).mittentePrimo.username}" action="#{utenteBean.utenteTrovatoId(superposts.posts.get(0).risposte.get(superposts.posts.get(0).risposte.size()-1).mittentePrimo.id)}"/>
 		            		</h:panelGroup>

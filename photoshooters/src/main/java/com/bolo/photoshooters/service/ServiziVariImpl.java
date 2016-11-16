@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.web.EMF;
 import com.bolo.photoshooters.web.MailSender;
@@ -56,7 +57,12 @@ public class ServiziVariImpl implements ServiziVari {
 				.getResultList();
 				
 		for (Utente ut : utenti) {
-			MailSender.sendNonActivationMail(ut.getEmail(), ut.getUsername());
+			EmailDaInviare email = new EmailDaInviare();
+			email.setTipoEmail(10);
+			email.setUtenteSender(ut);
+			email.setEmail(ut.getEmail());
+			serv.persist(email);
+			MailSender.sendNonActivationMail(email, ut.getUsername());
 			serv.delete(ut);
 		}
 				
@@ -109,5 +115,73 @@ public class ServiziVariImpl implements ServiziVari {
 			return null;
 		}
 	}
+	
+	
+	@Override
+	public void invioEmailDaInviare() throws Exception {
+		//dopo 30gg cancella utenti registrati ma non attivati
+		
+//		Date currentDate = new Date(); // current date
+//        Calendar today = new GregorianCalendar();
+////		int giorniScadenza = 60;
+//		int secondiPassati = 30;
+//        today.setTime(currentDate);				
+//		today.add(Calendar.SECOND, secondiPassati);
+//        Date scadenza = today.getTime();
+//
+//		System.out.println("INVIO EMAIL:::SCADENZA"+scadenza+":::TODAY"+today);
+		final ServiziComuni serv = new ServiziComuniImpl();
+		EntityManager em = EMF.createEntityManager();
+		em.getTransaction().begin();
+		List<EmailDaInviare> emailsDaInviare = em
+				.createQuery("select e from EmailDaInviare e where e.statoLavorazione = 0")
+//				.setParameter("scadenza", scadenza)
+				.getResultList();
+				
+		for (EmailDaInviare email : emailsDaInviare) {
+			
+			switch (email.getTipoEmail()) {
+			case 0:
+				MailSender.sendNuovaFotoPreferitaMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 1:
+				MailSender.sendNuovaRispostaAnnuncioAltruiMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 2:
+				MailSender.sendNuovaRispostaAnnuncioMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 3:
+				MailSender.sendNuovaRispostaInForumMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 4:
+				MailSender.sendNuovoAlbumUtenteSeguitoMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 5:
+				MailSender.sendNuovoFollowerMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 6:
+				MailSender.sendNuovoMessaggioInPostTuoMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 7:
+				MailSender.sendNuovoMessaggioMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 8:
+				MailSender.sendNuovoVotoMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 9:
+				MailSender.sendRegisterMail(email, email.getUtenteSender().getActivationCode());
+				break;
+			case 10:
+				MailSender.sendNonActivationMail(email, email.getUtenteSender().getUsername());
+				break;
+			default:
+				break;	
+			}	
+			if(email.getStatoLavorazione()==2) {
+				serv.delete(email);
+			}
+		}
 
+	}
+	
 }

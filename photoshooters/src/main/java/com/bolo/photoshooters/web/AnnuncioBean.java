@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.bolo.photo.web.entity.Annuncio;
+import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Thread;
@@ -364,6 +365,7 @@ public class AnnuncioBean {
 		if (utenteBean.getUtente()!=null) {
 				nuoviMessaggiThreadsAnnuncio(utenteBean.getUtente().getId());
 		}
+		messaggioRispostaAnnuncio = new Messaggio();
 		contentBean.setMessaggio(null);
 		contentBean.setContent("annuncioAltrui.xhtml");		
 	}
@@ -485,7 +487,12 @@ public class AnnuncioBean {
 		try {
 			serv.merge(threadAnnuncioPubblicato);
 			if(threadAnnuncioPubblicato.getMittentePrimo().isMailNuovaRispostaAnnuncio()) {
-				MailSender.sendNuovaRispostaAnnuncioAltruiMail(threadAnnuncioPubblicato.getMittentePrimo().getEmail(), utenteBean.getUtente().getUsername());
+				EmailDaInviare email = new EmailDaInviare();
+				email.setTipoEmail(1);
+				email.setUtenteSender(utenteBean.getUtente());
+				email.setEmail(threadAnnuncioPubblicato.getMittentePrimo().getEmail());
+				serv.persist(email);
+//				MailSender.sendNuovaRispostaAnnuncioAltruiMail(threadAnnuncioPubblicato.getMittentePrimo().getEmail(), utenteBean.getUtente().getUsername());
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -525,7 +532,12 @@ public class AnnuncioBean {
 			try {
 				serv.merge(a);
 				if(a.getProponente().isMailNuovaRispostaAnnuncio()) {
-					MailSender.sendNuovaRispostaAnnuncioMail(a.getProponente().getEmail(), utenteBean.getUtente().getUsername());
+					EmailDaInviare email = new EmailDaInviare();
+					email.setTipoEmail(1);
+					email.setUtenteSender(utenteBean.getUtente());
+					email.setEmail(a.getProponente().getEmail());
+					serv.persist(email);
+//					MailSender.sendNuovaRispostaAnnuncioMail(a.getProponente().getEmail(), utenteBean.getUtente().getUsername());
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -558,7 +570,12 @@ public class AnnuncioBean {
 			try {
 				serv.merge(a);
 				if(a.getProponente().isMailNuovaRispostaAnnuncio()) {
-					MailSender.sendNuovaRispostaAnnuncioMail(a.getProponente().getEmail(), utenteBean.getUtente().getUsername());
+					EmailDaInviare email = new EmailDaInviare();
+					email.setTipoEmail(1);
+					email.setUtenteSender(utenteBean.getUtente());
+					email.setEmail(a.getProponente().getEmail());
+					serv.persist(email);
+//					MailSender.sendNuovaRispostaAnnuncioMail(a.getProponente().getEmail(), utenteBean.getUtente().getUsername());
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

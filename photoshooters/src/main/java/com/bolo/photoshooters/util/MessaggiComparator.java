@@ -5,7 +5,7 @@ import java.util.Comparator;
 import com.bolo.photo.web.entity.Messaggio;
 
 public class MessaggiComparator implements Comparator<Messaggio> {
-
+// l'array è ordinato in modo che get(0) è il più recente come Data!!
 	public int compare(Messaggio u1, Messaggio u2) {
 //		System.out.println("in MessaggiComparator: ");
 		int c = u2.getData().compareTo(u1.getData());

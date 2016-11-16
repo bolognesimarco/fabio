@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 
 import com.bolo.photo.web.entity.Album;
+import com.bolo.photo.web.entity.Annuncio;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Membership;
 import com.bolo.photo.web.entity.Messaggio;
@@ -537,10 +538,12 @@ public class DBInitializer {
 		
 		
 		
-		
+//	POST*********************************************************	
 		Post regolamentoPost = new Post();
 		regolamentoPost.setId(1);
 		regolamentoPost.setProponente(admin);
+		admin.getPostsPartecipati().add(regolamentoPost);
+		regolamentoPost.getPartecipanti().add(admin);
 		Thread regolamentoThread = new Thread();
 		regolamentoPost.getRisposte().add(regolamentoThread);
 		regolamentoThread.setOggettoThread("REGOLAMENTo FORUm");
@@ -570,6 +573,8 @@ public class DBInitializer {
 		presentazioneUtentiFreeSP.getPosts().add(presentazioneUtentiFreePost0);
 		presentazioneUtentiFreePost0.setId(2);
 		presentazioneUtentiFreePost0.setProponente(admin);
+		admin.getPostsPartecipati().add(presentazioneUtentiFreePost0);
+		presentazioneUtentiFreePost0.getPartecipanti().add(admin);
 		presentazioneUtentiFreePost0.setPostUtentiFree(true);
 		Thread presentatiThread0 = new Thread();
 //		presentatiThread0.setNuovoMessaggio(true);
@@ -596,6 +601,8 @@ public class DBInitializer {
 		presentazioneUtentiFreeSP.getPosts().add(presentazioneUtentiFreePost1);
 		presentazioneUtentiFreePost1.setId(3);	
 		presentazioneUtentiFreePost1.setProponente(test);
+		test.getPostsPartecipati().add(presentazioneUtentiFreePost1);
+		presentazioneUtentiFreePost1.getPartecipanti().add(test);
 		Thread presentatiThread1 = new Thread();
 		presentazioneUtentiFreePost1.getRisposte().add(presentatiThread1);
 		presentatiThread1.setOggettoThread("Buongiorno");
@@ -621,6 +628,8 @@ public class DBInitializer {
 		presentazioneUtentiFreeSP.getPosts().add(presentazioneUtentiFreePost2);
 		presentazioneUtentiFreePost2.setId(4);	
 		presentazioneUtentiFreePost2.setProponente(test2);
+		test2.getPostsPartecipati().add(presentazioneUtentiFreePost2);
+		presentazioneUtentiFreePost2.getPartecipanti().add(test2);
 		Thread presentatiThread2 = new Thread();
 		presentazioneUtentiFreePost2.getRisposte().add(presentatiThread2);
 		presentatiThread2.setOggettoThread("CIAOOOOo 2");
@@ -650,6 +659,8 @@ public class DBInitializer {
 		genericoUtentiFreePost0.setSuperpost(generaleUtentiFreeSP);
 		genericoUtentiFreePost0.setId(5);
 		genericoUtentiFreePost0.setProponente(admin);
+		admin.getPostsPartecipati().add(genericoUtentiFreePost0);
+		genericoUtentiFreePost0.getPartecipanti().add(admin);
 		genericoUtentiFreePost0.setPostUtentiFree(true);
 		Thread genericoUtentiFreeThread0 = new Thread();
 		genericoUtentiFreePost0.getRisposte().add(genericoUtentiFreeThread0);
@@ -675,6 +686,8 @@ public class DBInitializer {
 		genericoUtentiFreePost1.setSuperpost(generaleUtentiFreeSP);
 		genericoUtentiFreePost1.setId(6);
 		genericoUtentiFreePost1.setProponente(test3);
+		test3.getPostsPartecipati().add(genericoUtentiFreePost1);
+		genericoUtentiFreePost1.getPartecipanti().add(test3);
 		Thread genericoUtentiFreeThread1 = new Thread();
 		genericoUtentiFreePost1.getRisposte().add(genericoUtentiFreeThread1);
 		genericoUtentiFreeThread1.setOggettoThread("Buongiorno mondo-post generico fb3");
@@ -699,6 +712,8 @@ public class DBInitializer {
 		genericoUtentiFreePost2.setSuperpost(generaleUtentiFreeSP);
 		genericoUtentiFreePost2.setId(7);
 		genericoUtentiFreePost2.setProponente(test2);
+		test2.getPostsPartecipati().add(genericoUtentiFreePost2);
+		genericoUtentiFreePost2.getPartecipanti().add(test2);
 		Thread genericoUtentiFreeThread2 = new Thread();
 		genericoUtentiFreePost2.getRisposte().add(genericoUtentiFreeThread2);
 		genericoUtentiFreeThread2.setOggettoThread("Post generico fb2");
@@ -735,6 +750,8 @@ public class DBInitializer {
 		genericoUtentiFreePost3.setSuperpost(generaleUtentiFreeSP);
 		genericoUtentiFreePost3.setId(8);
 		genericoUtentiFreePost3.setProponente(test4);
+		test4.getPostsPartecipati().add(genericoUtentiFreePost3);
+		genericoUtentiFreePost3.getPartecipanti().add(test4);
 		Thread genericoUtentiFreeThread3 = new Thread();
 		genericoUtentiFreePost3.getRisposte().add(genericoUtentiFreeThread3);
 		genericoUtentiFreeThread3.setOggettoThread("Hey....... post generico di fb4");
@@ -774,6 +791,7 @@ public class DBInitializer {
 		serv.deleteAll(Messaggio.class, em);
 		serv.deleteAll(Thread.class, em);
 		serv.deleteAll(SuperPost.class, em);
+		serv.deleteAll(Annuncio.class, em);
 		
 		serv.persist(admin, em);
 		serv.persist(test, em);	

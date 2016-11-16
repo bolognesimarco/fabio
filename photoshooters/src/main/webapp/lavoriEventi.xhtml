@@ -9,19 +9,20 @@
     
 <h:head>
 	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataTable.css" library="css" />
 </h:head>
 <h:body>
 
 	<h:panelGroup styleClass="pannello cerca">
 		
-			<h:dataTable id="annuncisito" var="annSito" value="#{annuncioBean.annunciSito}">
+			<p:dataTable id="annuncisito" var="annSito" value="#{annuncioBean.annunciSito}"  rows="5" paginator="true" scrollable="false" scrollWidth="0">
 				
 				<f:facet name="header">
 	           		<h:outputText styleClass="common" value="&#160;&#160;ANNUNCi PHOTOSHOOTERs - #{annuncioBean.annunciSito.size()}"/>
 	           		<br></br>
 	       		</f:facet>
 				
-				<h:column>
+				<p:column >
 				
 					<f:facet name="header">
 	            		<h:panelGrid columns="4" border="0">
@@ -51,7 +52,7 @@
 						</h:panelGrid>
 					</h:panelGrid>		 
 					      		
-				</h:column>
+				</p:column>
 				
 				<f:facet name="footer">
 	           		<h:panelGrid columns="2" border="0">
@@ -59,7 +60,7 @@
 					</h:panelGrid>
 	       		</f:facet>
 	
-			</h:dataTable>
+			</p:dataTable>
 
 	</h:panelGroup>
 	

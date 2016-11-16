@@ -205,14 +205,17 @@
 					<h:outputLabel for="seguitoavviso">NUOVo P|S Ti SEGUe</h:outputLabel>
 						<h:selectBooleanCheckbox id="seguitoavviso" value="#{utenteBean.utente.mailNuovoFollower}">
 					</h:selectBooleanCheckbox>	
+					<h:outputLabel for="albumavviso">NUOVo ALBUm Di P|S SEGUITo</h:outputLabel>
+						<h:selectBooleanCheckbox id="albumavviso" value="#{utenteBean.utente.mailNuovoAlbumDiUtenteSeguito}">
+					</h:selectBooleanCheckbox>	
 					<h:outputLabel for="postavviso">NUOVo MESSAGGIo In TUo POSt</h:outputLabel>
 						<h:selectBooleanCheckbox id="postavviso" value="#{utenteBean.utente.mailNuovoMessaggioPostTuo}">
 					</h:selectBooleanCheckbox>	
 					<h:outputLabel for="annuncioavviso">NUOVa RISPOSTa TUo ANNUNCIo</h:outputLabel>
 						<h:selectBooleanCheckbox id="annuncioavviso" value="#{utenteBean.utente.mailNuovaRispostaAnnuncio}">
 					</h:selectBooleanCheckbox>	
-					<h:outputLabel for="albumavviso">NUOVo ALBUm Di P|S SEGUITo</h:outputLabel>
-						<h:selectBooleanCheckbox id="albumavviso" value="#{utenteBean.utente.mailNuovoAlbumDiUtenteSeguito}">
+					<h:outputLabel for="forumavviso">NUOVa RISPOSTa DIRETTa NEl FORUm</h:outputLabel>
+						<h:selectBooleanCheckbox id="forumavviso" value="#{utenteBean.utente.mailNuovaRispostaForum}">
 					</h:selectBooleanCheckbox>	
 						
 				</h:panelGrid>

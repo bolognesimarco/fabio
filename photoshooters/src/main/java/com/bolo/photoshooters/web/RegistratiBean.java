@@ -18,6 +18,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
+import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
@@ -64,7 +65,12 @@ public class RegistratiBean {
 				Date currentDate = new Date();
 				nuovo.setDataIscrizione(currentDate);
 				serv.persist(nuovo);
-				MailSender.sendRegisterMail(email, nuovo.getActivationCode());
+				EmailDaInviare emailActivation = new EmailDaInviare();
+				emailActivation.setTipoEmail(9);
+				emailActivation.setUtenteSender(nuovo);
+				emailActivation.setEmail(email);
+				serv.persist(emailActivation);
+//				MailSender.sendRegisterMail(emailActivation, nuovo.getActivationCode());
 			} catch (Exception e) {
 				e.printStackTrace();
 				contentBean.setContent("registrati.xhtml");

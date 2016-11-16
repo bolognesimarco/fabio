@@ -169,59 +169,30 @@ function moveCursorToEnd(obj) {
 								</h:panelGrid>
 				        		<h:panelGrid columns="1">
 				        			<h:outputText value="#{messpostreply.oggetto}"></h:outputText>
-				  	   			
-
-		    	   				<h:panelGroup rendered="#{postBean.messaggioIsLetto(threadspost.destinatarioPrimo.id,threadspost.messaggi.get(0))==false and threadspost.nuovoMessaggio==true and threadspost.mittentePrimo.id==utenteBean.utente.id}" style="height:15px">
-			    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
-										<h:outputText value="unread"></h:outputText>
-			    	   				</sup>
-		    	   				</h:panelGroup>
-				    	   				
-				    	   				
-				    	   				
-						    	   		<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.messaggioIsLetto(utenteBean.utente.id,messpostreply)==false}" style="height:15px">
+				        			
+			    	   				<h:panelGroup>
+					    	   			<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and ((messpostreply.lettoDaDestinatario==false and utenteBean.utente.id==messpostreply.destinatario.id) or (postBean.messaggioIsLetto(utenteBean.utente.id,messpostreply)==false) )}" style="height:15px">
 					    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
 												<h:outputText value="new"></h:outputText>
 					    	   				</sup>
 				    	   				</h:panelGroup>
-				    	   				<h:panelGroup rendered="#{postBean.messaggioIsLetto(messpostreply.destinatario.id,messpostreply)==false and threadspost.nuovoMessaggio==true and messpostreply.mittente.id==utenteBean.utente.id}" style="height:15px">
+				    	   				<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.messaggioIsLetto(messpostreply.destinatario.id,messpostreply)==false and messpostreply.mittente.id==utenteBean.utente.id}" style="height:15px">
 					    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
 												<h:outputText value="unread"></h:outputText>
 					    	   				</sup>
-				    	   				</h:panelGroup>
-				    	   				
+				    	   				</h:panelGroup>			 	   			
+				    	   			</h:panelGroup>		
+				    	   				    	   				
 									<h:inputTextarea value="#{messpostreply.messaggio}" readonly="true" style="width:230px!important;color:black!important;" size="350" rows="5" id="messaggio2" />
 								</h:panelGrid>
 								<f:facet name="footer">
-									<p:commandButton update="rispondimessaggioform:rispostaDetail3" oncomplete="PF('rispondisecondaria2OP').loadContents()" value="RISPONDi CITANDo&#178;" rendered="#{utenteBean.tipoMembershipUtente()!=0 and messpostreply.mittente.id!=utenteBean.utente.id}">
+									<p:commandButton update="postgenericoforumform:rispondimessaggioform:rispostaDetail3" oncomplete="PF('rispondisecondaria2OP').loadContents()" value="RISPONDi CITANDo&#178;" rendered="#{utenteBean.tipoMembershipUtente()!=0 and messpostreply.mittente.id!=utenteBean.utente.id}">
 				           			     <f:setPropertyActionListener value="#{messpostreply}" target="#{postBean.messaggioRispostaThread}" />
 				           			     <f:ajax event="click" listener="#{postBean.threadInRispostaSet2(messpostreply)}"  />
 				           			</p:commandButton>	
 			           			</f:facet>
 				        	</h:panelGrid>
-				        	
-						    <p:overlayPanel widgetVar="rispondisecondaria2OP" styleClass="overlaypanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" >
-						        <h:form id="rispondimessaggioform">
-						        <p:outputPanel id="rispostaDetail3" styleClass="outputpanel">
-						            <h:panelGrid  columns="2" columnClasses="rightcolonna,leftcolonna">
-						                <f:facet name="header">
-											<h:outputText value="RISPONDi Al MESSAGGIo id=#{postBean.messaggioRispostaThread.id}"></h:outputText>
-						                </f:facet>
-				
-										<h:outputText value="TITOLo MESSAGGIo THREAd" />
-										<h:outputText value="#{postBean.messaggioRispostaThread.oggetto}" />                    
-						                	                
-						                <h:outputText value="RISPOSTa" />
-										<h:inputTextarea onfocus="moveCursorToEnd(this)" onclick="moveCursorToEnd(this)" value="#{postBean.messaggioRispostaThr.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:350px!important;"  size="350" rows="5"></h:inputTextarea>
-										
-										<h:messages id="messages3" layout="table"></h:messages>
-										<p:commandButton action="#{postBean.inviaRispostaThread(postBean.messaggioRispostaThread.thread)}" value="INVIa RISPOSTa CITANDo&#178;" process="@form" update="postgenericoforumform"></p:commandButton>
-		
-						            </h:panelGrid>
-						        </p:outputPanel>
-						        </h:form>
-						    </p:overlayPanel>
-				        	
+
 						</p:column>
 						
 					</p:dataTable>		       		
@@ -251,6 +222,30 @@ function moveCursorToEnd(obj) {
 				        </p:outputPanel>
 				        </h:form>
 				    </p:overlayPanel>
+			
+							        	
+				    <p:overlayPanel widgetVar="rispondisecondaria2OP" styleClass="overlaypanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" >
+				        <h:form id="rispondimessaggioform">
+				        <p:outputPanel id="rispostaDetail3" styleClass="outputpanel">
+				            <h:panelGrid  columns="2" columnClasses="right,left">
+				                <f:facet name="header">
+									<h:outputText value="RISPONDi Al MESSAGGIo id=#{postBean.messaggioRispostaThread.id}"></h:outputText>
+				                </f:facet>
+		
+								<h:outputText value="TITOLo MESSAGGIo THREAd" />
+								<h:outputText value="#{postBean.messaggioRispostaThread.oggetto}" />                    
+				                	                
+				                <h:outputText value="RISPOSTa" />
+								<h:inputTextarea onfocus="moveCursorToEnd(this)" onclick="moveCursorToEnd(this)" value="#{postBean.messaggioRispostaThread.messaggio}" required="true" requiredMessage="Il messaggio non può essere vuoto." style="width:350px!important;"  size="350" rows="5"></h:inputTextarea>
+								
+								<h:messages id="messages3" layout="table"></h:messages>
+								<p:commandButton action="#{postBean.inviaRispostaMessaggio(postBean.messaggioRispostaThread.thread)}" value="INVIa RISPOSTa CITANDo&#178;" process="@form" update="postgenericoforumform"></p:commandButton>
+
+				            </h:panelGrid>
+				        </p:outputPanel>
+				        </h:form>
+				    </p:overlayPanel>
+				        	
 			
 		</h:panelGrid>
 	</h:form>

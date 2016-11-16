@@ -204,9 +204,11 @@ public class Utente implements Serializable{
 	@Column
 	private boolean mailNuovoAlbumDiUtenteSeguito = true;
 	
+	@Column
+	private boolean mailNuovaRispostaForum = true;
 	
-	
-	
+	@ManyToMany(mappedBy="partecipanti")
+	private List<Post> postsPartecipati = new ArrayList<Post>(); 
 	
 	//************GETTERS&SETTERS**********
 	
@@ -272,6 +274,14 @@ public class Utente implements Serializable{
 
 	public void setMailNuovaRispostaAnnuncio(boolean mailNuovaRispostaAnnuncio) {
 		this.mailNuovaRispostaAnnuncio = mailNuovaRispostaAnnuncio;
+	}
+	
+	public boolean isMailNuovaRispostaForum() {
+		return mailNuovaRispostaForum;
+	}
+
+	public void setMailNuovaRispostaForum(boolean mailNuovaRispostaForum) {
+		this.mailNuovaRispostaForum = mailNuovaRispostaForum;
 	}
 
 	public int getVisite() {
@@ -692,5 +702,15 @@ public class Utente implements Serializable{
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+	public List<Post> getPostsPartecipati() {
+		return postsPartecipati;
+	}
+
+	public void setPostsPartecipati(List<Post> postsPartecipati) {
+		this.postsPartecipati = postsPartecipati;
+	}
+	
+	
 	
 }

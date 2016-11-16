@@ -9,4 +9,5 @@ public interface ServiziVari {
 	public Utente login(String username, String password) throws Exception;
 	public boolean utenteAttivo(String email) throws Exception;
 	public void cancellaUtentiNonAttivati() throws Exception;
+	public void invioEmailDaInviare() throws Exception;
 }

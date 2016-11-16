@@ -24,6 +24,7 @@ import javax.servlet.http.Part;
 import org.eclipse.persistence.internal.sessions.remote.SequencingFunctionCall.GetNextValue;
 
 import com.bolo.photo.web.entity.Album;
+import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Utente;
@@ -84,7 +85,12 @@ public class InputBean {
 					serv.persist(newAlbum);
 					for (Utente ut : utenteBean.cercaFollowersUtente(utenteBean.getUtente())) {
 						if (ut.isMailNuovoAlbumDiUtenteSeguito()) {
-							MailSender.sendNuovoAlbumUtenteSeguitoMail(ut.getEmail(), utenteBean.getUtente().getUsername());
+							EmailDaInviare email = new EmailDaInviare();
+							email.setTipoEmail(4);
+							email.setUtenteSender(utenteBean.getUtente());
+							email.setEmail(ut.getEmail());
+							serv.persist(email);
+//							MailSender.sendNuovoAlbumUtenteSeguitoMail(ut.getEmail(), utenteBean.getUtente().getUsername());
 						}
 					}
 				} catch (Exception e) {
@@ -651,7 +657,12 @@ public class InputBean {
 					f.getVoti().add(votoFoto);
 					f.setMediaVoti(utenteBean.calcolaMediaVotiFoto(f.getVoti()));
 					if(f.getPubblicatore().isMailNuovoVoto()){
-						MailSender.sendNuovoVotoMail(f.getPubblicatore().getEmail(), utenteBean.getUtente().getUsername());
+						EmailDaInviare email = new EmailDaInviare();
+						email.setTipoEmail(8);
+						email.setUtenteSender(utenteBean.getUtente());
+						email.setEmail(f.getPubblicatore().getEmail());
+						serv.persist(email);
+//						MailSender.sendNuovoVotoMail(f.getPubblicatore().getEmail(), utenteBean.getUtente().getUsername());
 					}
 					serv.merge(f);
 					FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("my-gallery");
@@ -684,7 +695,12 @@ public class InputBean {
 			foto.getUtentiChePreferisconoFoto().add(utenteBean.getUtente());
 				try {
 					if(foto.getPubblicatore().isMailNuovaFotoPreferita()){
-						MailSender.sendNuovaFotoPreferitaMail(foto.getPubblicatore().getEmail(), utenteBean.getUtente().getUsername());
+						EmailDaInviare email = new EmailDaInviare();
+						email.setTipoEmail(0);
+						email.setUtenteSender(utenteBean.getUtente());
+						email.setEmail(foto.getPubblicatore().getEmail());
+						serv.persist(email);
+//						MailSender.sendNuovaFotoPreferitaMail(foto.getPubblicatore().getEmail(), utenteBean.getUtente().getUsername());
 					}
 					serv.merge(foto);
 				} catch (Exception e) {

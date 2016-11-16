@@ -23,6 +23,7 @@ import org.primefaces.event.SelectEvent;
 
 import com.bolo.photo.web.entity.Album;
 import com.bolo.photo.web.entity.Annuncio;
+import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Messaggio;
@@ -741,7 +742,12 @@ public class UtenteBean {
 		utente.getUtentiSeguiti().add(u);
 		try {
 			if(u.isMailNuovoFollower()){
-				MailSender.sendNuovoFollowerMail(u.getEmail(), utente.getUsername());
+				EmailDaInviare email = new EmailDaInviare();
+				email.setTipoEmail(5);
+				email.setUtenteSender(utente);
+				email.setEmail(u.getEmail());
+				serv.persist(email);
+//				MailSender.sendNuovoFollowerMail(u.getEmail(), utente.getUsername());
 			}
 			System.out.println("seguiiiiiii");
 			serv.merge(utente);

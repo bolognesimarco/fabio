@@ -83,10 +83,17 @@
 								<h:commandButton styleClass="ui-bottone" value="#{PostsSP.risposte.get(PostsSP.risposte.size()-1).oggettoThread}">
 									<f:ajax event="click" listener="#{postBean.visualizzaPost(PostsSP)}" render=":content :postgenericoforumform" />
 								</h:commandButton>
-								<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiNonLetti(utenteBean.utente.id, PostsSP)==true}" style="height:15px">
-			    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
-										<h:outputText value="new"></h:outputText>
-			    	   				</sup>
+								<h:panelGroup>
+									<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiNonLetti(utenteBean.utente.id, PostsSP)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="new"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
+			    	   				<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiPerUtenteNonLetti(utenteBean.utente.id, PostsSP)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="&#160;P|S"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
 		    	   				</h:panelGroup>
 			        			<h:outputText value="&#160;P|S:&#160;"></h:outputText>
 			        			<h:commandLink value="#{PostsSP.proponente.username}" action="#{utenteBean.utenteTrovatoId(PostsSP.proponente.id)}" />

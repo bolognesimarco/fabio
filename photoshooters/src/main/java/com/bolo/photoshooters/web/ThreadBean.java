@@ -20,6 +20,7 @@ import javax.persistence.Query;
 import org.primefaces.context.RequestContext;
 
 import com.bolo.photo.web.entity.Annuncio;
+import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.Thread;
 import com.bolo.photo.web.entity.Utente;
@@ -73,7 +74,12 @@ public class ThreadBean {
 				try {
 					serv.persist(thr);
 					if(mess.getDestinatario().isMailNuovoMessaggio()) {
-					MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
+						EmailDaInviare email = new EmailDaInviare();
+						email.setTipoEmail(7);
+						email.setUtenteSender(utenteBean.getUtente());
+						email.setEmail(mess.getDestinatario().getEmail());
+						serv.persist(email);
+//						MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -113,7 +119,12 @@ public class ThreadBean {
 				try {
 					serv.merge(threadEsistente);;
 					if(mess.getDestinatario().isMailNuovoMessaggio()) {
-						MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
+						EmailDaInviare email = new EmailDaInviare();
+						email.setTipoEmail(7);
+						email.setUtenteSender(utenteBean.getUtente());
+						email.setEmail(mess.getDestinatario().getEmail());
+						serv.persist(email);
+//						MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -163,7 +174,12 @@ public class ThreadBean {
 		try {
 			serv.merge(threadMessaggi);
 			if(mess.getDestinatario().isMailNuovoMessaggio()) {
-				MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
+				EmailDaInviare email = new EmailDaInviare();
+				email.setTipoEmail(7);
+				email.setUtenteSender(utenteBean.getUtente());
+				email.setEmail(mess.getDestinatario().getEmail());
+				serv.persist(email);
+//				MailSender.sendNuovoMessaggioMail(mess.getDestinatario().getEmail(), mess.getMittente().getUsername());
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
