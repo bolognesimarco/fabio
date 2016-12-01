@@ -27,6 +27,7 @@ import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Esperienza;
 import com.bolo.photo.web.entity.Foto;
 import com.bolo.photo.web.entity.Messaggio;
+import com.bolo.photo.web.entity.Post;
 import com.bolo.photo.web.entity.RegioneItaliana;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.Thread;
@@ -35,6 +36,8 @@ import com.bolo.photo.web.entity.Utente;
 import com.bolo.photo.web.entity.Voto;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
+import com.bolo.photoshooters.util.IndirectListSorter;
+import com.bolo.photoshooters.util.PostsComparator;
 import com.bolo.photoshooters.vo.CercaUtenteVO;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
@@ -59,7 +62,8 @@ public class UtenteBean {
 	List<Utente> followers = new ArrayList<Utente>();
 	private boolean collaboratoUtente = false;
 	private boolean tutteRegioni = false;
-	
+	List<Post> postsUtenteProponente = new ArrayList<Post>();
+	List<Post> postsRispostiDaUtente = new ArrayList<Post>();	
 
 
 	public void cercaUtenti(){		
@@ -736,24 +740,51 @@ public class UtenteBean {
 		.getResultList();		
 		contentBean.setContent("preferitiUtenteTrovato.xhtml");
 	}
+
 	
-	
-	public void seguiUtente(Utente u) {
-		utente.getUtentiSeguiti().add(u);
-		try {
-			if(u.isMailNuovoFollower()){
-				EmailDaInviare email = new EmailDaInviare();
-				email.setTipoEmail(5);
-				email.setUtenteSender(utente);
-				email.setEmail(u.getEmail());
-				serv.persist(email);
-//				MailSender.sendNuovoFollowerMail(u.getEmail(), utente.getUsername());
+	public void visualizzaPostsUtente() {
+		postsUtenteProponente.clear();
+		postsRispostiDaUtente.clear();
+		for (Post p : utente.getPostsPartecipati()) {
+			if (p.getProponente().getId()==utente.getId()) {
+				postsUtenteProponente.add(p);
+			} else {
+				postsRispostiDaUtente.add(p);
 			}
-			System.out.println("seguiiiiiii");
-			serv.merge(utente);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		ordinaPostPerData(postsUtenteProponente);
+		ordinaPostPerData(postsRispostiDaUtente);
+		ordinaPostPerData(utente.getPostsSeguiti());
+		contentBean.setContent("postsUtente.xhtml");
+	}
+	
+	IndirectListSorter<Post> postsSorter = new IndirectListSorter<Post>();
+	
+	public void ordinaPostPerData(List<Post> listPosts ) {	 
+		System.out.println("ORDINA POSTS:#"+listPosts.size());
+		//ordina per ultimo invio/ricezione
+		postsSorter.sortIndirectList(listPosts, new PostsComparator());
+	}
+
+
+	public void seguiUtente(Utente u) {
+		if(!utenteSeguito(u)) {
+			utente.getUtentiSeguiti().add(u);
+			try {
+				if(u.isMailNuovoFollower()){
+					EmailDaInviare email = new EmailDaInviare();
+					email.setTipoEmail(5);
+					email.setUtenteSender(utente);
+					email.setEmail(u.getEmail());
+					serv.persist(email);
+	//				MailSender.sendNuovoFollowerMail(u.getEmail(), utente.getUsername());
+				}
+				System.out.println("seguiiiiiii");
+				serv.merge(utente);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -780,9 +811,11 @@ public class UtenteBean {
 		if (utente!=null){
 			for (Utente ut : utente.getUtentiSeguiti()) {
 				if (u.getId()==ut.getId()) {
+//					System.out.println("utente seguito = TRUEEEEEE");
 					return true;
 				}	
 			}
+//			System.out.println("utente seguito = FALSEEEEE");
 			return false;
 		}
 		return false;
@@ -806,6 +839,12 @@ public class UtenteBean {
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("patternguestform");
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("content");
 	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -965,6 +1004,25 @@ public class UtenteBean {
 		return RegioneItaliana.values();
 	}
 
+	public List<Post> getPostsUtenteProponente() {
+		return postsUtenteProponente;
+	}
+
+	public void setPostsUtenteProponente(List<Post> postsUtenteProponente) {
+		this.postsUtenteProponente = postsUtenteProponente;
+	}
+
+	public List<Post> getPostsRispostiDaUtente() {
+		return postsRispostiDaUtente;
+	}
+
+	public void setPostsRispostiDaUtente(List<Post> postsRispostiDaUtente) {
+		this.postsRispostiDaUtente = postsRispostiDaUtente;
+	}
+	
+	
+	
+	
 	public ContentBean getContentBean() {
 		return contentBean;
 	}
@@ -972,9 +1030,10 @@ public class UtenteBean {
 	public void setContentBean(ContentBean contentBean) {
 		this.contentBean = contentBean;
 	}	
-
+	
 	@ManagedProperty(value = "#{contentBean}")
 	private ContentBean contentBean;
+	
 	
 	
 }

@@ -15,8 +15,19 @@
 	<h:panelGroup styleClass="pannello cerca">
 	<h:panelGrid>
 		<f:facet name="header">
-       		<h:outputText styleClass="common" value="&#160;&#160;FORUm"/>
-       		<br></br>
+			<h:panelGrid columns="2">
+	       		<h:outputText styleClass="common" value="&#160;&#160;FORUm"/>
+	       		<h:panelGroup>
+		       		<h:commandButton style="float:right;" value="POSTs UTENTe" rendered="#{utenteBean.tipoMembershipUtente()!=0}" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs">
+		       			<f:ajax event="click" listener="#{utenteBean.visualizzaPostsUtente()}" render=":content"></f:ajax>
+		       		</h:commandButton>
+	 				<h:panelGroup style="float:right;"  rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.nuoveRisposteForum!=0}" style="height:15px">
+	 	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+							<h:outputText value="#{postBean.nuoveRisposteForum}"></h:outputText>
+	 	   				</sup>
+		   			</h:panelGroup>
+	   			</h:panelGroup>
+	       	</h:panelGrid>
       	</f:facet>
 
 		<h:form id="forumform">

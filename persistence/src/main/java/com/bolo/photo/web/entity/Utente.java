@@ -210,7 +210,13 @@ public class Utente implements Serializable{
 	@ManyToMany(mappedBy="partecipanti")
 	private List<Post> postsPartecipati = new ArrayList<Post>(); 
 	
-	//************GETTERS&SETTERS**********
+	@ManyToMany(mappedBy="utentiFollowers")
+	private List<Post> postsSeguiti;
+	
+	
+	
+	
+	//************GETTERS&SETTERS****************************************
 	
 
 	
@@ -709,6 +715,14 @@ public class Utente implements Serializable{
 
 	public void setPostsPartecipati(List<Post> postsPartecipati) {
 		this.postsPartecipati = postsPartecipati;
+	}
+
+	public List<Post> getPostsSeguiti() {
+		return postsSeguiti;
+	}
+
+	public void setPostsSeguiti(List<Post> postsSeguiti) {
+		this.postsSeguiti = postsSeguiti;
 	}
 	
 	

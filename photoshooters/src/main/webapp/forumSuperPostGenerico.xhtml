@@ -21,9 +21,15 @@
 
 		<h:panelGrid>
 			<f:facet name="header">
-	        	<h:commandButton value="SUPERPOST &#160;&#160;#{postBean.superPostGenerico.nomeSuperPost}" >
+				<h:commandButton value="FORUm&#160;-" >
+	       			<f:ajax event="click" listener="#{menuBean.menuClick(4)}" render=":content"></f:ajax>	
+	       		</h:commandButton>
+	       		<h:outputText styleClass="common" value="&#160;-&#160;"/>
+	        	<h:commandButton value="#{postBean.titoloListaSuperPostsGenerica}" >
 	       			<f:ajax event="click" listener="#{postBean.caricaListaSuperPost(1)}" render=":content"></f:ajax>	
 	       		</h:commandButton>
+	       		<h:outputText styleClass="common" value="&#160;-&#160;"/>
+	       		<h:outputText value="#{postBean.superPostGenerico.nomeSuperPost}"></h:outputText>
 	       		<br></br>
 	      	</f:facet>
 			

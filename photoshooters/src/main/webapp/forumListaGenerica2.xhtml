@@ -21,7 +21,11 @@
 		
 		<h:panelGrid>
 			<f:facet name="header">
-	       		<h:outputText styleClass="common" value="LISTA GENERICa - &#160;&#160;#{postBean.titoloListaSuperPostsGenerica}"/>
+				<h:commandButton value="FORUm" >
+	       			<f:ajax event="click" listener="#{menuBean.menuClick(4)}" render=":content"></f:ajax>	
+	       		</h:commandButton>
+	       		<h:outputText styleClass="common" value="&#160;-&#160;"/>
+	       		<h:outputText styleClass="common" value="#{postBean.titoloListaSuperPostsGenerica}"/>
 	       		<br></br>
 	      	</f:facet>
 	

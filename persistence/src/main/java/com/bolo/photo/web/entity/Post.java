@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -50,7 +51,12 @@ public class Post implements Serializable{
 	private SuperPost superpost;
 	
 	@ManyToMany
+	@JoinTable(name="Posts_Partecipanti")
 	private List<Utente> partecipanti = new ArrayList<Utente>(); 
+	
+	@ManyToMany
+	@JoinTable(name="Posts_Followers")
+	private List<Utente> utentiFollowers = new ArrayList<Utente>();
 	
 //	GETTERS & SETTERS*****************
 	
@@ -135,6 +141,14 @@ public class Post implements Serializable{
 
 	public void setPartecipanti(List<Utente> partecipanti) {
 		this.partecipanti = partecipanti;
+	}
+
+	public List<Utente> getUtentiFollowers() {
+		return utentiFollowers;
+	}
+
+	public void setUtentiFollowers(List<Utente> utentiFollowers) {
+		this.utentiFollowers = utentiFollowers;
 	}
 	
 	

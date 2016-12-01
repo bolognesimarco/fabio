@@ -179,6 +179,7 @@
 		            		<h:outputText value="ATTIVITà PHOTOSHOOTEr&#160;"/>
 		            		<h:graphicImage value="/resources/images/iconamessaggiscambiati.svg" title="Hai scambiato messaggi con #{utenteBean.cercaUtente.utente.username}" width="20" height="20" rendered="#{threadBean.esisteThreadConUtenteTrovato(utenteBean.cercaUtente.utente) and utenteBean.tipoMembershipUtente()!=0}"></h:graphicImage>
 		        			<h:graphicImage value="/resources/images/iconacollaborato.svg" title="Hai collaborato con #{utenteBean.cercaUtente.utente.username}" width="20" height="20" rendered="#{utenteBean.collaboratoUtente and utenteBean.tipoMembershipUtente()!=0}"></h:graphicImage>
+		        			<h:graphicImage value="/resources/images/iconautenteseguito.svg" title="Segui l'utente #{utenteBean.cercaUtente.utente.username}" width="20" height="20" rendered="#{tenteBean.tipoMembershipUtente()!=0 and utenteBean.utenteSeguito(utenteBean.cercaUtente.utente)}"></h:graphicImage>
 		        		</f:facet>
 		        		<h:panelGrid columns="2" columnClasses="rightprofilo,leftprofilo">
 		        			<h:outputLabel for="ultimoaccesso">ULTIMo ACCESSo</h:outputLabel>

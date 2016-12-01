@@ -58,7 +58,7 @@
 			<h:panelGrid  columns="2" columnClasses="rightprofilo,leftprofilo">
 				
 				<h:outputLabel for="avatar">AVATAr</h:outputLabel>
-				<h:panelGroup>
+				<h:panelGroup id="avatar">
 				<h:graphicImage rendered="#{utenteBean.utente.avatar!=utenteBean.avatarDefault}" value="/lil?path=#{utenteBean.utente.username}/#{utenteBean.utente.avatar}" height="51" width="50"></h:graphicImage>
             	<h:graphicImage rendered="#{utenteBean.utente.avatar==utenteBean.avatarDefault}" value="/resources/images/avatarDefault.svg" height="51" width="50"></h:graphicImage>	
 				</h:panelGroup>
@@ -94,7 +94,7 @@
 				<h:outputText id="regione" value="#{utenteBean.utente.regIta}" />	
 
 				<h:outputLabel for="tipolavoro">TIPOLOGIa LAVORi</h:outputLabel>
-				<h:outputText id="tipoLavoro" value="#{utenteBean.utente.tipiLavoroDescrizione}" />	
+				<h:outputText id="tipolavoro" value="#{utenteBean.utente.tipiLavoroDescrizione}" />	
 
 			</h:panelGrid>			
 			<h:panelGrid border="0" columns="2" columnClasses="rightprofilo,leftprofilo" rendered="#{utenteBean.utente.tipoUtente.id==2 || utenteBean.utente.tipoUtente.id==9}">
@@ -142,8 +142,8 @@
 				
 					<h:commandButton value="COLLABORAZIONi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaCollaborazioniUtente(utenteBean.utente)}"></h:commandButton>
 					<h:commandButton value="PREFERITe | SEGUITi | FOLLOWERs" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.cercaPreferitiSeguitiDaUtente()}"></h:commandButton>
-					<h:commandButton value="ANNUNCi"></h:commandButton>
-					<h:commandButton value="POSTs"></h:commandButton>
+					<h:commandButton value="ANNUNCi" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs"></h:commandButton>
+					<h:commandButton value="POSTs" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs" action="#{utenteBean.visualizzaPostsUtente()}"></h:commandButton>
 					
 				</h:panelGrid>	
 				

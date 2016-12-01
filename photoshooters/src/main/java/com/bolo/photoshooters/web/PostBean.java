@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -603,58 +604,63 @@ public class PostBean {
 	
 	
 	
-//	public void nuoviMessaggiThreadsAnnuncio (int idUtente) {
-//	threadsAnnunciConNuoviMessaggi.clear();
-//	System.out.println("nuoviMESSAGGIANNUNCIIIIIingresso");
-//	
-//	List<Annuncio> annunciConNuoviMessaggiInThreadsToT = new ArrayList<Annuncio>();
-//	List<Annuncio> annunciTotUtente = new ArrayList<Annuncio>();
-//	annunciTotUtente.addAll(annunciUtente);
-//	annunciTotUtente.addAll(annunciRispostiDaUtente);
-//	if(annunciUtente.size()>0){
-//		System.out.println("annunciUtente.risposte() size="+annunciTotUtente.get(0).getRisposte().size());
-//	}
-//
-//	if (annunciRispostiDaUtente.size()>0) {
-//		System.out.println("annunciRispostiDaUtente.risposte() size="+annunciRispostiDaUtente.get(0).getRisposte().size());
-//	}
-//	System.out.println("annunciTotUtente size="+annunciTotUtente.size());
-//	for (Annuncio annuncio : annunciTotUtente) {
-//		System.out.println("annunciTotUtente id="+annuncio.getId());
-//		System.out.println("annunciTotUtente thread.size===="+annuncio.getRisposte().size());
-//		for (Thread thr : annuncio.getRisposte()) {
-//			System.out.println("thread annuncio id="+thr.getId());
-//			if (thr.isNuovoMessaggio()) {
-//				System.out.println("isNuovoMessaggio== TRUEEE id="+thr.getId());
-//				annunciConNuoviMessaggiInThreadsToT.add(annuncio);
-//			}
-//		}
-//	}
-//	System.out.println("****ANNUNCIO Pubblicati+Risposti #"+annunciConNuoviMessaggiInThreadsToT.size());
-//
-//	int numthr = 0;		
-//	for (Annuncio ann : annunciConNuoviMessaggiInThreadsToT) {	
-//		for (Thread thr : ann.getRisposte()) {
-//			System.out.println("THREAD ID="+thr.getId());
-////			controllo se non ho cancellato il thread - in caso lo avessi cancellato, non lo conteggio anche se contiene mess nuovi x me
-//			if ((thr.getMittentePrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadMittente()==false) || (thr.getDestinatarioPrimo().getId()==utenteBean.getUtente().getId() && thr.isCancellatoThreadDestinatario()==false)) {	
-//				if (threadContieneMessaggiNonLetti(idUtente, thr)) {
-//					System.out.println("TRUE=contiene"+threadContieneMessaggiNonLetti(idUtente, thr));
-//					numthr++;
-//					threadsAnnunciConNuoviMessaggi.add(thr);
-//				}
-//			}
-//		}
-//	}
-//	System.out.println("threads annunci con messaggi non letti size"+threadsAnnunciConNuoviMessaggi.size());
-//	nuoviMessaggiAnnunci = numthr;
-//	System.out.println("nuoviMessaggiAnnunci==="+nuoviMessaggiAnnunci);
-//}
+	public boolean postSeguito(Post p) {
+		if (utenteBean.getUtente()!=null){
+//			for (Post pst : utenteBean.getUtente().getPostsSeguiti()) {
+			for (Utente ut : p.getUtentiFollowers()) {
+//				if (p.getId()==pst.getId()) {
+				if (ut.getId()==utenteBean.getUtente().getId()) {
+					System.out.println("post seguitooooo");
+					return true;
+				}	
+			}
+			System.out.println("post NOOOON seguitooooo");
+			return false;
+		}
+		return false;
+	}
+	
+	
+	public void seguiPost (Post p) {
+//		utenteBean.getUtente().getPostsSeguiti().add(p);
+		p.getUtentiFollowers().add(utenteBean.getUtente());
+		try {
+			serv.merge(p);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	
-	
-	
-	
+	public void nonSeguiPost (Post p) {
+		Iterator<Utente> it = p.getUtentiFollowers().iterator();
+		while(it.hasNext()) {
+			Utente ut = it.next();
+			System.out.println("id utente=="+ut.getId());
+			if(ut.getId()==utenteBean.getUtente().getId()) {
+				System.out.println("id ut trovato=="+ut.getId());
+				it.remove();
+			}
+		}
+//		Iterator<Post> it2 = utenteBean.getUtente().getPostsSeguiti().iterator();
+//		while(it2.hasNext()) {
+//			Post pst = it2.next();
+//			System.out.println("id post=="+pst.getId());
+//			if(pst.getId()==p.getId()) {
+//				System.out.println("id post trovato=="+pst.getId());
+//				it.remove();
+//			}
+//		}
+		try {
+			System.out.println("non seguire più post");
+			serv.merge(p);
+//			serv.merge(utenteBean.getUtente());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 	

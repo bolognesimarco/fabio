@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="forum.css" library="css" />
+	<h:outputStylesheet name="dataTable.css" library="css" />
+</h:head>
+<h:body>
+
+
+	<h:panelGroup styleClass="pannello cerca">
+
+	<h:form id="postsutente">
+
+		<h:panelGrid>
+			<f:facet name="header">
+				<h:outputText value="POSTs - #{utenteBean.utente.username}"></h:outputText>
+	       		<br></br>
+	      	</f:facet>
+			
+
+
+			<p:dataTable id="postsutenteproponente" var="PostsUt" value="#{utenteBean.postsUtenteProponente}" rendered="#{utenteBean.postsUtenteProponente.size()>-1}" first="0" rows="5" paginator="true" scrollable="false" scrollWidth="0">
+				
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;POSTs UTENTe&#160;(#{utenteBean.postsUtenteProponente.size()})" />
+	           		<br></br>
+	       		</f:facet>
+	       		
+				<p:column rendered="#{utenteBean.postsUtenteProponente.size()>0}">
+				
+					<h:panelGrid columns="1" border="1" style="background-color: rgb(120, 120, 120)!important;">
+					
+						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
+							
+							<h:outputText value="POSt&#160;(id:#{PostsUt.id}):&#160;"></h:outputText>
+							<h:panelGroup>
+								<h:commandButton styleClass="ui-bottone" value="#{PostsUt.risposte.get(PostsUt.risposte.size()-1).oggettoThread}">
+									<f:ajax event="click" listener="#{postBean.visualizzaPost(PostsUt)}" render=":content :postgenericoforumform" />
+								</h:commandButton>
+								<h:panelGroup>
+									<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiNonLetti(utenteBean.utente.id, PostsUt)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="new"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
+			    	   				<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiPerUtenteNonLetti(utenteBean.utente.id, PostsUt)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="&#160;P|S"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
+		    	   				</h:panelGroup>
+			        			<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+			        			<h:commandLink value="#{PostsUt.proponente.username}" action="#{utenteBean.utenteTrovatoId(PostsUt.proponente.id)}" />
+		        			</h:panelGroup>						
+							
+		            		<h:outputText value="DATa:&#160;"/>
+							<h:outputText id="datapubblicazione" value="#{PostsUt.risposte.get(PostsUt.risposte.size()-1).messaggi.get(PostsUt.risposte.get(PostsUt.risposte.size()-1).messaggi.size()-1).data}">
+								<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+							</h:outputText >
+							
+							<h:outputText value="ULTIMa RISPOSTa:&#160;"></h:outputText>
+							<h:panelGroup>							
+								<h:outputText id="dataultima" value="#{PostsUt.risposte.get(0).messaggi.get(0).data}">
+									<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+								</h:outputText >
+								<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+								<h:commandLink value="#{PostsUt.risposte.get(0).messaggi.get(0).mittente.username}" action="#{utenteBean.utenteTrovatoId(PostsUt.risposte.get(0).messaggi.get(0).mittente.id)}" />
+							</h:panelGroup>
+							
+		        			<h:outputText value="NUMERo RISPOSTe:&#160;"/>
+							<h:outputText  value="#{postBean.numeroMessaggiPost(PostsUt)}"/>
+
+						</h:panelGrid>
+
+		        	</h:panelGrid>
+		       					
+				</p:column>
+	
+			</p:dataTable>
+		
+			<p:dataTable id="postsrispostiutente" var="PostsUt" value="#{utenteBean.postsRispostiDaUtente}" rendered="#{utenteBean.postsRispostiDaUtente.size()>-1}" first="0" rows="5" paginator="true" scrollable="false" scrollWidth="0">
+				
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;POSTs RISPOSTi Da UTENTe&#160;(#{utenteBean.postsRispostiDaUtente.size()})" />
+	           		<br></br>
+	       		</f:facet>
+	       		
+				<p:column rendered="#{utenteBean.postsRispostiDaUtente.size()>0}">
+				
+					<h:panelGrid columns="1" border="1" style="background-color: rgb(120, 120, 120)!important;">
+					
+						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
+							
+							<h:outputText value="POSt&#160;(id:#{PostsUt.id}):&#160;"></h:outputText>
+							<h:panelGroup>
+								<h:commandButton styleClass="ui-bottone" value="#{PostsUt.risposte.get(PostsUt.risposte.size()-1).oggettoThread}">
+									<f:ajax event="click" listener="#{postBean.visualizzaPost(PostsUt)}" render=":content :postgenericoforumform" />
+								</h:commandButton>
+								<h:panelGroup>
+									<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiNonLetti(utenteBean.utente.id, PostsUt)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="new"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
+			    	   				<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiPerUtenteNonLetti(utenteBean.utente.id, PostsUt)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="&#160;P|S"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
+		    	   				</h:panelGroup>
+			        			<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+			        			<h:commandLink value="#{PostsUt.proponente.username}" action="#{utenteBean.utenteTrovatoId(PostsUt.proponente.id)}" />
+		        			</h:panelGroup>						
+							
+		            		<h:outputText value="DATa:&#160;"/>
+							<h:outputText id="datapubblicazione" value="#{PostsUt.risposte.get(PostsUt.risposte.size()-1).messaggi.get(PostsUt.risposte.get(PostsUt.risposte.size()-1).messaggi.size()-1).data}">
+								<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+							</h:outputText >
+							
+							<h:outputText value="ULTIMa RISPOSTa:&#160;"></h:outputText>
+							<h:panelGroup>							
+								<h:outputText id="dataultima" value="#{PostsUt.risposte.get(0).messaggi.get(0).data}">
+									<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+								</h:outputText >
+								<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+								<h:commandLink value="#{PostsUt.risposte.get(0).messaggi.get(0).mittente.username}" action="#{utenteBean.utenteTrovatoId(PostsUt.risposte.get(0).messaggi.get(0).mittente.id)}" />
+							</h:panelGroup>
+							
+		        			<h:outputText value="NUMERo RISPOSTe:&#160;"/>
+							<h:outputText  value="#{postBean.numeroMessaggiPost(PostsUt)}"/>
+
+						</h:panelGrid>
+
+		        	</h:panelGrid>
+		       					
+				</p:column>
+	
+			</p:dataTable>
+
+			<p:dataTable id="postsseguitidautente" var="PostsUt" value="#{utenteBean.utente.postsSeguiti}" rendered="#{utenteBean.utente.postsSeguiti.size()>-1}" first="0" rows="5" paginator="true" scrollable="false" scrollWidth="0">
+				
+				<f:facet name="header">
+	           		<h:outputText styleClass="common" value="&#160;&#160;POSTs SEGUITi Da UTENTe&#160;(#{utenteBean.utente.postsSeguiti.size()})" />
+	           		<br></br>
+	       		</f:facet>
+	       		
+				<p:column rendered="#{utenteBean.utente.postsSeguiti.size()>0}">
+				
+					<h:panelGrid columns="1" border="1" style="background-color: rgb(120, 120, 120)!important;">
+					
+						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
+							
+							<h:outputText value="POSt&#160;(id:#{PostsUt.id}):&#160;"></h:outputText>
+							<h:panelGroup>
+								<h:commandButton styleClass="ui-bottone" value="#{PostsUt.risposte.get(PostsUt.risposte.size()-1).oggettoThread}">
+									<f:ajax event="click" listener="#{postBean.visualizzaPost(PostsUt)}" render=":content :postgenericoforumform" />
+								</h:commandButton>
+								<h:panelGroup>
+									<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiNonLetti(utenteBean.utente.id, PostsUt)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="new"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
+			    	   				<h:panelGroup rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postContieneMessaggiPerUtenteNonLetti(utenteBean.utente.id, PostsUt)==true}" style="height:15px">
+				    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+											<h:outputText value="&#160;P|S"></h:outputText>
+				    	   				</sup>
+			    	   				</h:panelGroup>
+		    	   				</h:panelGroup>
+			        			<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+			        			<h:commandLink value="#{PostsUt.proponente.username}" action="#{utenteBean.utenteTrovatoId(PostsUt.proponente.id)}" />
+		        			</h:panelGroup>						
+							
+		            		<h:outputText value="DATa:&#160;"/>
+							<h:outputText id="datapubblicazione" value="#{PostsUt.risposte.get(PostsUt.risposte.size()-1).messaggi.get(PostsUt.risposte.get(PostsUt.risposte.size()-1).messaggi.size()-1).data}">
+								<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+							</h:outputText >
+							
+							<h:outputText value="ULTIMa RISPOSTa:&#160;"></h:outputText>
+							<h:panelGroup>							
+								<h:outputText id="dataultima" value="#{PostsUt.risposte.get(0).messaggi.get(0).data}">
+									<f:convertDateTime pattern="HH:mm:ss dd.MM.yyyy" />
+								</h:outputText >
+								<h:outputText value="&#160;P|S:&#160;"></h:outputText>
+								<h:commandLink value="#{PostsUt.risposte.get(0).messaggi.get(0).mittente.username}" action="#{utenteBean.utenteTrovatoId(PostsUt.risposte.get(0).messaggi.get(0).mittente.id)}" />
+							</h:panelGroup>
+							
+		        			<h:outputText value="NUMERo RISPOSTe:&#160;"/>
+							<h:outputText  value="#{postBean.numeroMessaggiPost(PostsUt)}"/>
+
+						</h:panelGrid>
+
+		        	</h:panelGrid>
+		       					
+				</p:column>
+	
+			</p:dataTable>	
+			
+		</h:panelGrid>
+	
+	</h:form>
+
+	</h:panelGroup>
+	
+</h:body>
+</html>

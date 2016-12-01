@@ -31,17 +31,36 @@ function moveCursorToEnd(obj) {
 		
 		<h:panelGrid>
 			<f:facet name="header">
-	       		<h:outputText styleClass="common" value="POST GENERICO - &#160;&#160;"/>
-	       		<h:commandButton value="#{postBean.superPostGenerico.nomeSuperPost}" >
-	       			<f:ajax event="click" listener="#{postBean.visualizzaSuperPost(postBean.superPostGenerico)}" render=":content"></f:ajax>	
-	       		</h:commandButton>
-	       		<br></br>
+				<h:panelGrid columns="2">
+					<h:panelGroup>
+						<h:commandButton value="FORUm" >
+			       			<f:ajax event="click" listener="#{menuBean.menuClick(4)}" render=":content"></f:ajax>	
+			       		</h:commandButton>
+			       		<h:outputText styleClass="common" value="&#160;-&#160;"/>
+			        	<h:commandButton value="SUPERPOST" >
+			       			<f:ajax event="click" listener="#{postBean.caricaListaSuperPost(1)}" render=":content"></f:ajax>	
+			       		</h:commandButton>
+			       		<h:outputText styleClass="common" value="&#160;-&#160;"/>
+			       		<h:commandButton value="#{postBean.superPostGenerico.nomeSuperPost}" >
+			       			<f:ajax event="click" listener="#{postBean.visualizzaSuperPost(postBean.superPostGenerico)}" render=":content"></f:ajax>	
+			       		</h:commandButton>
+		       		</h:panelGroup>
+		       		<h:panelGroup id="seguipanel">
+			       		<h:commandButton value="SEGUi POSt" style="float:right;" rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postSeguito(postBean.postGenerico)==false}" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs">
+			       			<f:ajax event="click" listener="#{postBean.seguiPost(postBean.postGenerico)}" render=":content seguipanel"></f:ajax>
+			       		</h:commandButton>
+			       		<h:commandButton value="NOn SEGUIRe PIù POSt" style="float:right;" rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.postSeguito(postBean.postGenerico)}" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs">
+			       			<f:ajax event="click" listener="#{postBean.nonSeguiPost(postBean.postGenerico)}" render=":content seguipanel"></f:ajax>
+			       		</h:commandButton>
+		       		</h:panelGroup>
+		       	</h:panelGrid>
 	      	</f:facet>
 			
 			<h:panelGrid styleClass="tabellaForum" columns="2" columnClasses="rightcolonna,leftcolonna"> 
 			
 				<f:facet name="header">
 					<h:outputText value="#{postBean.postGenerico.risposte.get(0).oggettoThread}"></h:outputText>
+
 	           		<br></br>
 	       		</f:facet>
 	       		
@@ -57,7 +76,10 @@ function moveCursorToEnd(obj) {
 	        		
 	        		<h:outputText value="MESSAGGIo&#160;"/>
 	        		<h:outputText value="#{postBean.postGenerico.risposte.get(0).messaggi.get(0).messaggio}"></h:outputText>
-	        					
+	        		
+	        		<h:outputText value="FOLLOWERs&#160;"></h:outputText>
+					<h:outputText value="(#{postBean.postGenerico.utentiFollowers.size()})"></h:outputText>	        	
+													
 				<f:facet name="footer">
 					<p:commandButton update="rispondipostform:rispostaDetail" oncomplete="PF('rispondipostOP').loadContents()" value="RISPONDi" rendered="#{utenteBean.tipoMembershipUtente()!=0}">
            			</p:commandButton>			
