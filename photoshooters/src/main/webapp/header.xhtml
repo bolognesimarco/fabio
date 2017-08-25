@@ -22,7 +22,7 @@
 
 			  <h:graphicImage value="/resources/images/Loghetto_PS_naked_C.svg" height="57px" width="39px"></h:graphicImage>
 			  <h:graphicImage  value="/resources/images/Scritta_photoshooters_small_C.svg">
-			  		<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content" /></h:graphicImage>
+			  		<f:ajax event="click" listener="#{menuBean.menuClick(7)}" render=":content :headerform :menuutenteform" /></h:graphicImage>
 			  <h:inputText id="cerca" maxlength="36" label="cerca"/>
 
 		  </h:panelGrid>
@@ -48,7 +48,7 @@
 	    	   	</h:commandButton>
 
 	    	   	<h:commandButton value="FORUm" style="#{menuBean.menuStyle4}" styleClass="menubutton">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(4)}" render=":content :headerform :menuutenteform" />
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(4)}" render=":content :headerform :menuutenteform :forumform" />
     					<h:panelGroup id="numerorisposteforum">
 	    	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
 	    	   					<h:outputText rendered="#{postBean.nuoveRisposteForum!=0}" value="#{postBean.nuoveRisposteForum}"></h:outputText>

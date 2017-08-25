@@ -37,9 +37,14 @@
 						
 						<h:commandButton value="#{result.titolo}" styleClass="menubuttonwhite">
 		    				<f:ajax event="click" listener="#{inputBean.visualizzaFotos2(result)}" render=":content :nuovafotoform :fotosform" />
-		    	   		</h:commandButton>	<br></br>
+		    	   		</h:commandButton>	<br></br>				    
+	
+						<p:commandButton update="modalbumform:albumDetail" styleClass="menubuttonwhite" oncomplete="PF('albumOP').loadContents()" value="MODIFICa" >
+              				  <f:setPropertyActionListener value="#{result}" target="#{inputBean.albumVisualizzato}" />
+              				  <f:ajax event="click" listener="#{inputBean.titoloAlbumDaModificareSet(result.titolo)}"  />
+            			</p:commandButton>
 		    	   		
-		    	   		<p:commandButton value="ELIMINa" styleClass="menubuttonorange; color: #EF4323;"  >
+		    	   		<p:commandButton value="ELIMINa" styleClass="menubuttonorange" style="color:#EF4323!important;"  >
         					<f:ajax event="click" listener="#{inputBean.cancellaAlbum(result)}" render=":content :headerform :patternguestform menuutenteform albumspanel" />
         					<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe? Verranno eliminate tutte le foto dell'album!" icon="ui-icon-alert" />
     					</p:commandButton>
@@ -48,13 +53,6 @@
 					        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
 					        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
 					    </p:confirmDialog>	
-					    
-	
-						<p:commandButton update="modalbumform:albumDetail" oncomplete="PF('albumOP').loadContents()" value="MODIFICa" >
-              				  <f:setPropertyActionListener value="#{result}" target="#{inputBean.albumVisualizzato}" />
-              				  <f:ajax event="click" listener="#{inputBean.titoloAlbumDaModificareSet(result.titolo)}"  />
-            			</p:commandButton>
-
 					</p:column>
 				</p:dataGrid>
 

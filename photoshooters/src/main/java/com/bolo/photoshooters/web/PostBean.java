@@ -22,6 +22,7 @@ import com.bolo.photo.web.entity.Messaggio;
 import com.bolo.photo.web.entity.Post;
 import com.bolo.photo.web.entity.SuperPost;
 import com.bolo.photo.web.entity.Thread;
+import com.bolo.photo.web.entity.TopicForum;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
@@ -54,6 +55,7 @@ public class PostBean {
 	private Messaggio messaggioRispostaPost = new Messaggio();
 	private Messaggio messaggioRispostaThr = new Messaggio();
 	private int nuoveRisposteForum = 0;
+	private List<TopicForum> Topics = new ArrayList<TopicForum>();
 	
 	//ListaSuperPost
 	public void caricaListaSuperPost (int tipoLista) {
@@ -61,55 +63,60 @@ public class PostBean {
 		int idFinal = 0;
 		titoloListaSuperPostsGenerica ="";
 		switch (tipoLista) {
-		case 1://FORUM UTENTI FREE
+		case 0://FORUM REGOLAMENTO - forum + sito
+			idIniz = 81;
+			idFinal = 120;
+			titoloListaSuperPostsGenerica ="UTENTi FREe";
+			break;		
+		case 1://FORUM UTENTI FREE - presentati + generale
 			idIniz = 1;
-			idFinal = 20;
+			idFinal = 40;
 			titoloListaSuperPostsGenerica ="UTENTi FREe";
 			break;
-		case 2://FORUM UTENTI PLUS
-			idIniz = 21;
-			idFinal = 40;
+		case 2://FORUM UTENTI PLUS - presentati + generale
+			idIniz = 41;
+			idFinal = 80;
 			titoloListaSuperPostsGenerica ="UTENTi PLUs";
 			break;
-		case 3://FEEDBACK UTENTI FREE
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+		case 3://FEEDBACK UTENTI FREE - collaborazioni + segnalazioni
+			idIniz = 121;
+			idFinal = 160;
+			titoloListaSuperPostsGenerica ="FEEDBACk UTENTi FREe";
 			break;
-		case 4://FEEDBACK UTENTI PLUS
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+		case 4://FEEDBACK UTENTI PLUS - collaborazioni + segnalazioni
+			idIniz = 161;
+			idFinal = 200;
+			titoloListaSuperPostsGenerica ="FEEDBACk UTENTi PLUs";
 			break;
 		case 5://LAVORI - RICHIESTA & OFFERTA	
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+			idIniz = 201;
+			idFinal = 220;
+			titoloListaSuperPostsGenerica ="LAVORi - RICHIESTa & OFFERTa";
 			break;
 		case 6://LAVORI - CASTING & AGENZIE
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+			idIniz = 221;
+			idFinal = 240;
+			titoloListaSuperPostsGenerica ="LAVORi - CASTINg & AGENZIe";
 			break;
 		case 7://FOTOGRAFIA - ATTREZZATURE & TECNICHE
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+			idIniz = 241;
+			idFinal = 260;
+			titoloListaSuperPostsGenerica ="FOTOGRAFIa - ATTREZZATURe & TECNICHe";
 			break;
 		case 8://FOTOGRAFIA - CONSIGLI & TRUCCHI
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+			idIniz = 261;
+			idFinal = 280;
+			titoloListaSuperPostsGenerica ="FOTOGRAFIa - CONSIGLi & TRUCCHi";
 			break;
 		case 9://MODA - ULTIMI TREND
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+			idIniz = 281;
+			idFinal = 300;
+			titoloListaSuperPostsGenerica ="MODa - ULTIMi TRENd";
 			break;
 		case 10://MODA - STILISTI & SFILATE
-			idIniz = 0;
-			idFinal = 0;
-			titoloListaSuperPostsGenerica ="";
+			idIniz = 301;
+			idFinal = 320;
+			titoloListaSuperPostsGenerica ="MODa - STILISTi & SFILATe";
 			break;
 		default:
 			break;
@@ -138,7 +145,44 @@ public class PostBean {
 			contentBean.setContent("forumListaGenerica2.xhtml");
 		}
 	}
-
+	
+	
+	public void caricaTopics() {
+		String query = "from TopicForum tf";
+		EntityManager em = EMF.createEntityManager();
+		List<TopicForum> topics = em
+		.createQuery(query)
+		.getResultList();
+		if (topics!=null && topics.size()>0) {
+			Topics = topics;
+		}
+		System.out.println("caricato topics num#"+Topics.size());
+		contentBean.setContent("forum2.xhtml");
+	}
+	
+	public void caricaListaSP (TopicForum tf) {
+		listaSuperPostsGenerica = tf.getSuperPosts();
+		titoloListaSuperPostsGenerica = tf.getNomeTopicForum();
+		for (SuperPost sp : listaSuperPostsGenerica) {		
+//			System.out.println("inizio ordinamentoooo - SP id= "+sp.getId());
+			for (Post p : sp.getPosts()) {
+//				System.out.println("inizio ordinamentoooo - P id= "+p.getId());
+				for (Thread t : p.getRisposte()) {
+//					System.out.println("inizio ordinamentoooo - TD id= "+t.getId());
+					ordinaMessaggiPerData(t.getMessaggi());
+				}
+				ordinaThreadPerData(p.getRisposte());
+			}
+			ordinaPostPerData(sp.getPosts());
+		}
+		System.out.println("dopo ordinamentoooo Lista SuperPost");
+		contentBean.setContent("forumListaGenerica2.xhtml");
+	}
+	
+	
+	public void visualizzaListaSPGenerica () {
+		contentBean.setContent("forumListaGenerica2.xhtml");
+	}
 	
 	//SuperPost=Lista Posts
 	public void visualizzaSuperPost(SuperPost sp) {
@@ -246,7 +290,7 @@ public class PostBean {
 		ordinaInversamenteThreadPerData(p.getRisposte());
 		postGenerico = p;
 		superPostGenerico = p.getSuperpost();
-		contentBean.setContent("forumPostGenerico3.xhtml");
+		contentBean.setContent("forumPostGenerico4.xhtml");
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("postgenericoforumform");	
 	}	
 	
@@ -339,7 +383,7 @@ public class PostBean {
 		}
 		messaggioRispostaThr = new Messaggio();
 		contentBean.setMessaggio("risposta secondaria inviata!");
-		contentBean.setContent("forumPostGenerico3.xhtml");
+		contentBean.setContent("forumPostGenerico4.xhtml");
 	}
 	
 	
@@ -387,7 +431,7 @@ public class PostBean {
 		}
 		messaggioRispostaThread = new Messaggio();
 		contentBean.setMessaggio("risposta secondaria2 inviata!");
-		contentBean.setContent("forumPostGenerico3.xhtml");
+		contentBean.setContent("forumPostGenerico4.xhtml");
 	}
 	
 	
@@ -622,10 +666,11 @@ public class PostBean {
 	
 	
 	public void seguiPost (Post p) {
-//		utenteBean.getUtente().getPostsSeguiti().add(p);
+		utenteBean.getUtente().getPostsSeguiti().add(p);
 		p.getUtentiFollowers().add(utenteBean.getUtente());
 		try {
 			serv.merge(p);
+//			serv.refresh(utenteBean.getUtente().getPostsSeguiti());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -655,6 +700,7 @@ public class PostBean {
 		try {
 			System.out.println("non seguire più post");
 			serv.merge(p);
+//			serv.persist(p);
 //			serv.merge(utenteBean.getUtente());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -1284,6 +1330,14 @@ public class PostBean {
 
 	public void setNuoveRisposteForum(int nuoveRisposteForum) {
 		this.nuoveRisposteForum = nuoveRisposteForum;
+	}
+
+	public List<TopicForum> getTopics() {
+		return Topics;
+	}
+
+	public void setTopics(List<TopicForum> topics) {
+		Topics = topics;
 	}
 
 

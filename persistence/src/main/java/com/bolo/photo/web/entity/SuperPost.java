@@ -28,7 +28,9 @@ public class SuperPost implements Serializable{
 	@Column
 	private String nomeSuperPost;
 
-	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="topicforum", nullable=true, updatable=false)
+	private TopicForum topicforum;
 	
 //	GETTERS & SETTERS*****************
 	
@@ -55,5 +57,15 @@ public class SuperPost implements Serializable{
 	public void setNomeSuperPost(String nomeSuperPost) {
 		this.nomeSuperPost = nomeSuperPost;
 	}
+
+	public TopicForum getTopicforum() {
+		return topicforum;
+	}
+
+	public void setTopicforum(TopicForum topicforum) {
+		this.topicforum = topicforum;
+	}
+
+	
 	
 }

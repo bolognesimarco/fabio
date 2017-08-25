@@ -52,7 +52,8 @@ public class MenuBean {
 			break;
 		case 4://FORUM
 			contentBean.setMessaggio(null);
-			contentBean.setContent("forum.xhtml");
+			postBean.caricaTopics();
+			contentBean.setContent("forum2.xhtml");
 			azzeraMenuStyle();
 			menuStyle4 = menuBorder;
 			break;

@@ -158,7 +158,7 @@
 					
 						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">
 							
-							<h:outputText value="POSt&#160;(id:#{PostsUt.id}):&#160;"></h:outputText>
+							<h:outputText styleClass="common" value="POSt&#160;(id:#{PostsUt.id}):&#160;"></h:outputText>
 							<h:panelGroup>
 								<h:commandButton styleClass="ui-bottone" value="#{PostsUt.risposte.get(PostsUt.risposte.size()-1).oggettoThread}">
 									<f:ajax event="click" listener="#{postBean.visualizzaPost(PostsUt)}" render=":content :postgenericoforumform" />

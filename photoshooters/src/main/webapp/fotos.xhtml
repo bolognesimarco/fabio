@@ -67,9 +67,13 @@
 			
 							</h:panelGrid>
 						</figcaption> 
-					</figure>
+					</figure>	
 					
-					<p:commandButton value="ELIMINa" styleClass="menubuttonorange" >
+					<h:commandButton value="MODIFICa" styleClass="menubuttonwhite">
+						<f:ajax event="click" listener="#{inputBean.modificaFoto(risultato)}" render=":content :modificafotoform" />		    	   
+		    	   	</h:commandButton>
+					
+					<p:commandButton value="ELIMINa" styleClass="menubuttonorange" style="color:#EF4323!important;">
 						<f:ajax event="click" listener="#{inputBean.cancellaFoto(risultato)}" render=":content :nuovafotoform :fotosform" />
 						<p:confirm header="CONFERMa" message="confermi ELIMINAZIONe?" icon="ui-icon-alert" />
 					</p:commandButton>		
@@ -77,11 +81,7 @@
 					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 				        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
 				        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-			   		</p:confirmDialog>	
-					
-					<h:commandButton value="MODIFICa" styleClass="menubuttonwhite">
-						<f:ajax event="click" listener="#{inputBean.modificaFoto(risultato)}" render=":content :modificafotoform" />		    	   
-		    	   	</h:commandButton>
+			   		</p:confirmDialog>					
 					
 				</p:column>
 			</p:dataGrid>	

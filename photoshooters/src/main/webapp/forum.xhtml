@@ -19,9 +19,9 @@
 	       		<h:outputText styleClass="common" value="&#160;&#160;FORUm"/>
 	       		<h:panelGroup>
 		       		<h:commandButton style="float:right;" value="POSTs UTENTe" rendered="#{utenteBean.tipoMembershipUtente()!=0}" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs">
-		       			<f:ajax event="click" listener="#{utenteBean.visualizzaPostsUtente()}" render=":content"></f:ajax>
+		       			<f:ajax event="click" listener="#{utenteBean.visualizzaPostsUtente()}" render=":content :postsutente"></f:ajax>
 		       		</h:commandButton>
-	 				<h:panelGroup style="float:right;"  rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.nuoveRisposteForum!=0}" style="height:15px">
+	 				<h:panelGroup style="float:right; height:15px;"  rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.nuoveRisposteForum!=0}">
 	 	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
 							<h:outputText value="#{postBean.nuoveRisposteForum}"></h:outputText>
 	 	   				</sup>
@@ -85,9 +85,9 @@
         		
 				<h:panelGrid   styleClass="tabellaForum" border="1">
 	        		<h:panelGroup>
-		        		<h:commandButton value="FEEDBACk UTENTi FREe" action="#{postBean.utentiFreeForum()}"/>
+		        		<h:commandButton value="FEEDBACk UTENTi FREe" action="#{postBean.caricaListaSuperPost(3)}"/>
 		        			<br style="height:20px"></br>
-		        		<h:commandButton  value="FEEDBACk UTENTi PLUs" action="#{postBean.utentiPlusForum()}"/>
+		        		<h:commandButton  value="FEEDBACk UTENTi PLUs" action="#{postBean.caricaListaSuperPost(4)}"/>
 	        				<br style="height:20px"></br>
 	        		</h:panelGroup>
 				</h:panelGrid>					  			

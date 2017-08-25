@@ -26,7 +26,7 @@
 	       		</h:commandButton>
 	       		<h:outputText styleClass="common" value="&#160;-&#160;"/>
 	        	<h:commandButton value="#{postBean.titoloListaSuperPostsGenerica}" >
-	       			<f:ajax event="click" listener="#{postBean.caricaListaSuperPost(1)}" render=":content"></f:ajax>	
+	       			<f:ajax event="click" listener="#{postBean.visualizzaListaSPGenerica()}" render=":content"></f:ajax>	
 	       		</h:commandButton>
 	       		<h:outputText styleClass="common" value="&#160;-&#160;"/>
 	       		<h:outputText value="#{postBean.superPostGenerico.nomeSuperPost}"></h:outputText>
@@ -76,7 +76,7 @@
 			<p:dataTable id="superpostgenerico" var="PostsSP" value="#{postBean.superPostGenerico.posts}" rendered="#{postBean.superPostGenerico.posts.size()>1}" first="0" rows="5" paginator="true" scrollable="false" scrollWidth="0">
 				
 				<f:facet name="header">
-	           		<h:outputText styleClass="common" value="&#160;&#160;POSTs &#160;#{postBean.superPostGenerico.posts.size()}" />
+	           		<h:outputText styleClass="common" value="&#160;&#160;POSTs &#160;#{postBean.superPostGenerico.posts.size()-1}" />
 	           		<br></br>
 	       		</f:facet>
 	       		

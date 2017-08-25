@@ -211,12 +211,12 @@ public class Utente implements Serializable{
 	private List<Post> postsPartecipati = new ArrayList<Post>(); 
 	
 	@ManyToMany(mappedBy="utentiFollowers")
-	private List<Post> postsSeguiti;
+	private List<Post> postsSeguiti = new ArrayList<Post>(); 
 	
 	
 	
 	
-	//************GETTERS&SETTERS****************************************
+	//************GETTERS&SETTERS************************************************************************
 	
 
 	

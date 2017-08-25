@@ -72,13 +72,18 @@ font-family: gisha!important;
     border-bottom-left-radius: 10px!important;
 
 }
+
+/*prende in button con corfirm dialog */
 .ui-button-text.ui-c {
-	color: rgb(65, 64, 66)!important;
+/* 	color: rgb(65, 64, 66)!important; */
+/* 	color: #00ffff; */
+	color: #FFF;
     padding-left: 8px!important;
     padding-right: 7px!important;
     padding-bottom: 2px!important;
     padding-top: 2px!important;
 }
+
 /* sforndo riga alternata */
 .ui-datatable-odd {
 	background-color: rgb(120, 120, 120)!important;

@@ -48,7 +48,7 @@ font-family: gisha;
 	font-size: small;
 	border: none;
 	box-shadow: none;
-	height: 16px;
+/* 	height: 16px; */
 	width: 50px;
 }
 
@@ -160,7 +160,8 @@ font-family: gisha;
 	font-size: small!important;
 	font-weight: normal!important;
 	border: none;
-	color: #80959E!important;
+/* 	color: #80959E!important; */
+	color: #414042!important;
 }
 
 .ui-autocomplete-item {

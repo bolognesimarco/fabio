@@ -9,7 +9,6 @@
     
 <h:head>
 	<h:outputStylesheet name="login.css" library="css" />
-
 </h:head>
 <h:body>
 
@@ -42,7 +41,7 @@
 				<f:facet name="footer">
 		            <h:panelGroup>
 		                <h:commandButton value="ENTRa&#160;&#160;" action="#{loginBean.login()}">
-		               		 <f:ajax onevent="click" render="content :homeuserform" ></f:ajax>
+		               		 <f:ajax onevent="click" render=":content homeuserform" ></f:ajax>
 		            	</h:commandButton>  
 	            	</h:panelGroup>
         		</f:facet>
