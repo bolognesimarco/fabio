@@ -76,7 +76,9 @@ public class DBInitializer {
 		free.setDescrizione("FREe");
 		plus.setId(2);
 		plus.setDescrizione("PLUs");
+
 		
+//		LAVORI------------------------------------------------------------------------------------------------
 		TipoUtente fotografo = new TipoUtente();
 		fotografo.setId(1);
 		fotografo.setDescrizione("FOTOGRAFo/a");
@@ -333,12 +335,13 @@ public class DBInitializer {
 		fotomodella.getTipiUtente().add(hostess);
 		
 		
-//		utenti test-------------------------------------------
+//		UTENTI test---------------------------------------------------------------------
 		Utente test = new Utente();
 		test.setId(2);
 		test.setName("fabio");
 		test.setUsername("fb");
-		test.setPassword("fb");
+		test.setPassword("780cd58b236bb2dcbc5b9c55768c7554701ecc10daefb9db0db3355a37ab3e317f77436eafb719b02bcb25385eeeed8cea5371a3ff4f81852d614eef50bcf7f6");
+		test.setSalt("[B@bd69367");
 		test.setEmail("portoricano2000@gmail.com");
 		test.setTipoUtente(fotografo);
 		test.setActive(true);
@@ -391,7 +394,8 @@ public class DBInitializer {
 		test2.setId(3);
 		test2.setName("fabio2");
 		test2.setUsername("fb2");
-		test2.setPassword("fb");
+		test2.setPassword("780cd58b236bb2dcbc5b9c55768c7554701ecc10daefb9db0db3355a37ab3e317f77436eafb719b02bcb25385eeeed8cea5371a3ff4f81852d614eef50bcf7f6");
+		test2.setSalt("[B@bd69367");
 		test2.setEmail("fbolo@inwind.it");
 		test2.setTipoUtente(modello);
 		test2.setActive(true);
@@ -434,7 +438,8 @@ public class DBInitializer {
 		test3.setId(4);
 		test3.setName("fabio3");
 		test3.setUsername("fb3");
-		test3.setPassword("fb");
+		test3.setPassword("780cd58b236bb2dcbc5b9c55768c7554701ecc10daefb9db0db3355a37ab3e317f77436eafb719b02bcb25385eeeed8cea5371a3ff4f81852d614eef50bcf7f6");
+		test3.setSalt("[B@bd69367");
 		test3.setEmail("fbolo3----@inwind.it");
 		test3.setTipoUtente(hostess);
 		test3.setActive(true);
@@ -469,7 +474,8 @@ public class DBInitializer {
 		test4.setId(5);
 		test4.setName("fabio");
 		test4.setUsername("fb4");
-		test4.setPassword("fb");
+		test4.setPassword("780cd58b236bb2dcbc5b9c55768c7554701ecc10daefb9db0db3355a37ab3e317f77436eafb719b02bcb25385eeeed8cea5371a3ff4f81852d614eef50bcf7f6");
+		test4.setSalt("[B@bd69367");
 		test4.setEmail("fbolo4-----@inwind.it");
 		test4.setTipoUtente(mua);
 		test4.setActive(true);
@@ -505,7 +511,8 @@ public class DBInitializer {
 		admin.setId(1);
 		admin.setName("admin");
 		admin.setUsername("ADMIn");
-		admin.setPassword("fb");
+		admin.setPassword("780cd58b236bb2dcbc5b9c55768c7554701ecc10daefb9db0db3355a37ab3e317f77436eafb719b02bcb25385eeeed8cea5371a3ff4f81852d614eef50bcf7f6");
+		admin.setSalt("[B@bd69367");
 		admin.setEmail("photoshooters.net@gmail.com");
 		admin.setTipoUtente(agenzia);
 		admin.setActive(true);
@@ -539,31 +546,66 @@ public class DBInitializer {
 		
 		
 		
-//	POST*********************************************************	
-		Post regolamentoPost = new Post();
-		regolamentoPost.setId(1);
-		regolamentoPost.setProponente(admin);
-		admin.getPostsPartecipati().add(regolamentoPost);
-		regolamentoPost.getPartecipanti().add(admin);
-		Thread regolamentoThread = new Thread();
-		regolamentoPost.getRisposte().add(regolamentoThread);
-		regolamentoThread.setOggettoThread("REGOLAMENTo FORUm");
-		regolamentoThread.setMittentePrimo(admin);
-		regolamentoThread.setDestinatarioPrimo(admin);
-		regolamentoThread.setPost(regolamentoPost);
+//	POST & SUPERPOST*********************************************************	
+		Post regolamentoForumPost = new Post();
+		regolamentoForumPost.setId(1);
+		regolamentoForumPost.setProponente(admin);
+		admin.getPostsPartecipati().add(regolamentoForumPost);
+		regolamentoForumPost.getPartecipanti().add(admin);
+		Thread regolamentoForumThread = new Thread();
+		regolamentoForumPost.getRisposte().add(regolamentoForumThread);
+		regolamentoForumThread.setOggettoThread("REGOLAMENTo FORUm");
+		regolamentoForumThread.setMittentePrimo(admin);
+		regolamentoForumThread.setDestinatarioPrimo(admin);
+		regolamentoForumThread.setPost(regolamentoForumPost);
 		Messaggio messRegolamento = new Messaggio();
 		messRegolamento.getLetto().add(admin);
-		regolamentoThread.getMessaggi().add(messRegolamento);
-		messRegolamento.setThread(regolamentoThread);
+		regolamentoForumThread.getMessaggi().add(messRegolamento);
+		messRegolamento.setThread(regolamentoForumThread);
 		Date dataRegolamento = new Date();
 		String strdataRegolamento = "01-01-1999 00:00:00";
 		dataRegolamento = dateformat.parse(strdataRegolamento);
 		messRegolamento.setData(dataRegolamento);
-		messRegolamento.setOggetto(regolamentoThread.getOggettoThread());
+		messRegolamento.setOggetto(regolamentoForumThread.getOggettoThread());
 		messRegolamento.setMittente(admin);
 		messRegolamento.setDestinatario(admin);
+		messRegolamento.setMessaggio("Regolamento del forum aggiornato.");
 		
+		Post regolamentoSitoPost = new Post();
+		regolamentoSitoPost.setId(11);
+		regolamentoSitoPost.setProponente(admin);
+		admin.getPostsPartecipati().add(regolamentoSitoPost);
+		regolamentoSitoPost.getPartecipanti().add(admin);
+		Thread regolamentoThread = new Thread();
+		regolamentoSitoPost.getRisposte().add(regolamentoThread);
+		regolamentoThread.setOggettoThread("REGOLAMENTo SITo");
+		regolamentoThread.setMittentePrimo(admin);
+		regolamentoThread.setDestinatarioPrimo(admin);
+		regolamentoThread.setPost(regolamentoSitoPost);
+		Messaggio messRegolamento1 = new Messaggio();
+		messRegolamento1.getLetto().add(admin);
+		regolamentoThread.getMessaggi().add(messRegolamento1);
+		messRegolamento1.setThread(regolamentoThread);
+		Date dataRegolamento1 = new Date();
+		String strdataRegolamento1 = "01-01-1999 00:00:00";
+		dataRegolamento1 = dateformat.parse(strdataRegolamento1);
+		messRegolamento1.setData(dataRegolamento1);
+		messRegolamento1.setOggetto(regolamentoThread.getOggettoThread());
+		messRegolamento1.setMittente(admin);
+		messRegolamento1.setDestinatario(admin);
+		messRegolamento1.setMessaggio("Regolamento del sito aggiornato.");
 		
+		SuperPost regolamentoForumSP = new SuperPost();
+		regolamentoForumSP.setNomeSuperPost("REGOLAMENTo FORUm");
+		regolamentoForumSP.setId(81);		
+		regolamentoForumPost.setSuperpost(regolamentoForumSP);
+		regolamentoForumSP.getPosts().add(regolamentoForumPost);
+		
+		SuperPost regolamentoSitoSP = new SuperPost();
+		regolamentoSitoSP.setNomeSuperPost("REGOLAMENTo SITo");
+		regolamentoSitoSP.setId(101);
+		regolamentoSitoPost.setSuperpost(regolamentoSitoSP);
+		regolamentoSitoSP.getPosts().add(regolamentoSitoPost);
 		
 		SuperPost presentazioneUtentiFreeSP = new SuperPost();
 		presentazioneUtentiFreeSP.setNomeSuperPost("PRESENTAZIONe - UTENTi FREe");
@@ -836,19 +878,62 @@ public class DBInitializer {
 		messGenericoUtentiPlus0.setMittente(admin);
 		messGenericoUtentiPlus0.setDestinatario(admin);
 
-//TOPICS FORUM **********************************************************
 		
-		TopicForum topicRegolamentoForum = new TopicForum();
-		topicRegolamentoForum.setNomeTopicForum("REGOLAMENTo FORUm");
-		topicRegolamentoForum.setId(1);
+		SuperPost collaborazioniFreeSP = new SuperPost();
+		collaborazioniFreeSP.setNomeSuperPost("COLLABORAZIONi UTENTi FREe");
+		collaborazioniFreeSP.setId(121);
+		SuperPost segnalazioniFreeSP = new SuperPost();
+		segnalazioniFreeSP.setNomeSuperPost("SEGNALAZIONi UTENTi FREe");
+		segnalazioniFreeSP.setId(141);
+		
+		SuperPost collaborazioniPlusSP = new SuperPost();
+		collaborazioniPlusSP.setNomeSuperPost("COLLABORAZIONi UTENTi PLUs");
+		collaborazioniPlusSP.setId(161);
+		SuperPost segnalazioniPlusSP = new SuperPost();
+		segnalazioniPlusSP.setNomeSuperPost("SEGNALAZIONi UTENTi PLUs");
+		segnalazioniPlusSP.setId(181);
+		
+		SuperPost richiestaOffertaSP = new SuperPost();
+		richiestaOffertaSP.setNomeSuperPost("RICHIESTa & OFFERTa");
+		richiestaOffertaSP.setId(201);
+		SuperPost eventiConcorsiSP = new SuperPost();
+		eventiConcorsiSP.setNomeSuperPost("EVENTi & CONCORSi");
+		eventiConcorsiSP.setId(221);		
 
-		TopicForum topicRegolamentoSito = new TopicForum();
-		topicRegolamentoSito.setNomeTopicForum("REGOLAMENTo SITo");
-		topicRegolamentoSito.setId(2);
+		SuperPost liberatorieSP = new SuperPost();
+		liberatorieSP.setNomeSuperPost("LIBERATORIe");
+		liberatorieSP.setId(241);
+		SuperPost strumentazioneTecnicheSP = new SuperPost();
+		strumentazioneTecnicheSP.setNomeSuperPost("STRUMENTAZIONe & TECNICHe");
+		strumentazioneTecnicheSP.setId(242);
+		SuperPost postProduzioneStampaSP = new SuperPost();
+		postProduzioneStampaSP.setNomeSuperPost("POSt-PRODUZIONe & STAMPa");
+		postProduzioneStampaSP.setId(261);
+	
+		SuperPost stilistiSfilateSP = new SuperPost();
+		stilistiSfilateSP.setNomeSuperPost("RICHIESTa & OFFERTa");
+		stilistiSfilateSP.setId(281);
+		SuperPost trendsSP = new SuperPost();
+		trendsSP.setNomeSuperPost("TRENDs");
+		trendsSP.setId(301);
+		
+		
+//TOPICS FORUM **********************************************************		
+		TopicForum topicRegolamento = new TopicForum();
+		topicRegolamento.setNomeTopicForum("REGOLAMENTi - FORUm & SITo");
+		topicRegolamento.setId(1);
+		regolamentoForumSP.setTopicforum(topicRegolamento);
+		topicRegolamento.getSuperPosts().add(regolamentoForumSP);
+		regolamentoSitoSP.setTopicforum(topicRegolamento);
+		topicRegolamento.getSuperPosts().add(regolamentoSitoSP);
+
+//		TopicForum topicRegolamentoSito = new TopicForum();
+//		topicRegolamentoSito.setNomeTopicForum("REGOLAMENTo SITo");
+//		topicRegolamentoSito.setId(2);
 		
 		TopicForum topicUtentiFree= new TopicForum();
 		topicUtentiFree.setNomeTopicForum("UTENTi FREe");
-		topicUtentiFree.setId(3);
+		topicUtentiFree.setId(2);
 		presentazioneUtentiFreeSP.setTopicforum(topicUtentiFree);
 		topicUtentiFree.getSuperPosts().add(presentazioneUtentiFreeSP);
 		generaleUtentiFreeSP.setTopicforum(topicUtentiFree);
@@ -856,7 +941,7 @@ public class DBInitializer {
 		
 		TopicForum topicUtentiPlus = new TopicForum();
 		topicUtentiPlus.setNomeTopicForum("UTENTi PLUs");
-		topicUtentiPlus.setId(4);
+		topicUtentiPlus.setId(3);
 		generaleUtentiPlusSP.setTopicforum(topicUtentiPlus);
 		topicUtentiPlus.getSuperPosts().add(generaleUtentiPlusSP);
 		presentazioneUtentiPlusSP.setTopicforum(topicUtentiPlus);
@@ -864,35 +949,45 @@ public class DBInitializer {
 		
 		TopicForum topicFeedbackFree = new TopicForum();
 		topicFeedbackFree.setNomeTopicForum("FEEDBACk UTENTi FREe");
-		topicFeedbackFree.setId(5);
+		topicFeedbackFree.setId(4);
+		collaborazioniFreeSP.setTopicforum(topicFeedbackFree);
+		topicFeedbackFree.getSuperPosts().add(collaborazioniFreeSP);
+		segnalazioniFreeSP.setTopicforum(topicFeedbackFree);
+		topicFeedbackFree.getSuperPosts().add(segnalazioniFreeSP);
 		
 		TopicForum topicFeedbackPlus = new TopicForum();
 		topicFeedbackPlus.setNomeTopicForum("FEEDBACk UTENTi PLUs");
-		topicFeedbackPlus.setId(6);
+		topicFeedbackPlus.setId(5);
+		collaborazioniPlusSP.setTopicforum(topicFeedbackPlus);
+		topicFeedbackPlus.getSuperPosts().add(collaborazioniPlusSP);
+		segnalazioniPlusSP.setTopicforum(topicFeedbackPlus);
+		topicFeedbackPlus.getSuperPosts().add(segnalazioniPlusSP);
 		
-		TopicForum topicLavoroRichiestaOfferta = new TopicForum();
-		topicLavoroRichiestaOfferta.setNomeTopicForum("RICHIESTa & OFFERTa");
-		topicLavoroRichiestaOfferta.setId(7);
+		TopicForum topicLavoro = new TopicForum();
+		topicLavoro.setNomeTopicForum("ANNUNCi LAVORo");
+		topicLavoro.setId(6);
+		richiestaOffertaSP.setTopicforum(topicLavoro);
+		topicLavoro.getSuperPosts().add(richiestaOffertaSP);
+		eventiConcorsiSP.setTopicforum(topicLavoro);
+		topicLavoro.getSuperPosts().add(eventiConcorsiSP);
 		
-		TopicForum topicCastingAgenzie = new TopicForum();
-		topicCastingAgenzie.setNomeTopicForum("CASTINg & AGENZIe");
-		topicCastingAgenzie.setId(8);
+		TopicForum topicFotografia = new TopicForum();
+		topicFotografia.setNomeTopicForum("FOTOGRAFIa");
+		topicFotografia.setId(7);
+		liberatorieSP.setTopicforum(topicFotografia);
+		topicFotografia.getSuperPosts().add(liberatorieSP);
+		strumentazioneTecnicheSP.setTopicforum(topicFotografia);
+		topicFotografia.getSuperPosts().add(strumentazioneTecnicheSP);
+		postProduzioneStampaSP.setTopicforum(topicFotografia);
+		topicFotografia.getSuperPosts().add(postProduzioneStampaSP);
 		
-		TopicForum topicFotografiaAttrezzatureTecniche = new TopicForum();
-		topicFotografiaAttrezzatureTecniche.setNomeTopicForum("ATTREZZATURe & TECNICHe");
-		topicFotografiaAttrezzatureTecniche.setId(9);
-
-		TopicForum topicFotografiaConsigliTrucchi = new TopicForum();
-		topicFotografiaConsigliTrucchi.setNomeTopicForum("CONSIGLi & TRUCCHi");
-		topicFotografiaConsigliTrucchi.setId(10);
-		
-		TopicForum topicModaUltimiTrend = new TopicForum();
-		topicModaUltimiTrend.setNomeTopicForum("ULTIMi TRENd");
-		topicModaUltimiTrend.setId(11);
-		
-		TopicForum topicModaStilistiSfilate = new TopicForum();
-		topicModaStilistiSfilate.setNomeTopicForum("STILISTi & SFILATe");
-		topicModaStilistiSfilate.setId(12);
+		TopicForum topicModa = new TopicForum();
+		topicModa.setNomeTopicForum("MODa");
+		topicModa.setId(8);
+		stilistiSfilateSP.setTopicforum(topicModa);
+		topicModa.getSuperPosts().add(stilistiSfilateSP);
+		trendsSP.setTopicforum(topicModa);
+		topicModa.getSuperPosts().add(trendsSP);
 		
 		
 	//////////////////////////////////////////////////////////////
@@ -916,23 +1011,22 @@ public class DBInitializer {
 		serv.persist(test2, em);
 		serv.persist(test3, em);
 		serv.persist(test4, em);
-		serv.persist(regolamentoPost, em);
+//		serv.persist(regolamentoForumPost, em);
+//		serv.persist(regolamentoSitoPost, em);
+		serv.persist(regolamentoForumSP, em);
+		serv.persist(regolamentoSitoSP, em);
 		serv.persist(presentazioneUtentiFreeSP, em);
 		serv.persist(generaleUtentiFreeSP, em);
 		serv.persist(generaleUtentiPlusSP, em);
 		serv.persist(presentazioneUtentiPlusSP, em);
-		serv.persist(topicRegolamentoForum, em);
-		serv.persist(topicRegolamentoSito, em);
+		serv.persist(topicRegolamento, em);
 		serv.persist(topicUtentiFree, em);
 		serv.persist(topicUtentiPlus, em);
 		serv.persist(topicFeedbackFree, em);
 		serv.persist(topicFeedbackPlus, em);
-		serv.persist(topicLavoroRichiestaOfferta, em);
-		serv.persist(topicCastingAgenzie, em);
-		serv.persist(topicFotografiaAttrezzatureTecniche, em);
-		serv.persist(topicFotografiaConsigliTrucchi, em);
-		serv.persist(topicModaUltimiTrend, em);
-		serv.persist(topicModaStilistiSfilate, em);
+		serv.persist(topicLavoro, em);
+		serv.persist(topicFotografia, em);
+		serv.persist(topicModa, em);
 		
 		
 		serv.persist(free, em);

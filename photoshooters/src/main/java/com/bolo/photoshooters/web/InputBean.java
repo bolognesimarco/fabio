@@ -40,7 +40,7 @@ import com.bolo.photoshooters.web.EMF;
 public class InputBean {
  
 	private Part part;
-	private String statusMessage;
+	private String statusMessage = new String();
 	private ServiziComuni serv = new ServiziComuniImpl();
 	@ManagedProperty(value="#{contentBean}")
 	private ContentBean contentBean;

@@ -673,8 +673,11 @@ public class UtenteBean {
 	
 	public int tipoMembershipUtente () {
 		if (utente==null) {
+			System.out.println("membership =0");
 			return 0;
 		}
+		System.out.println("membership !!!=0");
+		System.out.println("membership ="+utente.getMemberships().get(utente.getMemberships().size()-1).getTipoMembership().getId());
 		return utente.getMemberships().get(utente.getMemberships().size()-1).getTipoMembership().getId();
 	}
 

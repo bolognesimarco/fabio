@@ -14,6 +14,18 @@
     <filter-name>SessionFilter</filter-name>
     <url-pattern>/profilo.xhtml</url-pattern>
   </filter-mapping>
+  
+  <servlet>
+  <servlet-name>Push Servlet</servlet-name>
+  <servlet-class>org.primefaces.push.PushServlet</servlet-class>
+  <load-on-startup>1</load-on-startup>
+   <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+  <servlet-name>Push Servlet</servlet-name>
+  <url-pattern>/primepush/*</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -24,9 +36,18 @@
     <servlet-class>com.bolo.photoshooters.web.RegistrationServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet>
+    <servlet-name>Password</servlet-name>
+    <servlet-class>com.bolo.photoshooters.web.PasswordChangeServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
   <servlet-mapping>
     <servlet-name>Register</servlet-name>
     <url-pattern>/activate</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>Password</servlet-name>
+    <url-pattern>/password</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>

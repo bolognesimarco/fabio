@@ -2,6 +2,7 @@ package com.bolo.photoshooters.web;
 
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 
+import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Sesso;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
@@ -21,15 +23,21 @@ import com.bolo.photoshooters.service.ServiziComuni;
 import com.bolo.photoshooters.service.ServiziComuniImpl;
 import com.bolo.photoshooters.service.ServiziVari;
 import com.bolo.photoshooters.service.ServiziVariImpl;
+import com.bolo.photoshooters.util.HashingSHAE;
 
 @ManagedBean
 @SessionScoped
 public class LoginBean {
 	private String username;
 	private String password;
+	private String emailPsw;
+	private String usernameResetPsw;
+	private String passwordReset;
+	private String pswConfirmReset;
 	private ServiziVari serviziVari = new ServiziVariImpl();
 	private ServiziComuni serv = new ServiziComuniImpl();
 
+	
 	public void login() {
 		
 		try {
@@ -76,6 +84,7 @@ public class LoginBean {
 					
 				}else{
 					System.out.println("login ko");
+					contentBean.setContent("login.xhtml");
 					contentBean.setMessaggio("utente e/o password errati!");
 				}
 			}
@@ -85,7 +94,90 @@ public class LoginBean {
 		}				
 	}
 	
+	
+	public void caricaRecuperaPassword() {
+		contentBean.setMessaggio("Inserisci username ed email: verrà inviata la procedura per creare una nuova password!");
+		contentBean.setContent("recuperoPassword.xhtml");
+	}	
+	
 
+	public void resettaPassword(String user, String email) {
+		Utente esiste = null;
+		try {
+			esiste = serviziVari.utenteConMailEsiste(user, email);
+			esiste.setActivationCode(UUID.randomUUID().toString());
+			EmailDaInviare emailActivation = new EmailDaInviare();
+			emailActivation.setTipoEmail(11);
+			emailActivation.setUtenteSender(esiste);
+			emailActivation.setEmail(email);
+			serv.merge(esiste);
+			serv.persist(emailActivation);
+			contentBean.setMessaggio("Ti è stata inviata la procedura di cambio password alla email "+email);
+			usernameResetPsw = "";
+			emailPsw = "";
+
+		} catch (Exception e1) {
+			String msg = "username e/o email non corrette";
+			contentBean.setMessaggio(msg);
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	
+	public void passwordUpdate(String password) {
+		Utente nuovo = utenteBean.getUtente();
+		String salt;
+		try {
+			salt = HashingSHAE.getSalt();
+			nuovo.setSalt(salt);
+			String hashedPassword = HashingSHAE.get_SHA_512_SecurePassword(password, salt);
+			nuovo.setPassword(hashedPassword);
+			serv.merge(nuovo);
+			contentBean.setMessaggio("Password aggiornata!");
+			contentBean.setContent("homePage.xhtml");
+			passwordReset = "";
+			pswConfirmReset = "";
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void checkConfirmPassword2(FacesContext context,
+			UIComponent component, Object value) {
+
+		boolean passwordok = false;	
+		String confirm = (String) value;
+		String valuepassword = (String)((UIInput)context.getViewRoot().findComponent("passwordresetform:password")).getValue();
+        
+		// pattern complessita password completo (1 num, 1 minu, 1 maiu, 1 car spec, no spazi, 5-10 car)
+		//String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[,@#$%^&+=])(?=\\S+$).{5,10}";
+		String pattern = "(?=.*[0-9])(?=.*[!?*.,@#$%^&+=])(?=\\S+$).{4,10}";
+		passwordok = valuepassword.matches(pattern);
+		if (!passwordok) {
+			String msg = "la password deve avere minimo: 1 numero, 1 tra !?*.,@#$%^&+=, 4-10 caratteri, no spazi.";
+			throw new ValidatorException(new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, msg));
+		}
+		
+		if (valuepassword == null || !confirm.equals(valuepassword)) {
+			String msg = "le password sono diverse";
+			throw new ValidatorException(new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, msg, msg));
+		}
+	}
+	
+	
+	
+	
+	
+	
+//	metodi NON usati (usati in registratiBean)
 	public void checkUsername(FacesContext context, UIComponent component,
 			Object value) throws ValidatorException {
 		String usernameToCheck = (String) value;
@@ -119,10 +211,54 @@ public class LoginBean {
 		}
 	}
 	
+	
+	
 //	****************GETTERS&SETTERS************
 	
 	
 	
+	
+
+
+
+	public String getUsernameResetPsw() {
+		return usernameResetPsw;
+	}
+
+
+	public String getEmailPsw() {
+		return emailPsw;
+	}
+
+
+	public void setEmailPsw(String emailPsw) {
+		this.emailPsw = emailPsw;
+	}
+
+
+	public void setUsernameResetPsw(String usernameResetPsw) {
+		this.usernameResetPsw = usernameResetPsw;
+	}
+
+
+	public String getPswConfirmReset() {
+		return pswConfirmReset;
+	}
+
+	public void setPswConfirmReset(String pswConfirmReset) {
+		this.pswConfirmReset = pswConfirmReset;
+	}
+
+
+
+	public String getPasswordReset() {
+		return passwordReset;
+	}
+
+	public void setPasswordReset(String passwordReset) {
+		this.passwordReset = passwordReset;
+	}
+
 	public String getUsername() {
 		return username;
 	}

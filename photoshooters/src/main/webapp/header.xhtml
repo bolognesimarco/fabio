@@ -57,7 +57,7 @@
 	    	  	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton value="SITe" style="#{menuBean.menuStyle3}" styleClass="menubutton">
-	    			<f:ajax event="click" listener="#{menuBean.menuClick(3)}" render=":content :headerform :menuutenteform" />
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(3)}" render=":content" />
 	    	   	</h:commandButton>
 	    	   	
 	    	   	<h:commandButton value="REGISTRATi" style="#{menuBean.menuStyle1}" styleClass="menubutton"  rendered="#{utenteBean.utente==null}">
@@ -98,8 +98,9 @@
 	    	   			</h:panelGroup>
 	    	   	</h:commandButton>
 	    	   	
-	    	   	<p:commandButton value="CHAt" style="#{menuBean.menuStyle11}" styleClass="menubuttonred" actionListener="#{menuBean.menuClick(11)}" update=":content :headerform :menuutenteform">
-	    			<p:confirm header="CONFERMa" message="confermi il CHAT?" icon="ui-icon-alert" />
+	    	   	<p:commandButton value="CHAt" style="#{menuBean.menuStyle11}" styleClass="menubuttonred" >
+	    			<f:ajax event="click" listener="#{menuBean.menuClick(11)}" render=":content :chatform :headerform :menuutenteform" />
+
 	    	   	</p:commandButton>
 	    	   	
 	    	   	<h:commandButton value="ANNUNCi" style="#{menuBean.menuStyle12}" styleClass="menubuttonred">

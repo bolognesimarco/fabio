@@ -3,6 +3,8 @@ package com.bolo.photoshooters.web;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -17,9 +19,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.bolo.photo.web.entity.EmailDaInviare;
+import com.bolo.photo.web.entity.Foto;
+import com.bolo.photo.web.entity.Membership;
 import com.bolo.photo.web.entity.Sesso;
+import com.bolo.photo.web.entity.TipoMembership;
 import com.bolo.photo.web.entity.TipoUtente;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziComuni;
@@ -29,6 +36,7 @@ import com.bolo.photoshooters.service.ServiziVariImpl;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
+import com.bolo.photoshooters.util.HashingSHAE;
 
 @ManagedBean
 @SessionScoped
@@ -42,6 +50,7 @@ public class RegistratiBean {
 	private Sesso sesso; 
 	private String città;
 	private boolean accettoRegolamento = false;
+	private int tipoMembership = 1;
 	
 	private ServiziComuni serv = new ServiziComuniImpl();
 	private ServiziVari serviziVari = new ServiziVariImpl();
@@ -51,9 +60,12 @@ public class RegistratiBean {
 		if (accettoRegolamento){
 			try {
 				Utente nuovo = new Utente();
-	
 				nuovo.setUsername(username);
-				nuovo.setPassword(password);
+//				hashing password SHAE512
+				String salt = HashingSHAE.getSalt();
+				nuovo.setSalt(salt);
+				String hashedPassword = HashingSHAE.get_SHA_512_SecurePassword(password, salt);
+				nuovo.setPassword(hashedPassword);
 				nuovo.setName(nome);
 				nuovo.setEmail(email);
 				nuovo.setSesso(sesso);
@@ -61,9 +73,37 @@ public class RegistratiBean {
 				nuovo.setTipoUtente(serv.getReference(TipoUtente.class, tipoUtente));
 				nuovo.setActive(false);
 				nuovo.setActivationCode(UUID.randomUUID().toString());
-				//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 				Date currentDate = new Date();
 				nuovo.setDataIscrizione(currentDate);
+				
+//				membership selection
+				DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				Membership newMShip = new Membership();
+				EntityManager em = EMF.createEntityManager();
+				String hql = "from TipoMembership tm";
+				Query q = em.createQuery(hql, TipoMembership.class);
+				List<TipoMembership> tipimerbership = q.getResultList();
+				System.out.println("tipimerbership size "+tipimerbership.size());
+				if(tipoMembership==1) { //FREe
+					
+					newMShip.setTipoMembership(tipimerbership.get(1));
+//					Date dataInizio = new Date();
+//					String strdataInizio = "02-04-2013 00:35:42";
+//					dataInizio = dateformat.parse(strdataInizio);
+					newMShip.setDataInizio(currentDate);
+//					Date dataFine = new Date();passwordReset.xhtml
+//					String strdataFine = "02-04-2017 00:35:42";
+//					dataFine = dateformat.parse(strdataFine);
+//					newMShip.setDataFine(dataFine);
+					newMShip.setUtente(nuovo);
+					List<Membership> listaMShip = new ArrayList<Membership>();
+					listaMShip.add(newMShip);
+					nuovo.setMemberships(listaMShip);
+				} else { //PLUS
+					newMShip.setTipoMembership(tipimerbership.get(2));
+					contentBean.setContent("pagamento.xhtml");
+				}
+
 				serv.persist(nuovo);
 				EmailDaInviare emailActivation = new EmailDaInviare();
 				emailActivation.setTipoEmail(9);
@@ -209,11 +249,24 @@ public class RegistratiBean {
 	
 	
 
+//	 getters & setters ************************************************************************
+	
+	
 	
 	
 	public boolean isAccettoRegolamento() {
 		return accettoRegolamento;
 	}
+
+	public int getTipoMembership() {
+		return tipoMembership;
+	}
+
+
+	public void setTipoMembership(int tipoMembership) {
+		this.tipoMembership = tipoMembership;
+	}
+
 
 	public void setAccettoRegolamento(boolean accettoRegolamento) {
 		this.accettoRegolamento = accettoRegolamento;

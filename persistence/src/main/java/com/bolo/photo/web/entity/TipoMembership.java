@@ -15,6 +15,9 @@ public class TipoMembership implements Serializable{
 	@Column
 	private String descrizione;
 
+	
+//	getters & setters ******************
+	
 	public int getId() {
 		return id;
 	}

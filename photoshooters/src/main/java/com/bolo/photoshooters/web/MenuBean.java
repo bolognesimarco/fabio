@@ -36,11 +36,13 @@ public class MenuBean {
 		switch (menuClicked) {
 		case 1://REGISTRATI
 			contentBean.setContent("registrati.xhtml");
+			contentBean.setMessaggio(null);
 			azzeraMenuStyle();
 			menuStyle1 = menuBorder;
 			break;
 		case 2://LOGIN
 			contentBean.setContent("login.xhtml");
+			contentBean.setMessaggio(null);
 			azzeraMenuStyle();
 			menuStyle2 = menuBorder;
 			break;
@@ -99,7 +101,7 @@ public class MenuBean {
 			break;
 		case 11://CHAT
 			contentBean.setMessaggio(null);
-			contentBean.setContent("wip.xhtml");
+			contentBean.setContent("chat.xhtml");
 			azzeraMenuStyle();
 			menuStyle11 = menuUtenteBorder;
 			break;
@@ -112,7 +114,8 @@ public class MenuBean {
 			menuStyle12 = menuUtenteBorder;
 			break;
 		case 13://CREDITI
-			contentBean.setContent("wip.xhtml");
+			contentBean.setMessaggio(null);
+			contentBean.setContent("pagamento3.xhtml");
 			azzeraMenuStyle();
 			menuStyle13 = menuUtenteBorder;
 			break;
@@ -137,7 +140,7 @@ public class MenuBean {
 			break;
 		case 16://MODIFICA PROFILO
 			contentBean.setMessaggio(null);
-			inputBean.setStatusMessage(null);
+//			inputBean.setStatusMessage(null);
 			contentBean.setContent("modificaProfilo4.xhtml");
 			break;
 		case 17://FOTOS
@@ -187,6 +190,9 @@ public class MenuBean {
 		contentBean.setContent("messaggioAvvenutaRegistrazione.xhtml");
 	}
 	
+	public void passwordResetPage(){
+		contentBean.setContent("passwordReset.xhtml");
+	}
 	
 	
 //	****GETTERS&SETTERS**********************

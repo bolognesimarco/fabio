@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="cerca.css" library="css" />
+	<h:outputStylesheet name="dataTable.css" library="css" />
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello cerca">
+		<h:panelGrid>
+			<f:facet name="header">
+				<h:panelGrid columns="2">
+		       		<h:outputText styleClass="common" value="&#160;&#160;FORUm"/>
+		       		<h:panelGroup>
+			       		<h:commandButton style="float:right;" value="POSTs UTENTe" rendered="#{utenteBean.tipoMembershipUtente()!=0}" disabled="#{utenteBean.tipoMembershipUtente()!=2}" title="attivo per utenti PLUs">
+			       			<f:ajax event="click" listener="#{utenteBean.visualizzaPostsUtente()}" render=":content :postsutente"></f:ajax>
+			       		</h:commandButton>
+		 				<h:panelGroup style="float:right; height:15px;"  rendered="#{utenteBean.tipoMembershipUtente()!=0 and postBean.nuoveRisposteForum!=0}">
+		 	   				<sup  style="color:red;font-size:10px;margin-left:-3px;">
+								<h:outputText value="#{postBean.nuoveRisposteForum}"></h:outputText>
+		 	   				</sup>
+			   			</h:panelGroup>
+		   			</h:panelGroup>
+		       	</h:panelGrid>
+	       	</f:facet>
+		       		<h:form id="forumform">
+			       		<p:dataTable id="topicsforumtable" var="topics" value="#{postBean.topics}">
+			       			<p:column>
+			       				<h:commandButton styleClass="ui-bottone" value="#{topics.nomeTopicForum}">
+									<f:ajax event="click" listener="#{postBean.caricaListaSP(topics)}" render=":content :forumlistagenericaform" />
+								</h:commandButton>
+
+			       			</p:column>
+			       		</p:dataTable>
+		       		</h:form>
+
+
+		</h:panelGrid>
+	</h:panelGroup>
+	
+</h:body>
+</html>

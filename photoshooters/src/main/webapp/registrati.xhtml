@@ -88,10 +88,18 @@
  				<p:autoComplete required="true" requiredMessage="scegli la città" id="città" value="#{registratiBean.città}" completeMethod="#{registratiBean.suggerisciCittà}" />
 				<h:panelGroup><h:message for="città" /></h:panelGroup>
 				
+				<h:outputLabel for="membership">TIPOLOGIa ACCOUNt</h:outputLabel>
+				<h:selectOneRadio id="membership" value="#{registratiBean.tipoMembership}">
+   					<f:selectItem itemValue="1" itemLabel="FREe" />
+  				 	<f:selectItem itemValue="2" itemLabel="PLUs" />	   			
+				</h:selectOneRadio>	
+				<h:panelGroup><h:message for="membership" /></h:panelGroup>
+				
 				<h:outputLabel for="regolamento">ACCETTo REGOLAMENTo</h:outputLabel>
 				<h:selectBooleanCheckbox id="regolamento" value="#{registratiBean.accettoRegolamento}">
 				</h:selectBooleanCheckbox>
 				<h:panelGroup></h:panelGroup>	
+				
 				
 			</h:panelGrid>
 			

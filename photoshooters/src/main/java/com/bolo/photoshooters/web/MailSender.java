@@ -104,7 +104,14 @@ public class MailSender {
         email.setStatoLavorazione(2);
     }
 	
-	
+//	tipoEmailDaInviare =11	
+	private static String resetPasswordMessage = "Hai ricevuto questo messaggio perchè hai richiesto una nuova password per il portale Photoshooters.net.\r\n"
+			+ "Per completare la procedura di reset password segui questo link: http://localhost:8080/password?activationCode=%\r\n\r\n"
+			+ "Se non hai effettuato tu la richiesta semplicemente cancella questo messaggio, o avvisa l'amministrazione del portale.";	
+	public static void sendResetPasswordMail(EmailDaInviare email, String activationCode) throws Exception{
+		sendEmail2("mail.photoshooters.net", "25", "register@photoshooters.net", "1Ochorios_", email, "Reset Password - Photoshooters.net", resetPasswordMessage.replace("%", activationCode));
+	}	
+
 //	tipoEmailDaInviare =9	
 	private static String activationMessage = "Hai ricevuto questo messaggio perchè ti sei registrato al portale Photoshooters.net.\r\n"
 			+ "Per completare la registrazione segui questo link: http://localhost:8080/activate?activationCode=%\r\n\r\n"

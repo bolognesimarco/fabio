@@ -13,6 +13,7 @@ import com.bolo.photo.web.entity.EmailDaInviare;
 import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.web.EMF;
 import com.bolo.photoshooters.web.MailSender;
+import com.bolo.photoshooters.util.HashingSHAE;
 
 public class ServiziVariImpl implements ServiziVari {
 
@@ -25,6 +26,8 @@ public class ServiziVariImpl implements ServiziVari {
 				.getResultList()
 				.size()>0;
 	}
+	
+
 	
 	@Override
 	public boolean emailEsiste(String email) throws Exception {
@@ -101,17 +104,63 @@ public class ServiziVariImpl implements ServiziVari {
 		}
 	}
 	
-	
-	public Utente login(String username, String password) throws Exception{
+	@Override
+	public Utente utenteConMailEsiste(String username, String email) throws Exception {
 		EntityManager em = EMF.createEntityManager();
 		List<Utente> utenti = em
-		.createQuery("from Utente u where u.username=:user and u.password=:pass")
-		.setParameter("user", username)
-		.setParameter("pass", password)
-		.getResultList();
-		if(utenti!=null && utenti.size()>0){
-			return utenti.get(0);
+				.createQuery("from Utente u where u.username=:user and u.email=:mail")
+				.setParameter("user", username)
+				.setParameter("mail", email)
+				.getResultList();
+			if(utenti!=null && utenti.get(0)!=null){
+				System.out.println("user="+utenti.get(0).getUsername()+" - email="+utenti.get(0).getEmail());
+				return utenti.get(0);
+			}else{
+				return null;
+			}
+	}
+	
+	@Override
+	public Utente resetPassword(String activationCode) throws Exception{
+		EntityManager em = EMF.createEntityManager();
+		em.getTransaction().begin();
+		List<Utente> utenti = em
+			.createQuery("from Utente u where u.activationCode=:code")
+			.setParameter("code", activationCode)
+			.getResultList();
+		if(utenti!=null && utenti.get(0)!=null){
+			Utente u = utenti.get(0);
+			System.out.println("resetPassword servizio Vario - utente id= "+u.getId());
+
+			Date currentDate = new Date();
+			u.setDataUltimoAccesso(currentDate);
+		em.getTransaction().commit();
+			return u;
 		}else{
+			return null;
+		}
+	}
+	
+	
+	public Utente login(String username, String password) throws Exception{
+//		hashing password SHAE512
+		EntityManager em = EMF.createEntityManager();
+		List<Utente> utenti = em
+		.createQuery("from Utente u where u.username=:user")
+		.setParameter("user", username)
+//		.setParameter("pass", password)
+		.getResultList();	
+		if(utenti!=null && utenti.size()>0){
+			String salt = utenti.get(0).getSalt();
+			String hashedPassword = HashingSHAE.get_SHA_512_SecurePassword(password, salt);
+			if (hashedPassword.equals(utenti.get(0).getPassword())) {
+				return utenti.get(0);
+			} else {
+				System.out.println("user e/o password errati!");
+				return null;			
+			}
+		}else{
+			System.out.println("user non esistente!");
 			return null;
 		}
 	}
@@ -173,6 +222,9 @@ public class ServiziVariImpl implements ServiziVari {
 				break;
 			case 10:
 				MailSender.sendNonActivationMail(email, email.getUtenteSender().getUsername());
+				break;
+			case 11:
+				MailSender.sendResetPasswordMail(email, email.getUtenteSender().getActivationCode());
 				break;
 			default:
 				break;	

@@ -36,14 +36,23 @@
 			<h:panelGrid styleClass="tabellaForum" columns="2" columnClasses="rightcolonna,leftcolonna"> 
 			
 				<f:facet name="header">
-
+					<h:panelGrid>
+						<h:panelGroup style="width:100%!important;" rendered="#{postBean.superPostGenerico.getId()==81}">
+	        				<h:outputText></h:outputText>
+	        				<iframe height="300px" width="95%" src="/files/RegolamentoSito_Giu2017c.htm"></iframe>	
+						</h:panelGroup>
+						<h:panelGroup style="width:100%!important;" rendered="#{postBean.superPostGenerico.getId()==101}">
+	        				<h:outputText></h:outputText>
+	        				<iframe height="300px" width="95%" src="/files/RegolamentoSito_Giu2017c.htm"></iframe>	
+						</h:panelGroup>
+					</h:panelGrid>
 	       		</f:facet>
 	       		
 			        <h:outputText value="POSTATo Da&#160;"/>
 	           		<h:commandLink  value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).proponente.username}" action="#{utenteBean.utenteTrovatoId(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).proponente.id)}"/>
 	        		<h:outputText value="MESSAGGIo&#160;"></h:outputText>
 	        		<h:outputText value="#{postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.get(postBean.superPostGenerico.posts.get(postBean.superPostGenerico.posts.size()-1).risposte.size()-1).messaggi.size()-1).messaggio}"></h:outputText>
-					
+
 				<f:facet name="footer">
 					<p:commandButton update="rispondipostform:rispostaDetail" oncomplete="PF('rispondipostOP').loadContents()" value="CREa NUOVo POSt" rendered="#{utenteBean.tipoMembershipUtente()!=0}">
            			</p:commandButton>	

@@ -11,14 +11,14 @@ import com.bolo.photo.web.entity.Utente;
 import com.bolo.photoshooters.service.ServiziVari;
 import com.bolo.photoshooters.service.ServiziVariImpl;
 
-public class RegistrationServlet extends HttpServlet {
+public class PasswordChangeServlet extends HttpServlet {
 	
 	private ServiziVari serviziVari = new ServiziVariImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			Utente u = serviziVari.activateUser(request.getParameter("activationCode"));
+			Utente u = serviziVari.resetPassword(request.getParameter("activationCode"));
 			if(u==null){
 				response.sendRedirect("errorPage.xhtml");
 			}else{
@@ -30,23 +30,15 @@ public class RegistrationServlet extends HttpServlet {
 				ParametersBean pBean = new ParametersBean();
 				bean.setUtente(u);
 				bean.setContentBean(contentBean);
-				u.setOnline(true);
 				request.getSession(true).setAttribute("utenteBean", bean);
 				
 				MenuBean menu = new MenuBean();
 				menu.setContentBean(contentBean);
 				menu.setUtenteBean(bean);
-				menu.messaggioAvvenutaRegistrazione();
+				menu.passwordResetPage();
 				request.getSession(true).setAttribute("menuBean", menu);
 				response.sendRedirect("/");
 				pBean.fillSelectItems();
-
-				
-				InputBean inputBean = new InputBean();
-				inputBean.getVotoFoto().setScore(-1);
-				inputBean.setStatusMessage("");
-				request.getSession(true).setAttribute("inputBean", inputBean);
-
 			}
 			
 		} catch (Exception e) {

@@ -40,6 +40,9 @@ public class Membership implements Serializable{
 	@JoinColumn(name="utente", nullable=false, updatable=false)
 	private Utente utente;
 
+	
+//	getters & setters ******************
+	
 	public int getId() {
 		return id;
 	}

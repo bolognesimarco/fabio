@@ -148,7 +148,7 @@ public class PostBean {
 	
 	
 	public void caricaTopics() {
-		String query = "from TopicForum tf";
+		String query = "from TopicForum tf order by tf.id";
 		EntityManager em = EMF.createEntityManager();
 		List<TopicForum> topics = em
 		.createQuery(query)
@@ -156,11 +156,15 @@ public class PostBean {
 		if (topics!=null && topics.size()>0) {
 			Topics = topics;
 		}
-		System.out.println("caricato topics num#"+Topics.size());
+		System.out.println("caricato topics tot size#"+Topics.size());
 		contentBean.setContent("forum2.xhtml");
 	}
 	
 	public void caricaListaSP (TopicForum tf) {
+//		if(tf.getId()==1) {
+//			contentBean.setContent("forumListaGenerica2.xhtml");
+//		} else {
+			
 		listaSuperPostsGenerica = tf.getSuperPosts();
 		titoloListaSuperPostsGenerica = tf.getNomeTopicForum();
 		for (SuperPost sp : listaSuperPostsGenerica) {		
@@ -176,7 +180,9 @@ public class PostBean {
 			ordinaPostPerData(sp.getPosts());
 		}
 		System.out.println("dopo ordinamentoooo Lista SuperPost");
+
 		contentBean.setContent("forumListaGenerica2.xhtml");
+//		}
 	}
 	
 	
@@ -290,6 +296,8 @@ public class PostBean {
 		ordinaInversamenteThreadPerData(p.getRisposte());
 		postGenerico = p;
 		superPostGenerico = p.getSuperpost();
+		listaSuperPostsGenerica = superPostGenerico.getTopicforum().getSuperPosts();
+		titoloListaSuperPostsGenerica = superPostGenerico.getTopicforum().getNomeTopicForum();
 		contentBean.setContent("forumPostGenerico4.xhtml");
 		FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add("postgenericoforumform");	
 	}	
@@ -313,6 +321,9 @@ public class PostBean {
 		thr.setOggettoThread("Re: "+p.getRisposte().get(p.getRisposte().size()-1).getOggettoThread());
 		thr.setPost(p);
 		p.getRisposte().add(thr);
+		if (utenteBean.getUtente().getId()==p.getProponente().getId()) {
+			mess.setLettoDaDestinatario(true);
+		}
 		if (!utentePartecipatoPost(utenteBean.getUtente(), p)) {
 			utenteBean.getUtente().getPostsPartecipati().add(p);
 			p.getPartecipanti().add(utenteBean.getUtente());

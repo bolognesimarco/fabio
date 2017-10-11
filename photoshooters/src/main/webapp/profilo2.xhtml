@@ -30,7 +30,7 @@
 				<h:outputText style="width: 120px;"  id="username" value="#{utenteBean.utente.username}"/>
 				
 				<h:outputLabel for="password">PASSWORd</h:outputLabel>
-				<h:outputText  id="password" value="#{utenteBean.utente.password}"/>
+				<h:outputText  id="password" value="************"/>
 								
 				<h:outputLabel for="email">EMAIl</h:outputLabel>
 				<h:outputText  id="email" value="#{utenteBean.utente.email}"/>
@@ -183,7 +183,7 @@
         	<f:facet name="footer">
 	            <h:panelGroup>
 	         	<h:commandButton value="MODIFICa PROFILo">
-    			   <f:ajax event="click" listener="#{menuBean.menuClick(16)}" render=":content :avatarForm" />
+    			   <f:ajax event="click" listener="#{menuBean.menuClick(16)}" render=":content :profiloform" />
     	   		</h:commandButton> 
     	   		<br></br>
 	            	<h:outputText value="#{contentBean.messaggio}"></h:outputText>

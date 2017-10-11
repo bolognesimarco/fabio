@@ -29,11 +29,13 @@
 	       		<br></br>
 	      	</f:facet>
 	
+
+	
 			<p:dataTable id="listasuperpostsgenerici" var="superposts" value="#{postBean.listaSuperPostsGenerica}" rendered="true">
 				<p:column>
 					<h:panelGrid columns="1" border="1" style="background-color: rgb(120, 120, 120)!important;">
 						<f:facet name="header">
-			       			<h:commandButton styleClass="common" value="#{superposts.nomeSuperPost}" action="#{postBean.visualizzaSuperPost(superposts)}"/>
+			       			<h:commandButton styleClass="common" value="#{superposts.nomeSuperPost} - id(#{superposts.getId()})" action="#{postBean.visualizzaSuperPost(superposts)}"/>
 				       		<br></br>
 				      	</f:facet>
 						<h:panelGrid columns="2" columnClasses="rightcolonna,leftcolonna">

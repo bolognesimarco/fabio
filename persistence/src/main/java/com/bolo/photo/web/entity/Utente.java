@@ -68,6 +68,9 @@ public class Utente implements Serializable{
 	private String password;
 	
 	@Column
+	private String salt;
+	
+	@Column
 	private int visite;
 	
 	@Column
@@ -724,7 +727,14 @@ public class Utente implements Serializable{
 	public void setPostsSeguiti(List<Post> postsSeguiti) {
 		this.postsSeguiti = postsSeguiti;
 	}
-	
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
 	
 	
 }

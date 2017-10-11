@@ -9,6 +9,9 @@
     
 <h:head>
 	<h:outputStylesheet name="cerca.css" library="css" />
+
+	<h:outputStylesheet name="forum.css" library="css" />
+	<h:outputStylesheet name="autocomplete.css" library="css" />
 </h:head>
 <h:body>
 
@@ -18,15 +21,44 @@
 		
 			<h:panelGrid columns="2" columnClasses="right,left" >
 	            <h:panelGroup>
-	                <h:commandButton value="NUOVo MESSAGGIo&#160;&#160;"
-					 	action="#{menuBean.menuClick(18)}" >
+	                <h:commandButton value="NUOVo MESSAGGIo&#160;&#160;" action="#{menuBean.menuClick(18)}" >
 	            	</h:commandButton>  
+	            	<p:commandButton update="rispondimessaggioform:rispostaDetail" oncomplete="PF('rispondimessOP').loadContents()" value="NUOVo MESSAGGIo" rendered="#{utenteBean.tipoMembershipUtente()!=0}">
+           			</p:commandButton>		
             	</h:panelGroup>
             	<h:panelGroup>
             		<h:outputText value="#{contentBean.messaggio}"></h:outputText>
             		<h:messages/>
             	</h:panelGroup>
 			</h:panelGrid>
+		
+			<p:overlayPanel widgetVar="rispondimessOP" styleClass="overlaypanel" showEffect="fade" hideEffect="fade" dismissable="false" showCloseIcon="true" >
+		        <h:form id="rispondimessaggioform">
+		        <p:outputPanel id="rispostaDetail" style="text-align:center;">
+		            <h:panelGrid  columns="2" columnClasses="right,left">
+		                <f:facet name="header">
+							<h:outputText value="SCRIVi NUOVo MESSAGGIo"></h:outputText>
+		                </f:facet>
+
+						<h:outputLabel for="mittente">MITTENTe</h:outputLabel>
+						<h:outputText id="mittente" value="#{utenteBean.utente.username}" />
+
+						<h:outputText value="DESTINATARi" />
+						<p:autoComplete id="destinatari" minQueryLength="2" maxResults="5" value="#{threadBean.messaggio.destinatario}" completeMethod="#{utenteBean.suggerisciUtenteTranneLoggato}" converter="entityConverter" var="dest" itemValue="#{dest}" itemLabel="#{dest.username}" required="true" requiredMessage="Manca il destinatario!"></p:autoComplete>
+                               
+		                <h:outputText value="OGGETTo" />
+						<h:inputText id="oggetto" required="true" requiredMessage="L'oggetto non può essere vuoto!" value="#{threadBean.messaggio.oggetto}" styleClass="textareatonda"/>
+							                
+		                <h:outputText value="MESSAGGIo" />
+						<h:inputTextarea size="120" required="true" requiredMessage="Il messaggio non può essere vuoto!" rows="8" id="messaggio" value="#{threadBean.messaggio.messaggio}"/>
+
+						<h:messages id="messages" layout="table"></h:messages>
+		 				<p:commandButton id="rispondipost" value="&#160;INVIa MESSAGGIo" action="#{threadBean.inviaNuovoMessaggio()}" process="@form" update="threadsmessaggiform">
+						</p:commandButton>
+		            </h:panelGrid>
+		        </p:outputPanel>
+		        </h:form>
+		    </p:overlayPanel>
 		
 		<h:dataTable id="threadsricevutiutente" var="thrs" value="#{threadBean.threadsRicevutiUtente}">
 			<f:facet name="header">

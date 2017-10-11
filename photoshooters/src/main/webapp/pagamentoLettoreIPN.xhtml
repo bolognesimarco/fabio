@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    
+<h:head>
+	<h:outputStylesheet name="login.css" library="css" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+</h:head>
+<h:body>
+
+	<h:panelGroup styleClass="pannello login">
+
+		<h:form id="lettoreipnform">
+
+				
+				<form target="paypal" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" >
+<!-- 					<h:inputHidden name="cmd" value="_cart"></h:inputHidden> -->
+					<input type="hidden" name="cmd" value="_cart"/>
+					<input type="hidden" name="business" value="portoricano2000@gmail.com"/>
+					<input type="hidden" name="lc" value="IT"/>
+					<input type="hidden" name="item_name" value="ABBONAMENTo FREe"/>
+					<input type="hidden" name="button_subtype" value="products"/>
+					<input type="hidden" name="no_note" value="0"/>
+					<input type="hidden" name="currency_code" value="EUR"/>
+					<input type="hidden" name="add" value="1"/>
+					<input type="hidden" name="bn" value="PP-ShopCartBF:btn_cart_LG.gif:NonHostedGuest"/>
+					<table>
+					<tr><td><input type="hidden" name="on0" value="MESi"/>MESi</td></tr><tr><td><select name="os0">
+						<option value="3 mesi">3 mesi €50,00 EUR</option>
+						<option value="6 mesi">6 mesi €100,00 EUR</option>
+						<option value="12 mesi">12 mesi €150,00 EUR</option>
+					</select> </td></tr>
+					</table>
+					<input type="hidden" name="currency_code" value="EUR"/>
+					<input type="hidden" name="option_select0" value="3 mesi"/>
+					<input type="hidden" name="option_amount0" value="50.00"/>
+					<input type="hidden" name="option_select1" value="6 mesi"/>
+					<input type="hidden" name="option_amount1" value="100.00"/>
+					<input type="hidden" name="option_select2" value="12 mesi"/>
+					<input type="hidden" name="option_amount2" value="150.00"/>
+					<input type="hidden" name="option_index" value="0"/>
+					<input type="image" src="https://www.sandbox.paypal.com/it_IT/IT/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal è il metodo rapido e sicuro per pagare e farsi pagare online."/>
+					<img alt="" border="0" src="https://www.sandbox.paypal.com/it_IT/i/scr/pixel.gif" width="1" height="1"/>
+				</form>
+
+				
+
+		</h:form>
+
+	</h:panelGroup>
+
+</h:body>
+</html>

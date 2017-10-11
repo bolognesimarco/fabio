@@ -15,7 +15,7 @@
 	<h:panelGroup styleClass="pannello login">
 	<p:focus for="loginform:username"/>
 		<h:form id="loginform">
-			<h:panelGrid columns="2" columnClasses="loginright, loginleft">
+			<h:panelGrid columns="3" columnClasses="right,centercol,left">
 			
 				<f:facet name="header">
             		<h:outputText value="&#160;&#160;LOGIn"/>
@@ -24,13 +24,18 @@
 				<h:outputLabel for="username">USERNAMe</h:outputLabel>
 				<h:inputText id="username" value="#{loginBean.username}"
 					required="true" requiredMessage="inserisci uno username" />
-
+				<h:panelGroup>
+					<h:message for="username" />
+				</h:panelGroup>
 
 				<h:outputLabel for="password">PASSWORd</h:outputLabel>
 				<h:inputSecret id="password" value="#{loginBean.password}"
 					required="true" requiredMessage="inserisci una password">
 				</h:inputSecret>
-
+				<h:panelGroup>
+					<h:message for="password" />
+				</h:panelGroup>
+				
 				<h:outputLabel for="messages"><br></br></h:outputLabel>
 		        <h:panelGroup>
 					<h:messages id="messages" layout="table"></h:messages>
@@ -39,11 +44,14 @@
 
 
 				<f:facet name="footer">
-		            <h:panelGroup>
-		                <h:commandButton value="ENTRa&#160;&#160;" action="#{loginBean.login()}">
+		            <h:panelGrid columns="2" columnClasses="left">
+		            	<h:commandButton tabindex="3" style="color: #EF4323!important;font-size: 10px!important;" value="&#160;&#160;RECUPERa PASSWORd" action="#{loginBean.caricaRecuperaPassword()}">
+		               		 <f:ajax onevent="click" render=":content passwordresetform" ></f:ajax>
+		            	</h:commandButton>  
+		                <h:commandButton tabindex="2" value="ENTRa&#160;&#160;" action="#{loginBean.login()}">
 		               		 <f:ajax onevent="click" render=":content homeuserform" ></f:ajax>
 		            	</h:commandButton>  
-	            	</h:panelGroup>
+	            	</h:panelGrid>
         		</f:facet>
 				
 			</h:panelGrid>
